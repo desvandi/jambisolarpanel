@@ -2,7 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { Home, Building2, Factory, Zap, MessageCircle, Battery, BatteryCharging, Info, ChevronDown, ChevronUp } from "lucide-react";
+import { Home, Building2, Factory, Zap, MessageCircle, Battery, BatteryCharging, Info, ChevronDown, ChevronUp, Car, Monitor, Sparkles } from "lucide-react";
 import {
   type CalculatedPackage,
   calculatePackages,
@@ -14,8 +14,17 @@ import {
   formatRp,
 } from "@/lib/pricing";
 
-function waLink(pkg: string) {
-  return `https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20dengan%20paket%20${encodeURIComponent(pkg)}`;
+function waLink(pkg: CalculatedPackage, addOns?: { carport: boolean; monitoring: string }) {
+  let text = `Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan paket ${encodeURIComponent(pkg.name)} (${encodeURIComponent(pkg.priceFormatted)})`;
+  if (addOns) {
+    const parts: string[] = [];
+    if (addOns.carport) parts.push(`+ Carport ${formatRp(pkg.carportAddonPrice)}`);
+    if (addOns.monitoring === "basic") parts.push(`+ Monitoring Basic ${formatRp(pkg.monitoringBasicPrice)}`);
+    if (addOns.monitoring === "standard") parts.push(`+ Monitoring Standard ${formatRp(pkg.monitoringStandardPrice)}`);
+    if (addOns.monitoring === "industrial") parts.push(`+ Monitoring Industrial ${formatRp(pkg.monitoringIndustrialPrice)}`);
+    if (parts.length) text += `. Add-on: ${encodeURIComponent(parts.join(", "))}`;
+  }
+  return `https://wa.me/6281328190707?text=${text}`;
 }
 
 const categoryMeta = [
@@ -30,12 +39,14 @@ const categoryMeta = [
     title: "Gold Package — Bisnis & UMKM",
     tagline: "Hybrid System 1 Fase — Solusi bisnis skala menengah hingga besar",
     tiers: ["gold"],
+    showAddOns: true,
   },
   {
     icon: Factory,
     title: "Platinum Package — Industri",
     tagline: "Hybrid System 3 Fase — Solusi skala besar untuk efisiensi maksimal",
     tiers: ["platinum"],
+    showAddOns: true,
   },
 ];
 
@@ -45,16 +56,15 @@ export function ProductSection() {
   const [showCalc, setShowCalc] = useState(false);
   const [packages, setPackages] = useState<CalculatedPackage[]>(() => calculatePackages());
   const [isCustom, setIsCustom] = useState(() => hasCustomPricing());
+  const [addOns, setAddOns] = useState<Record<string, { carport: boolean; monitoring: string }>>({});
 
-  // Listen for storage changes from kalibrasi page (cross-tab sync)
+  // Listen for storage changes from kalibrasi page
   useEffect(() => {
     const handler = () => {
-      const results = calculatePackages();
-      setPackages(results);
+      setPackages(calculatePackages());
       setIsCustom(hasCustomPricing());
     };
     window.addEventListener("storage", handler);
-    // Also listen for custom event dispatched by kalibrasi page (same-tab)
     window.addEventListener("jmse-pricing-updated", handler);
     return () => {
       window.removeEventListener("storage", handler);
@@ -62,9 +72,33 @@ export function ProductSection() {
     };
   }, []);
 
-  // Group packages by tier
   const getPackagesByTier = (tier: string) =>
     packages.filter((p) => p.tier === tier);
+
+  const toggleCarport = (pkgName: string) => {
+    setAddOns((prev) => ({
+      ...prev,
+      [pkgName]: { ...prev[pkgName], carport: !(prev[pkgName]?.carport ?? false), monitoring: prev[pkgName]?.monitoring || "none" },
+    }));
+  };
+
+  const setMonitoring = (pkgName: string, level: string) => {
+    setAddOns((prev) => ({
+      ...prev,
+      [pkgName]: { carport: prev[pkgName]?.carport ?? false, monitoring: level },
+    }));
+  };
+
+  const getAddOnTotal = (pkg: CalculatedPackage) => {
+    const a = addOns[pkg.name];
+    if (!a) return 0;
+    let total = 0;
+    if (a.carport) total += pkg.carportAddonPrice;
+    if (a.monitoring === "basic") total += pkg.monitoringBasicPrice;
+    if (a.monitoring === "standard") total += pkg.monitoringStandardPrice;
+    if (a.monitoring === "industrial") total += pkg.monitoringIndustrialPrice;
+    return total;
+  };
 
   return (
     <section id="produk" className="py-20 md:py-28 bg-muted/30" ref={ref}>
@@ -85,10 +119,10 @@ export function ProductSection() {
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
             Semua paket dihitung berdasarkan kondisi iradiasi matahari di Jambi
-            (PSH 3,5–4 jam) dan rasio baterai yang optimal terhadap produksi panel
-            surya. Tersedia opsi tanpa baterai (hemat investasi) maupun dengan
-            baterai LiFePO4 (full backup 24 jam). Harga sudah termasuk PPN 11%,
-            instalasi, survei, desain, dan garansi resmi.
+            (PSH 3,75 jam) dan rasio baterai optimal 26–33% dari produksi harian PV.
+            Tersedia opsi tanpa baterai (hemat investasi) maupun dengan baterai LiFePO4
+            (full backup 24 jam). Harga sudah termasuk PPN 11%, instalasi, survei,
+            desain, dan garansi resmi.
           </p>
         </motion.div>
 
@@ -122,21 +156,25 @@ export function ProductSection() {
               className="mt-3 text-xs text-blue-600 dark:text-blue-400 space-y-2 leading-relaxed"
             >
               <p>
-                <strong>Parameter Jambi:</strong> PSH (Peak Sun Hours) rata-rata 3,5–4 jam/hari.
-                Produksi harian = Kapasitas kWp × PSH × Efisiensi 80%.
+                <strong>Parameter Jambi:</strong> PSH (Peak Sun Hours) rata-rata 3,75 jam/hari.
+                Produksi harian = Kapasitas kWp x PSH x Efisiensi 80%.
               </p>
               <p>
-                <strong>Rasio Baterai:</strong> Kapasitas baterai = 26–33% dari produksi harian PV.
-                Cukup untuk kebutuhan malam hari (backup esensial 8–10 jam), tanpa over-sizing.
+                <strong>Rasio Baterai:</strong> Kapasitas baterai = 26-33% dari produksi harian PV.
+                Cukup untuk kebutuhan malam hari (backup esensial 8-10 jam), tanpa over-sizing.
               </p>
               <p>
-                <strong>Biaya per panel (630Wp):</strong> Panel + Mounting + BOS
-                + Tenaga Kerja.
+                <strong>Biaya per paket:</strong> Panel + Mounting + BOS + Inverter + Baterai (opsional)
+                + Proteksi (SPD & Grounding) + Jasa Instalasi + Survei & Desain + Commissioning + Logistik.
               </p>
               <p>
                 <strong>Margin:</strong> 35% dari HPP (Harga Pokok Produksi).
                 <strong> PPN 11%</strong> sudah termasuk dalam harga tertera.
                 <strong> PPh</strong> dipotong oleh pihak pembeli (wajib pajak), bukan menambah harga jual.
+              </p>
+              <p>
+                <strong>Add-on tersedia:</strong> Kanopi Carport (+harga per kWp) dan Smart Monitoring
+                (Basic / Standard / Industrial) untuk paket Gold & Platinum.
               </p>
             </motion.div>
           )}
@@ -179,141 +217,216 @@ export function ProductSection() {
                 </span>
               </div>
 
+              {/* Product Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {catProducts.map((product) => (
-                  <div
-                    key={product.name}
-                    className={`relative p-6 rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
-                      product.popular
-                        ? "bg-gradient-to-br from-solar to-solar-dark text-white border-solar shadow-lg shadow-solar/20"
-                        : "bg-card border-border hover:border-solar/30"
-                    }`}
-                  >
-                    {product.popular && (
-                      <span className="absolute -top-3 left-6 px-3 py-1 bg-gold text-navy text-xs font-bold rounded-full shadow-md">
-                        PALING POPULER
-                      </span>
-                    )}
+                {catProducts.map((product) => {
+                  const addOnTotal = getAddOnTotal(product);
+                  const currentAddOns = addOns[product.name];
+                  return (
+                    <div
+                      key={product.name}
+                      className={`relative p-6 rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
+                        product.popular
+                          ? "bg-gradient-to-br from-solar to-solar-dark text-white border-solar shadow-lg shadow-solar/20"
+                          : "bg-card border-border hover:border-solar/30"
+                      }`}
+                    >
+                      {product.popular && (
+                        <span className="absolute -top-3 left-6 px-3 py-1 bg-gold text-navy text-xs font-bold rounded-full shadow-md">
+                          PALING POPULER
+                        </span>
+                      )}
 
-                    <div className="flex items-center gap-2 mb-3">
-                      <Zap
-                        className={`w-5 h-5 ${
-                          product.popular ? "text-gold-light" : "text-solar"
+                      <div className="flex items-center gap-2 mb-3">
+                        <Zap
+                          className={`w-5 h-5 ${
+                            product.popular ? "text-gold-light" : "text-solar"
+                          }`}
+                        />
+                        <h4
+                          className={`text-base font-bold leading-tight ${
+                            product.popular ? "text-white" : "text-navy dark:text-white"
+                          }`}
+                        >
+                          {product.name}
+                        </h4>
+                      </div>
+
+                      <p
+                        className={`text-sm mb-3 leading-relaxed ${
+                          product.popular ? "text-white/80" : "text-muted-foreground"
                         }`}
-                      />
-                      <h4
-                        className={`text-base font-bold leading-tight ${
+                      >
+                        {product.desc}
+                      </p>
+
+                      {/* Specs line */}
+                      <p
+                        className={`text-xs font-medium mb-3 px-2.5 py-1.5 rounded-lg inline-block ${
+                          product.popular
+                            ? "bg-white/10 text-white/70"
+                            : "bg-muted text-muted-foreground"
+                        }`}
+                      >
+                        {product.specs}
+                      </p>
+
+                      {product.batteryKwh > 0 && (
+                        <span
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium mb-3 ml-2 ${
+                            product.popular
+                              ? "bg-white/10 text-gold-light"
+                              : "bg-gold/10 text-gold"
+                          }`}
+                        >
+                          <Battery className="w-3.5 h-3.5" />
+                          LiFePO4 Backup
+                        </span>
+                      )}
+
+                      {/* Battery sizing note */}
+                      {product.batteryNote && (
+                        <p
+                          className={`text-xs mt-2 mb-3 leading-relaxed ${
+                            product.popular ? "text-white/60" : "text-muted-foreground"
+                          }`}
+                        >
+                          {product.batteryNote}
+                        </p>
+                      )}
+
+                      <div
+                        className={`p-3 rounded-xl mb-4 ${
+                          product.popular ? "bg-white/10" : "bg-solar/5 border border-solar/10"
+                        }`}
+                      >
+                        <p
+                          className={`text-xs font-medium mb-1 ${
+                            product.popular ? "text-white/60" : "text-muted-foreground"
+                          }`}
+                        >
+                          Estimasi Penghematan Bulanan
+                        </p>
+                        <p
+                          className={`text-lg font-bold ${
+                            product.popular ? "text-gold-light" : "text-solar"
+                          }`}
+                        >
+                          {product.savingsRange}
+                        </p>
+                        <p
+                          className={`text-xs mt-1 ${
+                            product.popular ? "text-white/50" : "text-muted-foreground"
+                          }`}
+                        >
+                          Produksi: {product.dailyProduction}
+                        </p>
+                      </div>
+
+                      <p
+                        className={`text-lg font-extrabold mb-1 ${
                           product.popular ? "text-white" : "text-navy dark:text-white"
                         }`}
                       >
-                        {product.name}
-                      </h4>
-                    </div>
-
-                    <p
-                      className={`text-sm mb-3 leading-relaxed ${
-                        product.popular
-                          ? "text-white/80"
-                          : "text-muted-foreground"
-                      }`}
-                    >
-                      {product.desc}
-                    </p>
-
-                    {/* Specs line */}
-                    <p
-                      className={`text-xs font-medium mb-3 px-2.5 py-1.5 rounded-lg inline-block ${
-                        product.popular
-                          ? "bg-white/10 text-white/70"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      {product.specs}
-                    </p>
-
-                    {product.batteryKwh > 0 && (
-                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium mb-3 ml-2 ${
-                        product.popular
-                          ? "bg-white/10 text-gold-light"
-                          : "bg-gold/10 text-gold"
-                      }`}>
-                        <Battery className="w-3.5 h-3.5" />
-                        LiFePO4 Backup
-                      </span>
-                    )}
-
-                    {/* Battery sizing note */}
-                    {product.batteryNote && (
-                      <p className={`text-xs mt-2 mb-3 leading-relaxed ${product.popular ? "text-white/60" : "text-muted-foreground"}`}>
-                        {product.batteryNote}
+                        {product.priceFormatted}
                       </p>
-                    )}
-
-                    <div
-                      className={`p-3 rounded-xl mb-4 ${
-                        product.popular
-                          ? "bg-white/10"
-                          : "bg-solar/5 border border-solar/10"
-                      }`}
-                    >
+                      {addOnTotal > 0 && (
+                        <p
+                          className={`text-xs mb-1 font-medium ${
+                            product.popular ? "text-gold-light" : "text-solar"
+                          }`}
+                        >
+                          + Add-on: {formatRp(addOnTotal)} = {formatRp(product.price + addOnTotal)}
+                        </p>
+                      )}
                       <p
-                        className={`text-xs font-medium mb-1 ${
-                          product.popular ? "text-white/60" : "text-muted-foreground"
-                        }`}
-                      >
-                        Estimasi Penghematan Bulanan
-                      </p>
-                      <p
-                        className={`text-lg font-bold ${
-                          product.popular ? "text-gold-light" : "text-solar"
-                        }`}
-                      >
-                        {product.savingsRange}
-                      </p>
-                      <p
-                        className={`text-xs mt-1 ${
+                        className={`text-xs mb-4 ${
                           product.popular ? "text-white/50" : "text-muted-foreground"
                         }`}
                       >
-                        Produksi: {product.dailyProduction}
+                        Sudah termasuk PPN 11%, instalasi & garansi
                       </p>
+
+                      {/* Add-on section (Gold & Platinum only) */}
+                      {cat.showAddOns && (
+                        <div className={`mb-4 p-3 rounded-xl border ${
+                          product.popular ? "bg-white/5 border-white/20" : "bg-muted/50 border-border"
+                        }`}>
+                          <p className={`text-xs font-semibold mb-2 flex items-center gap-1.5 ${
+                            product.popular ? "text-white/70" : "text-muted-foreground"
+                          }`}>
+                            <Sparkles className="w-3.5 h-3.5" />
+                            Optional Add-on
+                          </p>
+
+                          {/* Carport toggle */}
+                          {product.carportAddonPrice > 0 && (
+                            <button
+                              onClick={() => toggleCarport(product.name)}
+                              className={`w-full flex items-center justify-between p-2 rounded-lg text-xs mb-2 transition-colors ${
+                                currentAddOns?.carport
+                                  ? product.popular ? "bg-gold/20 text-gold-light" : "bg-solar/10 text-solar"
+                                  : product.popular ? "bg-white/5 text-white/50 hover:bg-white/10" : "bg-card hover:bg-muted"
+                              }`}
+                            >
+                              <span className="flex items-center gap-1.5">
+                                <Car className="w-3.5 h-3.5" />
+                                Kanopi Carport ({product.kWp} kWp)
+                              </span>
+                              <span className="font-medium">+{formatRp(product.carportAddonPrice)}</span>
+                            </button>
+                          )}
+
+                          {/* Smart Monitoring */}
+                          {(product.monitoringBasicPrice > 0 || product.monitoringStandardPrice > 0 || product.monitoringIndustrialPrice > 0) && (
+                            <div className="space-y-1">
+                              {[
+                                { level: "basic", label: "Basic", price: product.monitoringBasicPrice },
+                                { level: "standard", label: "Standard", price: product.monitoringStandardPrice },
+                                { level: "industrial", label: "Industrial", price: product.monitoringIndustrialPrice },
+                              ].filter(m => m.price > 0).map(m => (
+                                <button
+                                  key={m.level}
+                                  onClick={() => setMonitoring(product.name, currentAddOns?.monitoring === m.level ? "none" : m.level)}
+                                  className={`w-full flex items-center justify-between p-2 rounded-lg text-xs transition-colors ${
+                                    currentAddOns?.monitoring === m.level
+                                      ? product.popular ? "bg-gold/20 text-gold-light" : "bg-solar/10 text-solar"
+                                      : product.popular ? "bg-white/5 text-white/50 hover:bg-white/10" : "bg-card hover:bg-muted"
+                                  }`}
+                                >
+                                  <span className="flex items-center gap-1.5">
+                                    <Monitor className="w-3.5 h-3.5" />
+                                    Smart Monitoring {m.label}
+                                  </span>
+                                  <span className="font-medium">+{formatRp(m.price)}</span>
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      <a
+                        href={waLink(product, currentAddOns)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => {
+                          if (typeof window !== "undefined" && (window as unknown as Record<string, unknown>).fbq) {
+                            (window as unknown as Record<string, (...args: unknown[]) => void>).fbq!("track", "Lead");
+                          }
+                        }}
+                        className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
+                          product.popular
+                            ? "bg-white text-solar hover:bg-white/90 hover:shadow-lg"
+                            : "bg-solar text-white hover:bg-solar-dark"
+                        }`}
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                        Tanya Paket Ini via WhatsApp
+                      </a>
                     </div>
-
-                    <p
-                      className={`text-lg font-extrabold mb-1 ${
-                        product.popular ? "text-white" : "text-navy dark:text-white"
-                      }`}
-                    >
-                      {product.priceFormatted}
-                    </p>
-                    <p
-                      className={`text-xs mb-4 ${
-                        product.popular ? "text-white/50" : "text-muted-foreground"
-                      }`}
-                    >
-                      Sudah termasuk PPN 11%, instalasi & garansi
-                    </p>
-
-                    <a
-                      href={waLink(product.name)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => {
-                        if (typeof window !== "undefined" && (window as unknown as Record<string, unknown>).fbq) {
-                          (window as unknown as Record<string, (...args: unknown[]) => void>).fbq!('track', 'Lead');
-                        }
-                      }}
-                      className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
-                        product.popular
-                          ? "bg-white text-solar hover:bg-white/90 hover:shadow-lg"
-                          : "bg-solar text-white hover:bg-solar-dark"
-                      }`}
-                    >
-                      <MessageCircle className="w-4 h-4" />
-                      Tanya Paket Ini via WhatsApp
-                    </a>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </motion.div>
           );

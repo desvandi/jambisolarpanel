@@ -12,7 +12,7 @@ import {
 const faqs = [
   {
     q: "Berapa biaya pasang panel surya?",
-    a: "Biaya instalasi panel surya bervariasi tergantung kapasitas sistem dan kebutuhan spesifik Anda. Untuk rumah tangga, paket mulai dari Rp 36 juta untuk sistem 2 kWp (tanpa baterai). Untuk bisnis dan industri, paket mulai dari Rp 90 juta. Semua harga sudah termasuk PPN 11%, peralatan, instalasi, survei, desain, dan garansi resmi. Kami menyediakan konsultasi dan survei gratis untuk memberikan estimasi biaya yang akurat sesuai kebutuhan Anda.",
+    a: "Biaya instalasi panel surya bervariasi tergantung kapasitas sistem dan kebutuhan spesifik Anda. Untuk rumah tangga, paket mulai dari Rp31 juta untuk sistem 1 kWp (tanpa baterai) hingga Rp77 juta untuk 5 kWp. Untuk bisnis dan industri, paket mulai dari Rp101 juta (6,5 kWp). Semua harga sudah termasuk PPN 11%, peralatan, instalasi, survei, desain, dan garansi resmi. Tersedia juga add-on Kanopi Carport dan Smart Monitoring untuk paket Gold dan Platinum. Kami menyediakan konsultasi dan survei gratis untuk memberikan estimasi biaya yang akurat sesuai kebutuhan Anda.",
   },
   {
     q: "Berapa lama balik modal (ROI)?",
