@@ -2,119 +2,191 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Home, Building2, Factory, Zap, MessageCircle, Battery, BatteryCharging } from "lucide-react";
+import { Home, Building2, Factory, Zap, MessageCircle, Battery, BatteryCharging, Info, ChevronDown, ChevronUp } from "lucide-react";
+import { useState } from "react";
 
 function waLink(pkg: string) {
   return `https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20dengan%20paket%20${encodeURIComponent(pkg)}`;
 }
 
+/* ============================================================
+   PERHITUNGAN TEKNIS & HARGA — DISUSUN UNTUK KONDISI JAMBI
+   ============================================================
+   Parameter:
+   - PSH Jambi           : 3,5 – 4 jam (avg 3,75 jam)
+   - Efisiensi sistem     : 0,80
+   - Produksi per kWp    : 3,75 × 0,80 = 3,0 kWh/hari
+   - Tarif PLN R-1       : ~Rp 1.500/kWh (avg block tarif)
+
+   Rasio Baterai terhadap PV:
+   - Baterai = 26-33% produksi harian PV → cukup untuk kebutuhan malam
+   - 5 kWp → 5 kWh  (produksi 17 kWh/hari, baterai 29%)
+   - 10 kWp → 10 kWh (produksi 30 kWh/hari, baterai 33%)
+   - 12 kWp → 10 kWh (produksi 38 kWh/hari, baterai 26%)
+   - 18 kWp → 15 kWh (produksi 57 kWh/hari, baterai 26%)
+   - 20 kWp → 20 kWh (produksi 62 kWh/hari, baterai 32%)
+
+   Komponen HPP per panel:
+   - Panel 630Wp          : Rp  2.500.000
+   - Mounting aluminium    : Rp    400.000
+   - BOS (kabel, MC4, CB)  : Rp    500.000
+   - Tenaga kerja          : Rp    600.000
+                          ─────────────────
+   Subtotal per panel      : Rp  4.000.000
+
+   Penyesuaian baterai     : + Rp 2.000.000 (BOS + labor integrasi)
+
+   Margin                  : 35% dari HPP
+   PPN                     : 11% dari subtotal (HPP + margin)
+   PPh                     : Dipotong oleh pembeli (bukan menambah harga)
+
+   Contoh Silver 5 kWp (tanpa baterai):
+   - 9 panel × Rp 4.000.000  = Rp 36.000.000
+   - Inverter DEYE 6kW       = Rp 12.000.000
+   - HPP                      = Rp 48.000.000
+   - Margin 35%               = Rp 16.800.000
+   - Subtotal                 = Rp 64.800.000
+   - PPN 11%                  = Rp  7.128.000
+   - Harga final              = Rp 72.000.000
+   ============================================================ */
+
 const categories = [
   {
     icon: Home,
     title: "Silver Package — Rumah Tangga",
-    tagline: "Hybrid Off-Grid System 1 Phase — Cocok untuk kebutuhan rumah tangga",
+    tagline: "Hybrid System 1 Fase — Cocok untuk kebutuhan rumah tangga di Jambi & sekitarnya",
     products: [
       {
         name: "Silver 2 kWp (Tanpa Baterai)",
-        desc: "4 panel PV 630Wp + Inverter DEYE 3.600W. Cocok untuk rumah kecil: lampu, TV, kipas angin.",
-        savings: "Rp 1jt - 2jt/bulan",
-        price: "Rp 51.350.000",
+        desc: "4 panel PV 630Wp + Inverter Hybrid DEYE 3.600W. Cocok untuk rumah kecil: lampu, TV, kipas angin, charger. Produksi ~7,6 kWh/hari (PSH Jambi 3,75h).",
+        specs: "4× Panel 630Wp | DEYE 3.6kW Hybrid",
+        dailyProduction: "~7,6 kWh/hari",
+        savings: "Rp 500rb - 700rb/bulan",
+        price: "Rp 36.000.000",
         popular: false,
         battery: false,
       },
       {
         name: "Silver 3 kWp (Tanpa Baterai)",
-        desc: "5 panel PV 630Wp + Inverter DEYE 3.600W. Ideal untuk rumah menengah, AC 1 unit, kulkas.",
-        savings: "Rp 1.5jt - 2.5jt/bulan",
-        price: "Rp 58.890.000",
+        desc: "5 panel PV 630Wp + Inverter Hybrid DEYE 3.600W. Ideal untuk rumah menengah dengan AC 1 unit dan kulkas. Produksi ~9,5 kWh/hari.",
+        specs: "5× Panel 630Wp | DEYE 3.6kW Hybrid",
+        dailyProduction: "~9,5 kWh/hari",
+        savings: "Rp 650rb - 900rb/bulan",
+        price: "Rp 42.000.000",
         popular: false,
         battery: false,
       },
       {
         name: "Silver 5 kWp (Tanpa Baterai)",
-        desc: "9 panel PV 630Wp + Inverter DEYE 6.000W. Rumah keluarga besar, AC 2 unit, water heater.",
-        savings: "Rp 2.5jt - 4jt/bulan",
-        price: "Rp 85.800.000",
+        desc: "9 panel PV 630Wp + Inverter Hybrid DEYE 6.000W. Rumah keluarga besar, AC 2 unit, water heater. Produksi ~17 kWh/hari.",
+        specs: "9× Panel 630Wp | DEYE 6kW Hybrid",
+        dailyProduction: "~17 kWh/hari",
+        savings: "Rp 1,1jt - 1,5jt/bulan",
+        price: "Rp 72.000.000",
         popular: true,
         battery: false,
       },
       {
-        name: "Silver 5 kWp (Baterai 5kWh)",
-        desc: "9 panel PV 630Wp + DEYE 6.000W + LiFePO4 5.000Wh. Full backup, listrik 24 jam saat padam.",
-        savings: "Rp 2.5jt - 4jt/bulan",
-        price: "Rp 110.500.000",
+        name: "Silver 5 kWp (Baterai 5 kWh)",
+        desc: "9 panel PV 630Wp + DEYE 6.000W + LiFePO4 5 kWh. Full backup saat PLN padam. Baterai menutupi kebutuhan malam hari (lampu, HP, kipas) hingga 8-10 jam.",
+        specs: "9× Panel 630Wp | DEYE 6kW | LiFePO4 5kWh",
+        dailyProduction: "~17 kWh/hari",
+        savings: "Rp 1,1jt - 1,5jt/bulan",
+        price: "Rp 97.000.000",
         popular: false,
         battery: true,
+        batteryNote: "Rasio baterai 29% dari produksi harian — optimal untuk backup malam",
       },
     ],
   },
   {
     icon: Building2,
     title: "Gold Package — Bisnis & UMKM",
-    tagline: "Hybrid Off-Grid System 1 Phase — Solusi bisnis skala menengah hingga besar",
+    tagline: "Hybrid System 1 Fase — Solusi bisnis skala menengah hingga besar",
     products: [
       {
         name: "Gold 7 kWp (Tanpa Baterai)",
-        desc: "12 panel PV 630Wp + DEYE SUN 6.000W. Toko, kantor kecil, workshop, cold storage mini.",
-        savings: "Rp 4jt - 7jt/bulan",
-        price: "Rp 117.000.000",
+        desc: "12 panel PV 630Wp + DEYE 6.000W Hybrid. Toko, kantor kecil, workshop, cold storage mini. Produksi ~22,7 kWh/hari.",
+        specs: "12× Panel 630Wp | DEYE 6kW Hybrid",
+        dailyProduction: "~22,7 kWh/hari",
+        savings: "Rp 1,5jt - 2jt/bulan",
+        price: "Rp 90.000.000",
         popular: false,
         battery: false,
       },
       {
         name: "Gold 10 kWp (Tanpa Baterai)",
-        desc: "16 panel PV 630Wp + GROWATT SPE 10.000ES. Gudang, restoran, hotel kecil, minimarket.",
-        savings: "Rp 6jt - 10jt/bulan",
-        price: "Rp 152.100.000",
+        desc: "16 panel PV 630Wp + GROWATT SPF 10.000ES Hybrid. Gudang, restoran, hotel kecil, minimarket. Produksi ~30,2 kWh/hari.",
+        specs: "16× Panel 630Wp | GROWATT 10kW Hybrid",
+        dailyProduction: "~30,2 kWh/hari",
+        savings: "Rp 2jt - 2,8jt/bulan",
+        price: "Rp 121.000.000",
         popular: true,
         battery: false,
       },
       {
-        name: "Gold 10 kWp (Baterai 10kWh)",
-        desc: "16 panel PV 630Wp + GROWATT SPE 10.000ES + LiFePO4 10.000Wh. Full backup bisnis 24 jam.",
-        savings: "Rp 6jt - 10jt/bulan",
-        price: "Rp 194.740.000",
+        name: "Gold 10 kWp (Baterai 10 kWh)",
+        desc: "16 panel PV 630Wp + GROWATT 10.000ES + LiFePO4 10 kWh. Full backup bisnis 24 jam. Baterai menutupi operasional malam hari (lampu, CCTV, kulkas, POS).",
+        specs: "16× Panel 630Wp | GROWATT 10kW | LiFePO4 10kWh",
+        dailyProduction: "~30,2 kWh/hari",
+        savings: "Rp 2jt - 2,8jt/bulan",
+        price: "Rp 163.000.000",
         popular: false,
         battery: true,
+        batteryNote: "Rasio baterai 33% dari produksi harian — cukup untuk backup operasional malam",
       },
     ],
   },
   {
     icon: Factory,
     title: "Platinum Package — Industri",
-    tagline: "Hybrid Off-Grid System 3 Phase — Solusi skala besar untuk efisiensi maksimal",
+    tagline: "Hybrid System 3 Fase — Solusi skala besar untuk efisiensi maksimal",
     products: [
       {
-        name: "Platinum 12 kWp (Baterai 10kWh)",
-        desc: "20 panel PV 630Wp + DEYE SUN 10.000W + LiFePO4 10.000Wh. Pabrik menengah, processing plant.",
-        savings: "Rp 8jt - 14jt/bulan",
-        price: "Rp 252.850.000",
+        name: "Platinum 12 kWp (Baterai 10 kWh)",
+        desc: "20 panel PV 630Wp + DEYE 10.000W 3-Fase + LiFePO4 10 kWh. Pabrik menengah, processing plant. Produksi ~37,8 kWh/hari.",
+        specs: "20× Panel 630Wp | DEYE 10kW 3P | LiFePO4 10kWh",
+        dailyProduction: "~37,8 kWh/hari",
+        savings: "Rp 2,5jt - 3,5jt/bulan",
+        price: "Rp 195.000.000",
         popular: false,
         battery: true,
+        batteryNote: "Rasio baterai 26% dari produksi harian — optimal untuk beban penting malam",
       },
       {
-        name: "Platinum 18 kWp (Baterai 15kWh)",
-        desc: "30 panel PV 630Wp + DEYE SUN 15.000W + LiFePO4 15.000Wh. Pabrik besar, agro-industri.",
-        savings: "Rp 12jt - 22jt/bulan",
-        price: "Rp 341.900.000",
+        name: "Platinum 18 kWp (Baterai 15 kWh)",
+        desc: "30 panel PV 630Wp + DEYE 15.000W 3-Fase + LiFePO4 15 kWh. Pabrik besar, agro-industri, rumah makan besar. Produksi ~56,7 kWh/hari.",
+        specs: "30× Panel 630Wp | DEYE 15kW 3P | LiFePO4 15kWh",
+        dailyProduction: "~56,7 kWh/hari",
+        savings: "Rp 3,8jt - 5jt/bulan",
+        price: "Rp 282.000.000",
         popular: true,
         battery: true,
+        batteryNote: "Rasio baterai 26% dari produksi harian — menutupi beban esensial malam",
       },
       {
-        name: "Platinum 20 kWp (Baterai 20kWh)",
-        desc: "33 panel PV 630Wp + DEYE SUN 20.000W + LiFePO4 20.000Wh. Mega proyek, industrial complex.",
-        savings: "Rp 14jt - 25jt/bulan",
-        price: "Rp 421.460.000",
+        name: "Platinum 20 kWp (Baterai 20 kWh)",
+        desc: "33 panel PV 630Wp + DEYE 20.000W 3-Fase + LiFePO4 20 kWh. Mega proyek, industrial complex, hotel. Produksi ~62,4 kWh/hari.",
+        specs: "33× Panel 630Wp | DEYE 20kW 3P | LiFePO4 20kWh",
+        dailyProduction: "~62,4 kWh/hari",
+        savings: "Rp 4,1jt - 5,5jt/bulan",
+        price: "Rp 325.000.000",
         popular: false,
         battery: true,
+        batteryNote: "Rasio baterai 32% dari produksi harian — full backup untuk operasional kritis",
       },
     ],
   },
 ];
 
+/* Harga sudah termasuk: Peralatan, Instalasi, Survei & Desain, Garansi
+   Harga sudah termasuk PPN 11%
+   PPh dipotong oleh pihak pembeli (bukan menambah harga jual) */
+
 export function ProductSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [showCalc, setShowCalc] = useState(false);
 
   return (
     <section id="produk" className="py-20 md:py-28 bg-muted/30" ref={ref}>
@@ -134,11 +206,62 @@ export function ProductSection() {
             <span className="gradient-text">Sesuai Kebutuhan</span> Anda
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Kami menyediakan berbagai paket instalasi PLTS Hybrid Off-Grid yang
-            dirancang khusus untuk setiap segmen. Tersedia opsi tanpa baterai
-            (hemat investasi) maupun dengan baterai LiFePO4 (full backup 24 jam).
-            Semua paket termasuk survei, desain, instalasi, dan garansi resmi.
+            Semua paket dihitung berdasarkan kondisi iradiasi matahari di Jambi
+            (PSH 3,5–4 jam) dan rasio baterai yang optimal terhadap produksi panel
+            surya. Tersedia opsi tanpa baterai (hemat investasi) maupun dengan
+            baterai LiFePO4 (full backup 24 jam). Harga sudah termasuk PPN 11%,
+            instalasi, survei, desain, dan garansi resmi.
           </p>
+        </motion.div>
+
+        {/* PSH Info Box */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="max-w-3xl mx-auto mb-12 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/30"
+        >
+          <button
+            onClick={() => setShowCalc(!showCalc)}
+            className="flex items-center justify-between w-full text-left"
+          >
+            <div className="flex items-center gap-2">
+              <Info className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+              <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
+                Bagaimana cara kami menghitung harga? (Klik untuk detail)
+              </span>
+            </div>
+            {showCalc ? (
+              <ChevronUp className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            ) : (
+              <ChevronDown className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            )}
+          </button>
+          {showCalc && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              className="mt-3 text-xs text-blue-600 dark:text-blue-400 space-y-2 leading-relaxed"
+            >
+              <p>
+                <strong>Parameter Jambi:</strong> PSH (Peak Sun Hours) rata-rata 3,5–4 jam/hari.
+                Produksi harian = Kapasitas kWp × PSH × Efisiensi 80%.
+              </p>
+              <p>
+                <strong>Rasio Baterai:</strong> Kapasitas baterai = 26–33% dari produksi harian PV.
+                Cukup untuk kebutuhan malam hari (backup esensial 8–10 jam), tanpa over-sizing.
+              </p>
+              <p>
+                <strong>Biaya per panel (630Wp):</strong> Panel Rp 2,5jt + Mounting Rp 400rb + BOS
+                Rp 500rb + Tenaga Kerja Rp 600rb = Rp 4jt/panel.
+              </p>
+              <p>
+                <strong>Margin:</strong> 35% dari HPP (Harga Pokok Produksi).
+                <strong> PPN 11%</strong> sudah termasuk dalam harga tertera.
+                <strong> PPh</strong> dipotong oleh pihak pembeli (wajib pajak), bukan menambah harga jual.
+              </p>
+            </motion.div>
+          )}
         </motion.div>
 
         {/* Categories */}
@@ -206,7 +329,7 @@ export function ProductSection() {
                   </div>
 
                   <p
-                    className={`text-sm mb-4 leading-relaxed ${
+                    className={`text-sm mb-3 leading-relaxed ${
                       product.popular
                         ? "text-white/80"
                         : "text-muted-foreground"
@@ -215,15 +338,33 @@ export function ProductSection() {
                     {product.desc}
                   </p>
 
+                  {/* Specs line */}
+                  <p
+                    className={`text-xs font-medium mb-3 px-2.5 py-1.5 rounded-lg inline-block ${
+                      product.popular
+                        ? "bg-white/10 text-white/70"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    {product.specs}
+                  </p>
+
                   {product.battery && (
-                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium mb-3 ${
+                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium mb-3 ml-2 ${
                       product.popular
                         ? "bg-white/10 text-gold-light"
                         : "bg-gold/10 text-gold"
                     }`}>
                       <Battery className="w-3.5 h-3.5" />
-                      Termasuk Baterai LiFePO4
+                      LiFePO4 Backup
                     </span>
+                  )}
+
+                  {/* Battery sizing note */}
+                  {product.batteryNote && (
+                    <p className={`text-xs mt-2 mb-3 leading-relaxed ${product.popular ? "text-white/60" : "text-muted-foreground"}`}>
+                      {product.batteryNote}
+                    </p>
                   )}
 
                   <div
@@ -238,7 +379,7 @@ export function ProductSection() {
                         product.popular ? "text-white/60" : "text-muted-foreground"
                       }`}
                     >
-                      Estimasi Penghematan
+                      Estimasi Penghematan Bulanan
                     </p>
                     <p
                       className={`text-lg font-bold ${
@@ -247,14 +388,28 @@ export function ProductSection() {
                     >
                       {product.savings}
                     </p>
+                    <p
+                      className={`text-xs mt-1 ${
+                        product.popular ? "text-white/50" : "text-muted-foreground"
+                      }`}
+                    >
+                      Produksi: {product.dailyProduction}
+                    </p>
                   </div>
 
                   <p
-                    className={`text-lg font-extrabold mb-4 ${
+                    className={`text-lg font-extrabold mb-1 ${
                       product.popular ? "text-white" : "text-navy dark:text-white"
                     }`}
                   >
                     {product.price}
+                  </p>
+                  <p
+                    className={`text-xs mb-4 ${
+                      product.popular ? "text-white/50" : "text-muted-foreground"
+                    }`}
+                  >
+                    Sudah termasuk PPN 11%, instalasi & garansi
                   </p>
 
                   <a
