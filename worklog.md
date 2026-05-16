@@ -68,6 +68,26 @@ Stage Summary:
 ---
 Task ID: 4
 Agent: Main Agent
+Task: Connect ProductSection to shared pricing library & enhance Kalibrasi Harga page
+
+Work Log:
+- Refactored ProductSection.tsx to use dynamic pricing from `@/lib/pricing` instead of hardcoded values
+- Added localStorage-based price loading with cross-tab sync via `storage` event + custom `jmse-pricing-updated` event
+- Updated Kalibrasi Harga page to dispatch `jmse-pricing-updated` event on save
+- Added "Generate & Salin Harga ke Landing Page" button that exports formatted price code to clipboard
+- Added subtle admin gear icon (⚙) link in footer to access Kalibrasi Harga page
+- Updated Footer.tsx with Next.js `Link` import for internal navigation
+
+Stage Summary:
+- ProductSection now dynamically reads prices from localStorage (falls back to defaults from pricing.ts)
+- Changing prices in Kalibrasi Harga automatically updates ProductSection (cross-tab + same-tab sync)
+- Kalibrasi Harga page has 2 export options: JSON config + formatted code for landing page
+- Admin access via ⚙ icon in footer or direct URL `/kalibrasi-harga`
+- Build verified: 5 static pages generated, 0 errors
+
+---
+Task ID: 4
+Agent: Main Agent
 Task: Build price calibration page for easy material price updates
 
 Work Log:

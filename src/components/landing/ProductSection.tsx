@@ -1,61 +1,77 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Home, Building2, Factory, Zap, MessageCircle, Battery, BatteryCharging, Info, ChevronDown, ChevronUp } from "lucide-react";
 import {
-  calculatePackages,
-  hasCustomPricing,
   type CalculatedPackage,
+  calculatePackages,
+  loadComponentPrices,
+  loadInverterPrices,
+  loadSettings,
+  hasCustomPricing,
   inverterDisplayNames,
+  formatRp,
 } from "@/lib/pricing";
 
 function waLink(pkg: string) {
   return `https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20dengan%20paket%20${encodeURIComponent(pkg)}`;
 }
 
-const tierConfig = {
-  silver: {
+const categoryMeta = [
+  {
     icon: Home,
     title: "Silver Package — Rumah Tangga",
     tagline: "Hybrid System 1 Fase — Cocok untuk kebutuhan rumah tangga di Jambi & sekitarnya",
+    tiers: ["silver"],
   },
-  gold: {
+  {
     icon: Building2,
     title: "Gold Package — Bisnis & UMKM",
     tagline: "Hybrid System 1 Fase — Solusi bisnis skala menengah hingga besar",
+    tiers: ["gold"],
   },
-  platinum: {
+  {
     icon: Factory,
     title: "Platinum Package — Industri",
     tagline: "Hybrid System 3 Fase — Solusi skala besar untuk efisiensi maksimal",
+    tiers: ["platinum"],
   },
-} as const;
-
-type TierKey = keyof typeof tierConfig;
-
-function getTierLabel(tier: string): string {
-  if (tier === "silver") return "Tanpa Baterai — Hemat investasi awal, gunakan listrik PLN saat malam";
-  return "Dengan Baterai LiFePO4 — Full backup 24 jam, listrik tetap menyala saat PLN padam";
-}
+];
 
 export function ProductSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [showCalc, setShowCalc] = useState(false);
   const [packages, setPackages] = useState<CalculatedPackage[]>([]);
+  const [isCustom, setIsCustom] = useState(false);
 
+  // Load prices from localStorage (or defaults) on client mount
   useEffect(() => {
-    // Calculate on mount (reads from localStorage if available)
-    setPackages(calculatePackages());
+    const results = calculatePackages();
+    setPackages(results);
+    setIsCustom(hasCustomPricing());
+  }, []);
+
+  // Listen for storage changes from kalibrasi page (cross-tab sync)
+  useEffect(() => {
+    const handler = () => {
+      const results = calculatePackages();
+      setPackages(results);
+      setIsCustom(hasCustomPricing());
+    };
+    window.addEventListener("storage", handler);
+    // Also listen for custom event dispatched by kalibrasi page (same-tab)
+    window.addEventListener("jmse-pricing-updated", handler);
+    return () => {
+      window.removeEventListener("storage", handler);
+      window.removeEventListener("jmse-pricing-updated", handler);
+    };
   }, []);
 
   // Group packages by tier
-  const groupedPackages: Record<TierKey, CalculatedPackage[]> = {
-    silver: packages.filter((p) => p.tier === "silver"),
-    gold: packages.filter((p) => p.tier === "gold"),
-    platinum: packages.filter((p) => p.tier === "platinum"),
-  };
+  const getPackagesByTier = (tier: string) =>
+    packages.filter((p) => p.tier === tier);
 
   return (
     <section id="produk" className="py-20 md:py-28 bg-muted/30" ref={ref}>
@@ -121,21 +137,26 @@ export function ProductSection() {
                 Cukup untuk kebutuhan malam hari (backup esensial 8–10 jam), tanpa over-sizing.
               </p>
               <p>
-                <strong>Komponen per panel (630Wp):</strong> Panel + Mounting + BOS
-                + Tenaga Kerja. Harga termasuk margin dan PPN 11%.
+                <strong>Biaya per panel (630Wp):</strong> Panel + Mounting + BOS
+                + Tenaga Kerja.
               </p>
               <p>
-                <strong>PPh</strong> dipotong oleh pihak pembeli (wajib pajak), bukan menambah harga jual.
+                <strong>Margin:</strong> 35% dari HPP (Harga Pokok Produksi).
+                <strong> PPN 11%</strong> sudah termasuk dalam harga tertera.
+                <strong> PPh</strong> dipotong oleh pihak pembeli (wajib pajak), bukan menambah harga jual.
               </p>
             </motion.div>
           )}
         </motion.div>
 
-        {/* Tier Categories */}
-        {(Object.entries(tierConfig) as [TierKey, typeof tierConfig[TierKey]][]).map(
-          ([tierKey, cat], catIdx) => (
+        {/* Categories */}
+        {categoryMeta.map((cat, catIdx) => {
+          const catProducts = cat.tiers.flatMap((t) => getPackagesByTier(t));
+          if (catProducts.length === 0) return null;
+
+          return (
             <motion.div
-              key={tierKey}
+              key={cat.title}
               initial={{ opacity: 0, y: 40 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: catIdx * 0.15 }}
@@ -161,12 +182,12 @@ export function ProductSection() {
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
                   <BatteryCharging className="w-3.5 h-3.5 text-gold" />
-                  Dengan Baterai LiFePO4 — Full backup 24 jam
+                  Dengan Baterai LiFePO4 — Full backup 24 jam, listrik tetap menyala saat PLN padam
                 </span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {groupedPackages[tierKey].map((product) => (
+                {catProducts.map((product) => (
                   <div
                     key={product.name}
                     className={`relative p-6 rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
@@ -302,8 +323,8 @@ export function ProductSection() {
                 ))}
               </div>
             </motion.div>
-          )
-        )}
+          );
+        })}
 
         {/* CTA */}
         <motion.div
