@@ -4,7 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { Send, User, MapPin, Zap, Phone } from "lucide-react";
 
-const WA_LINK = "https://wa.me/6281328190707";
+const WA_LINK = "https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20mengisi%20form%20di%20website%20anda%20dan%20ingin%20konsultasi%20panel%20surya";
 
 export function LeadFormSection() {
   const ref = useRef(null);

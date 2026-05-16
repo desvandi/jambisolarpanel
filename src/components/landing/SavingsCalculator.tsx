@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { Calculator, TrendingDown, MessageCircle } from "lucide-react";
 
 const WA_LINK =
-  "https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20konsultasi%20panel%20surya";
+  "https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20sudah%20menghitung%20estimasi%20penghematan%20di%20kalkulator%20website%20anda%20dan%20tertarik%20untuk%20konsultasi%20lebih%20lanjut";
 
 const billPresets = [
   { label: "Rp 500rb", value: 500000 },

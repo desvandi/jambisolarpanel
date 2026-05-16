@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { X, MessageCircle, Gift } from "lucide-react";
 
 const WA_LINK =
-  "https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20promo%20konsultasi%20gratis%20panel%20surya";
+  "https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20dengan%20penawaran%20diskon%20spesial%20panel%20surya%20yang%20tampil%20di%20popup%20website%20anda";
 
 export function ExitIntentPopup() {
   const [show, setShow] = useState(false);

@@ -91,7 +91,7 @@ export function Navbar() {
 
             {/* CTA Desktop */}
             <a
-              href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20konsultasi%20panel%20surya"
+              href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20konsultasi%20gratis%20panel%20surya%20(melalui%20tombol%20Konsultasi%20Gratis%20di%20menu%20atas)"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => {
@@ -143,7 +143,7 @@ export function Navbar() {
               </a>
             ))}
             <a
-              href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20konsultasi%20panel%20surya"
+              href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20konsultasi%20gratis%20panel%20surya%20(melalui%20menu%20mobile)"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 px-4 py-3 mt-2 bg-solar text-white text-sm font-semibold rounded-xl"

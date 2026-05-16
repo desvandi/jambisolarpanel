@@ -2,100 +2,111 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Home, Building2, Factory, Zap, MessageCircle } from "lucide-react";
+import { Home, Building2, Factory, Zap, MessageCircle, Battery, BatteryCharging } from "lucide-react";
 
-const WA_LINK =
-  "https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20konsultasi%20panel%20surya";
+function waLink(pkg: string) {
+  return `https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20dengan%20paket%20${encodeURIComponent(pkg)}`;
+}
 
 const categories = [
   {
     icon: Home,
-    title: "Paket Rumah Tangga",
-    tagline: "Solusi hemat untuk keluarga Indonesia",
+    title: "Silver Package — Rumah Tangga",
+    tagline: "Hybrid Off-Grid System 1 Phase — Cocok untuk kebutuhan rumah tangga",
     products: [
       {
-        name: "Starter 1 kWp",
-        desc: "Cocok untuk rumah kecil, lampu, TV, kipas angin",
-        savings: "Rp 500rb - 1jt/bulan",
-        price: "Mulai Rp 15 Juta",
-        popular: false,
-      },
-      {
-        name: "Standard 2 kWp",
-        desc: "Ideal untuk rumah menengah, AC 1 unit, kulkas",
+        name: "Silver 2 kWp (Tanpa Baterai)",
+        desc: "4 panel PV 630Wp + Inverter DEYE 3.600W. Cocok untuk rumah kecil: lampu, TV, kipas angin.",
         savings: "Rp 1jt - 2jt/bulan",
-        price: "Mulai Rp 28 Juta",
+        price: "Rp 51.350.000",
         popular: false,
+        battery: false,
       },
       {
-        name: "Premium 3 kWp",
-        desc: "Rumah keluarga besar, AC 2 unit, water heater",
-        savings: "Rp 2jt - 3.5jt/bulan",
-        price: "Mulai Rp 42 Juta",
+        name: "Silver 3 kWp (Tanpa Baterai)",
+        desc: "5 panel PV 630Wp + Inverter DEYE 3.600W. Ideal untuk rumah menengah, AC 1 unit, kulkas.",
+        savings: "Rp 1.5jt - 2.5jt/bulan",
+        price: "Rp 58.890.000",
+        popular: false,
+        battery: false,
+      },
+      {
+        name: "Silver 5 kWp (Tanpa Baterai)",
+        desc: "9 panel PV 630Wp + Inverter DEYE 6.000W. Rumah keluarga besar, AC 2 unit, water heater.",
+        savings: "Rp 2.5jt - 4jt/bulan",
+        price: "Rp 85.800.000",
         popular: true,
+        battery: false,
       },
       {
-        name: "Elite 5 kWp",
-        desc: "Rumah mewah, full AC, kolam renang, charging EV",
-        savings: "Rp 3.5jt - 5jt/bulan",
-        price: "Mulai Rp 65 Juta",
+        name: "Silver 5 kWp (Baterai 5kWh)",
+        desc: "9 panel PV 630Wp + DEYE 6.000W + LiFePO4 5.000Wh. Full backup, listrik 24 jam saat padam.",
+        savings: "Rp 2.5jt - 4jt/bulan",
+        price: "Rp 110.500.000",
         popular: false,
+        battery: true,
       },
     ],
   },
   {
     icon: Building2,
-    title: "Paket Bisnis & UMKM",
-    tagline: "Tingkatkan profit dengan efisiensi energi",
+    title: "Gold Package — Bisnis & UMKM",
+    tagline: "Hybrid Off-Grid System 1 Phase — Solusi bisnis skala menengah hingga besar",
     products: [
       {
-        name: "Bisnis 10 kWp",
-        desc: "Toko, kantor kecil, workshop, cold storage mini",
-        savings: "Rp 5jt - 8jt/bulan",
-        price: "Mulai Rp 120 Juta",
+        name: "Gold 7 kWp (Tanpa Baterai)",
+        desc: "12 panel PV 630Wp + DEYE SUN 6.000W. Toko, kantor kecil, workshop, cold storage mini.",
+        savings: "Rp 4jt - 7jt/bulan",
+        price: "Rp 117.000.000",
         popular: false,
+        battery: false,
       },
       {
-        name: "Bisnis 20 kWp",
-        desc: "Gudang, restoran, hotel kecil, minimarket",
-        savings: "Rp 10jt - 15jt/bulan",
-        price: "Mulai Rp 220 Juta",
+        name: "Gold 10 kWp (Tanpa Baterai)",
+        desc: "16 panel PV 630Wp + GROWATT SPE 10.000ES. Gudang, restoran, hotel kecil, minimarket.",
+        savings: "Rp 6jt - 10jt/bulan",
+        price: "Rp 152.100.000",
         popular: true,
+        battery: false,
       },
       {
-        name: "Bisnis 50 kWp",
-        desc: "Pabrik kecil, ruko cluster, pergudangan",
-        savings: "Rp 25jt - 40jt/bulan",
-        price: "Mulai Rp 500 Juta",
+        name: "Gold 10 kWp (Baterai 10kWh)",
+        desc: "16 panel PV 630Wp + GROWATT SPE 10.000ES + LiFePO4 10.000Wh. Full backup bisnis 24 jam.",
+        savings: "Rp 6jt - 10jt/bulan",
+        price: "Rp 194.740.000",
         popular: false,
+        battery: true,
       },
     ],
   },
   {
     icon: Factory,
-    title: "Paket Industri",
-    tagline: "Solusi skala besar untuk efisiensi maksimal",
+    title: "Platinum Package — Industri",
+    tagline: "Hybrid Off-Grid System 3 Phase — Solusi skala besar untuk efisiensi maksimal",
     products: [
       {
-        name: "Industri 100 kWp",
-        desc: "Pabrik menengah, warehouse besar, processing plant",
-        savings: "Rp 50jt - 80jt/bulan",
-        price: "Hubungi Kami",
+        name: "Platinum 12 kWp (Baterai 10kWh)",
+        desc: "20 panel PV 630Wp + DEYE SUN 10.000W + LiFePO4 10.000Wh. Pabrik menengah, processing plant.",
+        savings: "Rp 8jt - 14jt/bulan",
+        price: "Rp 252.850.000",
         popular: false,
+        battery: true,
       },
       {
-        name: "Industri 250 kWp",
-        desc: "Pabrik besar, mining site, agro-industri",
-        savings: "Rp 125jt - 200jt/bulan",
-        price: "Hubungi Kami",
+        name: "Platinum 18 kWp (Baterai 15kWh)",
+        desc: "30 panel PV 630Wp + DEYE SUN 15.000W + LiFePO4 15.000Wh. Pabrik besar, agro-industri.",
+        savings: "Rp 12jt - 22jt/bulan",
+        price: "Rp 341.900.000",
         popular: true,
+        battery: true,
       },
       {
-        name: "Custom 500+ kWp",
-        desc: "Mega proyek, industrial complex, utility scale",
-        savings: "Rp 250jt+/bulan",
-        price: "Hubungi Kami",
+        name: "Platinum 20 kWp (Baterai 20kWh)",
+        desc: "33 panel PV 630Wp + DEYE SUN 20.000W + LiFePO4 20.000Wh. Mega proyek, industrial complex.",
+        savings: "Rp 14jt - 25jt/bulan",
+        price: "Rp 421.460.000",
         popular: false,
+        battery: true,
       },
     ],
   },
@@ -123,9 +134,10 @@ export function ProductSection() {
             <span className="gradient-text">Sesuai Kebutuhan</span> Anda
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Kami menyediakan berbagai paket instalasi PLTS yang dirancang khusus
-            untuk setiap segmen. Semua paket termasuk survei, desain, instalasi,
-            dan garansi resmi.
+            Kami menyediakan berbagai paket instalasi PLTS Hybrid Off-Grid yang
+            dirancang khusus untuk setiap segmen. Tersedia opsi tanpa baterai
+            (hemat investasi) maupun dengan baterai LiFePO4 (full backup 24 jam).
+            Semua paket termasuk survei, desain, instalasi, dan garansi resmi.
           </p>
         </motion.div>
 
@@ -138,7 +150,7 @@ export function ProductSection() {
             transition={{ duration: 0.5, delay: catIdx * 0.15 }}
             className="mb-16 last:mb-0"
           >
-            <div className="flex items-center gap-3 mb-8">
+            <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-xl bg-solar/10 flex items-center justify-center">
                 <cat.icon className="w-5 h-5 text-solar" />
               </div>
@@ -150,8 +162,20 @@ export function ProductSection() {
               </div>
             </div>
 
+            {/* Battery Legend */}
+            <div className="flex flex-wrap gap-4 mb-6">
+              <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                <Zap className="w-3.5 h-3.5 text-solar" />
+                Tanpa Baterai — Hemat investasi awal, gunakan listrik PLN saat malam
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                <BatteryCharging className="w-3.5 h-3.5 text-gold" />
+                Dengan Baterai LiFePO4 — Full backup 24 jam, listrik tetap menyala saat PLN padam
+              </span>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {cat.products.map((product, i) => (
+              {cat.products.map((product) => (
                 <div
                   key={product.name}
                   className={`relative p-6 rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
@@ -173,7 +197,7 @@ export function ProductSection() {
                       }`}
                     />
                     <h4
-                      className={`text-lg font-bold ${
+                      className={`text-base font-bold leading-tight ${
                         product.popular ? "text-white" : "text-navy dark:text-white"
                       }`}
                     >
@@ -190,6 +214,17 @@ export function ProductSection() {
                   >
                     {product.desc}
                   </p>
+
+                  {product.battery && (
+                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium mb-3 ${
+                      product.popular
+                        ? "bg-white/10 text-gold-light"
+                        : "bg-gold/10 text-gold"
+                    }`}>
+                      <Battery className="w-3.5 h-3.5" />
+                      Termasuk Baterai LiFePO4
+                    </span>
+                  )}
 
                   <div
                     className={`p-3 rounded-xl mb-4 ${
@@ -215,7 +250,7 @@ export function ProductSection() {
                   </div>
 
                   <p
-                    className={`text-sm font-semibold mb-4 ${
+                    className={`text-lg font-extrabold mb-4 ${
                       product.popular ? "text-white" : "text-navy dark:text-white"
                     }`}
                   >
@@ -223,9 +258,14 @@ export function ProductSection() {
                   </p>
 
                   <a
-                    href={WA_LINK}
+                    href={waLink(product.name)}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => {
+                      if (typeof window !== "undefined" && (window as Record<string, unknown>).fbq) {
+                        (window as Record<string, (...args: unknown[]) => void>).fbq!('track', 'Lead');
+                      }
+                    }}
                     className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
                       product.popular
                         ? "bg-white text-solar hover:bg-white/90 hover:shadow-lg"
@@ -233,7 +273,7 @@ export function ProductSection() {
                     }`}
                   >
                     <MessageCircle className="w-4 h-4" />
-                    Konsultasi via WhatsApp
+                    Tanya Paket Ini via WhatsApp
                   </a>
                 </div>
               ))}
@@ -249,11 +289,11 @@ export function ProductSection() {
           className="text-center mt-12"
         >
           <p className="text-muted-foreground mb-4">
-            Butuh paket custom yang tidak tercantum? Kami siap merancang solusi
-            sesuai kebutuhan spesifik Anda.
+            Butuh paket custom di luar daftar di atas? Kapasitas 1 kWp hingga
+            500+ kWp. Kami siap merancang solusi sesuai kebutuhan spesifik Anda.
           </p>
           <a
-            href={WA_LINK}
+            href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20ingin%20request%20custom%20proposal%20paket%20panel%20surya"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-8 py-4 bg-navy dark:bg-white text-white dark:text-navy font-bold rounded-full hover:shadow-xl transition-all duration-300 hover:scale-105"

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { ArrowUp, Phone, MessageCircle } from "lucide-react";
 
 const WA_LINK =
-  "https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20konsultasi%20panel%20surya";
+  "https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20konsultasi%20panel%20surya%20(melalui%20tombol%20WhatsApp%20mengambang)";
 
 export function FloatingButtons() {
   const [showScroll, setShowScroll] = useState(false);
@@ -57,7 +57,9 @@ export function FloatingButtons() {
 
         {/* Call Button */}
         <a
-          href="tel:+6281328190707"
+          href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20ingin%20menghubungi%20anda%20melalui%20tombol%20telepon%20di%20website"
+          target="_blank"
+          rel="noopener noreferrer"
           className="group flex items-center gap-3"
         >
           <span className="hidden sm:block px-4 py-2 bg-white dark:bg-navy text-navy dark:text-white text-sm font-semibold rounded-xl shadow-lg border border-border whitespace-nowrap opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300">

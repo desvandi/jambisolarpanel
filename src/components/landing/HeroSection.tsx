@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-const WA_LINK =
-  "https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20konsultasi%20panel%20surya";
+const WA_HERO =
+  "https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20konsultasi%20panel%20surya%20dari%20landing%20page%20anda";
 
 const features = [
   { icon: "📊", text: "Gratis Survei Area Tertentu" },
@@ -144,7 +144,7 @@ export function HeroSection() {
             className="flex flex-col sm:flex-row gap-4 mb-12"
           >
             <a
-              href={WA_LINK}
+              href={WA_HERO}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => {
@@ -160,7 +160,9 @@ export function HeroSection() {
               Chat WhatsApp Sekarang
             </a>
             <a
-              href="tel:+6281328190707"
+              href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20konsultasi%20panel%20surya%20(melalui%20tombol%20telepon%20di%20hero%20section)"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-semibold text-lg rounded-full border border-white/20 transition-all duration-300 hover:scale-105"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

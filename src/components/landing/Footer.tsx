@@ -3,30 +3,31 @@
 import { ThemeToggle } from "./ThemeToggle";
 import Image from "next/image";
 
-const WA_LINK =
-  "https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20konsultasi%20panel%20surya";
+function wa(text: string) {
+  return `https://wa.me/6281328190707?text=${encodeURIComponent(text)}`;
+}
 
-const footerLinks = {
+const footerLinks: Record<string, { label: string; msg: string }[]> = {
   Layanan: [
-    "PLTS Off-Grid",
-    "PLTS Hybrid",
-    "PLTS On-Grid",
-    "Solar Water Pump",
-    "Maintenance & Service",
+    { label: "PLTS Off-Grid", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan layanan PLTS Off-Grid untuk area tanpa PLN" },
+    { label: "PLTS Hybrid", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan layanan PLTS Hybrid (PLN + Solar + Baterai)" },
+    { label: "PLTS On-Grid", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan layanan PLTS On-Grid (terhubung PLN)" },
+    { label: "Solar Water Pump", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan Solar Water Pump / pompa air tenaga surya" },
+    { label: "Maintenance & Service", msg: "Halo PT. Jaya Mandiri Smart Energy, saya ingin mengetahui layanan maintenance dan service panel surya" },
   ],
   Solusi: [
-    "Rumah Tangga",
-    "Bisnis & UMKM",
-    "Perkebunan",
-    "Industri",
-    "Institusi",
+    { label: "Rumah Tangga", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik solusi panel surya untuk rumah tangga" },
+    { label: "Bisnis & UMKM", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik solusi panel surya untuk bisnis / UMKM" },
+    { label: "Perkebunan", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik solusi panel surya untuk perkebunan / kebun" },
+    { label: "Industri", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik solusi panel surya untuk industri" },
+    { label: "Institusi", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik solusi panel surya untuk institusi (sekolah, masjid, kantor desa)" },
   ],
   Perusahaan: [
-    "Tentang Kami",
-    "Portofolio",
-    "Testimoni",
-    "Karir",
-    "Kontak",
+    { label: "Tentang Kami", msg: "Halo PT. Jaya Mandiri Smart Energy, saya ingin mengetahui lebih lanjut tentang perusahaan anda" },
+    { label: "Portofolio", msg: "Halo PT. Jaya Mandiri Smart Energy, saya ingin melihat portofolio proyek yang sudah dikerjakan" },
+    { label: "Testimoni", msg: "Halo PT. Jaya Mandiri Smart Energy, saya ingin mengetahui testimoni dari pelanggan anda" },
+    { label: "Karir", msg: "Halo PT. Jaya Mandiri Smart Energy, saya ingin mengetahui karir / lowongan pekerjaan di perusahaan anda" },
+    { label: "Kontak & Alamat", msg: "Halo PT. Jaya Mandiri Smart Energy, saya ingin mengetahui alamat dan kontak anda" },
   ],
 };
 
@@ -63,7 +64,7 @@ export function Footer() {
             </p>
             <div className="flex gap-2">
               <a
-                href={WA_LINK}
+                href={wa("Halo PT. Jaya Mandiri Smart Energy, saya menghubungi dari WhatsApp di footer website")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-9 h-9 rounded-lg bg-white/10 hover:bg-solar flex items-center justify-center transition-colors"
@@ -100,12 +101,14 @@ export function Footer() {
               <h4 className="text-sm font-bold text-white mb-4">{title}</h4>
               <ul className="space-y-2.5">
                 {links.map((link) => (
-                  <li key={link}>
+                  <li key={link.label}>
                     <a
-                      href="#"
+                      href={wa(link.msg)}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="text-sm text-white/50 hover:text-solar-light transition-colors"
                     >
-                      {link}
+                      {link.label}
                     </a>
                   </li>
                 ))}
@@ -122,13 +125,17 @@ export function Footer() {
           </p>
           <div className="flex items-center gap-4">
             <a
-              href="#"
+              href={wa("Halo PT. Jaya Mandiri Smart Energy, saya ingin mengetahui kebijakan privasi perusahaan anda")}
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-xs text-white/40 hover:text-white/60 transition-colors"
             >
               Privacy Policy
             </a>
             <a
-              href="#"
+              href={wa("Halo PT. Jaya Mandiri Smart Energy, saya ingin mengetahui syarat dan ketentuan layanan anda")}
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-xs text-white/40 hover:text-white/60 transition-colors"
             >
               Terms of Service

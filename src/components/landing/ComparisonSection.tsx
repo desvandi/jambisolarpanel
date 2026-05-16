@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { BarChart3, Zap, Battery, Plug } from "lucide-react";
 
 const WA_LINK =
-  "https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20konsultasi%20panel%20surya";
+  "https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20telah%20melihat%20perbandingan%20PLN%20vs%20Panel%20Surya%20di%20website%20anda%20dan%20ingin%20beralih%20ke%20panel%20surya";
 
 const comparisons = [
   {
