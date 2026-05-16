@@ -42,7 +42,7 @@ const trustItems = [
   },
   {
     icon: Wrench,
-    title: "Custom Design by Real Engineers",
+    title: "Desain Custom oleh Insinyur Berpengalaman",
     desc: "Setiap sistem dirancang secara custom oleh insinyur berlisensi berdasarkan kebutuhan spesifik lokasi Anda.",
   },
   {

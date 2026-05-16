@@ -21,7 +21,7 @@ const comparisons = [
   {
     category: "Keandalan",
     pln: { icon: Plug, text: "Risiko padam, terutama daerah tertentu", value: "80-90%", color: "text-red-500" },
-    solar: { icon: Battery, text: "Energi tersimpan 24/7, rain or shine", value: "99%+", color: "text-solar" },
+    solar: { icon: Battery, text: "Energi tersimpan 24/7, hujan atau cerah", value: "99%+", color: "text-solar" },
   },
   {
     category: "Nilai Properti",
@@ -36,7 +36,7 @@ const comparisons = [
   {
     category: "Dampak Lingkungan",
     pln: { icon: Plug, text: "Emisi karbon tinggi dari batu bara", value: "CO2 Tinggi", color: "text-red-500" },
-    solar: { icon: Zap, text: "Energi bersih, zero emission", value: "100% Hijau", color: "text-solar" },
+    solar: { icon: Zap, text: "Energi bersih, bebas emisi", value: "100% Hijau", color: "text-solar" },
   },
 ];
 

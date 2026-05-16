@@ -1762,8 +1762,8 @@ export default function KalibrasiHargaPage() {
                 </h3>
               </div>
               <p className="text-xs text-muted-foreground mb-3">
-                Rasio optimal: 26–40% dari produksi harian PV. Di bawah 26% = baterai terlalu
-                kecil. Di atas 40% = baterai terlalu besar (over-sizing, boros).
+                Rasio optimal: 26–33% dari produksi harian PV (filosofi Opsi A: baterai cukup untuk kebutuhan malam). Di bawah 26% = baterai terlalu
+                kecil. Di atas 33% = baterai terlalu besar (over-sizing, boros).
               </p>
               <div className="space-y-2">
                 {results
@@ -1772,7 +1772,7 @@ export default function KalibrasiHargaPage() {
                     const kWp = (pkg.panelCount * detailed.panel.wattage) / 1000;
                     const dailyKwh = kWp * settings.pshHours * settings.efficiency;
                     const ratio = (pkg.batteryKwh / dailyKwh) * 100;
-                    const isOk = ratio >= 26 && ratio <= 40;
+                    const isOk = ratio >= 26 && ratio <= 33;
                     return (
                       <div
                         key={pkg.name}

@@ -54,7 +54,7 @@ export function ProblemSolutionSection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section className="py-20 md:py-28 bg-background" ref={ref}>
+    <section id="masalah" className="py-20 md:py-28 bg-background" ref={ref}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div

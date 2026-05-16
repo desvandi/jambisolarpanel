@@ -60,7 +60,7 @@ export function ExitIntentPopup() {
           <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-4">
             <Gift className="w-8 h-8 text-gold-light" />
           </div>
-          <h3 className="text-xl font-bold mb-2">Tunggu Dulu! 🎉</h3>
+          <h3 className="text-xl font-bold mb-2">Tunggu Dulu!</h3>
           <p className="text-white/80 text-sm">
             Dapatkan penawaran eksklusif sebelum Anda pergi
           </p>

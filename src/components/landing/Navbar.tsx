@@ -6,7 +6,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import Image from "next/image";
 
 const navLinks = [
-  { href: "#layanan", label: "Layanan" },
+  { href: "#masalah", label: "Layanan" },
   { href: "#keunggulan", label: "Keunggulan" },
   { href: "#produk", label: "Produk" },
   { href: "#kalkulator", label: "Kalkulator" },

@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     "paket panel surya rumah",
     "solar panel kebun",
     "instalasi panel surya industri",
-    "PT Jaya Mandiri Smart Energy",
+    "PT. Jaya Mandiri Smart Energy",
     "sistem energi surya",
     "hemat listrik solar panel",
     "EPC panel surya",
@@ -199,7 +199,7 @@ export default function RootLayout({
                   name: "Berapa lama balik modal?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Rata-rata balik modal terjadi dalam 3-5 tahun tergantung penggunaan listrik dan kapasitas sistem yang dipasang. Setelah itu, Anda menikmati listrik gratis selama 20-25 tahun.",
+                    text: "Untuk rumah tangga (paket Silver 2-5 kWp), ROI realistis tercapai dalam 8-9 tahun. Untuk bisnis dan industri (paket Gold & Platinum 6,5-20 kWp), ROI tercapai dalam 5-7 tahun. Perhitungan ini memperhitungkan kenaikan tarif PLN rata-rata 6% per tahun. Total keuntungan bersih dalam 25 tahun mencapai 5-7 kali lipat dari investasi awal.",
                   },
                 },
                 {

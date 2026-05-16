@@ -6,11 +6,7 @@ import { Home, Building2, Factory, Zap, MessageCircle, Battery, BatteryCharging,
 import {
   type CalculatedPackage,
   calculatePackages,
-  loadComponentPrices,
-  loadInverterPrices,
-  loadSettings,
   hasCustomPricing,
-  inverterDisplayNames,
   formatRp,
   calculateROI,
 } from "@/lib/pricing";
