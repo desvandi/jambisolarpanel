@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import {
   type ComponentPrices,
   type InverterPrices,
@@ -282,12 +282,13 @@ function computeAggregated(d: DetailedState): {
   const mountingPerPanel =
     d.mounting.bracketPerPanel + d.mounting.hardwarePerPanel + d.mounting.laborPerPanel;
 
-  // BOS per panel = cable estimate + MC4 + DC breaker
+  // BOS per panel = cable estimate + MC4 + DC breaker + AC breaker
   const bosPerPanel =
     d.bos.avgCableLenPerPanel * d.bos.solarCablePerM +
     d.bos.avgCableLenPerPanel * 0.5 * d.bos.acCablePerM +
     d.bos.mc4PerPair +
-    d.bos.dcBreakerPerUnit;
+    d.bos.dcBreakerPerUnit +
+    d.bos.acBreakerPerUnit;
 
   // Protection per system
   const spdGroundingPerSystem = d.bos.spd + d.bos.grounding + d.bos.lightningArrester;
@@ -347,9 +348,13 @@ function RupiahInput({
   hint?: string;
 }) {
   const [display, setDisplay] = useState(formatRp(value));
+  const focusedRef = useRef(false);
 
+  // Sync dari parent value HANYA saat tidak fokus (biar user bisa mengetik dengan tenang)
   useEffect(() => {
-    setDisplay(formatRp(value));
+    if (!focusedRef.current) {
+      setDisplay(formatRp(value));
+    }
   }, [value]);
 
   return (
@@ -363,13 +368,23 @@ function RupiahInput({
         </span>
         <Input
           type="text"
+          inputMode="numeric"
           value={display}
+          onFocus={() => { focusedRef.current = true; }}
           onChange={(e) => {
-            setDisplay(e.target.value);
-            const num = parseRpToNumber(e.target.value);
+            const raw = e.target.value;
+            setDisplay(raw);
+            const num = parseRpToNumber(raw);
             if (!isNaN(num)) onChange(num);
           }}
-          onBlur={() => setDisplay(formatRp(value))}
+          onBlur={() => {
+            focusedRef.current = false;
+            // Format hanya saat blur, biar user bisa mengetik dengan bebas saat fokus
+            const num = parseRpToNumber(display);
+            const finalNum = isNaN(num) ? value : num;
+            setDisplay(formatRp(finalNum));
+            onChange(finalNum);
+          }}
           className="pl-10"
         />
       </div>
@@ -393,19 +408,43 @@ function PercentInput({
   min?: number;
   max?: number;
 }) {
+  const [local, setLocal] = useState(String(value));
+  const focusedRef = useRef(false);
+
+  useEffect(() => {
+    if (!focusedRef.current) setLocal(String(value));
+  }, [value]);
+
+  const clamp = (n: number) => Math.min(max, Math.max(min, Math.round(n)));
+
   return (
     <div className="space-y-1.5">
       <Label className="text-sm font-medium text-navy dark:text-white">{label}</Label>
       <div className="relative">
         <Input
           type="number"
-          value={value}
-          onChange={(e) =>
-            onChange(Math.min(max, Math.max(min, parseFloat(e.target.value) || 0)))
-          }
+          inputMode="numeric"
+          value={local}
+          onFocus={() => { focusedRef.current = true; }}
+          onChange={(e) => {
+            setLocal(e.target.value);
+            const parsed = parseFloat(e.target.value);
+            if (!isNaN(parsed)) onChange(clamp(parsed));
+          }}
+          onBlur={() => {
+            focusedRef.current = false;
+            const parsed = parseFloat(local);
+            if (isNaN(parsed)) {
+              setLocal(String(value));
+            } else {
+              const clamped = clamp(parsed);
+              setLocal(String(clamped));
+              onChange(clamped);
+            }
+          }}
           min={min}
           max={max}
-          step={0.5}
+          step={1}
           className="pr-8"
         />
         <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
@@ -436,16 +475,43 @@ function NumberInput({
   max?: number;
   step?: number;
 }) {
+  const [local, setLocal] = useState(String(value));
+  const focusedRef = useRef(false);
+
+  // Sync dari parent HANYA saat tidak fokus
+  useEffect(() => {
+    if (!focusedRef.current) setLocal(String(value));
+  }, [value]);
+
+  const clamp = (n: number) => Math.min(max, Math.max(min, n));
+
   return (
     <div className="space-y-1.5">
       <Label className="text-sm font-medium text-navy dark:text-white">{label}</Label>
       <div className="relative">
         <Input
           type="number"
-          value={value}
-          onChange={(e) =>
-            onChange(Math.min(max, Math.max(min, parseFloat(e.target.value) || 0)))
-          }
+          inputMode="decimal"
+          value={local}
+          onFocus={() => { focusedRef.current = true; }}
+          onChange={(e) => {
+            setLocal(e.target.value);
+            const parsed = parseFloat(e.target.value);
+            if (!isNaN(parsed)) onChange(clamp(parsed));
+            // Jika NaN (field kosong), jangan update parent — biarkan user mengetik dulu
+          }}
+          onBlur={() => {
+            focusedRef.current = false;
+            const parsed = parseFloat(local);
+            if (isNaN(parsed)) {
+              // Field kosong → kembalikan ke value parent
+              setLocal(String(value));
+            } else {
+              const clamped = clamp(parsed);
+              setLocal(String(clamped));
+              onChange(clamped);
+            }
+          }}
           min={min}
           max={max}
           step={step}

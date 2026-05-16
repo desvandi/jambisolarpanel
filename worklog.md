@@ -201,3 +201,25 @@ Stage Summary:
 - 8-layer audit completed, 7 issues found and fixed
 - Build verified successful after all fixes (0 errors, 5 static pages)
 - 3 action items remain for user (FB Pixel, GA, social links)
+
+---
+Task ID: 1
+Agent: main
+Task: Perbaiki seluruh input field di halaman kalibrasi-harga yang tidak bisa diisi user dengan benar
+
+Work Log:
+- Audit komprehensif 4 komponen input: RupiahInput, NumberInput, PercentInput, TextInput
+- Identifikasi 4 masalah: circular reformat RupiahInput, NumberInput empty-state bug, PercentInput step salah, acBreakerPerUnit tidak masuk kalkulasi
+- Rewrite RupiahInput: gunakan useRef focus tracking, format hanya saat blur (bukan setiap keystroke)
+- Rewrite NumberInput: local state dengan focus tracking, allow empty intermediate state, clamp on blur
+- Rewrite PercentInput: local state dengan focus tracking, step diubah dari 0.5 ke 1, Math.round untuk bilangan bulat
+- Fix computeAggregated: tambahkan acBreakerPerUnit ke bosPerPanel (sebelumnya tidak ada efek)
+- Build sukses: 0 errors, 5 static pages
+
+Stage Summary:
+- 4 bug diperbaiki di kalibrasi-harga/page.tsx
+- RupiahInput: formatRp hanya saat blur → user bisa mengetik angka tanpa gangguan titik ribuan
+- NumberInput: field bisa dikosongkan sementara saat typing angka baru
+- PercentInput: step=1 untuk bilangan bulat (margin/PPN)
+- acBreakerPerUnit: sekarang terhitung di bosPerPanel → harga final berubah saat user edit
+- Build clean, semua halaman berfungsi
