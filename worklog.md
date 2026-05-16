@@ -120,3 +120,23 @@ Stage Summary:
 - All 10 package prices recalculate in real-time when supplier prices change
 - No backend needed — all data stored in browser localStorage
 - Build verified successful (2 static pages + 1 dynamic API route)
+
+---
+Task ID: 5
+Agent: Main Agent
+Task: Create compilation & deployment guide PDF for beginners (Bahasa Indonesia)
+
+Work Log:
+- Analyzed project structure: Next.js 16 with standalone output, Bun package manager
+- Generated professional PDF guide (20 pages) using ReportLab with cover page
+- Cover designed via HTML/Playwright (geometric accent design, purple accent #4d2daf)
+- Content structured in 11 chapters for beginner-friendly reading
+- Added TOC with auto-generated clickable links
+- Ran QA checks: 10/10 passed, 2 minor warnings (non-blocking)
+
+Stage Summary:
+- PDF file: /home/z/my-project/download/Panduan-Kompilasi-Landing-Page-JMSE.pdf
+- 20 pages, 160 KB, full A4 format
+- Chapters: Pendahuluan, Persyaratan Sistem, Instalasi Software, Download Project, Install Dependencies, Preview, Build Produksi, Deploy (VPS/Vercel/Shared Hosting), Kalibrasi Harga, Troubleshooting, Ringkasan Alur Cepat
+- Written in Bahasa Indonesia for non-technical audience
+- Includes 8 formatted reference tables, callout boxes (tips/warnings/info)
