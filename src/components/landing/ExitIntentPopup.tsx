@@ -94,8 +94,8 @@ export function ExitIntentPopup() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => {
-              if (typeof window !== "undefined" && (window as Record<string, unknown>).fbq) {
-                (window as Record<string, (...args: unknown[]) => void>).fbq!('track', 'Lead');
+              if (typeof window !== "undefined" && (window as unknown as Record<string, unknown>).fbq) {
+                (window as unknown as Record<string, (...args: unknown[]) => void>).fbq!('track', 'Lead');
               }
               handleClose();
             }}

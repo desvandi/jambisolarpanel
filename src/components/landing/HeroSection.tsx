@@ -148,8 +148,8 @@ export function HeroSection() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => {
-                if (typeof window !== "undefined" && (window as Record<string, unknown>).fbq) {
-                  (window as Record<string, (...args: unknown[]) => void>).fbq!('track', 'Lead');
+                if (typeof window !== "undefined" && (window as unknown as Record<string, unknown>).fbq) {
+                  (window as unknown as Record<string, (...args: unknown[]) => void>).fbq!('track', 'Lead');
                 }
               }}
               className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-solar hover:bg-solar-dark text-white font-bold text-lg rounded-full transition-all duration-300 hover:shadow-2xl hover:shadow-solar/40 hover:scale-105 animate-whatsapp-pulse"

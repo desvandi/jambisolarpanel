@@ -43,15 +43,8 @@ export function ProductSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [showCalc, setShowCalc] = useState(false);
-  const [packages, setPackages] = useState<CalculatedPackage[]>([]);
-  const [isCustom, setIsCustom] = useState(false);
-
-  // Load prices from localStorage (or defaults) on client mount
-  useEffect(() => {
-    const results = calculatePackages();
-    setPackages(results);
-    setIsCustom(hasCustomPricing());
-  }, []);
+  const [packages, setPackages] = useState<CalculatedPackage[]>(() => calculatePackages());
+  const [isCustom, setIsCustom] = useState(() => hasCustomPricing());
 
   // Listen for storage changes from kalibrasi page (cross-tab sync)
   useEffect(() => {
@@ -306,8 +299,8 @@ export function ProductSection() {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => {
-                        if (typeof window !== "undefined" && (window as Record<string, unknown>).fbq) {
-                          (window as Record<string, (...args: unknown[]) => void>).fbq!('track', 'Lead');
+                        if (typeof window !== "undefined" && (window as unknown as Record<string, unknown>).fbq) {
+                          (window as unknown as Record<string, (...args: unknown[]) => void>).fbq!('track', 'Lead');
                         }
                       }}
                       className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${

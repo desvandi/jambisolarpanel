@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import {
   type ComponentPrices,
   type InverterPrices,
@@ -183,32 +183,18 @@ function NumberInput({
 
 // --- Main Page ---
 export default function KalibrasiHargaPage() {
-  const [components, setComponents] = useState<ComponentPrices>(defaultComponentPrices);
-  const [inverters, setInverters] = useState<InverterPrices>(defaultInverterPrices);
-  const [settings, setSettings] = useState<PricingSettings>(defaultSettings);
-  const [results, setResults] = useState<CalculatedPackage[]>([]);
+  const [components, setComponents] = useState<ComponentPrices>(() => loadComponentPrices());
+  const [inverters, setInverters] = useState<InverterPrices>(() => loadInverterPrices());
+  const [settings, setSettings] = useState<PricingSettings>(() => loadSettings());
   const [saved, setSaved] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [loaded, setLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState("components");
 
-  // Load from localStorage on mount
-  useEffect(() => {
-    setComponents(loadComponentPrices());
-    setInverters(loadInverterPrices());
-    setSettings(loadSettings());
-    setLoaded(true);
-  }, []);
-
-  // Recalculate whenever inputs change
-  const recalculate = useCallback(() => {
-    const r = calculatePackages(components, inverters, settings);
-    setResults(r);
-  }, [components, inverters, settings]);
-
-  useEffect(() => {
-    if (loaded) recalculate();
-  }, [loaded, recalculate]);
+  // Derive results from inputs (no effect needed)
+  const results = useMemo(
+    () => calculatePackages(components, inverters, settings),
+    [components, inverters, settings]
+  );
 
   const handleSave = () => {
     saveComponentPrices(components);

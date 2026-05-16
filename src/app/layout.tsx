@@ -14,6 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://jayamandiri.co.id"),
   title: "PT. Jaya Mandiri Smart Energy | Solusi Panel Surya Profesional #1 Indonesia",
   description:
     "Hemat tagihan listrik hingga 90% dengan instalasi PLTS Off-Grid, Hybrid & On-Grid dari PT. Jaya Mandiri Smart Energy. Garansi sistem, konsultasi gratis, support seluruh Indonesia. Hubungi sekarang!",
