@@ -12,6 +12,7 @@ import {
   hasCustomPricing,
   inverterDisplayNames,
   formatRp,
+  calculateROI,
 } from "@/lib/pricing";
 
 function waLink(pkg: CalculatedPackage, addOns?: { carport: boolean; monitoring: string }) {
@@ -295,33 +296,54 @@ export function ProductSection() {
                         </p>
                       )}
 
-                      <div
-                        className={`p-3 rounded-xl mb-4 ${
-                          product.popular ? "bg-white/10" : "bg-solar/5 border border-solar/10"
-                        }`}
-                      >
-                        <p
-                          className={`text-xs font-medium mb-1 ${
-                            product.popular ? "text-white/60" : "text-muted-foreground"
-                          }`}
-                        >
-                          Estimasi Penghematan Bulanan
-                        </p>
-                        <p
-                          className={`text-lg font-bold ${
-                            product.popular ? "text-gold-light" : "text-solar"
-                          }`}
-                        >
-                          {product.savingsRange}
-                        </p>
-                        <p
-                          className={`text-xs mt-1 ${
-                            product.popular ? "text-white/50" : "text-muted-foreground"
-                          }`}
-                        >
-                          Produksi: {product.dailyProduction}
-                        </p>
-                      </div>
+                      {/* ROI & Savings Info */}
+                      {(() => {
+                        const dailyKwh = product.kWp * 3.75 * 0.80;
+                        const roiData = calculateROI(product.price, dailyKwh);
+                        return (
+                          <div
+                            className={`p-3 rounded-xl mb-4 ${
+                              product.popular ? "bg-white/10" : "bg-solar/5 border border-solar/10"
+                            }`}
+                          >
+                            <p
+                              className={`text-xs font-medium mb-1 ${
+                                product.popular ? "text-white/60" : "text-muted-foreground"
+                              }`}
+                            >
+                              Estimasi Penghematan Bulanan
+                            </p>
+                            <p
+                              className={`text-lg font-bold ${
+                                product.popular ? "text-gold-light" : "text-solar"
+                              }`}
+                            >
+                              {product.savingsRange}
+                            </p>
+                            <p
+                              className={`text-xs mt-1 ${
+                                product.popular ? "text-white/50" : "text-muted-foreground"
+                              }`}
+                            >
+                              Produksi: {product.dailyProduction}
+                            </p>
+                            <div className={`flex items-center justify-between mt-2 pt-2 border-t ${
+                              product.popular ? "border-white/10" : "border-solar/10"
+                            }`}>
+                              <span className={`text-xs ${
+                                product.popular ? "text-white/60" : "text-muted-foreground"
+                              }`}>
+                                ROI ~{roiData.roiYearsWithIncrease} tahun
+                              </span>
+                              <span className={`text-xs font-semibold ${
+                                product.popular ? "text-gold-light" : "text-gold"
+                              }`}>
+                                Return 25thn {roiData.returnMultiplier}x
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })()}
 
                       <p
                         className={`text-lg font-extrabold mb-1 ${

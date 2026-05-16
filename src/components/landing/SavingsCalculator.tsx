@@ -1,8 +1,28 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
-import { Calculator, TrendingDown, MessageCircle } from "lucide-react";
+import { useRef, useState, useMemo } from "react";
+import {
+  Calculator,
+  TrendingDown,
+  MessageCircle,
+  Zap,
+  Clock,
+  TrendingUp,
+  Sun,
+  Info,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
+import {
+  calculatePackages,
+  calculateROI,
+  recommendPackage,
+  formatRp,
+  PLN_TARIFF_DEFAULT,
+  SELF_CONSUMPTION_DEFAULT,
+  PLN_INCREASE_RATE_DEFAULT,
+} from "@/lib/pricing";
 
 const WA_LINK =
   "https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20sudah%20menghitung%20estimasi%20penghematan%20di%20kalkulator%20website%20anda%20dan%20tertarik%20untuk%20konsultasi%20lebih%20lanjut";
@@ -16,25 +36,53 @@ const billPresets = [
   { label: "Rp 10jt", value: 10000000 },
 ];
 
-function formatRp(num: number) {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(num);
+function formatRpShort(num: number): string {
+  if (num >= 1_000_000) return `Rp ${(num / 1_000_000).toFixed(num % 1_000_000 === 0 ? 0 : 1)}jt`;
+  return `Rp ${Math.round(num / 1000)}rb`;
 }
 
 export function SavingsCalculator() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [bill, setBill] = useState(2000000);
+  const [showAssumptions, setShowAssumptions] = useState(false);
 
-  const monthlySavings = bill * 0.75;
-  const yearlySavings = monthlySavings * 12;
-  const fiveYearSavings = yearlySavings * 5;
-  const twentyFiveYearSavings = yearlySavings * 25;
-  const co2Saved = (bill * 12 * 0.75 * 0.0008) / 1000; // tonnes CO2
+  const analysis = useMemo(() => {
+    const allPkgs = calculatePackages();
+    const rec = recommendPackage(bill, allPkgs);
+    if (!rec) return null;
+
+    const monthlyKwh = bill / PLN_TARIFF_DEFAULT;
+    const productionKwh = rec.kWp * 3.75 * 0.80 * 30; // PSH × efficiency × 30 days
+    const coverage = Math.round((productionKwh / monthlyKwh) * 100);
+
+    const roi = calculateROI(rec.price, rec.kWp * 3.75 * 0.80);
+
+    // CO2 saved (Indonesia grid: ~0.8 kg CO2/kWh)
+    const co2PerYear = (roi.annualSavingsBase / PLN_TARIFF_DEFAULT) * 0.8 / 1000;
+
+    // Check if largest package still < 50% coverage
+    const nonBatteryPkgs = allPkgs.filter((p) => p.batteryKwh === 0);
+    const largestPkg = nonBatteryPkgs[nonBatteryPkgs.length - 1];
+    const largestProduction = largestPkg
+      ? largestPkg.kWp * 3.75 * 0.80 * 30
+      : 0;
+    const needsCustom = largestProduction < monthlyKwh * 0.5;
+
+    return {
+      recommended: rec,
+      monthlyKwh: Math.round(monthlyKwh),
+      productionKwh: Math.round(productionKwh),
+      coverage,
+      roi,
+      co2PerYear,
+      needsCustom,
+    };
+  }, [bill]);
+
+  if (!analysis) return null;
+
+  const { recommended: rec, monthlyKwh, productionKwh, coverage, roi, co2PerYear, needsCustom } = analysis;
 
   return (
     <section
@@ -65,8 +113,8 @@ export function SavingsCalculator() {
             <span className="text-gold-light">Penghematan</span> Anda
           </h2>
           <p className="text-lg text-white/70 leading-relaxed">
-            Masukkan tagihan listrik bulanan Anda dan lihat berapa besar hemat yang
-            bisa Anda dapatkan dengan panel surya.
+            Masukkan tagihan listrik bulanan Anda — kami akan menganalisis
+            kebutuhan dan merekomendasikan paket yang paling sesuai.
           </p>
         </motion.div>
 
@@ -77,10 +125,10 @@ export function SavingsCalculator() {
           className="max-w-4xl mx-auto"
         >
           <div className="glass rounded-3xl p-6 sm:p-10">
-            {/* Input */}
+            {/* Step 1: Bill Input */}
             <div className="text-center mb-8">
               <p className="text-sm font-medium text-navy/60 dark:text-white/60 mb-4">
-                Pilih tagihan listrik bulanan Anda:
+                Tagihan listrik bulanan Anda:
               </p>
               <div className="flex flex-wrap justify-center gap-3 mb-6">
                 {billPresets.map((preset) => (
@@ -103,56 +151,199 @@ export function SavingsCalculator() {
               </div>
             </div>
 
-            {/* Results Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            {/* Step 2: Analysis */}
+            <div className="p-5 rounded-2xl bg-gradient-to-br from-solar/5 to-gold/5 border border-solar/15 mb-8">
+              <div className="flex items-center gap-2 mb-4">
+                <Sun className="w-5 h-5 text-solar" />
+                <h3 className="font-bold text-navy dark:text-white text-base">
+                  Analisis Kebutuhan Anda
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Consumption */}
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-navy/5 dark:bg-white/5 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Zap className="w-4 h-4 text-navy dark:text-white" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Estimasi Pemakaian</p>
+                    <p className="font-bold text-navy dark:text-white">
+                      ~{monthlyKwh.toLocaleString("id-ID")} kWh/bulan
+                    </p>
+                  </div>
+                </div>
+
+                {/* Recommended Package */}
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-solar/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Calculator className="w-4 h-4 text-solar" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Rekomendasi Paket</p>
+                    <p className="font-bold text-solar">{rec.name}</p>
+                  </div>
+                </div>
+
+                {/* Production */}
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Produksi Sistem</p>
+                    <p className="font-bold text-navy dark:text-white">
+                      {productionKwh.toLocaleString("id-ID")} kWh/bulan
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Offset ~{Math.min(coverage, 100)}% tagihan Anda
+                    </p>
+                  </div>
+                </div>
+
+                {/* System Price */}
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Clock className="w-4 h-4 text-gold" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">Investasi</p>
+                    <p className="font-bold text-navy dark:text-white">{rec.priceFormatted}</p>
+                    <p className="text-xs text-muted-foreground">
+                      Sudah termasuk PPN 11%
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {needsCustom && (
+                <div className="mt-4 p-3 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/30">
+                  <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed">
+                    <strong>Custom Solution:</strong> Kebutuhan Anda melebihi kapasitas
+                    paket standar terbesar. Tim kami dapat merancang sistem custom
+                    hingga 500+ kWp. Hubungi kami untuk proposal khusus.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Step 3: Results */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
               <div className="text-center p-4 rounded-2xl bg-solar/5 border border-solar/10">
                 <TrendingDown className="w-6 h-6 text-solar mx-auto mb-2" />
                 <p className="text-xs text-muted-foreground mb-1">Hemat / Bulan</p>
                 <p className="text-xl sm:text-2xl font-bold text-solar">
-                  {formatRp(monthlySavings)}
+                  {formatRpShort(roi.monthlySavingsBase)}
                 </p>
               </div>
               <div className="text-center p-4 rounded-2xl bg-solar/5 border border-solar/10">
                 <TrendingDown className="w-6 h-6 text-solar mx-auto mb-2" />
                 <p className="text-xs text-muted-foreground mb-1">Hemat / Tahun</p>
                 <p className="text-xl sm:text-2xl font-bold text-solar">
-                  {formatRp(yearlySavings)}
+                  {formatRpShort(roi.annualSavingsBase)}
                 </p>
               </div>
               <div className="text-center p-4 rounded-2xl bg-gold/5 border border-gold/20">
+                <Clock className="w-6 h-6 text-gold mx-auto mb-2" />
                 <p className="text-xs text-muted-foreground mb-1">
-                  Total 5 Tahun
+                  Estimasi ROI
                 </p>
                 <p className="text-xl sm:text-2xl font-bold text-gold">
-                  {formatRp(fiveYearSavings)}
+                  ~{roi.roiYearsWithIncrease} thn
+                </p>
+                <p className="text-[10px] text-muted-foreground">
+                  (+{Math.round(PLN_INCREASE_RATE_DEFAULT * 100)}%/thn tarif)
                 </p>
               </div>
               <div className="text-center p-4 rounded-2xl bg-gold/5 border border-gold/20">
+                <TrendingUp className="w-6 h-6 text-gold mx-auto mb-2" />
                 <p className="text-xs text-muted-foreground mb-1">
-                  Total 25 Tahun
+                  Return 25 Tahun
                 </p>
                 <p className="text-xl sm:text-2xl font-bold text-gold">
-                  {formatRp(twentyFiveYearSavings)}
+                  {roi.returnMultiplier}x
+                </p>
+                <p className="text-[10px] text-muted-foreground">
+                  Net: {formatRpShort(roi.return25Year)}
                 </p>
               </div>
             </div>
 
+            {/* Key insight box */}
+            <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-800/30 mb-6">
+              <p className="text-center text-sm text-emerald-700 dark:text-emerald-300 leading-relaxed">
+                Investasi <strong>{rec.priceFormatted}</strong> hari ini menghasilkan
+                total penghematan <strong>{formatRp(roi.return25Year + rec.price)}</strong> dalam 25 tahun
+                — keuntungan bersih <strong>{formatRp(roi.return25Year)}</strong> (ROI{" "}
+                <strong>{roi.returnMultiplier}x lipat</strong>). Ini setara{" "}
+                deposito yang memberikan return{" "}
+                {Math.round(((roi.returnMultiplier - 1) / 25) * 100)}% per tahun secara konsisten,
+                jauh di atas inflasi dan tanpa risiko pasar.
+              </p>
+            </div>
+
             {/* Environmental impact */}
-            <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-800/30 mb-8">
-              <p className="text-center text-sm text-emerald-700 dark:text-emerald-300">
-                Selain hemat uang, Anda juga mengurangi{" "}
+            <div className="p-4 rounded-xl bg-gradient-to-r from-green-50 to-lime-50 dark:from-green-900/20 dark:to-lime-900/20 border border-green-200 dark:border-green-800/30 mb-6">
+              <p className="text-center text-sm text-green-700 dark:text-green-300">
+                Selain hemat uang, Anda juga mengurangi emisi{" "}
                 <span className="font-bold">
-                  {co2Saved.toFixed(1)} ton CO2 per tahun
+                  {co2PerYear.toFixed(1)} ton CO2 per tahun
                 </span>{" "}
                 dan berkontribusi pada lingkungan yang lebih bersih.
               </p>
             </div>
 
+            {/* Assumptions */}
+            <button
+              onClick={() => setShowAssumptions(!showAssumptions)}
+              className="flex items-center gap-2 mx-auto text-xs text-muted-foreground hover:text-navy dark:hover:text-white transition-colors mb-6"
+            >
+              <Info className="w-3.5 h-3.5" />
+              Lihat asumsi perhitungan
+              {showAssumptions ? (
+                <ChevronUp className="w-3.5 h-3.5" />
+              ) : (
+                <ChevronDown className="w-3.5 h-3.5" />
+              )}
+            </button>
+            {showAssumptions && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                className="mb-6 p-4 rounded-xl bg-muted/50 border border-border text-xs text-muted-foreground space-y-2 leading-relaxed"
+              >
+                <p>
+                  <strong>Tarif PLN:</strong> Rp {PLN_TARIFF_DEFAULT.toLocaleString("id-ID")}/kWh
+                  (tarif R-1 1300VA ke atas, non-subsidi). Bisnis & industri mungkin memiliki
+                  tarif berbeda.
+                </p>
+                <p>
+                  <strong>Self-consumption:</strong> {Math.round(SELF_CONSUMPTION_DEFAULT * 100)}%
+                  — persentase produksi solar yang langsung digunakan oleh bangunan.
+                  Sisa {100 - Math.round(SELF_CONSUMPTION_DEFAULT * 100)}% terbuang karena
+                  produksi puncak terjadi saat siang hari ketika beban rumah tangga relatif rendah.
+                </p>
+                <p>
+                  <strong>PSH Jambi:</strong> 3,75 jam/hari (rata-rata iradiasi matahari).
+                  Efisiensi sistem: 80% (losses dari kabel, suhu, konversi inverter).
+                </p>
+                <p>
+                  <strong>Kenaikan tarif PLN:</strong> {Math.round(PLN_INCREASE_RATE_DEFAULT * 100)}%
+                  per tahun (berdasarkan rata-rata historis 2017-2024). Faktual bisa bervariasi.
+                </p>
+                <p>
+                  <strong>ROI</strong> dihitung berdasarkan akumulasi penghematan tahunan
+                  (termasuk kenaikan tarif) vs harga investasi paket.
+                  Angka bersifat estimasi dan dapat berbeda tergantung pola konsumsi aktual.
+                </p>
+              </motion.div>
+            )}
+
             {/* CTA */}
             <div className="text-center">
               <p className="text-sm text-muted-foreground mb-4">
-                Ingin tahu estimasi penghematan yang lebih akurat untuk lokasi
-                Anda?
+                Ingin perhitungan yang lebih akurat untuk lokasi spesifik Anda?
+                Konsultasi dengan tim kami — gratis!
               </p>
               <a
                 href={WA_LINK}

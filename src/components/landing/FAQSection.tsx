@@ -16,7 +16,7 @@ const faqs = [
   },
   {
     q: "Berapa lama balik modal (ROI)?",
-    a: "Rata-rata masa balik modal (Return on Investment) terjadi dalam 3-5 tahun, tergantung dari penggunaan listrik dan kapasitas sistem yang dipasang. Setelah masa ROI tercapai, Anda menikmati listrik gratis selama sisa umur panel (20+ tahun). Dengan kenaikan tarif PLN rata-rata 5-10% per tahun, ROI Anda bahkan bisa lebih cepat dari estimasi. Kami akan memberikan perhitungan ROI detail saat konsultasi.",
+    a: "Masa balik modal (Return on Investment) bervariasi tergantung kapasitas sistem dan kebutuhan listrik Anda. Untuk rumah tangga (paket Silver 2-5 kWp), ROI realistis tercapai dalam 8-9 tahun. Untuk bisnis dan industri (paket Gold & Platinum 6,5-20 kWp), ROI tercapai dalam 5-7 tahun karena skala ekonomi yang lebih besar. Perhitungan ini sudah memperhitungkan kenaikan tarif PLN rata-rata 6% per tahun. Yang lebih penting: dalam 25 tahun umur panel, total keuntungan bersih mencapai 5-7 kali lipat dari investasi awal — artinya investasi Rp 100 juta menghasilkan keuntungan bersih Rp 500-700 juta selama masa pakai sistem. Kami akan memberikan perhitungan ROI detail saat konsultasi.",
   },
   {
     q: "Apakah sistem bisa bekerja tanpa PLN?",

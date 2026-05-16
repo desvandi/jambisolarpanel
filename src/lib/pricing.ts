@@ -472,6 +472,112 @@ export function calculatePackages(
   });
 }
 
+// --- ROI & Return Calculation ---
+
+export const PLN_TARIFF_DEFAULT = 1500; // Rp/kWh (R-1 1300VA+)
+export const SELF_CONSUMPTION_DEFAULT = 0.70; // 70% utilization (hybrid without battery)
+export const PLN_INCREASE_RATE_DEFAULT = 0.06; // 6% per tahun
+
+export interface ROIResult {
+  roiYears: number;            // Simple ROI (flat tariff)
+  roiYearsWithIncrease: number; // ROI dengan kenaikan PLN 6%/thn
+  return25Year: number;         // Net profit 25 tahun (dengan kenaikan PLN)
+  returnMultiplier: number;     // Total return 25thn / investasi
+  annualSavingsBase: number;    // Hemat per tahun (tarif tetap)
+  monthlySavingsBase: number;   // Hemat per bulan (tarif tetap)
+}
+
+export function calculateROI(
+  price: number,
+  dailyKwh: number,
+  options?: {
+    plnTariff?: number;
+    selfConsumption?: number;
+    plnIncreaseRate?: number;
+  }
+): ROIResult {
+  const tariff = options?.plnTariff ?? PLN_TARIFF_DEFAULT;
+  const selfCons = options?.selfConsumption ?? SELF_CONSUMPTION_DEFAULT;
+  const increaseRate = options?.plnIncreaseRate ?? PLN_INCREASE_RATE_DEFAULT;
+
+  const annualSavingsBase = dailyKwh * 365 * tariff * selfCons;
+  const monthlySavingsBase = dailyKwh * 30 * tariff * selfCons;
+
+  // Simple ROI (tarif tetap)
+  const roiYears = annualSavingsBase > 0 ? price / annualSavingsBase : 99;
+
+  // ROI dengan kenaikan PLN per tahun
+  let cumIncrease = 0;
+  let roiYearsWithIncrease = 30;
+  if (annualSavingsBase > 0) {
+    for (let y = 1; y <= 30; y++) {
+      cumIncrease += annualSavingsBase * Math.pow(1 + increaseRate, y - 1);
+      if (cumIncrease >= price) {
+        roiYearsWithIncrease = y;
+        break;
+      }
+    }
+  }
+
+  // Total return 25 tahun (dengan kenaikan PLN)
+  let cum25 = 0;
+  if (annualSavingsBase > 0) {
+    for (let y = 0; y < 25; y++) {
+      cum25 += annualSavingsBase * Math.pow(1 + increaseRate, y);
+    }
+  }
+  const return25Year = cum25 - price;
+  const returnMultiplier = price > 0 ? cum25 / price : 0;
+
+  return {
+    roiYears: Math.round(roiYears * 10) / 10,
+    roiYearsWithIncrease,
+    return25Year,
+    returnMultiplier: Math.round(returnMultiplier * 10) / 10,
+    annualSavingsBase,
+    monthlySavingsBase,
+  };
+}
+
+export function recommendPackage(
+  monthlyBillRp: number,
+  packages: CalculatedPackage[],
+  options?: { plnTariff?: number }
+): CalculatedPackage | null {
+  const tariff = options?.plnTariff ?? PLN_TARIFF_DEFAULT;
+  const monthlyKwh = monthlyBillRp / tariff;
+
+  // Filter non-battery packages only
+  const nonBatteryPkgs = packages.filter((p) => p.batteryKwh === 0);
+  if (nonBatteryPkgs.length === 0) return null;
+
+  let recommended: CalculatedPackage | null = null;
+  let bestScore = Infinity;
+
+  for (const pkg of nonBatteryPkgs) {
+    const productionKwh = pkg.kWp * defaultSettings.pshHours * defaultSettings.efficiency * 30;
+    const pct = (productionKwh / monthlyKwh) * 100;
+
+    // Score: distance from 80% coverage (sweet spot)
+    // Penalize undersizing heavily
+    let score: number;
+    if (pct < 50) {
+      score = 1000 + (50 - pct);
+    } else if (pct > 120) {
+      score = pct - 120;
+    } else {
+      score = Math.abs(pct - 80);
+    }
+
+    if (score < bestScore) {
+      bestScore = score;
+      recommended = pkg;
+    }
+  }
+
+  return recommended;
+}
+
 // --- Utility ---
 
 export function formatRp(num: number): string {

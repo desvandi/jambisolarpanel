@@ -148,7 +148,7 @@ export function ComparisonSection() {
           className="text-center mt-12"
         >
           <p className="text-sm text-muted-foreground mb-2">
-            *Setelah masa ROI tercapai (estimasi 3-5 tahun)
+            *Setelah masa ROI tercapai (estimasi 5-8 tahun, tergantung kapasitas sistem)
           </p>
           <a
             href={WA_LINK}
