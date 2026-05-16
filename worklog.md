@@ -64,3 +64,39 @@ Stage Summary:
 - Profit margin: 35% across all packages (within 30-40% target)
 - Added expandable pricing methodology info box in product section
 - Build verified successful (0 errors)
+
+---
+Task ID: 4
+Agent: Main Agent
+Task: Build price calibration page for easy material price updates
+
+Work Log:
+- Created `/src/lib/pricing.ts` — shared pricing module with:
+  - Type definitions (ComponentPrices, InverterPrices, PricingSettings, PackageSpec, CalculatedPackage)
+  - Default values for all component prices, inverter prices, and settings
+  - 10 package specifications (Silver/Gold/Platinum tiers)
+  - localStorage helpers (save/load/clear with separate keys for components, inverters, settings)
+  - `calculatePackages()` function that computes HPP, margin, PPN, and final price
+  - `formatRp()` and `parseRpToNumber()` utility functions
+- Updated `/src/components/landing/ProductSection.tsx` to use shared pricing module:
+  - Reads from localStorage on mount (if custom pricing saved)
+  - Falls back to defaults if no custom pricing exists
+  - All price display, savings, and battery notes are now dynamically calculated
+- Created `/src/app/kalibrasi-harga/page.tsx` — admin calibration page with:
+  - 3-tab input form: Panel & BOS, Inverter, Settings
+  - RupiahInput component with auto-formatting (Rp prefix, thousand separator)
+  - Real-time calculation table showing all 10 packages
+  - Mobile card view + desktop table view
+  - Summary cards (total packages, total HPP, avg margin, PSH)
+  - Battery ratio validation (26-40% optimal range with green/red indicators)
+  - Save to localStorage button (persists across browser sessions)
+  - Reset to defaults button
+  - Copy JSON config to clipboard for backup/sharing
+  - Navigation back to landing page
+
+Stage Summary:
+- Calibration page accessible at `/kalibrasi-harga`
+- Landing page at `/` automatically reads calibrated prices from localStorage
+- All 10 package prices recalculate in real-time when supplier prices change
+- No backend needed — all data stored in browser localStorage
+- Build verified successful (2 static pages + 1 dynamic API route)
