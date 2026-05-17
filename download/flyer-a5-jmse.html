@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1260">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+    width: 1260px;
+    height: 1788px;
+    overflow: hidden;
+    background: #FFFFFF;
+    color: #1a1a2e;
+  }
+
+  .page {
+    width: 1260px;
+    height: 1788px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ===== TOP HERO AREA ===== */
+  .hero {
+    position: relative;
+    background: linear-gradient(165deg, #07122B 0%, #0F2854 50%, #132D5E 100%);
+    padding: 40px 48px 36px;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 0;
+    height: 40px;
+    background: #fff;
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+
+  /* Subtle grid pattern */
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .hero-glow {
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(34,197,94,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  /* Logo row */
+  .logo-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .logo-icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, #22C55E, #16A34A);
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 12px rgba(34,197,94,0.35);
+  }
+  .logo-icon svg { width: 24px; height: 24px; }
+  .company-name {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.35;
+  }
+  .company-name b {
+    display: block;
+    font-size: 11px;
+    color: #86EFAC;
+    letter-spacing: 3px;
+  }
+
+  /* Headline */
+  .headline {
+    position: relative;
+    font-size: 44px;
+    font-weight: 900;
+    line-height: 1.15;
+    color: #FFFFFF;
+    margin-bottom: 10px;
+  }
+  .headline .hl-green {
+    color: #4ADE80;
+  }
+
+  /* Speech bubble price */
+  .price-bubble {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #22C55E, #16A34A);
+    padding: 10px 24px;
+    border-radius: 50px;
+    margin-bottom: 10px;
+    box-shadow: 0 6px 20px rgba(34,197,94,0.35);
+  }
+  .price-bubble span {
+    font-size: 22px;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 0.5px;
+  }
+
+  .hero-sub {
+    position: relative;
+    font-size: 15px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.45;
+    max-width: 680px;
+  }
+
+  /* Stats strip */
+  .stats-strip {
+    position: relative;
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+  }
+  .stat-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.75);
+  }
+  .stat-chip svg { width: 14px; height: 14px; color: #4ADE80; }
+
+
+  /* ===== BODY CONTENT ===== */
+  .body {
+    padding: 24px 48px 0;
+  }
+
+  /* SECTION HEADER */
+  .sec-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .sec-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sec-icon svg { width: 18px; height: 18px; }
+  .sec-icon.green { background: #DCFCE7; }
+  .sec-icon.blue { background: #DBEAFE; }
+  .sec-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #0F172A;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== TWO COL GRID ===== */
+  .two-col {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 18px;
+  }
+  .col-left { flex: 1; }
+  .col-right { flex: 1; }
+
+  /* PACKAGE CARD */
+  .pkg-card {
+    background: #FFFFFF;
+    border: 2px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .pkg-card.pop {
+    border-color: #22C55E;
+    background: linear-gradient(135deg, #F0FDF4, #FFFFFF);
+    box-shadow: 0 4px 16px rgba(34,197,94,0.1);
+  }
+  .pop-badge {
+    position: absolute;
+    top: -10px; right: 16px;
+    background: linear-gradient(135deg, #F59E0B, #EAB308);
+    color: #78350F;
+    font-size: 9px;
+    font-weight: 900;
+    padding: 3px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+  .pkg-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 6px;
+  }
+  .pkg-name {
+    font-size: 15px;
+    font-weight: 800;
+    color: #0F172A;
+  }
+  .pkg-tier {
+    font-size: 10px;
+    font-weight: 600;
+    color: #64748B;
+    margin-top: 1px;
+  }
+  .pkg-price-block {
+    text-align: right;
+  }
+  .pkg-price {
+    font-size: 20px;
+    font-weight: 900;
+    color: #0F172A;
+  }
+  .pkg-price small {
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .pkg-price-sub {
+    font-size: 9px;
+    color: #94A3B8;
+    font-weight: 500;
+  }
+
+  .pkg-specs {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .spec-tag {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 5px;
+    background: #F1F5F9;
+    color: #475569;
+  }
+  .spec-tag.bat {
+    background: #FEF9C3;
+    color: #A16207;
+  }
+  .spec-tag.addon {
+    background: #EDE9FE;
+    color: #6D28D9;
+  }
+
+  .pkg-detail {
+    display: flex;
+    gap: 16px;
+    padding-top: 8px;
+    border-top: 1px solid #E2E8F0;
+  }
+  .pkg-detail.pop-detail { border-top-color: #BBF7D0; }
+  .pkg-detail-item {
+    text-align: center;
+    flex: 1;
+  }
+  .pkg-detail-val {
+    font-size: 14px;
+    font-weight: 800;
+    color: #16A34A;
+  }
+  .pkg-detail-label {
+    font-size: 9px;
+    color: #94A3B8;
+    font-weight: 600;
+    margin-top: 1px;
+  }
+
+  /* BENEFITS LIST */
+  .benefits-list {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 16px 18px;
+  }
+  .benefit-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+  }
+  .benefit-row + .benefit-row {
+    border-top: 1px solid #F1F5F9;
+  }
+  .benefit-icon {
+    width: 30px; height: 30px;
+    min-width: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+  }
+  .bi-green { background: #DCFCE7; }
+  .bi-amber { background: #FEF3C7; }
+  .bi-blue { background: #DBEAFE; }
+  .bi-purple { background: #EDE9FE; }
+  .bi-teal { background: #CCFBF1; }
+  .bi-rose { background: #FFE4E6; }
+  .bi-orange { background: #FFEDD5; }
+
+  .benefit-text h4 {
+    font-size: 12px;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 1px;
+  }
+  .benefit-text p {
+    font-size: 10px;
+    color: #64748B;
+    line-height: 1.4;
+  }
+
+  /* Trust certs row */
+  .certs-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    padding: 10px 18px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+  }
+  .cert-tag {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 6px;
+    background: #EFF6FF;
+    color: #1D4ED8;
+    letter-spacing: 0.3px;
+  }
+
+
+  /* ===== BOTTOM CTA BAR ===== */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(165deg, #07122B, #0F2854);
+    padding: 22px 48px 28px;
+  }
+  .cta-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 16px;
+  }
+  .cta-info { flex: 1; }
+  .cta-info h3 {
+    font-size: 16px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+  .cta-info p {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.4;
+  }
+  .cta-badges {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .cta-badge {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.65);
+  }
+
+  .wa-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 26px;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    border-radius: 12px;
+    color: white;
+    font-size: 15px;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(37,211,102,0.35);
+    white-space: nowrap;
+  }
+  .wa-btn svg { width: 22px; height: 22px; fill: currentColor; }
+
+  .footer-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .contact-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .contact-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+  }
+  .contact-line svg { width: 14px; height: 14px; opacity: 0.5; }
+  .phone-num {
+    font-size: 24px;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 1px;
+    line-height: 1.2;
+  }
+
+  /* QR Placeholder */
+  .qr-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .qr-box {
+    width: 130px; height: 130px;
+    border: 2.5px dashed rgba(255,255,255,0.25);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.03);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .qr-box svg { width: 28px; height: 28px; color: rgba(255,255,255,0.18); }
+  .qr-box span {
+    font-size: 8px;
+    color: rgba(255,255,255,0.2);
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .qr-caption {
+    font-size: 8px;
+    color: rgba(255,255,255,0.3);
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ===== HERO ===== -->
+  <div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+
+    <div class="logo-row">
+      <div class="logo-icon">
+        <svg viewBox="0 0 40 40" fill="none">
+          <path d="M20 4L34 12V28L20 36L6 28V12L20 4Z" fill="rgba(255,255,255,0.15)" stroke="white" stroke-width="1.5"/>
+          <circle cx="20" cy="18" r="5" fill="none" stroke="#FDE047" stroke-width="2"/>
+          <path d="M18 17L19.5 19L23 15.5" stroke="#FDE047" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="company-name">
+        PT. JAYA MANDIRI
+        <b>SMART ENERGY</b>
+      </div>
+    </div>
+
+    <h1 class="headline">
+      Hemat Listrik <span class="hl-green">Hingga 90%</span><br/>
+      dengan Panel Surya
+    </h1>
+
+    <div class="price-bubble">
+      <span>PV 1 kWp Mulai Rp31 Juta</span>
+    </div>
+
+    <p class="hero-sub">
+      PLTS Off-Grid, Hybrid & On-Grid — Rumah, Bisnis, Kebun & Industri.<br/>
+      Dihitung berdasarkan kondisi matahari Jambi (PSH 3,75 jam).
+    </p>
+
+    <div class="stats-strip">
+      <div class="stat-chip">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"/></svg>
+        500+ Proyek
+      </div>
+      <div class="stat-chip">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"/></svg>
+        Garansi 25 Tahun
+      </div>
+      <div class="stat-chip">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"/></svg>
+        34 Provinsi
+      </div>
+      <div class="stat-chip">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"/></svg>
+        Respon 15 Menit
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BODY ===== -->
+  <div class="body">
+
+    <!-- Two column: Packages + Benefits -->
+    <div class="two-col">
+
+      <!-- LEFT: Packages -->
+      <div class="col-left">
+        <div class="sec-header">
+          <div class="sec-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div class="sec-title">PAKET & HARGA</div>
+        </div>
+
+        <!-- Silver -->
+        <div class="pkg-card">
+          <div class="pkg-top">
+            <div>
+              <div class="pkg-name">Silver — Rumah Tangga</div>
+              <div class="pkg-tier">2 / 3 / 5 kWp &bull; Hybrid 1 Fase</div>
+            </div>
+            <div class="pkg-price-block">
+              <div class="pkg-price"><small>Rp</small>31<small> Juta</small><small>+</small></div>
+              <div class="pkg-price-sub">sudah PPN 11%</div>
+            </div>
+          </div>
+          <div class="pkg-specs">
+            <span class="spec-tag">Hybrid 1 Fase</span>
+            <span class="spec-tag bat">Baterai Optional</span>
+            <span class="spec-tag">PSH 3.75h</span>
+          </div>
+          <div class="pkg-detail">
+            <div class="pkg-detail-item">
+              <div class="pkg-detail-val">8-9 Thn</div>
+              <div class="pkg-detail-label">ROI</div>
+            </div>
+            <div class="pkg-detail-item">
+              <div class="pkg-detail-val">5-7x</div>
+              <div class="pkg-detail-label">Return 25 Tahun</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gold -->
+        <div class="pkg-card pop">
+          <div class="pop-badge">Paling Populer</div>
+          <div class="pkg-top">
+            <div>
+              <div class="pkg-name">Gold — Bisnis & UMKM</div>
+              <div class="pkg-tier">7 / 10 kWp &bull; Hybrid 1 Fase</div>
+            </div>
+            <div class="pkg-price-block">
+              <div class="pkg-price"><small>Rp</small>101<small> Jt</small><small>+</small></div>
+              <div class="pkg-price-sub">sudah PPN 11%</div>
+            </div>
+          </div>
+          <div class="pkg-specs">
+            <span class="spec-tag">Hybrid 1 Fase</span>
+            <span class="spec-tag bat">Baterai Optional</span>
+            <span class="spec-tag addon">+ Carport</span>
+            <span class="spec-tag addon">+ Monitoring</span>
+          </div>
+          <div class="pkg-detail pop-detail">
+            <div class="pkg-detail-item">
+              <div class="pkg-detail-val">5-7 Thn</div>
+              <div class="pkg-detail-label">ROI</div>
+            </div>
+            <div class="pkg-detail-item">
+              <div class="pkg-detail-val">5-7x</div>
+              <div class="pkg-detail-label">Return 25 Tahun</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Platinum -->
+        <div class="pkg-card">
+          <div class="pkg-top">
+            <div>
+              <div class="pkg-name">Platinum — Industri</div>
+              <div class="pkg-tier">12 / 18 / 20 kWp &bull; Hybrid 3 Fase</div>
+            </div>
+            <div class="pkg-price-block">
+              <div class="pkg-price"><small>Rp</small>165<small> Jt</small><small>+</small></div>
+              <div class="pkg-price-sub">sudah PPN 11%</div>
+            </div>
+          </div>
+          <div class="pkg-specs">
+            <span class="spec-tag">Hybrid 3 Fase</span>
+            <span class="spec-tag bat">Baterai Optional</span>
+            <span class="spec-tag addon">+ Carport</span>
+            <span class="spec-tag addon">+ Monitoring</span>
+          </div>
+          <div class="pkg-detail">
+            <div class="pkg-detail-item">
+              <div class="pkg-detail-val">5-7 Thn</div>
+              <div class="pkg-detail-label">ROI</div>
+            </div>
+            <div class="pkg-detail-item">
+              <div class="pkg-detail-val">5-7x</div>
+              <div class="pkg-detail-label">Return 25 Tahun</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Benefits -->
+      <div class="col-right">
+        <div class="sec-header">
+          <div class="sec-icon blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="sec-title">KEUNGGULAN SISTEM</div>
+        </div>
+
+        <div class="benefits-list">
+          <div class="benefit-row">
+            <div class="benefit-icon bi-green">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <div class="benefit-text">
+              <h4>Backup Saat PLN Padam</h4>
+              <p>Listrik tetap menyala untuk lampu, WiFi, TV, CCTV, charger HP dengan baterai LiFePO4.</p>
+            </div>
+          </div>
+
+          <div class="benefit-row">
+            <div class="benefit-icon bi-amber">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2.5" stroke-linecap="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            </div>
+            <div class="benefit-text">
+              <h4>Hemat Tagihan PLN</h4>
+              <p>Dihitung dengan PSH Jambi 3,75h, potensi hemat hingga 90% tagihan listrik bulanan.</p>
+            </div>
+          </div>
+
+          <div class="benefit-row">
+            <div class="benefit-icon bi-blue">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
+            </div>
+            <div class="benefit-text">
+              <h4>Investasi Jangka Panjang</h4>
+              <p>ROI 5-9 tahun. Total return 5-7x lipat dalam 25 tahun. Garansi panel 25 tahun.</p>
+            </div>
+          </div>
+
+          <div class="benefit-row">
+            <div class="benefit-icon bi-purple">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.5" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <div class="benefit-text">
+              <h4>Upgradable & Fleksibel</h4>
+              <p>Mudah dikembangkan. Opsi tanpa baterai (hemat investasi) atau dengan baterai (full backup 24 jam).</p>
+            </div>
+          </div>
+
+          <div class="benefit-row">
+            <div class="benefit-icon bi-teal">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="benefit-text">
+              <h4>Proteksi Peralatan</h4>
+              <p>Output listrik stabil & bersih dengan SPD & grounding. Perangkat elektronik lebih awet.</p>
+            </div>
+          </div>
+
+          <div class="benefit-row">
+            <div class="benefit-icon bi-rose">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M2 12h20"/></svg>
+            </div>
+            <div class="benefit-text">
+              <h4>Coverage Seluruh Indonesia</h4>
+              <p>34 provinsi — dari kota besar hingga area terpencil tanpa PLN. Off-Grid, Hybrid & On-Grid.</p>
+            </div>
+          </div>
+
+          <div class="benefit-row">
+            <div class="benefit-icon bi-orange">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div class="benefit-text">
+              <h4>Nilai Properti Naik</h4>
+              <p>Rumah lebih modern & mandiri energi. Ramah lingkungan, investasi jangka panjang.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certification badges -->
+        <div class="certs-row">
+          <span class="cert-tag">ISO 9001</span>
+          <span class="cert-tag">SNI</span>
+          <span class="cert-tag">K3</span>
+          <span class="cert-tag">PLN SLO</span>
+          <span class="cert-tag">BPK PENGGUNA</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BOTTOM CTA BAR ===== -->
+  <div class="bottom-bar">
+    <div class="cta-row">
+      <div class="cta-info">
+        <h3>Konsultasi GRATIS + Desain Awal Bulan Ini!</h3>
+        <p>Survei area tertentu tanpa biaya. Estimasi ROI detail sesuai kebutuhan Anda.</p>
+        <div class="cta-badges">
+          <span class="cta-badge">Konsultasi Gratis</span>
+          <span class="cta-badge">Desain Awal Gratis</span>
+          <span class="cta-badge">Survei Area Tertentu</span>
+          <span class="cta-badge">Estimasi ROI Detail</span>
+        </div>
+      </div>
+      <div class="wa-btn">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Chat WhatsApp
+      </div>
+    </div>
+
+    <div class="footer-row">
+      <div class="contact-block">
+        <div class="phone-num">0813-2819-0707</div>
+        <div class="contact-line">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+          Rumah Tinggal &bull; Toko &bull; Kantor &bull; Kebun &bull; Industri
+        </div>
+        <div class="contact-line">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          Jambi &bull; Sumatera &bull; Seluruh Indonesia
+        </div>
+      </div>
+
+      <!-- QR Placeholder -->
+      <div class="qr-area">
+        <div class="qr-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="3" height="3"/>
+            <rect x="18" y="14" width="3" height="3"/>
+            <rect x="14" y="18" width="3" height="3"/>
+            <rect x="18" y="18" width="3" height="3"/>
+          </svg>
+          <span>QR Code<br/>akan diletakkan<br/>di sini</span>
+        </div>
+        <div class="qr-caption">Scan untuk info lebih lanjut</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
