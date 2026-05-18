@@ -9,6 +9,9 @@ import {
   hasCustomPricing,
   formatRp,
   calculateROI,
+  defaultComponentPrices,
+  defaultInverterPrices,
+  defaultSettings,
 } from "@/lib/pricing";
 
 interface AddOnState {
@@ -73,22 +76,27 @@ export function ProductSection() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [showCalc, setShowCalc] = useState(false);
   const [showBatteryInfo, setShowBatteryInfo] = useState(false);
-  const [packages, setPackages] = useState<CalculatedPackage[]>(() => calculatePackages());
-  const [isCustom, setIsCustom] = useState(() => hasCustomPricing());
+  // Initialize with explicit defaults to match SSR output (avoids hydration mismatch
+  // when localStorage has custom pricing that differs from defaults)
+  const [packages, setPackages] = useState<CalculatedPackage[]>(() =>
+    calculatePackages(defaultComponentPrices, defaultInverterPrices, defaultSettings)
+  );
+  const [isCustom, setIsCustom] = useState(false);
   const [addOns, setAddOns] = useState<Record<string, AddOnState>>({});
   const [activeFilter, setActiveFilter] = useState<CategoryFilter>("all");
 
-  // Listen for storage changes from kalibrasi page
+  // Load localStorage data after mount (client-only), then listen for changes
   useEffect(() => {
-    const handler = () => {
+    const loadFromStorage = () => {
       setPackages(calculatePackages());
       setIsCustom(hasCustomPricing());
     };
-    window.addEventListener("storage", handler);
-    window.addEventListener("jmse-pricing-updated", handler);
+    loadFromStorage();
+    window.addEventListener("storage", loadFromStorage);
+    window.addEventListener("jmse-pricing-updated", loadFromStorage);
     return () => {
-      window.removeEventListener("storage", handler);
-      window.removeEventListener("jmse-pricing-updated", handler);
+      window.removeEventListener("storage", loadFromStorage);
+      window.removeEventListener("jmse-pricing-updated", loadFromStorage);
     };
   }, []);
 

@@ -375,3 +375,18 @@ Stage Summary:
 - localStorage keys migrated from v2 to v4 with auto-migration function
 - Social media links now active (were placeholder "#")
 - Schema sameAs populated with Facebook + Instagram URLs
+---
+Task ID: 1
+Agent: Main Agent
+Task: Fix hydration mismatch error in landing page (ROI "14" vs "15" server/client)
+
+Work Log:
+- Diagnosed root cause: `calculatePackages()` called in `useState` initializer reads localStorage on client but returns defaults on SSR, causing ROI years to differ
+- Fixed ProductSection.tsx: Changed `useState(() => calculatePackages())` to `useState(() => calculatePackages(defaultComponentPrices, defaultInverterPrices, defaultSettings))` for SSR-safe init, then load localStorage data in useEffect
+- Fixed SavingsCalculator.tsx: Converted `useMemo` to `useEffect` + `useState` pattern so analysis only computes client-side after mount
+- Verified build passes cleanly
+
+Stage Summary:
+- Hydration mismatch fixed in both ProductSection.tsx and SavingsCalculator.tsx
+- Build: ✅ Compiled successfully, all pages generated
+- No other hydration-prone patterns found in codebase
