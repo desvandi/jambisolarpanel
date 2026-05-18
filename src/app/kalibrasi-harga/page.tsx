@@ -777,7 +777,7 @@ export default function KalibrasiHargaPage() {
       lines.push(`  HPP: ${formatRp(pkg.hpp)} | PPN: ${formatRp(pkg.ppn)}`);
       lines.push(`  Produksi: ${pkg.dailyProduction} | Hemat: ${pkg.savingsRange}`);
       lines.push(`  ${pkg.specs}`);
-      if (pkg.batteryNote) lines.push(`  ⚡ ${pkg.batteryNote}`);
+      lines.push(`  Baterai Add-on: Maks ${pkg.batteryMaxKwh} kWh (${pkg.batteryMaxUnits} unit x ${pkg.batteryUnitKwh} kWh)`);
       lines.push("");
     });
     navigator.clipboard.writeText(lines.join("\n"));
@@ -1776,7 +1776,7 @@ export default function KalibrasiHargaPage() {
                           {inverterDisplayNames[pkg.inverterKey].split(" ")[0]}
                         </td>
                         <td className="p-3 text-center text-xs">
-                          Add-on: {pkg.batteryRecKwhActual} kWh
+                          Maks: {pkg.batteryMaxKwh} kWh
                         </td>
                         <td className="p-3 text-right text-xs text-muted-foreground font-mono">
                           {formatRp(pkg.hpp)}
@@ -1835,7 +1835,7 @@ export default function KalibrasiHargaPage() {
                 {results.map((pkg) => {
                   const kWp = (pkg.panelCount * detailed.panel.wattage) / 1000;
                   const dailyKwh = kWp * settings.pshHours * settings.efficiency;
-                  const ratio = (pkg.batteryRecKwhActual / dailyKwh) * 100;
+                  const ratio = (pkg.batteryMaxKwh / dailyKwh) * 100;
                   return (
                     <div
                       key={pkg.name}
@@ -1843,7 +1843,7 @@ export default function KalibrasiHargaPage() {
                     >
                       <span className="font-medium">{pkg.name}</span>
                       <span>
-                        Rekomendasi: {pkg.batteryRecKwhActual} kWh ({ratio.toFixed(0)}% produksi harian) — dari Rp {pkg.batteryPricePerUnitFormatted}/unit
+                        Maks: {pkg.batteryMaxKwh} kWh ({pkg.batteryMaxUnits} unit, {ratio.toFixed(0)}% produksi harian) — Rp {pkg.batteryPricePerUnitFormatted}/unit {pkg.batteryUnitKwh} kWh
                       </span>
                     </div>
                   );

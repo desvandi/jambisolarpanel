@@ -86,7 +86,6 @@ export interface PackageSpec {
 export interface BatteryOption {
   kwh: number;           // e.g., 4.8, 9.6, 14.4
   unitCount: number;     // e.g., 1, 2, 3
-  recommended: boolean;
   price: number;         // total price with margin + PPN
   priceFormatted: string;
 }
@@ -110,14 +109,13 @@ export interface CalculatedPackage extends PackageSpec {
   batteryPricePerUnit: number;
   batteryPricePerUnitFormatted: string;
   batteryOptions: BatteryOption[];
-  batteryRecKwh: number;        // recommended kWh before cap
-  batteryRecKwhActual: number;  // recommended kWh after cap
+  batteryMaxKwh: number;         // max selectable = kWp × PSH (rounded up to 4.8)
+  batteryMaxUnits: number;       // max units
 }
 
 // --- Constants ---
 
 export const BATTERY_UNIT_KWH = 4.8;
-export const BATTERY_MAX_UNITS = 10; // max displayable units (48 kWh)
 
 // --- Default Values (Acuan 2026) ---
 
@@ -418,38 +416,27 @@ export function calculatePackages(
       : 0;
 
     // Battery add-on calculation (4.8 kWh units)
+    // MAKS kapasitas = kWp × PSH (kelipatan 4.8 kWh)
+    // Logic: saat baterai penuh & tidak ada pemadaman PLN, solar langsung
+    // supply beban via pengaturan SBU/SUB/Mix di inverter PowMr.
     const batteryUnitCost = batteryCostPerKwh * BATTERY_UNIT_KWH;
     const batteryUnitPrice = batteryCostPerKwh > 0
       ? Math.round((batteryUnitCost * addonMultiplier) / 100_000) * 100_000
       : 0;
 
-    // Recommended battery = kWp × PSH (daily production without efficiency factor)
-    const dailyProdRaw = kWp * s.pshHours;
-    const recUnits = Math.max(1, Math.round(dailyProdRaw / BATTERY_UNIT_KWH));
-    const recKwh = recUnits * BATTERY_UNIT_KWH;
-    const cappedRecUnits = Math.min(recUnits, BATTERY_MAX_UNITS);
-    const recKwhActual = cappedRecUnits * BATTERY_UNIT_KWH;
+    // Max battery = kWp × PSH, rounded UP to nearest 4.8 kWh unit
+    const dailyProdRaw = kWp * s.pshHours; // kWp × PSH (tanpa efficiency)
+    const maxUnits = Math.max(1, Math.ceil(dailyProdRaw / BATTERY_UNIT_KWH));
+    const maxKwh = maxUnits * BATTERY_UNIT_KWH;
 
-    // Generate battery options (show rec±2, clamped to 1..BATTERY_MAX_UNITS)
-    let startUnit = Math.max(1, cappedRecUnits - 2);
-    let endUnit = Math.min(cappedRecUnits + 2, BATTERY_MAX_UNITS);
-    // Ensure at least 3 options
-    if (endUnit - startUnit < 2) {
-      if (startUnit <= 1) {
-        endUnit = Math.min(3, BATTERY_MAX_UNITS);
-      } else {
-        startUnit = Math.max(1, endUnit - 2);
-      }
-    }
-
+    // Generate battery options: 1 unit → maxUnits
     const batteryOptions: BatteryOption[] = [];
-    for (let i = startUnit; i <= endUnit; i++) {
+    for (let i = 1; i <= maxUnits; i++) {
       const kwh = i * BATTERY_UNIT_KWH;
       const totalPrice = i * batteryUnitPrice;
       batteryOptions.push({
         kwh,
         unitCount: i,
-        recommended: i === cappedRecUnits,
         price: totalPrice,
         priceFormatted: formatRp(totalPrice),
       });
@@ -473,8 +460,8 @@ export function calculatePackages(
       batteryPricePerUnit: batteryUnitPrice,
       batteryPricePerUnitFormatted: formatRp(batteryUnitPrice),
       batteryOptions,
-      batteryRecKwh: recKwh,
-      batteryRecKwhActual: recKwhActual,
+      batteryMaxKwh: maxKwh,
+      batteryMaxUnits: maxUnits,
     };
   });
 }

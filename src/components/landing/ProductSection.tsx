@@ -2,7 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { Home, Building2, Factory, Zap, MessageCircle, Battery, BatteryCharging, Info, ChevronDown, ChevronUp, Car, Monitor, Sparkles, TreePine, Star } from "lucide-react";
+import { Home, Building2, Factory, Zap, MessageCircle, Battery, BatteryCharging, Info, ChevronDown, ChevronUp, Car, Monitor, Sparkles, TreePine } from "lucide-react";
 import {
   type CalculatedPackage,
   calculatePackages,
@@ -439,9 +439,7 @@ export function ProductSection() {
                         }`}>
                           <button
                             onClick={() => setShowBatteryInfo(!showBatteryInfo)}
-                            className={`w-full text-left flex items-center justify-between mb-2 ${
-                              hasBatterySelected ? "" : ""
-                            }`}
+                            className="w-full text-left flex items-center justify-between"
                           >
                             <p className={`text-xs font-semibold flex items-center gap-1.5 ${
                               product.popular ? "text-white/70" : "text-muted-foreground"
@@ -458,7 +456,7 @@ export function ProductSection() {
                             <p className={`text-[10px] leading-relaxed mb-2 ${
                               product.popular ? "text-white/40" : "text-muted-foreground"
                             }`}>
-                              Saat baterai penuh &amp; tidak ada pemadaman, sinar matahari langsung supply beban via pengaturan SBU/SUB/Mix di inverter. Rekomendasi = {product.kWp} kWp x 3,75 PSH = {product.batteryRecKwh} kWh
+                              Saat baterai penuh &amp; tidak ada pemadaman PLN, sinar matahari langsung supply beban via pengaturan SBU/SUB/Mix di inverter PowMr. Maks = {product.kWp} kWp x 3,75 PSH = {product.batteryMaxKwh} kWh ({product.batteryMaxUnits} unit)
                             </p>
                           )}
 
@@ -476,7 +474,7 @@ export function ProductSection() {
                               Tanpa Baterai
                             </button>
 
-                            {/* kWh options */}
+                            {/* kWh options: 1 unit → maxUnits */}
                             {product.batteryOptions.map((opt) => (
                               <button
                                 key={opt.kwh}
@@ -486,12 +484,12 @@ export function ProductSection() {
                                     ? product.popular ? "bg-gold/20 text-gold-light ring-1 ring-gold/40" : "bg-solar/10 text-solar ring-1 ring-solar/40"
                                     : product.popular ? "bg-white/5 text-white/50 hover:bg-white/10" : "bg-card hover:bg-muted"
                                 }`}
-                                title={`Rekomendasi: ${product.batteryRecKwh} kWh`}
+                                title={`${opt.kwh} kWh = ${opt.unitCount}x unit ${product.batteryUnitKwh} kWh`}
                               >
                                 <span className="font-medium">
                                   {opt.kwh} kWh
-                                  {opt.recommended && (
-                                    <Star className="inline w-2.5 h-2.5 ml-0.5 text-gold-light fill-current align-middle" />
+                                  {opt.unitCount === product.batteryMaxUnits && (
+                                    <span className="ml-0.5 text-[9px] opacity-70">MAX</span>
                                   )}
                                 </span>
                                 <span className="text-[10px] opacity-70">
@@ -500,15 +498,6 @@ export function ProductSection() {
                               </button>
                             ))}
                           </div>
-
-                          {/* Show if recommended is capped */}
-                          {product.batteryRecKwh !== product.batteryRecKwhActual && (
-                            <p className={`text-[10px] mt-1.5 ${
-                              product.popular ? "text-white/40" : "text-muted-foreground"
-                            }`}>
-                              Rekomendasi penuh: {product.batteryRecKwh} kWh — hubungi kami untuk penawaran custom
-                            </p>
-                          )}
                         </div>
                       )}
 

@@ -252,3 +252,29 @@ Stage Summary:
 - Build Next.js successful
 - Siap deploy
 
+---
+Task ID: 2
+Agent: Super Z (Main)
+Task: Refactor baterai dari bundled ke optional add-on, unit 4.8 kWh, maks = kWp x PSH
+
+Work Log:
+- Hapus 4 paket bundled baterai dari packageSpecs (Silver 5+Baterai, Gold 10+Baterai, Platinum 11+Baterai, Platinum 20+Baterai)
+- Total paket: 12 → 8 (lebih clean)
+- Baterai = optional add-on untuk SEMUA paket (termasuk Silver)
+- Satuan baterai: 4.8 kWh LiFePO4 (kelipatan tetap, mudah sourcing)
+- Logika maks kapasitas: max = ceil(kWp × PSH / 4.8) × 4.8 kWh
+- Pilihan baterai: 1 unit sampai max_units
+- Tabel per paket: Silver 1→4.8, Silver 2→9.6, Silver 3→9.6, Silver 5→19.2, Gold 6.5→24.0, Gold 10→38.4, Platinum 11→43.2, Platinum 20→76.8
+- Info PowMr: saat baterai penuh & tidak ada pemadaman, solar langsung supply beban via SBU/SUB/Mix
+- Update ProductSection UI: battery add-on cards untuk semua paket dengan MAX label
+- Update kalibrasi-harga: hapus batteryKwh/batteryNote references, gunakan batteryMaxKwh/batteryMaxUnits
+- Update SavingsCalculator: hapus nonBatteryPkgs filter (tidak ada lagi paket bundled baterai)
+- Update pricing.ts: hapus BatteryOption.recommended, ganti batteryRecKwh→batteryMaxKwh
+- Build sukses, server berjalan
+
+Stage Summary:
+- Battery sistem sepenuhnya di-refactor: bundled → optional add-on
+- Unit 4.8 kWh memudahkan sourcing supplier
+- Maks = kWp × PSH memastikan baterai tidak over-sizing
+- PowMr SBU/SUB/Mix dijelaskan di UI
+- 8 paket bersih tanpa bundled battery
