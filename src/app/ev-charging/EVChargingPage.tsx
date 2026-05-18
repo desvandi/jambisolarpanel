@@ -3,13 +3,13 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { ServicePageLayout } from "@/components/landing/ServicePageLayout";
-import { evPackages, plnChargingCost } from "@/lib/pricing-ev";
+import { evPackages, evAssumptions } from "@/lib/pricing-ev";
 import { formatRp } from "@/lib/pricing";
 import { MessageCircle, Car, Battery, Leaf, Zap, Shield, CheckCircle, ArrowRight } from "lucide-react";
 
 const benefits = [
   { icon: Leaf, title: "100% Energi Surya", desc: "Isi daya kendaraan listrik Anda dari matahari — gratis dan ramah lingkungan" },
-  { icon: Zap, title: "Hemat Rp 3-6jt/Bulan", desc: "Bandingkan dengan biaya charging dari PLN yang terus naik setiap tahun" },
+  { icon: Zap, title: "Hemat Rp 400-800rb/Bulan", desc: "Bandingkan dengan biaya charging dari PLN yang terus naik setiap tahun" },
   { icon: Car, title: "XCMG AC 7.2kW", desc: "Charger AC 7.2kW (1-fase) kompatibel dengan semua kendaraan listrik di Indonesia" },
   { icon: Battery, title: "Energi Surplus", desc: "Energi surplus dari PLTS dapat digunakan untuk kebutuhan rumah tangga lainnya" },
   { icon: Shield, title: "Garansi Resmi", desc: "Panel 25 tahun, inverter 5 tahun, charger 2 tahun, instalasi termasuk" },
@@ -33,9 +33,12 @@ export default function EVChargingPage() {
       <section className="py-16 md:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass rounded-2xl p-6 sm:p-8">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-6 text-center">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-2 text-center">
               Perbandingan Biaya Charging
             </h2>
+            <p className="text-sm text-muted-foreground text-center mb-6">
+              Asumsi: EV 7.2 kWh, charge 2x/hari, tarif PLN Rp 1.500/kWh
+            </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {/* PLN Charging */}
               <div className="p-5 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800/30">
@@ -46,23 +49,29 @@ export default function EVChargingPage() {
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Tarif listrik</span>
-                    <span className="font-semibold text-navy dark:text-white">Rp {plnChargingCost.perKwh.toLocaleString("id-ID")}/kWh</span>
+                    <span className="font-semibold text-navy dark:text-white">{formatRp(evAssumptions.plnTariffPerKwh)}/kWh</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Konsumsi EV (per 100km)</span>
-                    <span className="font-semibold text-navy dark:text-white">{plnChargingCost.evEfficiency} kWh</span>
+                    <span className="text-muted-foreground">Charge per hari</span>
+                    <span className="font-semibold text-navy dark:text-white">2x ({evAssumptions.dailyChargingKwh} kWh)</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Jarak per bulan</span>
-                    <span className="font-semibold text-navy dark:text-white">{plnChargingCost.monthlyKm.toLocaleString("id-ID")} km</span>
+                    <span className="text-muted-foreground">Pemakaian per bulan</span>
+                    <span className="font-semibold text-navy dark:text-white">{evAssumptions.monthlyChargingKwh} kWh</span>
                   </div>
                   <div className="pt-3 border-t border-red-200 dark:border-red-800/30">
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">Biaya per bulan</span>
                       <span className="text-xl font-extrabold text-red-600 dark:text-red-400">
-                        Rp {Math.round(plnChargingCost.monthlyPlnCost * 1000).toLocaleString("id-ID")}
+                        {formatRp(evAssumptions.monthlyPlnCost)}
                       </span>
                     </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Biaya per tahun</span>
+                    <span className="text-lg font-bold text-red-600 dark:text-red-400">
+                      {formatRp(evAssumptions.annualPlnCost)}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -70,7 +79,7 @@ export default function EVChargingPage() {
               {/* Solar Charging */}
               <div className="p-5 rounded-xl bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-200 dark:border-emerald-800/30">
                 <div className="flex items-center gap-2 mb-4">
-                  <Sun className="w-5 h-5 text-emerald-500" />
+                  <SunIcon className="w-5 h-5 text-emerald-500" />
                   <h3 className="font-bold text-emerald-600 dark:text-emerald-400">Charging dari PLTS</h3>
                 </div>
                 <div className="space-y-3">
@@ -79,30 +88,53 @@ export default function EVChargingPage() {
                     <span className="font-semibold text-navy dark:text-white">Gratis dari matahari</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Biaya operasional</span>
-                    <span className="font-semibold text-navy dark:text-white">Rp 0</span>
+                    <span className="text-muted-foreground">Solar offset</span>
+                    <span className="font-semibold text-navy dark:text-white">~{evAssumptions.solarOffsetPct}% siang hari</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Jarak per bulan</span>
-                    <span className="font-semibold text-navy dark:text-white">{plnChargingCost.monthlyKm.toLocaleString("id-ID")} km</span>
+                    <span className="text-muted-foreground">Biaya operasional</span>
+                    <span className="font-semibold text-navy dark:text-white">Rp 0</span>
                   </div>
                   <div className="pt-3 border-t border-emerald-200 dark:border-emerald-800/30">
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">Biaya per bulan</span>
                       <span className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400">
-                        Rp 0
+                        Rp 0 (dari surya)
                       </span>
                     </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Biaya per tahun</span>
+                    <span className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
+                      Rp 0 (dari surya)
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="mt-6 p-4 rounded-xl bg-solar/5 border border-solar/10 text-center">
-              <p className="text-sm text-muted-foreground mb-1">Penghematan per bulan</p>
-              <p className="text-2xl font-extrabold text-solar">
-                Rp {Math.round(plnChargingCost.monthlyPlnCost * 1000).toLocaleString("id-ID")}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">Setara Rp {Math.round(plnChargingCost.monthlyPlnCost * 12000).toLocaleString("id-ID")}/tahun</p>
+            <div className="mt-6 p-5 rounded-xl bg-solar/5 border border-solar/10">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Penghematan Per Bulan</p>
+                  <p className="text-2xl font-extrabold text-solar">
+                    {formatRp(evAssumptions.monthlySolarSavings)}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">({evAssumptions.solarOffsetPct}% offset dari PLN)</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Penghematan Per Tahun</p>
+                  <p className="text-2xl font-extrabold text-solar">
+                    {formatRp(evAssumptions.annualSolarSavings)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Total Biaya PLN/Tahun</p>
+                  <p className="text-2xl font-extrabold text-red-500">
+                    {formatRp(evAssumptions.annualPlnCost)}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">tanpa PLTS</p>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
@@ -200,7 +232,7 @@ export default function EVChargingPage() {
   );
 }
 
-function Sun({ className }: { className?: string }) {
+function SunIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="4" />

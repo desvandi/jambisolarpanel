@@ -51,7 +51,6 @@ export function ServicePageLayout({
             >
               <Link href="/" className="hover:text-solar-light transition-colors flex items-center gap-1">
                 <Home className="w-3.5 h-3.5" />
-                Home
               </Link>
               {breadcrumbs.map((bc, i) => (
                 <span key={i} className="flex items-center gap-2">

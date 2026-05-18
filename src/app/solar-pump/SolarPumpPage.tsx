@@ -54,8 +54,54 @@ export default function SolarPumpPage() {
         </div>
       </section>
 
-      {/* Pricing */}
+      {/* Problem-Solution Section */}
       <section className="py-16 md:py-20 bg-muted/30">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-8 text-center">
+            PLN vs Genset vs Solar Pump — Mana Lebih Hemat?
+          </h2>
+          {/* Comparison table */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr className="border-b border-border">
+                  <th className="text-left p-3 font-semibold text-navy dark:text-white">Aspek</th>
+                  <th className="text-center p-3 font-semibold text-red-500">PLN</th>
+                  <th className="text-center p-3 font-semibold text-orange-500">Genset</th>
+                  <th className="text-center p-3 font-semibold text-solar">Solar Pump</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ["Biaya bahan bakar/listrik", "~Rp 2-5 jt/bulan", "~Rp 3-8 jt/bulan", "Rp 0 (gratis matahari)"],
+                  ["Biaya operasional/tahun", "Rp 24-60 jt", "Rp 36-96 jt", "Rp 0"],
+                  ["Investasi awal", "Rp 5-15 jt (kabel)", "Rp 10-30 jt", "Rp 18-45 jt"],
+                  ["Balik modal", "-", "-", "2-4 tahun"],
+                  ["Emisi CO2", "Tergantung PLN", "Sangat tinggi", "Zero emission"],
+                  ["Ketersediaan area terpencil", "Tidak bisa", "Perlu BBM", "100% mandiri"],
+                  ["Perawatan", "Minim", "Rutin (oli, filter)", "Minim"],
+                  ["Daya tahan", "Tergantung jaringan", "5-8 tahun", "10-25 tahun"],
+                ].map(([label, pln, genset, solar], i) => (
+                  <tr key={i} className="border-b border-border/50 hover:bg-muted/30">
+                    <td className="p-3 text-muted-foreground">{label}</td>
+                    <td className="p-3 text-center text-red-500/80">{pln}</td>
+                    <td className="p-3 text-center text-orange-500/80">{genset}</td>
+                    <td className={`p-3 text-center font-medium ${i <= 1 ? "text-solar font-bold" : "text-solar/80"}`}>{solar}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-6 p-4 rounded-xl bg-solar/5 border border-solar/10 text-center">
+            <p className="text-sm text-muted-foreground">
+              Dalam <strong className="text-solar">2-4 tahun</strong>, Solar Pump sudah balik modal. Setelah itu, air gratis selama 20+ tahun.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="text-center mb-12">
             <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-blue-600 bg-blue-600/10 rounded-full">

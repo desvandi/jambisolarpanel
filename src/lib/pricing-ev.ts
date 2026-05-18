@@ -20,6 +20,28 @@ export interface EVPackage {
   desc: string;
 }
 
+// Realistic EV charging assumptions
+export const evAssumptions = {
+  evBatteryKwh: 7.2,           // Typical EV battery (Wuling Air, BYD Dolphin)
+  chargesPerDay: 2,             // Morning + evening
+  dailyChargingKwh: 14.4,       // 7.2 × 2
+  monthlyChargingKwh: 432,      // 14.4 × 30
+  plnTariffPerKwh: 1500,        // Rp/kWh
+  solarOffsetPct: 70,           // 70% covered by solar (daytime)
+  get monthlyPlnCost() {
+    return Math.round(this.dailyChargingKwh * 30 * this.plnTariffPerKwh);
+  },
+  get annualPlnCost() {
+    return this.monthlyPlnCost * 12;
+  },
+  get monthlySolarSavings() {
+    return Math.round(this.monthlyPlnCost * this.solarOffsetPct / 100);
+  },
+  get annualSolarSavings() {
+    return this.monthlySolarSavings * 12;
+  },
+};
+
 export const evPackages: EVPackage[] = [
   {
     name: "EV Home Charger Only",
@@ -41,9 +63,9 @@ export const evPackages: EVPackage[] = [
     panel: "8× LONGi 650Wp",
     inverter: "Powmr 5kW Hybrid",
     batteryKwh: 0,
-    monthlySavings: "~Rp 3.000.000/bulan",
-    features: ["PLTS 5.2 kWp + Charger AC 7.2kW", "Hemat ~Rp 3jt/bulan vs PLN charging", "Produksi ~15.6 kWh/hari", "Garansi panel 25 tahun", "Garansi inverter 5 tahun", "Gratis survei & instalasi", "PPN 11% termasuk"],
-    desc: "Solusi terintegrasi PLTS + EV Charger untuk rumah. Isi daya kendaraan listrik Anda dengan energi surya — gratis dari matahari. Hemat Rp 3 juta per bulan dibanding charging dari PLN.",
+    monthlySavings: "~Rp 324.000/bulan",
+    features: ["PLTS 5.2 kWp + Charger AC 7.2kW", "Hemat ~Rp 324rb/bulan vs PLN charging", "Produksi ~15.6 kWh/hari", "Isi daya 1x/hari dari surya", "Garansi panel 25 tahun", "Garansi inverter 5 tahun", "Gratis survei & instalasi", "PPN 11% termasuk"],
+    desc: "Solusi terintegrasi PLTS + EV Charger untuk rumah. Isi daya kendaraan listrik Anda dengan energi surya — gratis dari matahari. Hemat Rp 324 ribu per bulan dibanding charging dari PLN.",
   },
   {
     name: "EV Solar 7.8 kWp + Charger",
@@ -53,8 +75,8 @@ export const evPackages: EVPackage[] = [
     panel: "12× LONGi 650Wp",
     inverter: "Powmr 8kW Hybrid",
     batteryKwh: 0,
-    monthlySavings: "~Rp 4.500.000/bulan",
-    features: ["PLTS 7.8 kWp + Charger AC 7.2kW", "Hemat ~Rp 4.5jt/bulan vs PLN charging", "Produksi ~23.4 kWh/hari", "Garansi panel 25 tahun", "Garansi inverter 5 tahun", "Gratis survei & instalasi", "PPN 11% termasuk"],
+    monthlySavings: "~Rp 486.000/bulan",
+    features: ["PLTS 7.8 kWp + Charger AC 7.2kW", "Hemat ~Rp 486rb/bulan vs PLN charging", "Produksi ~23.4 kWh/hari", "Isi daya ~1.6x/hari dari surya", "Garansi panel 25 tahun", "Garansi inverter 5 tahun", "Gratis survei & instalasi", "PPN 11% termasuk"],
     desc: "Paket premium untuk rumah dengan 2 kendaraan listrik atau kebutuhan listrik rumah tinggi. Energi surplus dari PLTS dapat digunakan untuk kebutuhan rumah tangga lainnya.",
   },
   {
@@ -65,18 +87,8 @@ export const evPackages: EVPackage[] = [
     panel: "16× LONGi 650Wp",
     inverter: "Powmr 10kW Hybrid",
     batteryKwh: 0,
-    monthlySavings: "~Rp 6.000.000/bulan",
-    features: ["PLTS 10.4 kWp + Charger AC 7.2kW", "Hemat ~Rp 6jt/bulan vs PLN charging", "Produksi ~31.2 kWh/hari", "Garansi panel 25 tahun", "Garansi inverter 5 tahun", "Gratis survei & instalasi", "PPN 11% termasuk", "Cocok untuk bisnis & komersial"],
+    monthlySavings: "~Rp 648.000/bulan",
+    features: ["PLTS 10.4 kWp + Charger AC 7.2kW", "Hemat ~Rp 648rb/bulan vs PLN charging", "Produksi ~31.2 kWh/hari", "Isi daya ~2.2x/hari dari surya", "Garansi panel 25 tahun", "Garansi inverter 5 tahun", "Gratis survei & instalasi", "PPN 11% termasuk", "Cocok untuk bisnis & komersial"],
     desc: "Solusi ideal untuk area parkir komersial, ruko, atau kantor yang menyediakan EV charging. Energi surplus menutupi kebutuhan listrik bisnis Anda.",
   },
 ];
-
-// PLN Charging Cost Comparison
-export const plnChargingCost = {
-  perKwh: 1500, // Rp/kWh (tarif rumah tangga)
-  evEfficiency: 0.16, // 16 kWh per 100km
-  monthlyKm: 1000, // km per bulan rata-rata
-  get monthlyPlnCost() {
-    return Math.round(this.monthlyKm / 100 * this.evEfficiency * this.perKwh / 1000 * 10) / 10;
-  },
-};

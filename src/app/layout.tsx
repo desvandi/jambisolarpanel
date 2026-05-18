@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://jayamandiri.co.id"),
-  title: "PT. Jaya Mandiri Smart Energy | Solusi Panel Surya Profesional & Terpercaya",
+  title: "Jambi Solar Panel | PT. Jaya Mandiri Smart Energy",
   description:
-    "Hemat tagihan listrik hingga 90% dengan instalasi PLTS Off-Grid, Hybrid & On-Grid dari PT. Jaya Mandiri Smart Energy. Garansi sistem, konsultasi gratis, support seluruh Indonesia. Hubungi sekarang!",
+    "Hemat tagihan listrik hingga 90% dengan instalasi PLTS Off-Grid & Hybrid dari Jambi Solar Panel — PT. Jaya Mandiri Smart Energy. Garansi sistem, konsultasi gratis, support seluruh Indonesia. Hubungi sekarang!",
   keywords: [
     "panel surya Jambi",
     "jasa pasang solar panel Indonesia",
@@ -131,9 +131,10 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
-              name: "PT. Jaya Mandiri Smart Energy",
+              name: "Jambi Solar Panel",
+              legalName: "PT. Jaya Mandiri Smart Energy",
               description:
-                "Provider solusi energi surya profesional - PLTS Off-Grid, Hybrid, dan On-Grid untuk rumah, bisnis, kebun, dan industri di seluruh Indonesia.",
+                "Provider solusi energi surya profesional — Sistem Mandiri Off-Grid & Hybrid untuk Rumah, Bisnis, Kebun, dan Infrastruktur.",
               url: "https://jayamandiri.co.id",
               telephone: "+6281328190707",
               image: "/hero-solar.jpg",
@@ -178,7 +179,6 @@ export default function RootLayout({
               serviceType: [
                 "Instalasi PLTS Off-Grid",
                 "Instalasi PLTS Hybrid",
-                "Instalasi PLTS On-Grid",
                 "Solar Panel Installation",
                 "Sistem Energi Surya",
               ],
@@ -199,7 +199,7 @@ export default function RootLayout({
                   name: "Berapa biaya pasang panel surya?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Biaya instalasi panel surya bervariasi tergantung kapasitas dan kebutuhan. Untuk rumah tangga, paket mulai dari Powmr 1.3 kWp (tanpa baterai) hingga Powmr 5.2 kWp. Untuk bisnis dan industri, paket mulai dari Powmr 7.15 kWp. Konsultasikan kebutuhan Anda secara GRATIS dengan tim kami.",
+                    text: "Biaya instalasi PLTS Off-Grid & Hybrid bervariasi tergantung kapasitas dan kebutuhan. Untuk rumah tangga, paket mulai dari Powmr 1.3 kWp (tanpa baterai) hingga Powmr 5.2 kWp. Untuk bisnis dan industri, paket mulai dari Powmr 7.15 kWp. Konsultasikan kebutuhan Anda secara GRATIS dengan tim kami.",
                   },
                 },
                 {

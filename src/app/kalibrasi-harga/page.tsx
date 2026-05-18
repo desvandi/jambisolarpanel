@@ -1168,7 +1168,7 @@ export default function KalibrasiHargaPage() {
                   <SectionHeader icon={Zap} title="Inverter" />
                   <p className="text-xs text-muted-foreground">
                     Masukkan harga beli inverter dari supplier (belum termasuk margin &amp; pajak).
-                    Semua model adalah Hybrid (on-grid + off-grid + baterai).
+                    Semua model adalah Hybrid — sistem mandiri yang bekerja dengan atau tanpa PLN.
                   </p>
                 </div>
 

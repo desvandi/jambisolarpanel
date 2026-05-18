@@ -46,17 +46,17 @@ export function Footer() {
               </div>
               <div>
                 <p className="text-sm font-bold text-white leading-tight">
-                  PT. Jaya Mandiri
+                  Jambi Solar Panel
                 </p>
-                <p className="text-[10px] font-semibold text-solar-light tracking-wider uppercase">
-                  Smart Energy
+                <p className="text-[10px] font-semibold text-solar-light tracking-wider">
+                  by PT. Jaya Mandiri Smart Energy
                 </p>
               </div>
             </div>
             <p className="text-sm text-white/60 leading-relaxed mb-4 max-w-sm">
-              Smart Energy Solution Provider — Menyediakan solusi energi surya
-              profesional untuk rumah, bisnis, kebun, dan industri. Mitra energi
-              mandiri terpercaya Anda di Sumatera & Jawa Bagian Barat.
+              Jambi Solar Panel &mdash; Smart Energy Solution Provider dari PT. Jaya Mandiri Smart Energy.
+              Menyediakan solusi energi surya profesional untuk rumah, bisnis, kebun, dan industri.
+              Mitra energi mandiri terpercaya Anda di Sumatera &amp; Jawa Bagian Barat.
             </p>
             <div className="text-xs text-white/40 leading-relaxed mb-4 max-w-sm">
               Tangkit Baru Residence Blok D15, Jl. H. Saing, RT.001/RW.001,

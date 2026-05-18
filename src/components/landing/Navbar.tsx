@@ -112,10 +112,10 @@ export function Navbar() {
             </div>
             <div className="hidden sm:block">
               <p className="text-sm font-bold text-navy dark:text-white leading-tight">
-                PT. Jaya Mandiri
+                Jambi Solar Panel
               </p>
-              <p className="text-[10px] font-semibold text-solar tracking-wider uppercase">
-                Smart Energy
+              <p className="text-[10px] font-semibold text-solar tracking-wider">
+                by PT. Jaya Mandiri Smart Energy
               </p>
             </div>
           </Link>

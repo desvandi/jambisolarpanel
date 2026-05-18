@@ -102,6 +102,17 @@ export function HeroSection() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-40">
         <div className="max-w-3xl">
+          {/* Brand Trust Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            className="inline-flex items-center gap-2 px-4 py-2 mb-4 rounded-full bg-solar/20 border border-solar/30 text-solar-light text-sm font-bold"
+          >
+            <span className="text-base">&#9728;&#65039;</span>
+            <span>Jambi Solar Panel &mdash; by PT. Jaya Mandiri Smart Energy</span>
+          </motion.div>
+
           {/* Trust badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -120,7 +131,7 @@ export function HeroSection() {
                 </svg>
               ))}
             </span>
-            <span>Dipercaya oleh 500+ Pelanggan Rumah & Bisnis</span>
+            <span>Dipercaya oleh 500+ Pelanggan Rumah &amp; Bisnis</span>
           </motion.div>
 
           {/* Headline */}
