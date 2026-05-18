@@ -22,7 +22,7 @@ function waLink(pkg: CalculatedPackage, addOns?: AddOnState) {
   if (addOns) {
     const parts: string[] = [];
     if (addOns.carport) parts.push(`+ Carport ${formatRp(pkg.carportAddonPrice)}`);
-    if (addOns.battery > 0) parts.push(`+ Baterai LiFePO4 48V 100Ah ${addOns.battery} kWh`);
+    if (addOns.battery > 0) parts.push(`+ Baterai Shoto LiFePO4 ${addOns.battery} kWh`);
     if (addOns.monitoring === "basic") parts.push(`+ Monitoring Basic ${formatRp(pkg.monitoringBasicPrice)}`);
     if (addOns.monitoring === "standard") parts.push(`+ Monitoring Standard ${formatRp(pkg.monitoringStandardPrice)}`);
     if (addOns.monitoring === "industrial") parts.push(`+ Monitoring Industrial ${formatRp(pkg.monitoringIndustrialPrice)}`);
@@ -246,7 +246,7 @@ export function ProductSection() {
               </p>
               <p>
                 <strong>Biaya per paket:</strong> Panel + Mounting + BOS + Inverter
-                + Proteksi (SPD &amp; Grounding) + Jasa Instalasi + Survei &amp; Desain + Commissioning + Logistik.
+                + Proteksi (SPD, Grounding, Tomzn MCCB AC/DC) + Jasa Instalasi + Survei &amp; Desain + Commissioning + Logistik.
               </p>
               <p>
                 <strong>Margin:</strong> 35% dari HPP (Harga Pokok Produksi).
@@ -254,7 +254,7 @@ export function ProductSection() {
                 <strong> PPh</strong> dipotong oleh pihak pembeli (wajib pajak), bukan menambah harga jual.
               </p>
               <p>
-                <strong>Add-on tersedia:</strong> Pack Baterai LiFePO4 48V 100Ah (kelipatan 4,8 kWh), Kanopi Carport (+harga per kWp),
+                <strong>Add-on tersedia:</strong> Baterai Shoto LiFePO4 (kelipatan 4,8 kWh), Kanopi Carport (+harga per kWp),
                 dan Smart Monitoring (Basic / Standard / Industrial) untuk paket Gold &amp; Platinum.
               </p>
               <p>
@@ -302,7 +302,7 @@ export function ProductSection() {
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
                   <BatteryCharging className="w-3.5 h-3.5 text-gold" />
-                  + Pack Baterai LiFePO4 48V 100Ah — Backup saat PLN padam, unit 4,8 kWh
+                  + Baterai Shoto LiFePO4 — Backup saat PLN padam, unit 4,8 kWh
                 </span>
               </div>
 
@@ -449,7 +449,7 @@ export function ProductSection() {
                               product.popular ? "text-white/70" : "text-muted-foreground"
                             }`}>
                               <Battery className="w-3.5 h-3.5" />
-                              Baterai LiFePO4 48V 100Ah (Opsional)
+                              Baterai Shoto LiFePO4 (Opsional)
                               <span className="inline-flex items-center gap-0.5 text-[10px] font-normal opacity-60">
                                 {showBatteryInfo ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                               </span>
@@ -460,7 +460,7 @@ export function ProductSection() {
                             <p className={`text-xs leading-relaxed mb-2 ${
                               product.popular ? "text-white/50" : "text-muted-foreground"
                             }`}>
-                              Saat baterai penuh &amp; tidak ada pemadaman PLN, sinar matahari langsung supply beban via pengaturan SBU/SUB/Mix di inverter Powmr. Maks = {product.kWp} kWp x 3,75 PSH = {product.batteryMaxKwh} kWh ({product.batteryMaxUnits} unit Pack LiFePO4 48V 100Ah)
+                              Saat baterai penuh &amp; tidak ada pemadaman PLN, sinar matahari langsung supply beban via pengaturan SBU/SUB/Mix di inverter Powmr. Maks = {product.kWp} kWp x 3,75 PSH = {product.batteryMaxKwh} kWh ({product.batteryMaxUnits} unit Shoto LiFePO4)
                             </p>
                           )}
 

@@ -159,7 +159,7 @@ export function SocialProofSection() {
               <div className="flex items-center gap-3 mb-4 p-3 rounded-xl bg-gradient-to-r from-solar/5 to-gold/5 border border-solar/10">
                 <TrendingDown className="w-5 h-5 text-solar flex-shrink-0" />
                 <div className="min-w-0">
-                  <p className="text-xs text-muted-foreground font-medium">Tagihan Listrik</p>
+                  <p className="text-xs text-muted-foreground font-medium">Biaya Sebelum</p>
                   <p className="text-sm font-bold text-solar">
                     {t.beforeBill} <span className="text-muted-foreground">→</span> {t.afterBill}
                   </p>

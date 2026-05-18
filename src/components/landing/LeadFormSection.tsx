@@ -201,6 +201,9 @@ export function LeadFormSection() {
                       <input
                         type="tel"
                         required
+                        pattern="[0-9]{10,13}"
+                        minLength={10}
+                        maxLength={13}
                         value={form.phone}
                         onChange={(e) =>
                           setForm({ ...form, phone: e.target.value })

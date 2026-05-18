@@ -11,7 +11,7 @@
    - Margin: 35% | PPN: 11%
 
    Battery Logic:
-   - Unit size: 4.8 kWh LiFePO4 (easy to source from suppliers)
+   - Unit size: 4.8 kWh Shoto LiFePO4 Battery Pack (48V 100Ah)
    - Recommended capacity = kWp × PSH (daily production without efficiency)
    - When battery is full & no PLN outage, solar directly supplies loads
      via Powmr inverter SBU/SUB/Mix priority settings
@@ -31,8 +31,8 @@ export interface ComponentPrices {
   // BOS per panel
   bosPerPanel: number;           // Cables, MC4, connectors per panel
 
-  // Proteksi per sistem (lump sum)
-  spdGroundingPerSystem: number; // SPD + grounding system
+  // Proteksi per sistem — Tomzn MCCB AC, MCB DC PV-Inverter, SPD
+  spdGroundingPerSystem: number; // SPD + grounding + Tomzn protection
 
   // Labor
   laborPerPanel: number;         // Panel installation labor per panel
@@ -40,8 +40,8 @@ export interface ComponentPrices {
   laborBatteryPerKwh: number;    // Battery installation & wiring per kWh
 
   // Battery
-  batteryPerKwh: number;         // LiFePO4 per kWh
-  bosBatteryPerKwh: number;      // Battery BOS: cables, fuse, protective per kWh
+  batteryPerKwh: number;         // Shoto LiFePO4 per kWh
+  bosBatteryPerKwh: number;      // Battery BOS: Tomzn MCCB/AC/DC, cables, fuse per kWh
 
   // Professional Services (lump sum)
   surveyDesignFee: number;       // Survei & desain

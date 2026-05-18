@@ -330,3 +330,26 @@ Stage Summary:
 - Inverter: Powmr (was DEYE/GROWATT) — 7 models from 3.6kW to 20kW
 - Battery: Pack LiFePO4 48V 100Ah (was LiFePO4 PYLON/BYD)
 - Internal interface keys kept unchanged (deye3k6, etc.) for localStorage compatibility
+
+---
+Task ID: c1-c5
+Agent: Main Agent
+Task: Update brand materials + comprehensive audit + fix findings
+
+Work Log:
+- Updated battery brand: "Pack LiFePO4 48V 100Ah" → "Shoto LiFePO4 Battery Pack" in pricing.ts, kalibrasi, ProductSection, catalog cover
+- Updated protection brand: Added Tomzn references in pricing.ts comments and ProductSection display
+- Comprehensive audit found 18 issues (2 Critical, 4 High, 9 Medium, 3 Low)
+- Fixed C-1: Hero "Hubungi" CTA changed from WhatsApp to tel: link (phone icon now does phone call)
+- Fixed H-3: Desktop floating "Call" button changed from WhatsApp to tel: link
+- Fixed M-2: Testimonial card header "Tagihan Listrik" → "Biaya Sebelum" (covers off-grid genset cases)
+- Fixed M-5: LeadForm phone input added pattern="[0-9]{10,13}" validation
+- Removed unused imports: AlertCircle from kalibrasi (kept Textarea, Copy, Check which are used)
+- Build: PASS after all fixes
+
+Stage Summary:
+- Brand materials finalized: LONGi 650Wp, Powmr (MPPT built-in), Shoto LiFePO4, Tomzn protection
+- 5 fixes applied from audit, 13 remaining (need user input or product decisions)
+- H-2 (kWp naming mismatch with 650Wp): Needs product decision on package naming
+- H-1 (internal key names deye/growatt): Needs migration strategy for localStorage
+- C-2 (placeholder Pixel/GA IDs): Needs user to provide real IDs

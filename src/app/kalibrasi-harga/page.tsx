@@ -44,13 +44,11 @@ import {
   Wrench,
   DollarSign,
   CheckCircle2,
-  AlertCircle,
-  Copy,
-  Check,
   ArrowLeft,
   TrendingUp,
   Package,
   Shield,
+  Copy,
   HardHat,
   Monitor,
   Settings,
@@ -183,7 +181,7 @@ const defaultDetailedState: DetailedState = {
     {} as InverterDetailMap
   ),
   battery: {
-    brand: "Pack LiFePO4 48V 100Ah",
+    brand: "Shoto LiFePO4 Battery Pack",
     type: "LiFePO4",
     capacityPerUnit: 4.8,
     dod: 80,

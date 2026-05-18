@@ -84,13 +84,12 @@ export function FloatingButtons() {
 
         {/* Call Button */}
         <a
-          href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20ingin%20menghubungi%20anda%20melalui%20tombol%20telepon%20di%20website"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="tel:+6281328190707"
+          aria-label="Telepon"
           className="group flex items-center gap-3"
         >
           <span className="px-4 py-2 bg-white dark:bg-navy text-navy dark:text-white text-sm font-semibold rounded-xl shadow-lg border border-border whitespace-nowrap opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300">
-            Hubungi Kami
+            Telepon
           </span>
           <div className="w-12 h-12 rounded-full bg-solar flex items-center justify-center shadow-lg shadow-solar/40 hover:shadow-xl hover:shadow-solar/50 hover:scale-110 transition-all duration-300">
             <Phone className="w-5 h-5 text-white" />
