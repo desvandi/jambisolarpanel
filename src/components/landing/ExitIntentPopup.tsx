@@ -28,6 +28,23 @@ export function ExitIntentPopup() {
     return () => document.removeEventListener("mouseleave", handleMouseLeave);
   }, [handleMouseLeave]);
 
+  // Mobile exit intent: trigger when user scrolls back up quickly
+  useEffect(() => {
+    let lastScroll = window.scrollY;
+    let hasScrolledDown = false;
+    const onScroll = () => {
+      const curr = window.scrollY;
+      if (curr > 600) hasScrolledDown = true;
+      if (hasScrolledDown && curr < lastScroll && curr < 300 &&
+        !dismissed && !sessionStorage.getItem("exitPopupDismissed")) {
+        setShow(true);
+      }
+      lastScroll = curr;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [dismissed]);
+
   const handleClose = () => {
     setShow(false);
     setDismissed(true);

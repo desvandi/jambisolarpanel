@@ -44,13 +44,11 @@ import {
   Wrench,
   DollarSign,
   CheckCircle2,
-  AlertCircle,
-  Copy,
-  Check,
   ArrowLeft,
   TrendingUp,
   Package,
   Shield,
+  Copy,
   HardHat,
   Monitor,
   Settings,
@@ -147,16 +145,14 @@ interface DetailedState {
 // --- Default Detailed State ---
 
 function getBrandFromKey(key: string): string {
-  if (key.startsWith("growatt")) return "GROWATT";
-  if (key.startsWith("deye")) return "DEYE";
-  return "OTHER";
+  return "Powmr";
 }
 
 const defaultDetailedState: DetailedState = {
   panel: {
-    brand: "Tier-1 (LONGi/Trina/JA)",
+    brand: "LONGi",
     cellType: "Mono PERC",
-    wattage: 630,
+    wattage: 650,
     pricePerPanel: 2_500_000,
     warrantyPerformance: 25,
     warrantyProduct: 12,
@@ -185,9 +181,9 @@ const defaultDetailedState: DetailedState = {
     {} as InverterDetailMap
   ),
   battery: {
-    brand: "LiFePO4 (PYLON/BYD)",
+    brand: "Shoto LiFePO4 Battery Pack",
     type: "LiFePO4",
-    capacityPerUnit: 5,
+    capacityPerUnit: 4.8,
     dod: 80,
     pricePerKwh: 2_000_000,
     laborPerKwh: 250_000,
@@ -784,7 +780,7 @@ export default function KalibrasiHargaPage() {
       lines.push(`  HPP: ${formatRp(pkg.hpp)} | PPN: ${formatRp(pkg.ppn)}`);
       lines.push(`  Produksi: ${pkg.dailyProduction} | Hemat: ${pkg.savingsRange}`);
       lines.push(`  ${pkg.specs}`);
-      if (pkg.batteryNote) lines.push(`  ⚡ ${pkg.batteryNote}`);
+      lines.push(`  Baterai Add-on: Maks ${pkg.batteryMaxKwh} kWh (${pkg.batteryMaxUnits} unit x ${pkg.batteryUnitKwh} kWh)`);
       lines.push("");
     });
     navigator.clipboard.writeText(lines.join("\n"));
@@ -1783,7 +1779,7 @@ export default function KalibrasiHargaPage() {
                           {inverterDisplayNames[pkg.inverterKey].split(" ")[0]}
                         </td>
                         <td className="p-3 text-center text-xs">
-                          {pkg.batteryKwh > 0 ? `${pkg.batteryKwh} kWh` : "—"}
+                          Maks: {pkg.batteryMaxKwh} kWh
                         </td>
                         <td className="p-3 text-right text-xs text-muted-foreground font-mono">
                           {formatRp(pkg.hpp)}
@@ -1835,41 +1831,26 @@ export default function KalibrasiHargaPage() {
                 </h3>
               </div>
               <p className="text-xs text-muted-foreground mb-3">
-                Rasio optimal: 26–33% dari produksi harian PV (filosofi Opsi A: baterai cukup untuk kebutuhan malam). Di bawah 26% = baterai terlalu
-                kecil. Di atas 33% = baterai terlalu besar (over-sizing, boros).
+                Baterai tersedia sebagai add-on opsional (unit 4,8 kWh LiFePO4). Kapasitas rekomendasi = kWp x PSH.
+                Saat baterai penuh &amp; tidak ada pemadaman PLN, sinar matahari langsung supply beban via pengaturan SBU/SUB/Mix di inverter.
               </p>
               <div className="space-y-2">
-                {results
-                  .filter((r) => r.batteryKwh > 0)
-                  .map((pkg) => {
-                    const kWp = (pkg.panelCount * detailed.panel.wattage) / 1000;
-                    const dailyKwh = kWp * settings.pshHours * settings.efficiency;
-                    const ratio = (pkg.batteryKwh / dailyKwh) * 100;
-                    const isOk = ratio >= 26 && ratio <= 33;
-                    return (
-                      <div
-                        key={pkg.name}
-                        className={`flex items-center justify-between p-2.5 rounded-lg text-xs ${
-                          isOk
-                            ? "bg-emerald-50 dark:bg-emerald-900/10 text-emerald-700 dark:text-emerald-400"
-                            : "bg-red-50 dark:bg-red-900/10 text-red-700 dark:text-red-400"
-                        }`}
-                      >
-                        <span className="font-medium">{pkg.name}</span>
-                        <div className="flex items-center gap-2">
-                          <span>
-                            {pkg.batteryKwh} kWh / {dailyKwh.toFixed(1)} kWh ={" "}
-                            {ratio.toFixed(0)}%
-                          </span>
-                          {isOk ? (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-                          ) : (
-                            <AlertCircle className="w-3.5 h-3.5 text-red-500" />
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
+                {results.map((pkg) => {
+                  const kWp = (pkg.panelCount * detailed.panel.wattage) / 1000;
+                  const dailyKwh = kWp * settings.pshHours * settings.efficiency;
+                  const ratio = (pkg.batteryMaxKwh / dailyKwh) * 100;
+                  return (
+                    <div
+                      key={pkg.name}
+                      className="flex items-center justify-between p-2.5 rounded-lg text-xs bg-blue-50 dark:bg-blue-900/10 text-blue-700 dark:text-blue-400"
+                    >
+                      <span className="font-medium">{pkg.name}</span>
+                      <span>
+                        Maks: {pkg.batteryMaxKwh} kWh ({pkg.batteryMaxUnits} unit, {ratio.toFixed(0)}% produksi harian) — Rp {pkg.batteryPricePerUnitFormatted}/unit {pkg.batteryUnitKwh} kWh
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 

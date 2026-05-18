@@ -141,7 +141,7 @@ export function UrgencySection() {
             className="inline-flex items-center gap-3 px-10 py-5 bg-gold hover:bg-gold-light text-navy font-extrabold text-lg rounded-full transition-all duration-300 hover:shadow-2xl hover:shadow-gold/30 hover:scale-105 animate-whatsapp-pulse"
           >
             <MessageCircle className="w-6 h-6" />
-            Klaim Penawaran Gratis Sekarang
+            Klaim Konsultasi Gratis Sekarang
           </a>
         </motion.div>
       </div>

@@ -4,7 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { Send, User, MapPin, Zap, Phone } from "lucide-react";
 
-const WA_LINK = "https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20mengisi%20form%20di%20website%20anda%20dan%20ingin%20konsultasi%20panel%20surya";
+const WA_BASE = "https://wa.me/6281328190707";
 
 export function LeadFormSection() {
   const ref = useRef(null);
@@ -20,7 +20,7 @@ export function LeadFormSection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const message = `Halo PT. Jaya Mandiri Smart Energy,%0A%0ASaya ingin konsultasi panel surya:%0ANama: ${form.name}%0ALokasi: ${form.location}%0AKebutuhan: ${form.need}%0ANo. WA: ${form.phone}`;
-    window.open(`${WA_LINK}?text=${message}`, "_blank");
+    window.open(`${WA_BASE}?text=${message}`, "_blank");
     setSubmitted(true);
   };
 
@@ -175,11 +175,11 @@ export function LeadFormSection() {
                         <option value="Rumah Tangga (1-5 kWp)">
                           Rumah Tangga (1-5 kWp)
                         </option>
-                        <option value="Bisnis/UMKM (10-50 kWp)">
-                          Bisnis / UMKM (10-50 kWp)
+                        <option value="Bisnis/UMKM (5-50 kWp)">
+                          Bisnis / UMKM (5-50 kWp)
                         </option>
-                        <option value="Industri (100+ kWp)">
-                          Industri (100+ kWp)
+                        <option value="Industri (10-500+ kWp)">
+                          Industri (10-500+ kWp)
                         </option>
                         <option value="Kebun/Perkebunan Off-Grid">
                           Kebun / Perkebunan (Off-Grid)
@@ -201,6 +201,9 @@ export function LeadFormSection() {
                       <input
                         type="tel"
                         required
+                        pattern="[0-9]{10,13}"
+                        minLength={10}
+                        maxLength={13}
                         value={form.phone}
                         onChange={(e) =>
                           setForm({ ...form, phone: e.target.value })

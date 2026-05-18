@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState, useCallback } from "react";
 import {
   Calculator,
   TrendingDown,
@@ -14,6 +14,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
+import { useEffect } from "react";
 import {
   calculatePackages,
   calculateROI,
@@ -41,18 +42,31 @@ function formatRpShort(num: number): string {
   return `Rp ${Math.round(num / 1000)}rb`;
 }
 
+interface AnalysisResult {
+  recommended: ReturnType<typeof calculatePackages>[0];
+  monthlyKwh: number;
+  productionKwh: number;
+  coverage: number;
+  roi: ReturnType<typeof calculateROI>;
+  co2PerYear: number;
+  needsCustom: boolean;
+}
+
 export function SavingsCalculator() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [bill, setBill] = useState(2000000);
   const [showAssumptions, setShowAssumptions] = useState(false);
+  const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
 
-  const analysis = useMemo(() => {
+  // Compute analysis client-side only (after mount) to avoid hydration mismatch
+  // caused by calculatePackages() reading localStorage on client but not on SSR
+  const computeAnalysis = useCallback((billValue: number): AnalysisResult | null => {
     const allPkgs = calculatePackages();
-    const rec = recommendPackage(bill, allPkgs);
+    const rec = recommendPackage(billValue, allPkgs);
     if (!rec) return null;
 
-    const monthlyKwh = bill / PLN_TARIFF_DEFAULT;
+    const monthlyKwh = billValue / PLN_TARIFF_DEFAULT;
     const productionKwh = rec.kWp * 3.75 * 0.80 * 30; // PSH × efficiency × 30 days
     const coverage = Math.round((productionKwh / monthlyKwh) * 100);
 
@@ -62,8 +76,7 @@ export function SavingsCalculator() {
     const co2PerYear = (roi.annualSavingsBase / PLN_TARIFF_DEFAULT) * 0.8 / 1000;
 
     // Check if largest package still < 50% coverage
-    const nonBatteryPkgs = allPkgs.filter((p) => p.batteryKwh === 0);
-    const largestPkg = nonBatteryPkgs[nonBatteryPkgs.length - 1];
+    const largestPkg = allPkgs[allPkgs.length - 1];
     const largestProduction = largestPkg
       ? largestPkg.kWp * 3.75 * 0.80 * 30
       : 0;
@@ -78,7 +91,18 @@ export function SavingsCalculator() {
       co2PerYear,
       needsCustom,
     };
-  }, [bill]);
+  }, []);
+
+  useEffect(() => {
+    setAnalysis(computeAnalysis(bill));
+  }, [bill, computeAnalysis]);
+
+  // Also recompute when pricing settings change
+  useEffect(() => {
+    const handler = () => setAnalysis(computeAnalysis(bill));
+    window.addEventListener("jmse-pricing-updated", handler);
+    return () => window.removeEventListener("jmse-pricing-updated", handler);
+  }, [bill, computeAnalysis]);
 
   if (!analysis) return null;
 

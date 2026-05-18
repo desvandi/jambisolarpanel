@@ -2,67 +2,79 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Star, Quote, MapPin, CheckCircle } from "lucide-react";
+import { Star, Quote, MapPin, CheckCircle, TrendingDown, Zap } from "lucide-react";
 import Image from "next/image";
 
 const testimonials = [
   {
     name: "Bapak Hendra",
-    location: "Jambi",
+    location: "Villa, Jambi",
     role: "Pemilik Villa",
-    text: "Sejak pasang panel surya dari JMSE, tagihan listrik villa saya turun drastis dari Rp 4 juta jadi kurang dari Rp 500 ribu. Pemasangan rapi, tim profesional, dan respon cepat. Sangat recommended!",
+    text: "Sejak pasang panel surya dari JMSE, tagihan listrik villa saya turun drastis. Pemasangan rapi, tim profesional, dan respon cepat. Sangat recommended!",
     rating: 5,
     system: "5 kWp Hybrid",
+    beforeBill: "Rp 4 juta/bulan",
+    afterBill: "Rp 500 rb/bulan",
     savings: "Hemat Rp 3.5jt/bulan",
     image: null,
   },
   {
     name: "Ibu Ratna",
-    location: "Palembang",
+    location: "Toko, Palembang",
     role: "Pemilik Toko",
-    text: "Awalnya ragu, tapi setelah 6 bulan berjalan, saya sangat puas. Listrik toko saya sekarang hampir gratis. JMSE benar-benar solusi yang saya cari selama ini.",
+    text: "Awalnya ragu, tapi setelah 6 bulan berjalan, saya sangat puas. Listrik toko saya sekarang hampir gratis. JMSE benar-benar solusi yang saya cari.",
     rating: 5,
     system: "3 kWp On-Grid",
+    beforeBill: "Rp 3.5 juta/bulan",
+    afterBill: "Rp 1 jt/bulan",
     savings: "Hemat Rp 2.5jt/bulan",
     image: null,
   },
   {
     name: "Bapak Darmawan",
-    location: "Riau",
+    location: "Kebun Sawit, Riau",
     role: "Pemilik Kebun Sawit",
     text: "Kebun saya jauh dari PLN, selama ini pakai genset yang boros. Dengan sistem off-grid dari JMSE, sekarang CCTV dan pompa air saya jalan 24 jam tanpa masalah.",
     rating: 5,
     system: "10 kWp Off-Grid",
+    beforeBill: "Rp 12 jt/bulan (genset)",
+    afterBill: "Rp 0 (listrik mandiri)",
     savings: "Hemat Rp 8jt/bulan",
     image: null,
   },
   {
     name: "Bapak Faisal",
-    location: "Padang",
+    location: "Workshop, Padang",
     role: "Pemilik Workshop",
     text: "Mesin workshop saya butuh listrik stabil. JMSE datang survei, desain custom, dan pasang dengan sangat profesional. Garansi juga diberikan lengkap. Top!",
     rating: 5,
     system: "20 kWp Hybrid",
+    beforeBill: "Rp 18 juta/bulan",
+    afterBill: "Rp 6 jt/bulan",
     savings: "Hemat Rp 12jt/bulan",
     image: null,
   },
   {
     name: "Hj. Siti Aminah",
-    location: "Bangka",
+    location: "Cold Storage, Bangka",
     role: "Pengusaha Cold Storage",
     text: "Cold storage saya butuh listrik non-stop. Panel surya JMSE sangat membantu mengurangi biaya operasional. Investasi terbaik yang pernah saya buat.",
     rating: 5,
-    system: "50 kWp Hybrid",
+    system: "50 kWp Hybrid (Custom)",
+    beforeBill: "Rp 50 juta/bulan",
+    afterBill: "Rp 20 jt/bulan",
     savings: "Hemat Rp 30jt/bulan",
     image: null,
   },
   {
     name: "Bapak Agus",
-    location: "Lampung",
+    location: "Kantor Desa, Lampung",
     role: "Kepala Desa",
     text: "Kantor desa kami sekarang pakai panel surya dari JMSE. Warga juga tertarik. Tim JMSE sangat sabar menjelaskan dan membantu proses instalasi.",
     rating: 5,
-    system: "5 kWp Off-Grid",
+    system: "5 kWp Hybrid",
+    beforeBill: "Rp 4 juta/bulan",
+    afterBill: "Rp 1 jt/bulan",
     savings: "Hemat Rp 3jt/bulan",
     image: null,
   },
@@ -74,18 +86,21 @@ const portfolioItems = [
     desc: "Instalasi 5 kWp Hybrid untuk villa eksklusif dengan pool dan garden lighting.",
     image: "/portfolio-residential.jpg",
     tag: "Residential",
+    result: "Tagihan Rp 4jt → Rp 500rb",
   },
   {
     title: "Gudang Industri Palembang",
-    desc: "Sistem 50 kWp On-Grid untuk pergudangan modern dengan efisiensi maksimal.",
+    desc: "Sistem 50 kWp On-Grid untuk pergudangan modern dengan efisiensi maksimal. Paket custom di luar katalog standar.",
     image: "/portfolio-industrial.jpg",
-    tag: "Industrial",
+    tag: "Industrial (Custom)",
+    result: "Hemat 60% biaya operasional",
   },
   {
     title: "Kebun Sawit Riau",
     desc: "Sistem Off-Grid 10 kWp untuk pompa air, CCTV, dan pondok kebun.",
     image: "/portfolio-plantation.jpg",
     tag: "Agriculture",
+    result: "Listrik mandiri 24 jam",
   },
 ];
 
@@ -105,7 +120,7 @@ export function SocialProofSection() {
         >
           <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 text-sm font-semibold text-solar bg-solar/10 rounded-full">
             <Star className="w-4 h-4 fill-current" />
-            Testimoni & Portofolio
+            Testimoni &amp; Portofolio
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-navy dark:text-white mb-6">
             Dipercaya oleh{" "}
@@ -140,6 +155,17 @@ export function SocialProofSection() {
                 ))}
               </div>
 
+              {/* Before → After Savings Highlight */}
+              <div className="flex items-center gap-3 mb-4 p-3 rounded-xl bg-gradient-to-r from-solar/5 to-gold/5 border border-solar/10">
+                <TrendingDown className="w-5 h-5 text-solar flex-shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-xs text-muted-foreground font-medium">Biaya Sebelum</p>
+                  <p className="text-sm font-bold text-solar">
+                    {t.beforeBill} <span className="text-muted-foreground">→</span> {t.afterBill}
+                  </p>
+                </div>
+              </div>
+
               {/* Text */}
               <p className="text-sm text-foreground leading-relaxed mb-4">
                 &ldquo;{t.text}&rdquo;
@@ -167,10 +193,11 @@ export function SocialProofSection() {
               {/* Tags */}
               <div className="flex flex-wrap gap-2 mt-3">
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-solar/5 rounded-md text-xs font-medium text-solar">
-                  <CheckCircle className="w-3 h-3" />
+                  <Zap className="w-3 h-3" />
                   {t.system}
                 </span>
                 <span className="inline-flex items-center gap-1 px-2 py-1 bg-gold/5 rounded-md text-xs font-medium text-gold">
+                  <CheckCircle className="w-3 h-3" />
                   {t.savings}
                 </span>
               </div>
@@ -203,6 +230,10 @@ export function SocialProofSection() {
                   <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-transparent to-transparent" />
                   <span className="absolute top-3 left-3 px-3 py-1 bg-solar text-white text-xs font-semibold rounded-full">
                     {item.tag}
+                  </span>
+                  {/* Result badge */}
+                  <span className="absolute top-3 right-3 px-3 py-1 bg-gold/90 text-navy text-xs font-bold rounded-full">
+                    {item.result}
                   </span>
                   <div className="absolute bottom-3 left-3 right-3">
                     <h4 className="text-white font-bold text-lg">{item.title}</h4>

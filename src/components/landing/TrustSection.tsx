@@ -33,7 +33,7 @@ const trustItems = [
   {
     icon: Award,
     title: "Portofolio Terbukti",
-    desc: "Lebih dari 500 proyek berhasil diselesaikan untuk rumah tangga, bisnis, perkebunan, dan institusi pemerintah.",
+    desc: "Ratusan proyek berhasil diselesaikan untuk rumah tangga, bisnis, perkebunan, dan institusi pemerintah di seluruh Indonesia.",
   },
   {
     icon: Shield,
@@ -77,7 +77,7 @@ export function TrustSection() {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-navy dark:text-white mb-6">
             Dipercaya sebagai{" "}
             <span className="gradient-text">Ahli Energi Surya</span>{" "}
-            #1 Indonesia
+            Terpercaya di Indonesia
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
             PT. Jaya Mandiri Smart Energy bukan sekadar vendor panel surya. Kami
