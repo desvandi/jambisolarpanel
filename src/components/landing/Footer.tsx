@@ -2,7 +2,6 @@
 
 import { ThemeToggle } from "./ThemeToggle";
 import Image from "next/image";
-import Link from "next/link";
 
 function wa(text: string) {
   return `https://wa.me/6281328190707?text=${encodeURIComponent(text)}`;
@@ -141,13 +140,6 @@ export function Footer() {
             >
               Terms of Service
             </a>
-            <Link
-              href="/kalibrasi-harga"
-              className="text-xs text-white/20 hover:text-white/40 transition-colors"
-              title="Admin: Kalibrasi Harga"
-            >
-              ⚙
-            </Link>
             <ThemeToggle />
           </div>
         </div>

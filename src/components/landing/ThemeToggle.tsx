@@ -1,42 +1,31 @@
 "use client";
 
-import { useSyncExternalStore, useCallback } from "react";
+import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
-
-function subscribe(callback: () => void) {
-  const observer = new MutationObserver(callback);
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ["class"],
-  });
-  return () => observer.disconnect();
-}
-
-function getSnapshot() {
-  return document.documentElement.classList.contains("dark") ? "dark" : "light";
-}
-
-function getServerSnapshot() {
-  return "light" as const;
-}
+import { useEffect, useState } from "react";
 
 export function ThemeToggle() {
-  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const { setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-  const toggleTheme = useCallback(() => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    if (newTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [theme]);
+  // Prevent hydration mismatch
+  useEffect(() => setMounted(true), []);
+
+  if (!mounted) {
+    return (
+      <div className="w-9 h-9 rounded-full bg-white/10 dark:bg-white/10 flex items-center justify-center">
+        <Sun className="h-4 w-4 text-gold-light" />
+      </div>
+    );
+  }
+
+  const isDark = resolvedTheme === "dark";
 
   return (
     <button
-      onClick={toggleTheme}
+      onClick={() => setTheme(isDark ? "light" : "dark")}
       className="relative w-9 h-9 rounded-full bg-white/10 dark:bg-white/10 flex items-center justify-center hover:bg-white/20 transition-all duration-300"
-      aria-label="Toggle tema"
+      aria-label={isDark ? "Beralih ke mode terang" : "Beralih ke mode gelap"}
     >
       <Sun className="h-4 w-4 text-gold-light rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
       <Moon className="absolute h-4 w-4 text-gold-light rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />

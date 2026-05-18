@@ -194,9 +194,12 @@ export function ProductSection() {
           {filterTabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveFilter(tab.id)}
+              onClick={() => {
+                const target = tab.id === "plantation" ? "silver" : tab.id;
+                setActiveFilter(target as CategoryFilter);
+              }}
               className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                activeFilter === tab.id
+                (activeFilter === tab.id) || (tab.id === "plantation" && activeFilter === "silver")
                   ? "bg-solar text-white shadow-lg shadow-solar/30"
                   : "bg-card border border-border text-muted-foreground hover:border-solar/30 hover:text-solar"
               }`}
@@ -267,7 +270,8 @@ export function ProductSection() {
           const catProducts = cat.tiers.flatMap((t) => getPackagesByTier(t));
           if (catProducts.length === 0) return null;
 
-          const shouldShow = activeFilter === "all" || activeFilter === cat.id;
+          const shouldShow = activeFilter === "all" || activeFilter === cat.id ||
+            (activeFilter === "silver" && cat.id === "silver");
 
           return (
             <motion.div
@@ -453,8 +457,8 @@ export function ProductSection() {
                           </button>
 
                           {showBatteryInfo && (
-                            <p className={`text-[10px] leading-relaxed mb-2 ${
-                              product.popular ? "text-white/40" : "text-muted-foreground"
+                            <p className={`text-xs leading-relaxed mb-2 ${
+                              product.popular ? "text-white/50" : "text-muted-foreground"
                             }`}>
                               Saat baterai penuh &amp; tidak ada pemadaman PLN, sinar matahari langsung supply beban via pengaturan SBU/SUB/Mix di inverter PowMr. Maks = {product.kWp} kWp x 3,75 PSH = {product.batteryMaxKwh} kWh ({product.batteryMaxUnits} unit)
                             </p>

@@ -96,7 +96,7 @@ export function Navbar() {
               rel="noopener noreferrer"
               onClick={() => {
                 if (typeof window !== "undefined" && (window as unknown as Record<string, unknown>).fbq) {
-                  (window as unknown as Record<string, (...args: unknown[]) => void>).fbq!('track', 'Contact');
+                  (window as unknown as Record<string, (...args: unknown[]) => void>).fbq!('track', 'Lead');
                 }
               }}
               className="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-solar hover:bg-solar-dark text-white text-sm font-semibold rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-solar/30 hover:scale-105"

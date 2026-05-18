@@ -9,6 +9,7 @@ import {
   Settings,
   Droplets,
   ArrowRight,
+  CheckCircle,
 } from "lucide-react";
 
 const painPoints = [
@@ -117,7 +118,7 @@ export function ProblemSolutionSection() {
                 <div className="flex-1 pl-0 md:pl-4 border-l-0 md:border-l-2 border-solar/20">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-xl bg-solar/10 flex items-center justify-center shrink-0">
-                      <ZapOff className="w-6 h-6 text-solar" />
+                      <CheckCircle className="w-6 h-6 text-solar" />
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-solar mb-1 uppercase tracking-wide">
