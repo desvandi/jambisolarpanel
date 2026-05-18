@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://jayamandiri.co.id"),
-  title: "PT. Jaya Mandiri Smart Energy | Solusi Panel Surya Profesional #1 Indonesia",
+  title: "PT. Jaya Mandiri Smart Energy | Solusi Panel Surya Profesional & Terpercaya",
   description:
     "Hemat tagihan listrik hingga 90% dengan instalasi PLTS Off-Grid, Hybrid & On-Grid dari PT. Jaya Mandiri Smart Energy. Garansi sistem, konsultasi gratis, support seluruh Indonesia. Hubungi sekarang!",
   keywords: [
@@ -88,12 +88,17 @@ export default function RootLayout({
               t.src=v;s=b.getElementsByTagName(e)[0];
               s.parentNode.insertBefore(t,s)}(window, document,'script',
               'https://connect.facebook.net/en_US/fbevents.js');
-              fbq('init', 'YOUR_PIXEL_ID');
+              fbq('init', 'YOUR_PIXEL_ID'); // TODO: Ganti dengan Pixel ID asli dari Meta Business Manager
               fbq('track', 'PageView');
+              // Conversion API (Server-Side) — hubungkan ke backend saat Pixel ID sudah aktif
+              // fbq('track', 'ViewContent');
+              // fbq('track', 'Lead');
+              // fbq('track', 'Contact');
             `,
           }}
         />
         <noscript>
+          {/* TODO: Ganti YOUR_PIXEL_ID dengan Pixel ID asli */}
           <img
             height="1"
             width="1"
@@ -103,7 +108,7 @@ export default function RootLayout({
           />
         </noscript>
 
-        {/* Google Analytics */}
+        {/* Google Analytics — TODO: Ganti G-YOUR_GA_ID dengan GA Tracking ID asli */}
         <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_GA_ID"

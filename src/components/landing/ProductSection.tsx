@@ -2,7 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { Home, Building2, Factory, Zap, MessageCircle, Battery, BatteryCharging, Info, ChevronDown, ChevronUp, Car, Monitor, Sparkles } from "lucide-react";
+import { Home, Building2, Factory, Zap, MessageCircle, Battery, BatteryCharging, Info, ChevronDown, ChevronUp, Car, Monitor, Sparkles, TreePine } from "lucide-react";
 import {
   type CalculatedPackage,
   calculatePackages,
@@ -26,25 +26,41 @@ function waLink(pkg: CalculatedPackage, addOns?: { carport: boolean; monitoring:
 
 const categoryMeta = [
   {
+    id: "silver",
     icon: Home,
     title: "Silver Package — Rumah Tangga",
     tagline: "Hybrid System 1 Fase — Cocok untuk kebutuhan rumah tangga di Jambi & sekitarnya",
     tiers: ["silver"],
+    btnLabel: "Rumah Tangga",
   },
   {
+    id: "gold",
     icon: Building2,
     title: "Gold Package — Bisnis & UMKM",
     tagline: "Hybrid System 1 Fase — Solusi bisnis skala menengah hingga besar",
     tiers: ["gold"],
     showAddOns: true,
+    btnLabel: "Bisnis & UMKM",
   },
   {
+    id: "platinum",
     icon: Factory,
     title: "Platinum Package — Industri",
     tagline: "Hybrid System 3 Fase — Solusi skala besar untuk efisiensi maksimal",
     tiers: ["platinum"],
     showAddOns: true,
+    btnLabel: "Industri",
   },
+];
+
+type CategoryFilter = "all" | "silver" | "gold" | "platinum" | "plantation";
+
+const filterTabs: { id: CategoryFilter; label: string; icon: React.ElementType }[] = [
+  { id: "all", label: "Semua Paket", icon: Zap },
+  { id: "silver", label: "Rumah Tangga", icon: Home },
+  { id: "gold", label: "Bisnis & UMKM", icon: Building2 },
+  { id: "plantation", label: "Kebun & Perkebunan", icon: TreePine },
+  { id: "platinum", label: "Industri", icon: Factory },
 ];
 
 export function ProductSection() {
@@ -54,6 +70,7 @@ export function ProductSection() {
   const [packages, setPackages] = useState<CalculatedPackage[]>(() => calculatePackages());
   const [isCustom, setIsCustom] = useState(() => hasCustomPricing());
   const [addOns, setAddOns] = useState<Record<string, { carport: boolean; monitoring: string }>>({});
+  const [activeFilter, setActiveFilter] = useState<CategoryFilter>("all");
 
   // Listen for storage changes from kalibrasi page
   useEffect(() => {
@@ -67,6 +84,21 @@ export function ProductSection() {
       window.removeEventListener("storage", handler);
       window.removeEventListener("jmse-pricing-updated", handler);
     };
+  }, []);
+
+  // Listen for category selection from Hero quick selector
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail as string;
+      if (detail === "plantation") {
+        // Plantation packages are in silver tier (off-grid), show all to include them
+        setActiveFilter("silver");
+      } else if (["silver", "gold", "platinum"].includes(detail)) {
+        setActiveFilter(detail as CategoryFilter);
+      }
+    };
+    window.addEventListener("jmse-category-select", handler);
+    return () => window.removeEventListener("jmse-category-select", handler);
   }, []);
 
   const getPackagesByTier = (tier: string) =>
@@ -105,10 +137,10 @@ export function ProductSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
-          className="text-center max-w-3xl mx-auto mb-16"
+          className="text-center max-w-3xl mx-auto mb-10"
         >
           <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-solar bg-solar/10 rounded-full">
-            Paket & Harga
+            Paket &amp; Harga
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-navy dark:text-white mb-6">
             Pilih Paket{" "}
@@ -117,17 +149,39 @@ export function ProductSection() {
           <p className="text-lg text-muted-foreground leading-relaxed">
             Semua paket dihitung berdasarkan kondisi iradiasi matahari di Jambi
             (PSH 3,75 jam) dan rasio baterai optimal 26–33% dari produksi harian PV.
-            Tersedia opsi tanpa baterai (hemat investasi) maupun dengan baterai LiFePO4
-            (full backup 24 jam). Harga sudah termasuk PPN 11%, instalasi, survei,
-            desain, dan garansi resmi.
+            Harga sudah termasuk PPN 11%, instalasi, survei, desain, dan garansi resmi.
           </p>
+        </motion.div>
+
+        {/* Quick Category Filter Tabs */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="flex flex-wrap justify-center gap-2 mb-10"
+        >
+          {filterTabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveFilter(tab.id)}
+              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                activeFilter === tab.id
+                  ? "bg-solar text-white shadow-lg shadow-solar/30"
+                  : "bg-card border border-border text-muted-foreground hover:border-solar/30 hover:text-solar"
+              }`}
+            >
+              <tab.icon className="w-4 h-4" />
+              <span className="hidden sm:inline">{tab.label}</span>
+              <span className="sm:hidden">{tab.label.split(" ")[0]}</span>
+            </button>
+          ))}
         </motion.div>
 
         {/* PSH Info Box */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.4, delay: 0.1 }}
+          transition={{ duration: 0.4, delay: 0.15 }}
           className="max-w-3xl mx-auto mb-12 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/30"
         >
           <button
@@ -162,7 +216,7 @@ export function ProductSection() {
               </p>
               <p>
                 <strong>Biaya per paket:</strong> Panel + Mounting + BOS + Inverter + Baterai (opsional)
-                + Proteksi (SPD & Grounding) + Jasa Instalasi + Survei & Desain + Commissioning + Logistik.
+                + Proteksi (SPD &amp; Grounding) + Jasa Instalasi + Survei &amp; Desain + Commissioning + Logistik.
               </p>
               <p>
                 <strong>Margin:</strong> 35% dari HPP (Harga Pokok Produksi).
@@ -171,7 +225,7 @@ export function ProductSection() {
               </p>
               <p>
                 <strong>Add-on tersedia:</strong> Kanopi Carport (+harga per kWp) dan Smart Monitoring
-                (Basic / Standard / Industrial) untuk paket Gold & Platinum.
+                (Basic / Standard / Industrial) untuk paket Gold &amp; Platinum.
               </p>
             </motion.div>
           )}
@@ -182,13 +236,17 @@ export function ProductSection() {
           const catProducts = cat.tiers.flatMap((t) => getPackagesByTier(t));
           if (catProducts.length === 0) return null;
 
+          // Filter logic: if "all" or matching category is selected, show
+          const shouldShow = activeFilter === "all" || activeFilter === cat.id;
+
           return (
             <motion.div
               key={cat.title}
+              id={`category-${cat.id}`}
               initial={{ opacity: 0, y: 40 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: catIdx * 0.15 }}
-              className="mb-16 last:mb-0"
+              className={`mb-16 last:mb-0 ${!shouldShow ? "hidden" : ""}`}
             >
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-solar/10 flex items-center justify-center">
@@ -362,7 +420,7 @@ export function ProductSection() {
                           product.popular ? "text-white/50" : "text-muted-foreground"
                         }`}
                       >
-                        Sudah termasuk PPN 11%, instalasi & garansi
+                        Sudah termasuk PPN 11%, instalasi &amp; garansi
                       </p>
 
                       {/* Add-on section (Gold & Platinum only) */}
@@ -440,7 +498,7 @@ export function ProductSection() {
                         }`}
                       >
                         <MessageCircle className="w-4 h-4" />
-                        Tanya Paket Ini via WhatsApp
+                        Konsultasi Paket Ini Gratis
                       </a>
                     </div>
                   );
@@ -449,6 +507,21 @@ export function ProductSection() {
             </motion.div>
           );
         })}
+
+        {/* No results message */}
+        {activeFilter !== "all" && categoryMeta.filter(c => c.id === activeFilter || activeFilter === "all").length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">
+              Paket untuk kategori ini tersedia di bagian lain. Silakan pilih kategori lain atau{" "}
+              <button
+                onClick={() => setActiveFilter("all")}
+                className="text-solar font-semibold hover:underline"
+              >
+                lihat semua paket
+              </button>
+            </p>
+          </div>
+        )}
 
         {/* CTA */}
         <motion.div
@@ -462,12 +535,12 @@ export function ProductSection() {
             500+ kWp. Kami siap merancang solusi sesuai kebutuhan spesifik Anda.
           </p>
           <a
-            href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20ingin%20request%20custom%20proposal%20paket%20panel%20surya"
+            href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20ingin%20konsultasi%20custom%20proposal%20paket%20panel%20surya"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-8 py-4 bg-navy dark:bg-white text-white dark:text-navy font-bold rounded-full hover:shadow-xl transition-all duration-300 hover:scale-105"
           >
-            Request Custom Proposal
+            Konsultasi Custom Proposal Gratis
           </a>
         </motion.div>
       </div>

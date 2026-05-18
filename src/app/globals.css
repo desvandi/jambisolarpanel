@@ -230,3 +230,8 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #15803d;
 }
+
+/* Safe area for mobile sticky CTA bar */
+.safe-area-inset-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
