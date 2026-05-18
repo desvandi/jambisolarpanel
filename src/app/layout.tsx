@@ -15,20 +15,25 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://jayamandiri.co.id"),
-  title: "Jambi Solar Panel | PT. Jaya Mandiri Smart Energy",
+  title: "Jambi Solar Panel | Sistem Energi Mandiri Off-Grid & Hybrid",
   description:
-    "Hemat tagihan listrik hingga 90% dengan instalasi PLTS Off-Grid & Hybrid dari Jambi Solar Panel — PT. Jaya Mandiri Smart Energy. Garansi sistem, konsultasi gratis, support seluruh Indonesia. Hubungi sekarang!",
+    "Hemat tagihan listrik hingga 90% dengan instalasi PLTS Off-Grid & Hybrid dari Jambi Solar Panel — PT. Jaya Mandiri Smart Energy. Solusi untuk rumah, bisnis, kebun & infrastruktur. Garansi 25 tahun, konsultasi gratis.",
   keywords: [
     "panel surya Jambi",
-    "jasa pasang solar panel Indonesia",
     "PLTS off grid",
+    "PLTS hybrid",
+    "sistem energi mandiri",
     "paket panel surya rumah",
     "solar panel kebun",
+    "PJUTS",
+    "solar pump",
+    "EV charging solar",
     "instalasi panel surya industri",
     "PT. Jaya Mandiri Smart Energy",
-    "sistem energi surya",
+    "jasa pasang solar panel Indonesia",
     "hemat listrik solar panel",
     "EPC panel surya",
+    "solar panel Sumatera",
   ],
   authors: [{ name: "PT. Jaya Mandiri Smart Energy" }],
   icons: {
@@ -36,11 +41,11 @@ export const metadata: Metadata = {
     apple: "/logo-jmse.png",
   },
   openGraph: {
-    title: "Hemat Listrik Hingga 90% | PT. Jaya Mandiri Smart Energy",
+    title: "Solusi Energi Mandiri Off-Grid & Hybrid | Jambi Solar Panel",
     description:
-      "Instalasi PLTS profesional untuk rumah, bisnis, kebun & industri. Garansi sistem, desain custom, support seluruh Indonesia.",
+      "Instalasi PLTS Off-Grid & Hybrid profesional untuk rumah, bisnis, kebun & infrastruktur. Hemat hingga 90%, backup 24 jam, garansi 25 tahun.",
     url: "https://jayamandiri.co.id",
-    siteName: "PT. Jaya Mandiri Smart Energy",
+    siteName: "Jambi Solar Panel — PT. Jaya Mandiri Smart Energy",
     type: "website",
     locale: "id_ID",
     images: [
@@ -54,9 +59,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hemat Listrik Hingga 90% | PT. Jaya Mandiri Smart Energy",
+    title: "Solusi Energi Mandiri Off-Grid & Hybrid | Jambi Solar Panel",
     description:
-      "Instalasi PLTS profesional untuk rumah, bisnis, kebun & industri.",
+      "Instalasi PLTS profesional untuk rumah, bisnis, kebun & infrastruktur.",
     images: ["/hero-solar.jpg"],
   },
   robots: {
@@ -134,7 +139,7 @@ export default function RootLayout({
               name: "Jambi Solar Panel",
               legalName: "PT. Jaya Mandiri Smart Energy",
               description:
-                "Provider solusi energi surya profesional — Sistem Mandiri Off-Grid & Hybrid untuk Rumah, Bisnis, Kebun, dan Infrastruktur.",
+                "Provider solusi energi surya profesional — Sistem Mandiri Off-Grid & Hybrid untuk Rumah, Bisnis, Kebun, dan Infrastruktur. Coverage Sumatera & Jawa Bagian Barat.",
               url: "https://jayamandiri.co.id",
               telephone: "+6281328190707",
               image: "/hero-solar.jpg",
@@ -179,8 +184,11 @@ export default function RootLayout({
               serviceType: [
                 "Instalasi PLTS Off-Grid",
                 "Instalasi PLTS Hybrid",
-                "Solar Panel Installation",
-                "Sistem Energi Surya",
+                "PJUTS - Penerangan Jalan Umum Tenaga Surya",
+                "Solar Water Pump",
+                "EV Charging Terintegrasi PLTS",
+                "Smart Monitoring & Solar CCTV",
+                "Tender & Procurement Energi Terbarukan",
               ],
             }),
           }}

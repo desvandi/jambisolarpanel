@@ -141,9 +141,9 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6"
           >
-            Solusi Energi Mandiri untuk{" "}
-            <span className="gradient-text">Rumah, Bisnis, Kebun,</span>{" "}
-            dan Infrastruktur
+            Solusi Energi Mandiri{" "}
+            <span className="gradient-text">Off-Grid &amp; Hybrid</span>{" "}
+            untuk Rumah, Bisnis, Kebun, dan Infrastruktur
           </motion.h1>
 
           {/* Subheadline */}
@@ -151,9 +151,17 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg sm:text-xl text-solar-light font-semibold mb-8 max-w-2xl"
+            className="text-lg sm:text-xl text-solar-light font-semibold mb-2 max-w-2xl"
           >
-            PLTS &bull; PJUTS &bull; Solar Pump &bull; EV Charging &bull; Smart Energy &bull; Procurement
+            PLTS &bull; PJUTS &bull; Solar Pump &bull; EV Charging &bull; Smart IoT &bull; Procurement
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.22 }}
+            className="text-sm text-white/50 mb-8 max-w-2xl"
+          >
+            Hemat hingga 90% tagihan listrik &bull; Backup 24 jam saat PLN padam &bull; Paket mulai dari Rp 6 jutaan &bull; Garansi panel 25 tahun
           </motion.p>
 
           {/* CTA Buttons */}

@@ -20,6 +20,8 @@ import {
   calculateROI,
   recommendPackage,
   formatRp,
+  formatRpShort,
+  roundTo,
   PLN_TARIFF_DEFAULT,
   SELF_CONSUMPTION_DEFAULT,
   PLN_INCREASE_RATE_DEFAULT,
@@ -37,10 +39,7 @@ const billPresets = [
   { label: "Rp 10jt", value: 10000000 },
 ];
 
-function formatRpShort(num: number): string {
-  if (num >= 1_000_000) return `Rp ${(num / 1_000_000).toFixed(num % 1_000_000 === 0 ? 0 : 1)}jt`;
-  return `Rp ${Math.round(num / 1000)}rb`;
-}
+// formatRpShort now imported from @/lib/pricing
 
 interface AnalysisResult {
   recommended: ReturnType<typeof calculatePackages>[0];
@@ -67,10 +66,12 @@ export function SavingsCalculator() {
     if (!rec) return null;
 
     const monthlyKwh = billValue / PLN_TARIFF_DEFAULT;
-    const productionKwh = rec.kWp * 3.75 * 0.80 * 30; // PSH × efficiency × 30 days
+    const productionKwhRaw = rec.kWp * 3.75 * 0.80 * 30; // PSH × efficiency × 30 days
+    const productionKwh = Math.round(productionKwhRaw);
     const coverage = Math.round((productionKwh / monthlyKwh) * 100);
 
-    const roi = calculateROI(rec.price, rec.kWp * 3.75 * 0.80);
+    const dailyKwhRaw = rec.kWp * 3.75 * 0.80;
+    const roi = calculateROI(rec.price, dailyKwhRaw);
 
     // CO2 saved (Indonesia grid: ~0.8 kg CO2/kWh)
     const co2PerYear = (roi.annualSavingsBase / PLN_TARIFF_DEFAULT) * 0.8 / 1000;
@@ -78,7 +79,7 @@ export function SavingsCalculator() {
     // Check if largest package still < 50% coverage
     const largestPkg = allPkgs[allPkgs.length - 1];
     const largestProduction = largestPkg
-      ? largestPkg.kWp * 3.75 * 0.80 * 30
+      ? Math.round(largestPkg.kWp * 3.75 * 0.80 * 30)
       : 0;
     const needsCustom = largestProduction < monthlyKwh * 0.5;
 
@@ -311,7 +312,7 @@ export function SavingsCalculator() {
               <p className="text-center text-sm text-green-700 dark:text-green-300">
                 Selain hemat uang, Anda juga mengurangi emisi{" "}
                 <span className="font-bold">
-                  {co2PerYear.toFixed(1)} ton CO2 per tahun
+                  {roundTo(co2PerYear, 1).toFixed(1)} ton CO2 per tahun
                 </span>{" "}
                 dan berkontribusi pada lingkungan yang lebih bersih.
               </p>

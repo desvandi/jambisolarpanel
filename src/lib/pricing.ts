@@ -518,7 +518,7 @@ export function calculatePackages(
       price,
       priceFormatted: formatRp(price),
       kWp,
-      dailyProduction: `~${dailyKwh.toFixed(1)} kWh/hari`,
+      dailyProduction: `~${roundTo(dailyKwh, 1).toFixed(1)} kWh/hari`,
       savingsRange: `${formatSavings(cleanSavingsLow)} - ${formatSavings(cleanSavingsHigh)}/bulan`,
       carportAddonPrice: carportAddon,
       monitoringBasicPrice: monBasic,
@@ -637,6 +637,16 @@ export function recommendPackage(
 
 // --- Utility ---
 
+/**
+ * Round a number to a fixed number of decimal places.
+ * Uses string-based rounding to avoid floating-point artifacts
+ * (e.g. 14.399999999999999 → 14.4, not 14.399999999999999).
+ */
+export function roundTo(num: number, decimals: number = 1): number {
+  const factor = Math.pow(10, decimals);
+  return Math.round(num * factor) / factor;
+}
+
 export function formatRp(num: number): string {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
@@ -644,6 +654,15 @@ export function formatRp(num: number): string {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(num);
+}
+
+/** Short Rupiah format: Rp 1.5jt, Rp 300rb */
+export function formatRpShort(num: number): string {
+  if (num >= 1_000_000) {
+    const jt = roundTo(num / 1_000_000, 1);
+    return `Rp ${jt % 1 === 0 ? jt.toFixed(0) : jt.toFixed(1)}jt`;
+  }
+  return `Rp ${Math.round(num / 1000)}rb`;
 }
 
 export function parseRpToNumber(str: string): number {

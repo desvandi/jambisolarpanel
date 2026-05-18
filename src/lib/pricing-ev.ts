@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { formatRpShort } from "./pricing";
+
 /* ============================================================
    EV CHARGING PRICING — PT. Jaya Mandiri Smart Energy
    EV Charging Terintegrasi PLTS
@@ -97,14 +100,11 @@ function calculateEVSavings(solarKwp: number, price: number) {
     roiYearsWithIncrease,
     return25Year,
     returnMultiplier,
-    dailyProduction: Math.round(dailyProduction * 10) / 10,
+    dailyProduction: Math.round(dailyProduction * 10) / 10, // Safe 1-decimal rounding
   };
 }
 
-function formatRpShort(num: number): string {
-  if (num >= 1_000_000) return `Rp ${(num / 1_000_000).toFixed(num % 1_000_000 === 0 ? 0 : 1)}jt`;
-  return `Rp ${Math.round(num / 1000)}rb`;
-}
+// formatRpShort imported from @/lib/pricing
 
 export const evPackages: EVPackage[] = [
   {

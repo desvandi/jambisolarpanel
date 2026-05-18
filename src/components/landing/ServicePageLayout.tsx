@@ -6,7 +6,7 @@ import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { FloatingButtons } from "@/components/landing/FloatingButtons";
 import { ConsultationForm } from "@/components/landing/ConsultationForm";
-import { Home, ChevronRight } from "lucide-react";
+import { Home, ChevronRight, CheckCircle, Zap, Shield } from "lucide-react";
 import { ReactNode } from "react";
 
 interface ServicePageLayoutProps {
@@ -17,6 +17,16 @@ interface ServicePageLayoutProps {
   waText?: string;
   children: ReactNode;
   breadcrumbs?: { label: string; href?: string }[];
+  /** Optional: Problem statement for Problem-Solution funnel */
+  problem?: string;
+  /** Optional: Solution summary */
+  solutionSummary?: string;
+  /** Optional: Key benefits list */
+  keyBenefits?: string[];
+  /** Optional: ROI statement */
+  roiStatement?: string;
+  /** Optional: Price range hint */
+  priceHint?: string;
 }
 
 export function ServicePageLayout({
@@ -27,6 +37,11 @@ export function ServicePageLayout({
   waText,
   children,
   breadcrumbs = [],
+  problem,
+  solutionSummary,
+  keyBenefits,
+  roiStatement,
+  priceHint,
 }: ServicePageLayoutProps) {
   const defaultWaText = waText || `Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan layanan ${subBrand}. Mohon informasi lebih lanjut.`;
 
@@ -76,7 +91,7 @@ export function ServicePageLayout({
               className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 rounded-full bg-solar/20 border border-solar/30 text-solar-light text-sm font-semibold"
             >
               <span className="w-2 h-2 rounded-full bg-solar-light animate-pulse" />
-              {subBrand}
+              {subBrand} — Jambi Solar Panel
             </motion.div>
 
             {/* Title */}
@@ -108,6 +123,33 @@ export function ServicePageLayout({
             >
               {description}
             </motion.p>
+
+            {/* Key Trust Indicators */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.22 }}
+              className="flex flex-wrap gap-3 mb-8"
+            >
+              {[
+                { icon: Shield, text: "Garansi Resmi" },
+                { icon: Zap, text: "Gratis Survei" },
+                { icon: CheckCircle, text: "Desain Custom" },
+              ].map((item) => (
+                <span
+                  key={item.text}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white/80 bg-white/10 backdrop-blur-sm rounded-full border border-white/20"
+                >
+                  <item.icon className="w-3.5 h-3.5 text-solar-light" />
+                  {item.text}
+                </span>
+              ))}
+              {priceHint && (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-gold-light bg-gold/10 rounded-full border border-gold/20">
+                  {priceHint}
+                </span>
+              )}
+            </motion.div>
 
             {/* CTA Buttons */}
             <motion.div

@@ -10,43 +10,54 @@ import {
   Droplets,
   ArrowRight,
   CheckCircle,
+  MessageCircle,
 } from "lucide-react";
 
 const painPoints = [
   {
     icon: ZapOff,
     problem: "Listrik Sering Padam",
-    desc: "Pemadaman listrik mengganggu aktivitas keluarga dan bisnis Anda setiap hari.",
+    desc: "Pemadaman PLN mengganggu aktivitas keluarga dan bisnis Anda setiap hari. Produktivitas menurun, peralatan rusak, dan kenyamanan terganggu tanpa solusi yang memadai.",
     solution:
-      "Sistem PLTS kami dilengkapi baterai penyimpanan yang memastikan listrik tetap menyala 24 jam, bahkan saat PLN padam.",
+      "Sistem PLTS Hybrid kami menyimpan energi surplus di baterai LiFePO4 — saat PLN padam, listrik tetap menyala otomatis tanpa jeda. Rumah dan bisnis Anda aman 24/7.",
+    cta: "Konsultasi Backup Listrik",
+    ctaWa: "Halo PT. Jaya Mandiri Smart Energy, saya ingin konsultasi solusi backup listrik saat PLN padam",
   },
   {
     icon: Receipt,
-    problem: "Token Listrik Semakin Mahal",
-    desc: "Tagihan listrik PLN terus meningkat setiap bulan tanpa ada tanda-tanda turun.",
+    problem: "Tagihan Listrik Semakin Mahal",
+    desc: "Tarif PLN naik rata-rata 6% setiap tahun. Tagihan bulanan yang semakin membengkak menggerus keuntungan bisnis dan pengeluaran rumah tangga Anda.",
     solution:
-      "Dengan panel surya, Anda menghasilkan listrik sendiri secara gratis dari matahari. Hemat hingga 90% tagihan listrik setiap bulannya.",
+      "Panel surya menghasilkan listrik gratis dari matahari. Dengan sistem hybrid, Anda bisa menghemat 50-90% tagihan PLN setiap bulannya. ROI tercapai dalam 5-8 tahun, lalu listrik gratis selama 25+ tahun.",
+    cta: "Hitung Penghematan Saya",
+    ctaWa: "Halo PT. Jaya Mandiri Smart Energy, saya ingin menghitung potensi penghematan tagihan listrik dengan panel surya",
   },
   {
     icon: MapPinOff,
-    problem: "Lokasi Kebun Tanpa PLN",
-    desc: "Area perkebunan dan pedesaan belum terjangkau listrik PLN, menghambat produktivitas.",
+    problem: "Lokasi Kebun & Desa Tanpa PLN",
+    desc: "Area perkebunan sawit, karet, dan pedesaan belum terjangkau listrik PLN. CCTV mati di malam hari, pondok kebun gelap, dan produktivitas terhambat tanpa pasokan energi.",
     solution:
-      "Sistem Off-Grid kami dirancang khusus untuk area terpencil tanpa PLN. Cocok untuk pompa air, CCTV, PJU, dan pondok kebun.",
+      "Sistem Off-Grid kami dirancang khusus untuk area terpencil — PJUTS untuk penerangan jalan, Solar Pump untuk irigasi, dan Solar CCTV untuk keamanan. 100% mandiri tanpa PLN.",
+    cta: "Konsultasi Solusi Kebun",
+    ctaWa: "Halo PT. Jaya Mandiri Smart Energy, saya ingin konsultasi solusi energi surya untuk area kebun/perkebunan tanpa PLN",
   },
   {
     icon: Settings,
-    problem: "Mesin Diesel Boros & Ribet",
-    desc: "Genset memerlukan bahan bakar terus-menerus, bising, dan perawatan rutin yang mahal.",
+    problem: "Genset Boros BBM & Ribet",
+    desc: "Genset diesel memerlukan bahan bakar terus-menerus, menghasilkan polusi, berisik, dan butuh perawatan rutin. Biaya operasional membengkak tanpa henti setiap bulan.",
     solution:
-      "Panel surya bekerja secara otomatis tanpa bahan bakar, tanpa suara, dan hampir tanpa perawatan. Investasi sekali, manfaat puluhan tahun.",
+      "Panel surya bekerja otomatis tanpa bahan bakar, tanpa suara, dan hampir tanpa perawatan. Investasi sekali, manfaat puluhan tahun. Cocok menggantikan genset di kebun, pondok, dan site proyek.",
+    cta: "Bandingkan Genset vs Solar",
+    ctaWa: "Halo PT. Jaya Mandiri Smart Energy, saya ingin membandingkan biaya genset vs panel surya untuk lokasi saya",
   },
   {
     icon: Droplets,
     problem: "Pompa Air Listrik Mahal",
-    desc: "Biaya operasional pompa air menggunakan listrik PLN atau genset sangat tinggi.",
+    desc: "Biaya operasional pompa air menggunakan listrik PLN atau genset sangat tinggi — bisa Rp 2-8 juta per bulan. Untuk irigasi kebun sawit skala besar, ini beban yang tidak efisien.",
     solution:
-      "Solar water pump system kami mampu menggerakkan pompa air langsung dari energi matahari dengan biaya operasional mendekati nol.",
+      "Solar water pump menggerakkan pompa submersible langsung dari energi matahari — biaya operasional Rp 0. Balik modal dalam 2-4 tahun, lalu air gratis selama 20+ tahun.",
+    cta: "Hitung Kebutuhan Pompa Saya",
+    ctaWa: "Halo PT. Jaya Mandiri Smart Energy, saya ingin konsultasi solar water pump untuk irigasi kebun saya",
   },
 ];
 
@@ -68,13 +79,14 @@ export function ProblemSolutionSection() {
             Masalah yang Kami Selesaikan
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-navy dark:text-white mb-6">
-            Masalah Listrik Anda,{" "}
-            <span className="gradient-text">Solusi Cerdas dari Kami</span>
+            Masalah Energi Anda,{" "}
+            <span className="gradient-text">Solusi Nyata dari Kami</span>
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            PT. Jaya Mandiri Smart Energy menyediakan sistem energi mandiri yang
-            dirancang sesuai kebutuhan real Anda. Bukan sekadar menjual panel,
-            kami memberikan solusi total.
+            Jambi Solar Panel by PT. Jaya Mandiri Smart Energy menyediakan
+            sistem energi mandiri Off-Grid &amp; Hybrid yang dirancang sesuai
+            kebutuhan real Anda. Bukan sekadar menjual panel — kami memberikan
+            solusi total.
           </p>
         </motion.div>
 
@@ -89,7 +101,7 @@ export function ProblemSolutionSection() {
               className="group relative p-6 md:p-8 rounded-2xl border border-border bg-card hover:shadow-xl transition-all duration-300 overflow-hidden"
             >
               <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-red-400 to-solar" />
-              <div className="flex flex-col md:flex-row gap-6">
+              <div className="flex flex-col lg:flex-row gap-6">
                 {/* Problem */}
                 <div className="flex-1">
                   <div className="flex items-start gap-4">
@@ -108,14 +120,14 @@ export function ProblemSolutionSection() {
                 </div>
 
                 {/* Arrow */}
-                <div className="hidden md:flex items-center justify-center">
+                <div className="hidden lg:flex items-center justify-center">
                   <div className="w-10 h-10 rounded-full bg-solar/10 flex items-center justify-center">
                     <ArrowRight className="w-5 h-5 text-solar" />
                   </div>
                 </div>
 
                 {/* Solution */}
-                <div className="flex-1 pl-0 md:pl-4 border-l-0 md:border-l-2 border-solar/20">
+                <div className="flex-1 pl-0 lg:pl-4 border-l-0 lg:border-l-2 border-solar/20">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-xl bg-solar/10 flex items-center justify-center shrink-0">
                       <CheckCircle className="w-6 h-6 text-solar" />
@@ -124,9 +136,19 @@ export function ProblemSolutionSection() {
                       <p className="text-sm font-semibold text-solar mb-1 uppercase tracking-wide">
                         Solusi JMSE
                       </p>
-                      <p className="text-muted-foreground leading-relaxed">
+                      <p className="text-muted-foreground leading-relaxed mb-4">
                         {item.solution}
                       </p>
+                      {/* Segment CTA */}
+                      <a
+                        href={`https://wa.me/6281328190707?text=${encodeURIComponent(item.ctaWa)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-solar hover:bg-solar-dark text-white text-sm font-semibold rounded-full transition-all duration-200 hover:shadow-lg hover:shadow-solar/30 hover:scale-105"
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                        {item.cta}
+                      </a>
                     </div>
                   </div>
                 </div>

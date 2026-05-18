@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
+import Image from "next/image";
 import {
   Shield,
   Award,
@@ -12,49 +13,59 @@ import {
   MapPin,
   FileCheck,
   HardHat,
+  Star,
+  BadgeCheck,
+  Building2,
 } from "lucide-react";
 
 const trustItems = [
   {
     icon: FileCheck,
-    title: "Legalitas Resmi PT",
-    desc: "Terdaftar sebagai badan usaha resmi dengan izin usaha lengkap dan dokumen perusahaan yang transparan.",
+    title: "Legalitas PT Resmi",
+    desc: "Terdaftar sebagai badan usaha resmi PT. Jaya Mandiri Smart Energy dengan NIB, SK Kemenkumham, dan izin usaha lengkap yang transparan dan dapat diverifikasi.",
   },
   {
     icon: Users,
-    title: "Tim Teknisi Ahli Bersertifikat",
-    desc: "Didukung oleh insinyur dan teknisi berpengalaman yang telah menangani ratusan proyek di seluruh Indonesia.",
+    title: "Tim Teknisi Bersertifikat",
+    desc: "Didukung oleh insinyur dan teknisi berpengalaman yang telah menangani 500+ proyek instalasi PLTS di seluruh Sumatera dan Jawa Bagian Barat.",
   },
   {
     icon: HardHat,
-    title: "Owner Supervised Projects",
-    desc: "Setiap proyek diawasi langsung oleh pemilik perusahaan untuk memastikan kualitas terbaik tanpa kompromi.",
+    title: "Owner Supervised",
+    desc: "Setiap proyek diawasi langsung oleh pemilik perusahaan untuk memastikan kualitas terbaik tanpa kompromi. Tidak disubkontrakkan sembarangan.",
   },
   {
     icon: Award,
     title: "Portofolio Terbukti",
-    desc: "Ratusan proyek berhasil diselesaikan untuk rumah tangga, bisnis, perkebunan, dan institusi pemerintah di seluruh Indonesia.",
+    desc: "Ratusan proyek berhasil diselesaikan untuk rumah tangga, perkebunan sawit, bisnis UMKM, institusi pemerintah, dan korporasi besar.",
   },
   {
     icon: Shield,
     title: "Garansi Komprehensif",
-    desc: "Garansi panel surya 25 tahun performa, inverter 5-10 tahun, dan garansi instalasi oleh tim profesional kami.",
+    desc: "Garansi panel surya 25 tahun performa, inverter Powmr 5 tahun, baterai LiFePO4 5 tahun, dan garansi instalasi profesional oleh tim kami.",
   },
   {
     icon: Wrench,
-    title: "Desain Custom oleh Insinyur Berpengalaman",
-    desc: "Setiap sistem dirancang secara custom oleh insinyur berlisensi berdasarkan kebutuhan spesifik lokasi Anda.",
+    title: "Desain Custom oleh Insinyur",
+    desc: "Setiap sistem dirancang secara custom oleh insinyur berlisensi berdasarkan survei lokasi, kebutuhan beban, dan kondisi iradiasi matahari spesifik area Anda.",
   },
   {
     icon: Clock,
-    title: "Fast Response & Support",
-    desc: "Respon cepat dalam 15 menit via WhatsApp dan dukungan purna jual yang responsif selama masa garansi.",
+    title: "Respon 15 Menit via WhatsApp",
+    desc: "Tim support kami merespons dalam 15 menit pada jam kerja. Dukungan purna jual yang responsif selama masa garansi dan setelahnya.",
   },
   {
     icon: MapPin,
     title: "Coverage Sumatera & Jawa Barat",
-    desc: "Melayani instalasi di seluruh Sumatera dan Jawa Bagian Barat. Tim teknisi siap ke lokasi Anda untuk survei dan pemasangan.",
+    desc: "Melayani instalasi di seluruh Sumatera (Jambi, Riau, Palembang, Padang, Lampung) dan Jawa Bagian Barat (Jakarta, Bandung). Tim teknisi siap ke lokasi Anda.",
   },
+];
+
+const certifications = [
+  "PT Resmi (NIB)",
+  "SK Kemenkumham",
+  "Sertifikat Standar",
+  "SIUP Teregistrasi",
 ];
 
 export function TrustSection() {
@@ -76,13 +87,14 @@ export function TrustSection() {
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-navy dark:text-white mb-6">
             Dipercaya sebagai{" "}
-            <span className="gradient-text">Ahli Energi Surya</span>{" "}
+            <span className="gradient-text">Mitra Energi Mandiri</span>{" "}
             Terpercaya di Indonesia
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            PT. Jaya Mandiri Smart Energy bukan sekadar vendor panel surya. Kami
-            adalah mitra energi Anda yang menyediakan solusi lengkap dari desain,
-            instalasi, hingga maintenance dengan standar kualitas tertinggi.
+            Jambi Solar Panel by PT. Jaya Mandiri Smart Energy bukan sekadar
+            vendor panel surya. Kami adalah mitra energi Anda yang menyediakan
+            solusi lengkap — dari desain, instalasi, hingga maintenance — dengan
+            standar kualitas tertinggi dan legalitas resmi.
           </p>
         </motion.div>
 
@@ -109,7 +121,7 @@ export function TrustSection() {
           ))}
         </div>
 
-        {/* Certifications */}
+        {/* Certifications & Legal Badges */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -119,28 +131,49 @@ export function TrustSection() {
           <div className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
             <div className="flex-1 text-center md:text-left">
               <h3 className="text-xl font-bold text-navy dark:text-white mb-2">
-                Sertifikasi & Legalitas Terjamin
+                Legalitas &amp; Sertifikasi Terjamin
               </h3>
               <p className="text-muted-foreground leading-relaxed">
-                Kami memegang sertifikasi standar nasional dan internasional untuk
-                instalasi sistem PLTS. Setiap proyek dilengkapi dengan dokumentasi
-                resmi, perhitungan teknis, dan garansi tertulis yang sah secara
-                hukum.
+                Kami memegang legalitas lengkap sebagai badan usaha resmi.
+                Setiap proyek dilengkapi dengan dokumentasi resmi, perhitungan
+                teknis, dan garansi tertulis yang sah secara hukum. Siap untuk
+                tender pemerintah, BUMN, dan korporasi.
               </p>
             </div>
             <div className="flex flex-wrap justify-center gap-3">
-              {["PT Perorangan", "NIB", "Sertifikat Standar", "SK Kemenkumham"].map(
-                (cert) => (
-                  <span
-                    key={cert}
-                    className="px-4 py-2 bg-white dark:bg-navy rounded-lg border border-border text-sm font-semibold text-navy dark:text-white shadow-sm"
-                  >
-                    {cert}
-                  </span>
-                )
-              )}
+              {certifications.map((cert) => (
+                <span
+                  key={cert}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-white dark:bg-navy rounded-lg border border-border text-sm font-semibold text-navy dark:text-white shadow-sm"
+                >
+                  <BadgeCheck className="w-4 h-4 text-solar" />
+                  {cert}
+                </span>
+              ))}
             </div>
           </div>
+        </motion.div>
+
+        {/* Social Proof Quick Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4"
+        >
+          {[
+            { icon: Star, label: "Rating Pelanggan", value: "4.9/5", detail: "dari 127+ ulasan" },
+            { icon: Building2, label: "Proyek Selesai", value: "500+", detail: "rumah, bisnis, kebun, infra" },
+            { icon: MapPin, label: "Region Terlayani", value: "2+", detail: "Sumatera & Jawa Barat" },
+            { icon: Shield, label: "Garansi Panel", value: "25 Thn", detail: "performa garansi resmi" },
+          ].map((stat) => (
+            <div key={stat.label} className="text-center p-4 rounded-xl bg-card border border-border">
+              <stat.icon className="w-5 h-5 text-solar mx-auto mb-2" />
+              <p className="text-2xl font-extrabold text-navy dark:text-white">{stat.value}</p>
+              <p className="text-xs font-semibold text-muted-foreground">{stat.label}</p>
+              <p className="text-[10px] text-muted-foreground mt-0.5">{stat.detail}</p>
+            </div>
+          ))}
         </motion.div>
       </div>
     </section>
