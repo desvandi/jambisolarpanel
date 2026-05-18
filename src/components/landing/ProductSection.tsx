@@ -2,7 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { Home, Building2, Factory, Zap, MessageCircle, Battery, BatteryCharging, Info, ChevronDown, ChevronUp, Car, Monitor, Sparkles, TreePine } from "lucide-react";
+import { Home, Building2, Factory, Zap, MessageCircle, Battery, BatteryCharging, Info, ChevronDown, ChevronUp, Car, Monitor, Sparkles, TreePine, Star } from "lucide-react";
 import {
   type CalculatedPackage,
   calculatePackages,
@@ -11,11 +11,18 @@ import {
   calculateROI,
 } from "@/lib/pricing";
 
-function waLink(pkg: CalculatedPackage, addOns?: { carport: boolean; monitoring: string }) {
+interface AddOnState {
+  carport: boolean;
+  monitoring: string;
+  battery: number; // kWh, 0 = no battery
+}
+
+function waLink(pkg: CalculatedPackage, addOns?: AddOnState) {
   let text = `Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan paket ${encodeURIComponent(pkg.name)} (${encodeURIComponent(pkg.priceFormatted)})`;
   if (addOns) {
     const parts: string[] = [];
     if (addOns.carport) parts.push(`+ Carport ${formatRp(pkg.carportAddonPrice)}`);
+    if (addOns.battery > 0) parts.push(`+ Baterai LiFePO4 ${addOns.battery} kWh`);
     if (addOns.monitoring === "basic") parts.push(`+ Monitoring Basic ${formatRp(pkg.monitoringBasicPrice)}`);
     if (addOns.monitoring === "standard") parts.push(`+ Monitoring Standard ${formatRp(pkg.monitoringStandardPrice)}`);
     if (addOns.monitoring === "industrial") parts.push(`+ Monitoring Industrial ${formatRp(pkg.monitoringIndustrialPrice)}`);
@@ -31,7 +38,7 @@ const categoryMeta = [
     title: "Silver Package — Rumah Tangga",
     tagline: "Hybrid System 1 Fase — Cocok untuk kebutuhan rumah tangga di Jambi & sekitarnya",
     tiers: ["silver"],
-    btnLabel: "Rumah Tangga",
+    showCarportMonitoring: false,
   },
   {
     id: "gold",
@@ -39,8 +46,7 @@ const categoryMeta = [
     title: "Gold Package — Bisnis & UMKM",
     tagline: "Hybrid System 1 Fase — Solusi bisnis skala menengah hingga besar",
     tiers: ["gold"],
-    showAddOns: true,
-    btnLabel: "Bisnis & UMKM",
+    showCarportMonitoring: true,
   },
   {
     id: "platinum",
@@ -48,8 +54,7 @@ const categoryMeta = [
     title: "Platinum Package — Industri",
     tagline: "Hybrid System 3 Fase — Solusi skala besar untuk efisiensi maksimal",
     tiers: ["platinum"],
-    showAddOns: true,
-    btnLabel: "Industri",
+    showCarportMonitoring: true,
   },
 ];
 
@@ -67,9 +72,10 @@ export function ProductSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [showCalc, setShowCalc] = useState(false);
+  const [showBatteryInfo, setShowBatteryInfo] = useState(false);
   const [packages, setPackages] = useState<CalculatedPackage[]>(() => calculatePackages());
   const [isCustom, setIsCustom] = useState(() => hasCustomPricing());
-  const [addOns, setAddOns] = useState<Record<string, { carport: boolean; monitoring: string }>>({});
+  const [addOns, setAddOns] = useState<Record<string, AddOnState>>({});
   const [activeFilter, setActiveFilter] = useState<CategoryFilter>("all");
 
   // Listen for storage changes from kalibrasi page
@@ -91,7 +97,6 @@ export function ProductSection() {
     const handler = (e: Event) => {
       const detail = (e as CustomEvent).detail as string;
       if (detail === "plantation") {
-        // Plantation packages are in silver tier (off-grid), show all to include them
         setActiveFilter("silver");
       } else if (["silver", "gold", "platinum"].includes(detail)) {
         setActiveFilter(detail as CategoryFilter);
@@ -107,14 +112,36 @@ export function ProductSection() {
   const toggleCarport = (pkgName: string) => {
     setAddOns((prev) => ({
       ...prev,
-      [pkgName]: { ...prev[pkgName], carport: !(prev[pkgName]?.carport ?? false), monitoring: prev[pkgName]?.monitoring || "none" },
+      [pkgName]: {
+        ...prev[pkgName],
+        carport: !(prev[pkgName]?.carport ?? false),
+        monitoring: prev[pkgName]?.monitoring || "none",
+        battery: prev[pkgName]?.battery || 0,
+      },
     }));
   };
 
   const setMonitoring = (pkgName: string, level: string) => {
     setAddOns((prev) => ({
       ...prev,
-      [pkgName]: { carport: prev[pkgName]?.carport ?? false, monitoring: level },
+      [pkgName]: {
+        ...prev[pkgName],
+        carport: prev[pkgName]?.carport ?? false,
+        monitoring: level,
+        battery: prev[pkgName]?.battery || 0,
+      },
+    }));
+  };
+
+  const setBattery = (pkgName: string, kwh: number) => {
+    setAddOns((prev) => ({
+      ...prev,
+      [pkgName]: {
+        ...prev[pkgName],
+        carport: prev[pkgName]?.carport ?? false,
+        monitoring: prev[pkgName]?.monitoring || "none",
+        battery: kwh,
+      },
     }));
   };
 
@@ -123,6 +150,10 @@ export function ProductSection() {
     if (!a) return 0;
     let total = 0;
     if (a.carport) total += pkg.carportAddonPrice;
+    if (a.battery > 0) {
+      const units = a.battery / pkg.batteryUnitKwh;
+      total += Math.round(units) * pkg.batteryPricePerUnit;
+    }
     if (a.monitoring === "basic") total += pkg.monitoringBasicPrice;
     if (a.monitoring === "standard") total += pkg.monitoringStandardPrice;
     if (a.monitoring === "industrial") total += pkg.monitoringIndustrialPrice;
@@ -148,8 +179,8 @@ export function ProductSection() {
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
             Semua paket dihitung berdasarkan kondisi iradiasi matahari di Jambi
-            (PSH 3,75 jam) dan rasio baterai optimal 26–33% dari produksi harian PV.
-            Harga sudah termasuk PPN 11%, instalasi, survei, desain, dan garansi resmi.
+            (PSH 3,75 jam). Harga sudah termasuk PPN 11%, instalasi, survei,
+            desain, dan garansi resmi. Baterai tersedia sebagai add-on opsional.
           </p>
         </motion.div>
 
@@ -211,11 +242,7 @@ export function ProductSection() {
                 Produksi harian = Kapasitas kWp x PSH x Efisiensi 80%.
               </p>
               <p>
-                <strong>Rasio Baterai:</strong> Kapasitas baterai = 26-33% dari produksi harian PV.
-                Cukup untuk kebutuhan malam hari (backup esensial 8-10 jam), tanpa over-sizing.
-              </p>
-              <p>
-                <strong>Biaya per paket:</strong> Panel + Mounting + BOS + Inverter + Baterai (opsional)
+                <strong>Biaya per paket:</strong> Panel + Mounting + BOS + Inverter
                 + Proteksi (SPD &amp; Grounding) + Jasa Instalasi + Survei &amp; Desain + Commissioning + Logistik.
               </p>
               <p>
@@ -224,8 +251,12 @@ export function ProductSection() {
                 <strong> PPh</strong> dipotong oleh pihak pembeli (wajib pajak), bukan menambah harga jual.
               </p>
               <p>
-                <strong>Add-on tersedia:</strong> Kanopi Carport (+harga per kWp) dan Smart Monitoring
-                (Basic / Standard / Industrial) untuk paket Gold &amp; Platinum.
+                <strong>Add-on tersedia:</strong> Baterai LiFePO4 (kelipatan 4,8 kWh), Kanopi Carport (+harga per kWp),
+                dan Smart Monitoring (Basic / Standard / Industrial) untuk paket Gold &amp; Platinum.
+              </p>
+              <p>
+                <strong>Baterai:</strong> Kapasitas rekomendasi = kWp x PSH. Saat baterai penuh dan tidak ada
+                pemadaman PLN, sinar matahari langsung supply beban melalui pengaturan SBU/SUB/Mix di inverter.
               </p>
             </motion.div>
           )}
@@ -236,7 +267,6 @@ export function ProductSection() {
           const catProducts = cat.tiers.flatMap((t) => getPackagesByTier(t));
           if (catProducts.length === 0) return null;
 
-          // Filter logic: if "all" or matching category is selected, show
           const shouldShow = activeFilter === "all" || activeFilter === cat.id;
 
           return (
@@ -260,15 +290,15 @@ export function ProductSection() {
                 </div>
               </div>
 
-              {/* Battery Legend */}
+              {/* Legend */}
               <div className="flex flex-wrap gap-4 mb-6">
                 <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
                   <Zap className="w-3.5 h-3.5 text-solar" />
-                  Tanpa Baterai — Hemat investasi awal, gunakan listrik PLN saat malam
+                  Tanpa Baterai — Hemat investasi awal
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
                   <BatteryCharging className="w-3.5 h-3.5 text-gold" />
-                  Dengan Baterai LiFePO4 — Full backup 24 jam, listrik tetap menyala saat PLN padam
+                  + Baterai LiFePO4 — Backup saat PLN padam, unit 4,8 kWh
                 </span>
               </div>
 
@@ -277,6 +307,8 @@ export function ProductSection() {
                 {catProducts.map((product) => {
                   const addOnTotal = getAddOnTotal(product);
                   const currentAddOns = addOns[product.name];
+                  const hasBatterySelected = (currentAddOns?.battery || 0) > 0;
+
                   return (
                     <div
                       key={product.name}
@@ -315,7 +347,7 @@ export function ProductSection() {
                         {product.desc}
                       </p>
 
-                      {/* Specs line */}
+                      {/* Specs */}
                       <p
                         className={`text-xs font-medium mb-3 px-2.5 py-1.5 rounded-lg inline-block ${
                           product.popular
@@ -326,31 +358,7 @@ export function ProductSection() {
                         {product.specs}
                       </p>
 
-                      {product.batteryKwh > 0 && (
-                        <span
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium mb-3 ml-2 ${
-                            product.popular
-                              ? "bg-white/10 text-gold-light"
-                              : "bg-gold/10 text-gold"
-                          }`}
-                        >
-                          <Battery className="w-3.5 h-3.5" />
-                          LiFePO4 Backup
-                        </span>
-                      )}
-
-                      {/* Battery sizing note */}
-                      {product.batteryNote && (
-                        <p
-                          className={`text-xs mt-2 mb-3 leading-relaxed ${
-                            product.popular ? "text-white/60" : "text-muted-foreground"
-                          }`}
-                        >
-                          {product.batteryNote}
-                        </p>
-                      )}
-
-                      {/* ROI & Savings Info */}
+                      {/* ROI & Savings */}
                       {(() => {
                         const dailyKwh = product.kWp * 3.75 * 0.80;
                         const roiData = calculateROI(product.price, dailyKwh);
@@ -399,6 +407,7 @@ export function ProductSection() {
                         );
                       })()}
 
+                      {/* Price */}
                       <p
                         className={`text-lg font-extrabold mb-1 ${
                           product.popular ? "text-white" : "text-navy dark:text-white"
@@ -423,8 +432,88 @@ export function ProductSection() {
                         Sudah termasuk PPN 11%, instalasi &amp; garansi
                       </p>
 
-                      {/* Add-on section (Gold & Platinum only) */}
-                      {cat.showAddOns && (
+                      {/* ===== Battery Add-on (ALL packages) ===== */}
+                      {product.batteryOptions.length > 0 && (
+                        <div className={`mb-4 p-3 rounded-xl border ${
+                          product.popular ? "bg-white/5 border-white/20" : "bg-muted/50 border-border"
+                        }`}>
+                          <button
+                            onClick={() => setShowBatteryInfo(!showBatteryInfo)}
+                            className={`w-full text-left flex items-center justify-between mb-2 ${
+                              hasBatterySelected ? "" : ""
+                            }`}
+                          >
+                            <p className={`text-xs font-semibold flex items-center gap-1.5 ${
+                              product.popular ? "text-white/70" : "text-muted-foreground"
+                            }`}>
+                              <Battery className="w-3.5 h-3.5" />
+                              Baterai LiFePO4 (Opsional)
+                              <span className="inline-flex items-center gap-0.5 text-[10px] font-normal opacity-60">
+                                {showBatteryInfo ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                              </span>
+                            </p>
+                          </button>
+
+                          {showBatteryInfo && (
+                            <p className={`text-[10px] leading-relaxed mb-2 ${
+                              product.popular ? "text-white/40" : "text-muted-foreground"
+                            }`}>
+                              Saat baterai penuh &amp; tidak ada pemadaman, sinar matahari langsung supply beban via pengaturan SBU/SUB/Mix di inverter. Rekomendasi = {product.kWp} kWp x 3,75 PSH = {product.batteryRecKwh} kWh
+                            </p>
+                          )}
+
+                          {/* Battery options */}
+                          <div className="flex flex-wrap gap-1.5">
+                            {/* No battery option */}
+                            <button
+                              onClick={() => setBattery(product.name, 0)}
+                              className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                                !hasBatterySelected
+                                  ? product.popular ? "bg-gold/20 text-gold-light ring-1 ring-gold/40" : "bg-solar/10 text-solar ring-1 ring-solar/40"
+                                  : product.popular ? "bg-white/5 text-white/40 hover:bg-white/10" : "bg-card hover:bg-muted"
+                              }`}
+                            >
+                              Tanpa Baterai
+                            </button>
+
+                            {/* kWh options */}
+                            {product.batteryOptions.map((opt) => (
+                              <button
+                                key={opt.kwh}
+                                onClick={() => setBattery(product.name, opt.kwh)}
+                                className={`relative flex flex-col items-start px-2.5 py-1.5 rounded-lg text-xs transition-colors ${
+                                  currentAddOns?.battery === opt.kwh
+                                    ? product.popular ? "bg-gold/20 text-gold-light ring-1 ring-gold/40" : "bg-solar/10 text-solar ring-1 ring-solar/40"
+                                    : product.popular ? "bg-white/5 text-white/50 hover:bg-white/10" : "bg-card hover:bg-muted"
+                                }`}
+                                title={`Rekomendasi: ${product.batteryRecKwh} kWh`}
+                              >
+                                <span className="font-medium">
+                                  {opt.kwh} kWh
+                                  {opt.recommended && (
+                                    <Star className="inline w-2.5 h-2.5 ml-0.5 text-gold-light fill-current align-middle" />
+                                  )}
+                                </span>
+                                <span className="text-[10px] opacity-70">
+                                  {opt.unitCount}x {product.batteryUnitKwh} kWh = {opt.priceFormatted}
+                                </span>
+                              </button>
+                            ))}
+                          </div>
+
+                          {/* Show if recommended is capped */}
+                          {product.batteryRecKwh !== product.batteryRecKwhActual && (
+                            <p className={`text-[10px] mt-1.5 ${
+                              product.popular ? "text-white/40" : "text-muted-foreground"
+                            }`}>
+                              Rekomendasi penuh: {product.batteryRecKwh} kWh — hubungi kami untuk penawaran custom
+                            </p>
+                          )}
+                        </div>
+                      )}
+
+                      {/* ===== Carport + Monitoring Add-on (Gold & Platinum only) ===== */}
+                      {cat.showCarportMonitoring && (
                         <div className={`mb-4 p-3 rounded-xl border ${
                           product.popular ? "bg-white/5 border-white/20" : "bg-muted/50 border-border"
                         }`}>
@@ -432,7 +521,7 @@ export function ProductSection() {
                             product.popular ? "text-white/70" : "text-muted-foreground"
                           }`}>
                             <Sparkles className="w-3.5 h-3.5" />
-                            Optional Add-on
+                            Opsi Tambahan
                           </p>
 
                           {/* Carport toggle */}
@@ -507,21 +596,6 @@ export function ProductSection() {
             </motion.div>
           );
         })}
-
-        {/* No results message */}
-        {activeFilter !== "all" && categoryMeta.filter(c => c.id === activeFilter || activeFilter === "all").length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">
-              Paket untuk kategori ini tersedia di bagian lain. Silakan pilih kategori lain atau{" "}
-              <button
-                onClick={() => setActiveFilter("all")}
-                className="text-solar font-semibold hover:underline"
-              >
-                lihat semua paket
-              </button>
-            </p>
-          </div>
-        )}
 
         {/* CTA */}
         <motion.div

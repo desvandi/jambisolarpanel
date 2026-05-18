@@ -1,13 +1,20 @@
 /* ============================================================
-   PRICING MODULE v2 — PT. Jaya Mandiri Smart Energy
+   PRICING MODULE v3 — PT. Jaya Mandiri Smart Energy
    Shared pricing logic for ProductSection & Kalibrasi Harga
 
-   Update: 16 Mei 2026
-   - New package structure (1,2,3,5 / 6.5,10 / 11,20 kWp)
-   - Add-on support (Carport, Smart Monitoring)
-   - Battery sizing: 26-33% of daily PV production (Opsi A)
+   Update: 18 Mei 2026
+   - Battery moved to optional add-on (4.8 kWh units)
+   - Battery sizing: kWp × PSH, rounded to nearest 4.8 kWh
+   - Package structure: 1,2,3,5 / 6.5,10 / 11,20 kWp (no bundled battery)
+   - Add-on support (Carport, Smart Monitoring, Battery)
    - PSH Jambi: 3.75 jam | Efficiency: 80%
    - Margin: 35% | PPN: 11%
+
+   Battery Logic:
+   - Unit size: 4.8 kWh LiFePO4 (easy to source from suppliers)
+   - Recommended capacity = kWp × PSH (daily production without efficiency)
+   - When battery is full & no PLN outage, solar directly supplies loads
+     via PowMr inverter SBU/SUB/Mix priority settings
    ============================================================ */
 
 // --- Types ---
@@ -72,9 +79,16 @@ export interface PackageSpec {
   specs: string;
   panelCount: number;
   inverterKey: keyof InverterPrices;
-  batteryKwh: number;
   tier: "silver" | "gold" | "platinum";
   popular: boolean;
+}
+
+export interface BatteryOption {
+  kwh: number;           // e.g., 4.8, 9.6, 14.4
+  unitCount: number;     // e.g., 1, 2, 3
+  recommended: boolean;
+  price: number;         // total price with margin + PPN
+  priceFormatted: string;
 }
 
 export interface CalculatedPackage extends PackageSpec {
@@ -86,13 +100,24 @@ export interface CalculatedPackage extends PackageSpec {
   kWp: number;
   dailyProduction: string;
   savingsRange: string;
-  batteryNote: string | null;
   // Add-on prices (incl. margin & PPN)
   carportAddonPrice: number;
   monitoringBasicPrice: number;
   monitoringStandardPrice: number;
   monitoringIndustrialPrice: number;
+  // Battery add-on
+  batteryUnitKwh: number;
+  batteryPricePerUnit: number;
+  batteryPricePerUnitFormatted: string;
+  batteryOptions: BatteryOption[];
+  batteryRecKwh: number;        // recommended kWh before cap
+  batteryRecKwhActual: number;  // recommended kWh after cap
 }
+
+// --- Constants ---
+
+export const BATTERY_UNIT_KWH = 4.8;
+export const BATTERY_MAX_UNITS = 10; // max displayable units (48 kWh)
 
 // --- Default Values (Acuan 2026) ---
 
@@ -156,7 +181,7 @@ export const inverterMeta: Record<keyof InverterPrices, { capacity: number; phas
   deye20k3p: { capacity: 20.0, phase: "3-Fase", type: "Hybrid" },
 };
 
-// --- Package Definitions ---
+// --- Package Definitions (no bundled batteries) ---
 
 export const packageSpecs: PackageSpec[] = [
   // ============================
@@ -168,7 +193,6 @@ export const packageSpecs: PackageSpec[] = [
     specs: "2× Panel 630Wp | DEYE 3.6kW Hybrid",
     panelCount: 2,
     inverterKey: "deye3k6",
-    batteryKwh: 0,
     tier: "silver",
     popular: false,
   },
@@ -178,7 +202,6 @@ export const packageSpecs: PackageSpec[] = [
     specs: "4× Panel 630Wp | DEYE 3.6kW Hybrid",
     panelCount: 4,
     inverterKey: "deye3k6",
-    batteryKwh: 0,
     tier: "silver",
     popular: false,
   },
@@ -188,7 +211,6 @@ export const packageSpecs: PackageSpec[] = [
     specs: "5× Panel 630Wp | DEYE 3.6kW Hybrid",
     panelCount: 5,
     inverterKey: "deye3k6",
-    batteryKwh: 0,
     tier: "silver",
     popular: false,
   },
@@ -198,19 +220,8 @@ export const packageSpecs: PackageSpec[] = [
     specs: "8× Panel 630Wp | DEYE 6kW Hybrid",
     panelCount: 8,
     inverterKey: "deye6k",
-    batteryKwh: 0,
     tier: "silver",
     popular: true,
-  },
-  {
-    name: "Silver 5 kWp + Baterai 5 kWh",
-    desc: "8 panel PV 630Wp + DEYE 6.000W + LiFePO4 5 kWh. Full backup saat PLN padam. Baterai menutupi kebutuhan malam hari.",
-    specs: "8× Panel 630Wp | DEYE 6kW | LiFePO4 5kWh",
-    panelCount: 8,
-    inverterKey: "deye6k",
-    batteryKwh: 5,
-    tier: "silver",
-    popular: false,
   },
 
   // ============================
@@ -222,7 +233,6 @@ export const packageSpecs: PackageSpec[] = [
     specs: "11× Panel 630Wp | DEYE 8kW Hybrid",
     panelCount: 11,
     inverterKey: "deye8k",
-    batteryKwh: 0,
     tier: "gold",
     popular: false,
   },
@@ -232,19 +242,8 @@ export const packageSpecs: PackageSpec[] = [
     specs: "16× Panel 630Wp | GROWATT 10kW Hybrid",
     panelCount: 16,
     inverterKey: "growatt10k",
-    batteryKwh: 0,
     tier: "gold",
     popular: true,
-  },
-  {
-    name: "Gold 10 kWp + Baterai 10 kWh",
-    desc: "16 panel PV 630Wp + GROWATT 10.000ES + LiFePO4 10 kWh. Full backup bisnis 24 jam. Operasional tanpa gangguan.",
-    specs: "16× Panel 630Wp | GROWATT 10kW | LiFePO4 10kWh",
-    panelCount: 16,
-    inverterKey: "growatt10k",
-    batteryKwh: 10,
-    tier: "gold",
-    popular: false,
   },
 
   // ============================
@@ -256,17 +255,6 @@ export const packageSpecs: PackageSpec[] = [
     specs: "18× Panel 630Wp | DEYE 10kW 3-Fase",
     panelCount: 18,
     inverterKey: "deye10k3p",
-    batteryKwh: 0,
-    tier: "platinum",
-    popular: false,
-  },
-  {
-    name: "Platinum 11 kWp + Baterai 10 kWh",
-    desc: "18 panel PV 630Wp + DEYE 10.000W 3-Fase + LiFePO4 10 kWh. Pabrik dengan backup operasional malam hari.",
-    specs: "18× Panel 630Wp | DEYE 10kW 3P | LiFePO4 10kWh",
-    panelCount: 18,
-    inverterKey: "deye10k3p",
-    batteryKwh: 10,
     tier: "platinum",
     popular: true,
   },
@@ -276,17 +264,6 @@ export const packageSpecs: PackageSpec[] = [
     specs: "32× Panel 630Wp | DEYE 20kW 3-Fase",
     panelCount: 32,
     inverterKey: "deye20k3p",
-    batteryKwh: 0,
-    tier: "platinum",
-    popular: false,
-  },
-  {
-    name: "Platinum 20 kWp + Baterai 20 kWh",
-    desc: "32 panel PV 630Wp + DEYE 20.000W 3-Fase + LiFePO4 20 kWh. Full backup industri 24 jam. Energi mandiri penuh.",
-    specs: "32× Panel 630Wp | DEYE 20kW 3P | LiFePO4 20kWh",
-    panelCount: 32,
-    inverterKey: "deye20k3p",
-    batteryKwh: 20,
     tier: "platinum",
     popular: false,
   },
@@ -398,34 +375,22 @@ export function calculatePackages(
 
   const marginMultiplier = 1 + s.marginPct / 100;
   const ppnMultiplier = 1 + s.ppnPct / 100;
+  const addonMultiplier = marginMultiplier * ppnMultiplier;
 
   return packageSpecs.map((pkg) => {
     const panelCost = pkg.panelCount * costPerPanel;
     const inverterCost = inv[pkg.inverterKey];
     const inverterLaborCost = c.laborInverterPerUnit;
-    const batteryCost = pkg.batteryKwh * batteryCostPerKwh;
     const kWp = (pkg.panelCount * c.panelWattage) / 1000;
 
-    const hpp = panelCost + inverterCost + inverterLaborCost + batteryCost + fixedPerSystem;
+    // No bundled battery cost
+    const hpp = panelCost + inverterCost + inverterLaborCost + fixedPerSystem;
     const subtotal = Math.round(hpp * marginMultiplier);
     const ppn = Math.round(subtotal * (s.ppnPct / 100));
     const price = Math.round(subtotal * ppnMultiplier / 100_000) * 100_000;
 
     // Daily production
     const dailyKwh = kWp * s.pshHours * s.efficiency;
-
-    // Battery ratio
-    const battRatio = pkg.batteryKwh > 0 ? (pkg.batteryKwh / dailyKwh) * 100 : 0;
-    const batteryNote =
-      pkg.batteryKwh > 0
-        ? `Rasio baterai ${battRatio.toFixed(0)}% dari produksi harian — ${
-            battRatio < 28
-              ? "optimal untuk backup beban esensial malam"
-              : battRatio <= 40
-                ? "cukup untuk backup operasional malam"
-                : "perlu evaluasi (over-sizing)"
-          }`
-        : null;
 
     // Savings estimation (based on PLN average tariff ~Rp 1.500/kWh)
     const monthlySavingsLow =
@@ -439,7 +404,6 @@ export function calculatePackages(
     };
 
     // Add-on prices (with margin & PPN)
-    const addonMultiplier = marginMultiplier * ppnMultiplier;
     const carportAddon = c.carportPerKwp > 0
       ? Math.round((kWp * c.carportPerKwp * addonMultiplier) / 100_000) * 100_000
       : 0;
@@ -453,6 +417,44 @@ export function calculatePackages(
       ? Math.round((c.monitoringIndustrial * addonMultiplier) / 100_000) * 100_000
       : 0;
 
+    // Battery add-on calculation (4.8 kWh units)
+    const batteryUnitCost = batteryCostPerKwh * BATTERY_UNIT_KWH;
+    const batteryUnitPrice = batteryCostPerKwh > 0
+      ? Math.round((batteryUnitCost * addonMultiplier) / 100_000) * 100_000
+      : 0;
+
+    // Recommended battery = kWp × PSH (daily production without efficiency factor)
+    const dailyProdRaw = kWp * s.pshHours;
+    const recUnits = Math.max(1, Math.round(dailyProdRaw / BATTERY_UNIT_KWH));
+    const recKwh = recUnits * BATTERY_UNIT_KWH;
+    const cappedRecUnits = Math.min(recUnits, BATTERY_MAX_UNITS);
+    const recKwhActual = cappedRecUnits * BATTERY_UNIT_KWH;
+
+    // Generate battery options (show rec±2, clamped to 1..BATTERY_MAX_UNITS)
+    let startUnit = Math.max(1, cappedRecUnits - 2);
+    let endUnit = Math.min(cappedRecUnits + 2, BATTERY_MAX_UNITS);
+    // Ensure at least 3 options
+    if (endUnit - startUnit < 2) {
+      if (startUnit <= 1) {
+        endUnit = Math.min(3, BATTERY_MAX_UNITS);
+      } else {
+        startUnit = Math.max(1, endUnit - 2);
+      }
+    }
+
+    const batteryOptions: BatteryOption[] = [];
+    for (let i = startUnit; i <= endUnit; i++) {
+      const kwh = i * BATTERY_UNIT_KWH;
+      const totalPrice = i * batteryUnitPrice;
+      batteryOptions.push({
+        kwh,
+        unitCount: i,
+        recommended: i === cappedRecUnits,
+        price: totalPrice,
+        priceFormatted: formatRp(totalPrice),
+      });
+    }
+
     return {
       ...pkg,
       hpp,
@@ -463,11 +465,16 @@ export function calculatePackages(
       kWp,
       dailyProduction: `~${dailyKwh.toFixed(1)} kWh/hari`,
       savingsRange: `${formatSavings(monthlySavingsLow)} - ${formatSavings(monthlySavingsHigh)}/bulan`,
-      batteryNote,
       carportAddonPrice: carportAddon,
       monitoringBasicPrice: monBasic,
       monitoringStandardPrice: monStd,
       monitoringIndustrialPrice: monInd,
+      batteryUnitKwh: BATTERY_UNIT_KWH,
+      batteryPricePerUnit: batteryUnitPrice,
+      batteryPricePerUnitFormatted: formatRp(batteryUnitPrice),
+      batteryOptions,
+      batteryRecKwh: recKwh,
+      batteryRecKwhActual: recKwhActual,
     };
   });
 }
@@ -547,19 +554,14 @@ export function recommendPackage(
   const tariff = options?.plnTariff ?? PLN_TARIFF_DEFAULT;
   const monthlyKwh = monthlyBillRp / tariff;
 
-  // Filter non-battery packages only
-  const nonBatteryPkgs = packages.filter((p) => p.batteryKwh === 0);
-  if (nonBatteryPkgs.length === 0) return null;
-
   let recommended: CalculatedPackage | null = null;
   let bestScore = Infinity;
 
-  for (const pkg of nonBatteryPkgs) {
+  for (const pkg of packages) {
     const productionKwh = pkg.kWp * defaultSettings.pshHours * defaultSettings.efficiency * 30;
     const pct = (productionKwh / monthlyKwh) * 100;
 
     // Score: distance from 80% coverage (sweet spot)
-    // Penalize undersizing heavily
     let score: number;
     if (pct < 50) {
       score = 1000 + (50 - pct);

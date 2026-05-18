@@ -62,8 +62,7 @@ export function SavingsCalculator() {
     const co2PerYear = (roi.annualSavingsBase / PLN_TARIFF_DEFAULT) * 0.8 / 1000;
 
     // Check if largest package still < 50% coverage
-    const nonBatteryPkgs = allPkgs.filter((p) => p.batteryKwh === 0);
-    const largestPkg = nonBatteryPkgs[nonBatteryPkgs.length - 1];
+    const largestPkg = allPkgs[allPkgs.length - 1];
     const largestProduction = largestPkg
       ? largestPkg.kWp * 3.75 * 0.80 * 30
       : 0;
