@@ -2,6 +2,7 @@
 
 import { Navbar } from "@/components/landing/Navbar";
 import { HeroSection } from "@/components/landing/HeroSection";
+import { SolutionCards } from "@/components/landing/SolutionCards";
 import { TrustSection } from "@/components/landing/TrustSection";
 import { ProductSection } from "@/components/landing/ProductSection";
 import { ProblemSolutionSection } from "@/components/landing/ProblemSolutionSection";
@@ -23,6 +24,9 @@ export default function Home() {
       <main className="flex-1">
         {/* Hero - Above The Fold */}
         <HeroSection />
+
+        {/* Solution Overview Cards */}
+        <SolutionCards />
 
         {/* Trust Section */}
         <TrustSection />

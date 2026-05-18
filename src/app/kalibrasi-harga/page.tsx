@@ -353,6 +353,7 @@ function RupiahInput({
   // Sync dari parent value HANYA saat tidak fokus (biar user bisa mengetik dengan tenang)
   useEffect(() => {
     if (!focusedRef.current) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentionally sync parent value while not focused
       setDisplay(formatRp(value));
     }
   }, [value]);
@@ -412,7 +413,10 @@ function PercentInput({
   const focusedRef = useRef(false);
 
   useEffect(() => {
-    if (!focusedRef.current) setLocal(String(value));
+    if (!focusedRef.current) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentionally sync parent value while not focused
+      setLocal(String(value));
+    }
   }, [value]);
 
   const clamp = (n: number) => Math.min(max, Math.max(min, Math.round(n)));
@@ -480,7 +484,10 @@ function NumberInput({
 
   // Sync dari parent HANYA saat tidak fokus
   useEffect(() => {
-    if (!focusedRef.current) setLocal(String(value));
+    if (!focusedRef.current) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentionally sync parent value while not focused
+      setLocal(String(value));
+    }
   }, [value]);
 
   const clamp = (n: number) => Math.min(max, Math.max(min, n));

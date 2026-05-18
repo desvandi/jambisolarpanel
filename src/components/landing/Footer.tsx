@@ -8,26 +8,21 @@ function wa(text: string) {
   return `https://wa.me/6281328190707?text=${encodeURIComponent(text)}`;
 }
 
-const footerLinks: Record<string, { label: string; msg: string }[]> = {
+const footerLinks: Record<string, { label: string; href?: string; msg?: string }[]> = {
   Layanan: [
-    { label: "PLTS Off-Grid", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan layanan PLTS Off-Grid untuk area tanpa PLN" },
-    { label: "PLTS Hybrid", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan layanan PLTS Hybrid (PLN + Solar + Baterai)" },
-    { label: "PLTS On-Grid", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan layanan PLTS On-Grid (terhubung PLN)" },
-    { label: "Solar Water Pump", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan Solar Water Pump / pompa air tenaga surya" },
-    { label: "Maintenance & Service", msg: "Halo PT. Jaya Mandiri Smart Energy, saya ingin mengetahui layanan maintenance dan service panel surya" },
-  ],
-  Solusi: [
-    { label: "Rumah Tangga", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik solusi panel surya untuk rumah tangga" },
-    { label: "Bisnis & UMKM", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik solusi panel surya untuk bisnis / UMKM" },
-    { label: "Perkebunan", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik solusi panel surya untuk perkebunan / kebun" },
-    { label: "Industri", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik solusi panel surya untuk industri" },
-    { label: "Institusi", msg: "Halo PT. Jaya Mandiri Smart Energy, saya tertarik solusi panel surya untuk institusi (sekolah, masjid, kantor desa)" },
+    { label: "PLTS Rumah Tangga", href: "/solar-home" },
+    { label: "PLTS Bisnis & Industri", href: "/solar-commercial" },
+    { label: "PJUTS", href: "/pjuts" },
+    { label: "Solar Water Pump", href: "/solar-pump" },
+    { label: "EV Charging", href: "/ev-charging" },
+    { label: "Smart IoT & CCTV", href: "/smart-iot" },
+    { label: "Maintenance", href: "/maintenance" },
+    { label: "Tender & Procurement", href: "/tender-procurement" },
   ],
   Perusahaan: [
     { label: "Tentang Kami", msg: "Halo PT. Jaya Mandiri Smart Energy, saya ingin mengetahui lebih lanjut tentang perusahaan anda" },
     { label: "Portofolio", msg: "Halo PT. Jaya Mandiri Smart Energy, saya ingin melihat portofolio proyek yang sudah dikerjakan" },
     { label: "Testimoni", msg: "Halo PT. Jaya Mandiri Smart Energy, saya ingin mengetahui testimoni dari pelanggan anda" },
-    { label: "Karir", msg: "Halo PT. Jaya Mandiri Smart Energy, saya ingin mengetahui karir / lowongan pekerjaan di perusahaan anda" },
     { label: "Kontak & Alamat", msg: "Halo PT. Jaya Mandiri Smart Energy, saya ingin mengetahui alamat dan kontak anda" },
   ],
 };
@@ -36,7 +31,7 @@ export function Footer() {
   return (
     <footer className="bg-navy dark:bg-navy-light text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-4">
@@ -59,10 +54,14 @@ export function Footer() {
               </div>
             </div>
             <p className="text-sm text-white/60 leading-relaxed mb-4 max-w-sm">
-              Smart Energy Solution Provider - Menyediakan solusi energi surya
-              profesional untuk rumah, bisnis, kebun, dan industri di seluruh
-              Indonesia. Mitra energi mandiri terpercaya Anda.
+              Smart Energy Solution Provider — Menyediakan solusi energi surya
+              profesional untuk rumah, bisnis, kebun, dan industri. Mitra energi
+              mandiri terpercaya Anda di Sumatera & Jawa Bagian Barat.
             </p>
+            <div className="text-xs text-white/40 leading-relaxed mb-4 max-w-sm">
+              Tangkit Baru Residence Blok D15, Jl. H. Saing, RT.001/RW.001,
+              Desa Tangkit Baru, Kec. Sungai Gelam, Kabupaten Muaro Jambi, Jambi 36373
+            </div>
             <div className="flex gap-2">
               <a
                 href={wa("Halo PT. Jaya Mandiri Smart Energy, saya menghubungi dari WhatsApp di footer website")}
@@ -76,7 +75,9 @@ export function Footer() {
                 </svg>
               </a>
               <a
-                href="#"
+                href="https://www.facebook.com/share/1EMi46VPVc/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-9 h-9 rounded-lg bg-white/10 hover:bg-solar flex items-center justify-center transition-colors"
                 aria-label="Facebook"
               >
@@ -85,7 +86,9 @@ export function Footer() {
                 </svg>
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/desvandi101"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-9 h-9 rounded-lg bg-white/10 hover:bg-solar flex items-center justify-center transition-colors"
                 aria-label="Instagram"
               >
@@ -103,19 +106,40 @@ export function Footer() {
               <ul className="space-y-2.5">
                 {links.map((link) => (
                   <li key={link.label}>
-                    <a
-                      href={wa(link.msg)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-white/50 hover:text-solar-light transition-colors"
-                    >
-                      {link.label}
-                    </a>
+                    {link.href ? (
+                      <Link
+                        href={link.href}
+                        className="text-sm text-white/50 hover:text-solar-light transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={wa(link.msg || "")}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-white/50 hover:text-solar-light transition-colors"
+                      >
+                        {link.label}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
             </div>
           ))}
+        </div>
+
+        {/* Sub-brands */}
+        <div className="py-6 border-t border-white/10 mb-6">
+          <p className="text-xs text-white/30 uppercase tracking-wider font-semibold mb-3">Sub-Brands</p>
+          <div className="flex flex-wrap gap-3">
+            {["JMSE Home Solar", "JMSE Commercial Solar", "JMSE Agro Solar", "JMSE EV Energy", "JMSE Smart IoT", "JMSE Infrastructure"].map(brand => (
+              <span key={brand} className="px-3 py-1 text-xs text-white/40 bg-white/5 rounded-full border border-white/5">
+                {brand}
+              </span>
+            ))}
+          </div>
         </div>
 
         {/* Bottom Bar */}
