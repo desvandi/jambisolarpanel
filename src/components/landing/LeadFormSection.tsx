@@ -2,7 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { Send, User, MapPin, Zap, Phone } from "lucide-react";
+import { Send, User, MapPin, Zap, Phone, Download } from "lucide-react";
 
 const WA_BASE = "https://wa.me/6281328190707";
 
@@ -221,6 +221,16 @@ export function LeadFormSection() {
                     <Send className="w-5 h-5" />
                     Kirim via WhatsApp
                   </button>
+
+                  <a
+                    href={`https://wa.me/6281328190707?text=${encodeURIComponent("Halo PT. Jaya Mandiri Smart Energy, saya ingin mendapatkan pricelist / daftar harga paket panel surya terbaru. Terima kasih.")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex items-center justify-center gap-2 py-3 bg-white dark:bg-navy border-2 border-solar/30 text-solar font-semibold text-sm rounded-xl transition-all duration-300 hover:bg-solar/5 hover:border-solar"
+                  >
+                    <Download className="w-4 h-4" />
+                    Download Pricelist via WhatsApp
+                  </a>
 
                   <p className="text-xs text-center text-muted-foreground">
                     Data Anda aman dan tidak akan disebarluaskan. Kami menghormati

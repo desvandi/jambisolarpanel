@@ -9,11 +9,11 @@ import { MessageCircle, Car, Battery, Leaf, Zap, Shield, CheckCircle, ArrowRight
 
 const benefits = [
   { icon: Leaf, title: "100% Energi Surya", desc: "Isi daya kendaraan listrik Anda dari matahari — gratis dan ramah lingkungan" },
-  { icon: Zap, title: "Hemat Rp 400-800rb/Bulan", desc: "Bandingkan dengan biaya charging dari PLN yang terus naik setiap tahun" },
+  { icon: Zap, title: "Hemat Jutaan per Tahun", desc: "2x charging harian dari PLTS bisa hemat hingga Rp 5-7 juta per tahun vs tarif PLN" },
   { icon: Car, title: "XCMG AC 7.2kW", desc: "Charger AC 7.2kW (1-fase) kompatibel dengan semua kendaraan listrik di Indonesia" },
-  { icon: Battery, title: "Energi Surplus", desc: "Energi surplus dari PLTS dapat digunakan untuk kebutuhan rumah tangga lainnya" },
+  { icon: Battery, title: "Energi Surplus untuk Rumah", desc: "Energi surplus dari PLTS otomatis menutupi kebutuhan listrik rumah tangga lainnya" },
   { icon: Shield, title: "Garansi Resmi", desc: "Panel 25 tahun, inverter 5 tahun, charger 2 tahun, instalasi termasuk" },
-  { icon: CheckCircle, title: "Plug & Play", desc: "Instalasi charger standalone yang mudah, atau terintegrasi dengan PLTS" },
+  { icon: CheckCircle, title: "Plug & Play", desc: "Instalasi charger standalone yang mudah, atau terintegrasi dengan PLTS rumah Anda" },
 ];
 
 export default function EVChargingPage() {
@@ -22,7 +22,7 @@ export default function EVChargingPage() {
 
   return (
     <ServicePageLayout
-      subBrand="JMSE EV Energy"
+      subBrand="Jambi Solar EV"
       title="EV Charging Terintegrasi PLTS"
       tagline="Isi daya kendaraan listrik Anda dengan energi surya — hemat & mandiri."
       description="Solusi EV Charging terintegrasi dengan PLTS. Charger XCMG AC 7.2kW yang kompatibel dengan semua kendaraan listrik di Indonesia. Pilih charger standalone atau paket terintegrasi dengan PLTS untuk penghematan maksimal."

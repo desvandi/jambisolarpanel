@@ -134,7 +134,7 @@ export function ProblemSolutionSection() {
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-solar mb-1 uppercase tracking-wide">
-                        Solusi JMSE
+                        Solusi Kami
                       </p>
                       <p className="text-muted-foreground leading-relaxed mb-4">
                         {item.solution}

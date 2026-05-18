@@ -22,7 +22,7 @@ export default function SolarPumpPage() {
 
   return (
     <ServicePageLayout
-      subBrand="JMSE Agro Solar — Solar Pump"
+      subBrand="Jambi Solar Agro — Solar Pump"
       title="Solar Water Pump — Pompa Air Tenaga Surya"
       tagline="Irigasi kebun sawit, pertanian, peternakan tanpa listrik PLN."
       description="Pompa air submersible bertenaga surya untuk irigasi perkebunan sawit, pertanian, dan peternakan. Menggunakan pompa Samking submersible berkualitas, panel surya LONGi 650Wp, dan MPPT controller untuk efisiensi maksimal."

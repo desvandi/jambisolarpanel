@@ -22,7 +22,7 @@ const funnelButtons = [
   { label: "Kebun & Perkebunan", href: "/pjuts", icon: Sprout },
   { label: "Infrastruktur & PJUTS", href: "/tender-procurement", icon: Zap },
   { label: "EV Charging", href: "/ev-charging", icon: Car },
-  { label: "Smart IoT", href: "/smart-iot", icon: Cpu },
+  { label: "Smart IoT & CCTV", href: "/smart-iot", icon: Cpu },
 ];
 
 function AnimatedCounter({ end, suffix = "" }: { end: number; suffix?: string }) {
@@ -153,7 +153,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-lg sm:text-xl text-solar-light font-semibold mb-2 max-w-2xl"
           >
-            PLTS &bull; PJUTS &bull; Solar Pump &bull; EV Charging &bull; Smart IoT &bull; Procurement
+            PLTS &bull; PJUTS &bull; Solar Pump &bull; EV Charging &bull; Smart IoT
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 30 }}
@@ -161,7 +161,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.22 }}
             className="text-sm text-white/50 mb-8 max-w-2xl"
           >
-            Hemat hingga 90% tagihan listrik &bull; Backup 24 jam saat PLN padam &bull; Paket mulai dari Rp 6 jutaan &bull; Garansi panel 25 tahun
+            Hemat listrik, tetap nyala saat PLN padam, cocok untuk rumah, kebun, bisnis &amp; infrastruktur. Dipercaya 500+ pelanggan di Sumatera &amp; Jawa. Paket mulai dari Rp 6 jutaan.
           </motion.p>
 
           {/* CTA Buttons */}

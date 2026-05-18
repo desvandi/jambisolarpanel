@@ -132,7 +132,7 @@ export const evPackages: EVPackage[] = [
     monthlySavings: "",
     annualSavings: 0,
     roiYears: 0,
-    features: ["PLTS 5.2 kWp + Charger AC 7.2kW", "Produksi ~15.6 kWh/hari dari surya", "Hemat Rp 400-500rb/bulan vs PLN charging", "Isi daya EV dari surya — gratis", "Garansi panel 25 tahun", "Garansi inverter 5 tahun", "Gratis survei & instalasi", "PPN 11% termasuk"],
+    features: ["PLTS 5.2 kWp + Charger AC 7.2kW", "Produksi ~15.6 kWh/hari dari surya", "Hemat hingga Rp 5 juta/tahun vs PLN charging", "Isi daya EV dari surya — gratis", "Garansi panel 25 tahun", "Garansi inverter 5 tahun", "Gratis survei & instalasi", "PPN 11% termasuk"],
     desc: "Solusi terintegrasi PLTS + EV Charger untuk rumah. Isi daya kendaraan listrik Anda dengan energi surya — gratis dari matahari. Sistem hybrid Powmr memastikan supply listrik stabil untuk rumah dan EV charging.",
   },
   {
@@ -146,7 +146,7 @@ export const evPackages: EVPackage[] = [
     monthlySavings: "",
     annualSavings: 0,
     roiYears: 0,
-    features: ["PLTS 7.8 kWp + Charger AC 7.2kW", "Produksi ~23.4 kWh/hari dari surya", "Hemat Rp 600-750rb/bulan vs PLN charging", "Cukup untuk 1-2 EV sekaligus", "Garansi panel 25 tahun", "Garansi inverter 5 tahun", "Gratis survei & instalasi", "PPN 11% termasuk"],
+    features: ["PLTS 7.8 kWp + Charger AC 7.2kW", "Produksi ~23.4 kWh/hari dari surya", "Hemat hingga Rp 6 juta/tahun vs PLN charging", "Cukup untuk 1-2 EV sekaligus", "Garansi panel 25 tahun", "Garansi inverter 5 tahun", "Gratis survei & instalasi", "PPN 11% termasuk"],
     desc: "Paket premium untuk rumah dengan 2 kendaraan listrik atau kebutuhan listrik rumah tinggi. Energi surplus dari PLTS dapat digunakan untuk kebutuhan rumah tangga lainnya.",
   },
   {
@@ -160,7 +160,7 @@ export const evPackages: EVPackage[] = [
     monthlySavings: "",
     annualSavings: 0,
     roiYears: 0,
-    features: ["PLTS 10.4 kWp + Charger AC 7.2kW", "Produksi ~31.2 kWh/hari dari surya", "Hemat Rp 800rb-1jt/bulan vs PLN charging", "Cocok untuk bisnis & komersial", "Garansi panel 25 tahun", "Garansi inverter 5 tahun", "Gratis survei & instalasi", "PPN 11% termasuk", "Energi surplus menutupi kebutuhan bisnis"],
+    features: ["PLTS 10.4 kWp + Charger AC 7.2kW", "Produksi ~31.2 kWh/hari dari surya", "Hemat hingga Rp 7 jt+/tahun vs PLN charging", "Cocok untuk bisnis & komersial", "Garansi panel 25 tahun", "Garansi inverter 5 tahun", "Gratis survei & instalasi", "PPN 11% termasuk", "Energi surplus menutupi kebutuhan bisnis"],
     desc: "Solusi ideal untuk area parkir komersial, ruko, atau kantor yang menyediakan EV charging. Energi surplus menutupi kebutuhan listrik bisnis Anda.",
   },
 ];

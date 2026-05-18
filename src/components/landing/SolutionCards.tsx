@@ -16,39 +16,39 @@ import {
 const solutions = [
   {
     icon: Home,
-    subBrand: "JMSE Home Solar",
-    title: "PLTS Off-Grid & Hybrid untuk Rumah",
-    description: "Hemat tagihan PLN hingga 90%, backup listrik 24 jam saat padam. Investasi sekali, listrik gratis 25+ tahun. Cocok untuk rumah tangga, villa, dan guest house.",
+    subBrand: "Jambi Solar Home",
+    title: "Panel Surya untuk Rumah",
+    description: "Hemat tagihan PLN hingga 90%, listrik tetap nyala 24 jam saat padam. Investasi sekali, gratis 25+ tahun. Cocok untuk rumah, villa, guest house.",
     href: "/solar-home",
     color: "bg-solar",
   },
   {
     icon: Building2,
-    subBrand: "JMSE Commercial Solar",
-    title: "PLTS Skala Besar untuk Bisnis & Industri",
+    subBrand: "Jambi Solar Commercial",
+    title: "Panel Surya Bisnis & Industri",
     description: "Efisiensi operasional maksimal dengan ROI 5-7 tahun. Solusi untuk kantor, gudang, restoran, hotel, cold storage, dan pabrik.",
     href: "/solar-commercial",
     color: "bg-blue-600",
   },
   {
     icon: Sprout,
-    subBrand: "JMSE Agro Solar",
+    subBrand: "Jambi Solar Agro",
     title: "PJUTS & Solar Pump untuk Kebun",
-    description: "Penerangan jalan mandiri tanpa kabel PLN, irigasi gratis dari matahari. Solusi utama perkebunan sawit, karet, dan pertanian.",
+    description: "Lampu jalan mandiri tanpa kabel PLN, pompa irigasi gratis dari matahari. Solusi utama perkebunan sawit, karet, pertanian.",
     href: "/pjuts",
     color: "bg-emerald-600",
   },
   {
     icon: Car,
-    subBrand: "JMSE EV Energy",
+    subBrand: "Jambi Solar EV",
     title: "PLTS + EV Charging Terintegrasi",
-    description: "Isi daya kendaraan listrik dari matahari — hemat hingga Rp 5-7 juta per tahun. Cocok untuk rumah tangga dan area parkir komersial.",
+    description: "Isi daya kendaraan listrik dari matahari — hemat hingga jutaan per tahun. Cocok untuk rumah tangga dan area parkir komersial.",
     href: "/ev-charging",
     color: "bg-amber-600",
   },
   {
     icon: Cpu,
-    subBrand: "JMSE Smart IoT",
+    subBrand: "Jambi Solar IoT",
     title: "Monitoring & Solar CCTV",
     description: "Monitoring real-time performa PLTS + CCTV keamanan 24/7 tanpa kabel PLN. Kontrol penuh dari smartphone Anda.",
     href: "/smart-iot",
@@ -56,8 +56,8 @@ const solutions = [
   },
   {
     icon: Hammer,
-    subBrand: "JMSE Infrastructure",
-    title: "Tender, Procurement & Proyek Besar",
+    subBrand: "Jambi Solar Infrastructure",
+    title: "Tender, Pengadaan & Proyek Besar",
     description: "Pengadaan energi terbarukan untuk pemerintah, BUMN, dan korporasi. EPC profesional dengan legalitas lengkap.",
     href: "/tender-procurement",
     color: "bg-slate-700",
@@ -101,7 +101,7 @@ export function SolutionCards() {
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
             Dari rumah tangga hingga infrastruktur besar — kami menyediakan solusi
-            energi surya Off-Grid &amp; Hybrid yang komprehensif dan terintegrasi.
+            energi surya Off-Grid &amp; Hybrid yang komprehensif. Dipercaya untuk rumah, kebun, bisnis, dan proyek infrastruktur di Sumatera &amp; Jawa.
             Paket mulai dari <strong className="text-solar">Rp 6 jutaan</strong>.
           </p>
         </motion.div>

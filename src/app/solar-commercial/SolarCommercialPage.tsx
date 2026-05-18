@@ -40,7 +40,7 @@ export default function SolarCommercialPage() {
 
   return (
     <ServicePageLayout
-      subBrand="JMSE Commercial Solar"
+      subBrand="Jambi Solar Commercial"
       title="PLTS Bisnis & Industri — Efisiensi Energi untuk Profit Maksimal"
       tagline="ROI 5-7 tahun dengan penghematan operasional signifikan."
       description="Sistem PLTS skala besar untuk kantor, gudang, pabrik, hotel, dan fasilitas bisnis lainnya. Kapasitas 6.5 kWp hingga 20 kWp + baterai dengan opsi smart monitoring dan carport solar."

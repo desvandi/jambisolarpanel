@@ -20,19 +20,19 @@ interface NavItem {
 const navItems: NavItem[] = [
   { label: "Home", href: "/" },
   {
-    label: "Solusi",
+    label: "Layanan",
     children: [
-      { label: "JMSE Home Solar", href: "/solar-home" },
-      { label: "JMSE Commercial Solar", href: "/solar-commercial" },
-      { label: "JMSE Agro Solar — PJUTS", href: "/pjuts" },
-      { label: "JMSE Agro Solar — Solar Pump", href: "/solar-pump" },
-      { label: "JMSE EV Energy", href: "/ev-charging" },
-      { label: "JMSE Smart IoT", href: "/smart-iot" },
-      { label: "O&M Maintenance", href: "/maintenance" },
+      { label: "Panel Surya Rumah", href: "/solar-home" },
+      { label: "Panel Surya Bisnis & Industri", href: "/solar-commercial" },
+      { label: "PJUTS — Lampu Jalan Surya", href: "/pjuts" },
+      { label: "Solar Pump — Pompa Air", href: "/solar-pump" },
+      { label: "EV Charging", href: "/ev-charging" },
+      { label: "Smart IoT & CCTV", href: "/smart-iot" },
+      { label: "Maintenance", href: "/maintenance" },
     ],
   },
-  { label: "Kalkulator Hemat", href: "#kalkulator" },
-  { label: "Tender & Procurement", href: "/tender-procurement" },
+  { label: "Tender & Pengadaan", href: "/tender-procurement" },
+  { label: "Kalkulator", href: "#kalkulator" },
   { label: "FAQ", href: "#faq" },
 ];
 
@@ -151,7 +151,7 @@ export function Navbar() {
                       <div className="absolute top-full left-0 mt-1 w-72 py-2 rounded-xl glass border border-border shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
                         <div className="px-3 py-2">
                           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                            Solusi Energi JMSE
+                            Layanan Jambi Solar Panel
                           </p>
                         </div>
                         {item.children.map((child) => (

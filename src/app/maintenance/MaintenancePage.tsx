@@ -60,7 +60,7 @@ export default function MaintenancePage() {
 
   return (
     <ServicePageLayout
-      subBrand="JMSE O&M"
+      subBrand="Jambi Solar Maintenance"
       title="Operation & Maintenance PLTS"
       tagline="Jaga performa sistem PLTS Anda tetap optimal dengan layanan maintenance profesional."
       description="Layanan pemeliharaan berkala dan perbaikan untuk sistem PLTS Anda. Tim teknisi berpengalaman kami siap menjaga performa dan umur panjang investasi energi surya Anda."

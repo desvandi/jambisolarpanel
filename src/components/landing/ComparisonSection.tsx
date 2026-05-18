@@ -89,7 +89,7 @@ export function ComparisonSection() {
                   : "text-muted-foreground hover:text-navy dark:hover:text-white"
               }`}
             >
-              Panel Surya JMSE
+              Panel Surya Kami
             </button>
           </div>
         </div>

@@ -134,7 +134,7 @@ export function Footer() {
         <div className="py-6 border-t border-white/10 mb-6">
           <p className="text-xs text-white/30 uppercase tracking-wider font-semibold mb-3">Sub-Brands</p>
           <div className="flex flex-wrap gap-3">
-            {["JMSE Home Solar", "JMSE Commercial Solar", "JMSE Agro Solar", "JMSE EV Energy", "JMSE Smart IoT", "JMSE Infrastructure"].map(brand => (
+            {["Jambi Solar Home", "Jambi Solar Commercial", "Jambi Solar Agro", "Jambi Solar EV", "Jambi Solar IoT", "Jambi Solar Infrastructure"].map(brand => (
               <span key={brand} className="px-3 py-1 text-xs text-white/40 bg-white/5 rounded-full border border-white/5">
                 {brand}
               </span>
