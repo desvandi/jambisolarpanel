@@ -130,6 +130,46 @@ export function Footer() {
           ))}
         </div>
 
+        {/* Trust Section */}
+        <div className="py-6 border-t border-white/10 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div>
+              <p className="text-xs text-white/30 uppercase tracking-wider font-semibold mb-3">Area Layanan</p>
+              <p className="text-sm text-white/60 leading-relaxed">Sumatera &amp; Jawa Bagian Barat</p>
+              <p className="text-xs text-white/40 mt-1">Jambi, Riau, Palembang, Padang, Lampung, Bangka</p>
+            </div>
+            <div>
+              <p className="text-xs text-white/30 uppercase tracking-wider font-semibold mb-3">Kepercayaan Anda</p>
+              <ul className="space-y-1.5">
+                <li className="text-xs text-white/60 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-solar flex-shrink-0" />
+                  Garansi 25 Tahun Panel
+                </li>
+                <li className="text-xs text-white/60 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-solar flex-shrink-0" />
+                  Instalasi Profesional
+                </li>
+                <li className="text-xs text-white/60 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-solar flex-shrink-0" />
+                  Konsultasi Gratis
+                </li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs text-white/30 uppercase tracking-wider font-semibold mb-3">Kontak</p>
+              <a
+                href={wa("Halo PT. Jaya Mandiri Smart Energy, saya ingin konsultasi solusi energi surya")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-solar-light hover:text-solar transition-colors"
+              >
+                +62 813-2819-0707
+              </a>
+              <p className="text-xs text-white/40 mt-1">Tangkit Baru, Sungai Gelam, Muaro Jambi</p>
+            </div>
+          </div>
+        </div>
+
         {/* Sub-brands */}
         <div className="py-6 border-t border-white/10 mb-6">
           <p className="text-xs text-white/30 uppercase tracking-wider font-semibold mb-3">Sub-Brands</p>

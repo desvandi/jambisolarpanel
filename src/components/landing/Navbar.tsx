@@ -135,7 +135,7 @@ export function Navbar() {
                       className={`flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
                         openDropdown === item.label
                           ? "text-solar dark:text-solar bg-solar/5"
-                          : "text-navy/70 dark:text-white/70 hover:text-solar dark:hover:text-solar hover:bg-solar/5"
+                          : "text-navy dark:text-white/70 hover:text-solar dark:hover:text-solar hover:bg-solar/5"
                       }`}
                     >
                       {item.label}
@@ -158,7 +158,7 @@ export function Navbar() {
                           <Link
                             key={child.href}
                             href={child.href}
-                            className="flex items-center px-3 py-2.5 text-sm text-navy/80 dark:text-white/80 hover:text-solar dark:hover:text-solar hover:bg-solar/5 transition-colors mx-1 rounded-lg"
+                            className="flex items-center px-3 py-2.5 text-sm text-navy dark:text-white/80 hover:text-solar dark:hover:text-solar hover:bg-solar/5 transition-colors mx-1 rounded-lg"
                           >
                             {child.label}
                           </Link>
@@ -177,7 +177,7 @@ export function Navbar() {
                       e.preventDefault();
                       handleNavClick(item.href!);
                     }}
-                    className="px-3 py-2 text-sm font-medium text-navy/70 dark:text-white/70 hover:text-solar dark:hover:text-solar transition-colors duration-200 rounded-lg hover:bg-solar/5"
+                    className="px-3 py-2 text-sm font-medium text-navy dark:text-white/70 hover:text-solar dark:hover:text-solar transition-colors duration-200 rounded-lg hover:bg-solar/5"
                   >
                     {item.label}
                   </button>
@@ -189,7 +189,7 @@ export function Navbar() {
                   key={item.label}
                   href={item.href!}
                   onClick={() => setOpenDropdown(null)}
-                  className="px-3 py-2 text-sm font-medium text-navy/70 dark:text-white/70 hover:text-solar dark:hover:text-solar transition-colors duration-200 rounded-lg hover:bg-solar/5"
+                  className="px-3 py-2 text-sm font-medium text-navy dark:text-white/70 hover:text-solar dark:hover:text-solar transition-colors duration-200 rounded-lg hover:bg-solar/5"
                 >
                   {item.label}
                 </Link>

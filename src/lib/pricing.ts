@@ -202,7 +202,7 @@ export const packageSpecs: PackageSpec[] = [
   // ============================
   {
     name: "Paket 1.3 kWp",
-    desc: "2 panel surya 650Wp + Inverter Hybrid 3.600W. Starter untuk rumah kecil: lampu LED, TV, charger HP, kipas angin.",
+    desc: "Inverter Hybrid 3.600W. Starter untuk rumah kecil: lampu LED, TV, charger HP, kipas angin.",
     specs: "Kapasitas 1.3 kWp | Inverter Hybrid 1 Fase",
     panelCount: 2,
     inverterKey: "deye3k6",
@@ -211,7 +211,7 @@ export const packageSpecs: PackageSpec[] = [
   },
   {
     name: "Paket 2.6 kWp",
-    desc: "4 panel surya 650Wp + Inverter Hybrid 3.600W. Rumah kecil-menengah: lampu, TV, kipas angin, kulkas kecil.",
+    desc: "Inverter Hybrid 3.600W. Rumah kecil-menengah: lampu, TV, kipas angin, kulkas kecil.",
     specs: "Kapasitas 2.6 kWp | Inverter Hybrid 1 Fase",
     panelCount: 4,
     inverterKey: "deye3k6",
@@ -220,7 +220,7 @@ export const packageSpecs: PackageSpec[] = [
   },
   {
     name: "Paket 3.25 kWp",
-    desc: "5 panel surya 650Wp + Inverter Hybrid 3.600W. Rumah menengah: AC 1 unit, kulkas, mesin cuci.",
+    desc: "Inverter Hybrid 3.600W. Rumah menengah: AC 1 unit, kulkas, mesin cuci.",
     specs: "Kapasitas 3.25 kWp | Inverter Hybrid 1 Fase",
     panelCount: 5,
     inverterKey: "deye3k6",
@@ -229,7 +229,7 @@ export const packageSpecs: PackageSpec[] = [
   },
   {
     name: "Paket 5.2 kWp",
-    desc: "8 panel surya 650Wp + Inverter Hybrid 6.000W. Rumah keluarga besar: AC 2 unit, water heater, dispenser.",
+    desc: "Inverter Hybrid 6.000W. Rumah keluarga besar: AC 2 unit, water heater, dispenser.",
     specs: "Kapasitas 5.2 kWp | Inverter Hybrid 1 Fase",
     panelCount: 8,
     inverterKey: "deye6k",
@@ -242,7 +242,7 @@ export const packageSpecs: PackageSpec[] = [
   // ============================
   {
     name: "Paket 7.15 kWp",
-    desc: "11 panel surya 650Wp + Inverter Hybrid 8.000W. Toko, ruko, kantor kecil, cold storage mini, bengkel.",
+    desc: "Inverter Hybrid 8.000W. Toko, ruko, kantor kecil, cold storage mini, bengkel.",
     specs: "Kapasitas 7.15 kWp | Inverter Hybrid 1 Fase",
     panelCount: 11,
     inverterKey: "deye8k",
@@ -251,7 +251,7 @@ export const packageSpecs: PackageSpec[] = [
   },
   {
     name: "Paket 10.4 kWp",
-    desc: "16 panel surya 650Wp + Inverter Hybrid 10.000W. Gudang, restoran, hotel kecil, minimarket, clinic.",
+    desc: "Inverter Hybrid 10.000W. Gudang, restoran, hotel kecil, minimarket, clinic.",
     specs: "Kapasitas 10.4 kWp | Inverter Hybrid 1 Fase",
     panelCount: 16,
     inverterKey: "growatt10k",
@@ -264,7 +264,7 @@ export const packageSpecs: PackageSpec[] = [
   // ============================
   {
     name: "Paket 11.7 kWp",
-    desc: "18 panel surya 650Wp + Inverter 10.000W 3-Fase Hybrid. Pabrik menengah, processing plant, warehouse besar.",
+    desc: "Inverter 10.000W 3-Fase Hybrid. Pabrik menengah, processing plant, warehouse besar.",
     specs: "Kapasitas 11.7 kWp | Inverter Hybrid 3 Fase",
     panelCount: 18,
     inverterKey: "deye10k3p",
@@ -273,7 +273,7 @@ export const packageSpecs: PackageSpec[] = [
   },
   {
     name: "Paket 20.8 kWp",
-    desc: "32 panel surya 650Wp + Inverter 20.000W 3-Fase Hybrid. Mega proyek, industrial complex, pabrik besar, hotel bintang 4.",
+    desc: "Inverter 20.000W 3-Fase Hybrid. Mega proyek, industrial complex, pabrik besar, hotel bintang 4.",
     specs: "Kapasitas 20.8 kWp | Inverter Hybrid 3 Fase",
     panelCount: 32,
     inverterKey: "deye20k3p",

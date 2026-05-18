@@ -13,7 +13,7 @@ const benefits = [
   { icon: Droplets, title: "Tanpa Listrik PLN", desc: "100% tenaga surya, ideal untuk area terpencil tanpa jaringan listrik" },
   { icon: Shield, title: "Auto-Dry Run Protection", desc: "Sensor otomatis mencegah kerusakan pompa saat air habis" },
   { icon: Factory, title: "Stainless Steel", desc: "Body pompa stainless steel tahan karat, cocok untuk air tanah & sungai" },
-  { icon: CheckCircle, title: "Garansi Pompa 2 Tahun", desc: "Samking submersible pump berkualitas dengan garansi resmi" },
+  { icon: CheckCircle, title: "Garansi Pompa 2 Tahun", desc: "Pompa submersible berkualitas tinggi dengan garansi resmi" },
 ];
 
 export default function SolarPumpPage() {
@@ -25,7 +25,7 @@ export default function SolarPumpPage() {
       subBrand="Jambi Solar Agro — Solar Pump"
       title="Solar Water Pump — Pompa Air Tenaga Surya"
       tagline="Irigasi kebun sawit, pertanian, peternakan tanpa listrik PLN."
-      description="Pompa air submersible bertenaga surya untuk irigasi perkebunan sawit, pertanian, dan peternakan. Menggunakan pompa Samking submersible berkualitas, panel surya LONGi 650Wp, dan MPPT controller untuk efisiensi maksimal."
+      description="Pompa air submersible bertenaga surya untuk irigasi perkebunan sawit, pertanian, dan peternakan. Menggunakan komponen berkualitas tinggi dengan garansi resmi dan MPPT controller untuk efisiensi maksimal."
       breadcrumbs={[{ label: "Solusi", href: "/" }, { label: "Solar Pump" }]}
       waText="Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan Solar Water Pump. Mohon informasi lebih lanjut mengenai harga dan spesifikasi."
     >

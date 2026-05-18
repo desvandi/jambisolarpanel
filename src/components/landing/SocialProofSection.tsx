@@ -123,8 +123,8 @@ export function SocialProofSection() {
             Testimoni &amp; Portofolio
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-navy dark:text-white mb-6">
-            Dipercaya oleh{" "}
-            <span className="gradient-text">500+ Pelanggan</span>
+            Dipercaya{" "}
+            <span className="gradient-text">Ratusan Pelanggan</span>
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
             Jangan hanya percaya kata kami. Dengarkan langsung pengalaman para

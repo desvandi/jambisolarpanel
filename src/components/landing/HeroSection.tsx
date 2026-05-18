@@ -131,7 +131,7 @@ export function HeroSection() {
                 </svg>
               ))}
             </span>
-            <span>Dipercaya oleh 500+ Pelanggan Rumah &amp; Bisnis</span>
+            <span>Dipercaya Ratusan Pelanggan Rumah &amp; Bisnis</span>
           </motion.div>
 
           {/* Headline */}
@@ -141,7 +141,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6"
           >
-            Solusi Energi Mandiri{" "}
+            Solusi Panel Surya Jambi — Energi Mandiri{" "}
             <span className="gradient-text">Off-Grid &amp; Hybrid</span>{" "}
             untuk Rumah, Bisnis, Kebun, dan Infrastruktur
           </motion.h1>

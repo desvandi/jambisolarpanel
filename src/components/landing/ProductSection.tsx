@@ -315,7 +315,7 @@ export function ProductSection() {
               </div>
 
               {/* Product Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 overflow-hidden">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 overflow-hidden">
                 {catProducts.map((product) => {
                   const addOnTotal = getAddOnTotal(product);
                   const currentAddOns = addOns[product.name];
@@ -331,7 +331,7 @@ export function ProductSection() {
                       }`}
                     >
                       {product.popular && (
-                        <span className="absolute -top-3 left-6 px-3 py-1 bg-white text-solar text-xs font-bold rounded-full shadow-md border-2 border-solar">
+                        <span className="absolute -top-3 left-6 px-3 py-1 bg-gold text-navy text-xs font-bold rounded-full shadow-md border-2 border-gold">
                           PALING POPULER
                         </span>
                       )}
@@ -468,7 +468,7 @@ export function ProductSection() {
                             <p className={`text-xs leading-relaxed mb-2 ${
                               product.popular ? "text-white/50" : "text-muted-foreground"
                             }`}>
-                              Saat baterai penuh &amp; tidak ada pemadaman PLN, sinar matahari langsung supply beban via pengaturan SBU/SUB/Mix di inverter. Maks = {product.kWp} kWp x 3,75 PSH = {product.batteryMaxKwh.toFixed(1)} kWh ({product.batteryMaxUnits} unit Baterai Penyimpanan)
+                              Saat baterai penuh &amp; tidak ada pemadaman PLN, sinar matahari langsung supply beban via pengaturan SBU/SUB/Mix di inverter. Maks = {product.kWp % 1 === 0 ? product.kWp.toFixed(1) : product.kWp.toFixed(2)} kWp x 3,75 PSH = {product.batteryMaxKwh.toFixed(1)} kWh ({product.batteryMaxUnits} unit Baterai Penyimpanan)
                             </p>
                           )}
 
@@ -499,7 +499,7 @@ export function ProductSection() {
                                 title={`${opt.kwh} kWh = ${opt.unitCount}x unit ${product.batteryUnitKwh} kWh`}
                               >
                                 <span className="font-medium">
-                                  {opt.kwh.toFixed(1)} kWh
+                                  {Number(opt.kwh.toFixed(1))} kWh
                                   {opt.unitCount === product.batteryMaxUnits && (
                                     <span className="ml-0.5 text-[9px] opacity-70">MAX</span>
                                   )}
