@@ -4,7 +4,7 @@
 
    Update: 18 Mei 2026
    - Brand: Inverter Powmr | Panel LONGi 650Wp | Baterai LiFePO4 48V 100Ah
-   - Package naming: Powmr kWp (replaces Silver/Gold/Platinum tier names)
+   - Package naming: Paket kWp (replaces Silver/Gold/Platinum tier names)
    - Battery moved to optional add-on (4.8 kWh units)
    - Battery sizing: kWp × PSH, rounded to nearest 4.8 kWh
    - Package structure: 1.3,2.6,3.25,5.2 / 7.15,10.4 / 11.7,20.8 kWp
@@ -16,7 +16,7 @@
    - Unit size: 4.8 kWh LiFePO4 Battery Pack (48V 100Ah)
    - Recommended capacity = kWp × PSH (daily production without efficiency)
    - When battery is full & no PLN outage, solar directly supplies loads
-     via Powmr inverter SBU/SUB/Mix priority settings
+     via inverter SBU/SUB/Mix priority settings
    ============================================================ */
 
 // --- Types ---
@@ -161,13 +161,13 @@ export const defaultSettings: PricingSettings = {
 // --- Inverter Display Names ---
 
 export const inverterDisplayNames: Record<keyof InverterPrices, string> = {
-  deye3k6: "Powmr 3.600W Hybrid",
-  deye6k: "Powmr 6.000W Hybrid",
-  deye8k: "Powmr 8.000W Hybrid",
-  growatt10k: "Powmr 10.000W Hybrid",
-  deye10k3p: "Powmr 10.000W 3-Fase",
-  deye15k3p: "Powmr 15.000W 3-Fase",
-  deye20k3p: "Powmr 20.000W 3-Fase",
+  deye3k6: "Inverter Hybrid 3.600W",
+  deye6k: "Inverter Hybrid 6.000W",
+  deye8k: "Inverter Hybrid 8.000W",
+  growatt10k: "Inverter Hybrid 10.000W",
+  deye10k3p: "Inverter Hybrid 10.000W 3-Fase",
+  deye15k3p: "Inverter Hybrid 15.000W 3-Fase",
+  deye20k3p: "Inverter Hybrid 20.000W 3-Fase",
 };
 
 // Inverter metadata for kalibrasi detail
@@ -186,14 +186,14 @@ export const inverterMeta: Record<keyof InverterPrices, { capacity: number; phas
 // --- Package Name Migration Map (v3 tier-based → v4 Powmr-based) ---
 
 export const packageNameMigration: Record<string, string> = {
-  "Silver 1 kWp": "Powmr 1.3 kWp",
-  "Silver 2 kWp": "Powmr 2.6 kWp",
-  "Silver 3 kWp": "Powmr 3.25 kWp",
-  "Silver 5 kWp": "Powmr 5.2 kWp",
-  "Gold 6.5 kWp": "Powmr 7.15 kWp",
-  "Gold 10 kWp": "Powmr 10.4 kWp",
-  "Platinum 11 kWp": "Powmr 11.7 kWp",
-  "Platinum 20 kWp": "Powmr 20.8 kWp",
+  "Silver 1 kWp": "Paket 1.3 kWp",
+  "Silver 2 kWp": "Paket 2.6 kWp",
+  "Silver 3 kWp": "Paket 3.25 kWp",
+  "Silver 5 kWp": "Paket 5.2 kWp",
+  "Gold 6.5 kWp": "Paket 7.15 kWp",
+  "Gold 10 kWp": "Paket 10.4 kWp",
+  "Platinum 11 kWp": "Paket 11.7 kWp",
+  "Platinum 20 kWp": "Paket 20.8 kWp",
 };
 
 export const packageSpecs: PackageSpec[] = [
@@ -201,36 +201,36 @@ export const packageSpecs: PackageSpec[] = [
   // Rumah Tangga (1 Fase)
   // ============================
   {
-    name: "Powmr 1.3 kWp",
-    desc: "2 panel LONGi 650Wp + Inverter Hybrid Powmr 3.600W. Starter untuk rumah kecil: lampu LED, TV, charger HP, kipas angin.",
-    specs: "2× LONGi 650Wp | Powmr 3.6kW Hybrid",
+    name: "Paket 1.3 kWp",
+    desc: "2 panel surya 650Wp + Inverter Hybrid 3.600W. Starter untuk rumah kecil: lampu LED, TV, charger HP, kipas angin.",
+    specs: "Kapasitas 1.3 kWp | Inverter Hybrid 1 Fase",
     panelCount: 2,
     inverterKey: "deye3k6",
     tier: "silver",
     popular: false,
   },
   {
-    name: "Powmr 2.6 kWp",
-    desc: "4 panel LONGi 650Wp + Inverter Hybrid Powmr 3.600W. Rumah kecil-menengah: lampu, TV, kipas angin, kulkas kecil.",
-    specs: "4× LONGi 650Wp | Powmr 3.6kW Hybrid",
+    name: "Paket 2.6 kWp",
+    desc: "4 panel surya 650Wp + Inverter Hybrid 3.600W. Rumah kecil-menengah: lampu, TV, kipas angin, kulkas kecil.",
+    specs: "Kapasitas 2.6 kWp | Inverter Hybrid 1 Fase",
     panelCount: 4,
     inverterKey: "deye3k6",
     tier: "silver",
     popular: false,
   },
   {
-    name: "Powmr 3.25 kWp",
-    desc: "5 panel LONGi 650Wp + Inverter Hybrid Powmr 3.600W. Rumah menengah: AC 1 unit, kulkas, mesin cuci.",
-    specs: "5× LONGi 650Wp | Powmr 3.6kW Hybrid",
+    name: "Paket 3.25 kWp",
+    desc: "5 panel surya 650Wp + Inverter Hybrid 3.600W. Rumah menengah: AC 1 unit, kulkas, mesin cuci.",
+    specs: "Kapasitas 3.25 kWp | Inverter Hybrid 1 Fase",
     panelCount: 5,
     inverterKey: "deye3k6",
     tier: "silver",
     popular: false,
   },
   {
-    name: "Powmr 5.2 kWp",
-    desc: "8 panel LONGi 650Wp + Inverter Hybrid Powmr 6.000W. Rumah keluarga besar: AC 2 unit, water heater, dispenser.",
-    specs: "8× LONGi 650Wp | Powmr 6kW Hybrid",
+    name: "Paket 5.2 kWp",
+    desc: "8 panel surya 650Wp + Inverter Hybrid 6.000W. Rumah keluarga besar: AC 2 unit, water heater, dispenser.",
+    specs: "Kapasitas 5.2 kWp | Inverter Hybrid 1 Fase",
     panelCount: 8,
     inverterKey: "deye6k",
     tier: "silver",
@@ -241,18 +241,18 @@ export const packageSpecs: PackageSpec[] = [
   // Bisnis & UMKM (1 Fase)
   // ============================
   {
-    name: "Powmr 7.15 kWp",
-    desc: "11 panel LONGi 650Wp + Inverter Hybrid Powmr 8.000W. Toko, ruko, kantor kecil, cold storage mini, bengkel.",
-    specs: "11× LONGi 650Wp | Powmr 8kW Hybrid",
+    name: "Paket 7.15 kWp",
+    desc: "11 panel surya 650Wp + Inverter Hybrid 8.000W. Toko, ruko, kantor kecil, cold storage mini, bengkel.",
+    specs: "Kapasitas 7.15 kWp | Inverter Hybrid 1 Fase",
     panelCount: 11,
     inverterKey: "deye8k",
     tier: "gold",
     popular: false,
   },
   {
-    name: "Powmr 10.4 kWp",
-    desc: "16 panel LONGi 650Wp + Inverter Hybrid Powmr 10.000W. Gudang, restoran, hotel kecil, minimarket, clinic.",
-    specs: "16× LONGi 650Wp | Powmr 10kW Hybrid",
+    name: "Paket 10.4 kWp",
+    desc: "16 panel surya 650Wp + Inverter Hybrid 10.000W. Gudang, restoran, hotel kecil, minimarket, clinic.",
+    specs: "Kapasitas 10.4 kWp | Inverter Hybrid 1 Fase",
     panelCount: 16,
     inverterKey: "growatt10k",
     tier: "gold",
@@ -263,18 +263,18 @@ export const packageSpecs: PackageSpec[] = [
   // Industri (3 Fase)
   // ============================
   {
-    name: "Powmr 11.7 kWp",
-    desc: "18 panel LONGi 650Wp + Powmr 10.000W 3-Fase Hybrid. Pabrik menengah, processing plant, warehouse besar.",
-    specs: "18× LONGi 650Wp | Powmr 10kW 3-Fase",
+    name: "Paket 11.7 kWp",
+    desc: "18 panel surya 650Wp + Inverter 10.000W 3-Fase Hybrid. Pabrik menengah, processing plant, warehouse besar.",
+    specs: "Kapasitas 11.7 kWp | Inverter Hybrid 3 Fase",
     panelCount: 18,
     inverterKey: "deye10k3p",
     tier: "platinum",
     popular: true,
   },
   {
-    name: "Powmr 20.8 kWp",
-    desc: "32 panel LONGi 650Wp + Powmr 20.000W 3-Fase Hybrid. Mega proyek, industrial complex, pabrik besar, hotel bintang 4.",
-    specs: "32× LONGi 650Wp | Powmr 20kW 3-Fase",
+    name: "Paket 20.8 kWp",
+    desc: "32 panel surya 650Wp + Inverter 20.000W 3-Fase Hybrid. Mega proyek, industrial complex, pabrik besar, hotel bintang 4.",
+    specs: "Kapasitas 20.8 kWp | Inverter Hybrid 3 Fase",
     panelCount: 32,
     inverterKey: "deye20k3p",
     tier: "platinum",
@@ -486,7 +486,7 @@ export function calculatePackages(
     // Battery add-on calculation (4.8 kWh units)
     // MAKS kapasitas = kWp × PSH (kelipatan 4.8 kWh)
     // Logic: saat baterai penuh & tidak ada pemadaman PLN, solar langsung
-    // supply beban via pengaturan SBU/SUB/Mix di inverter Powmr.
+    // supply beban via pengaturan SBU/SUB/Mix di inverter.
     const batteryUnitCost = batteryCostPerKwh * BATTERY_UNIT_KWH;
     const batteryUnitPrice = batteryCostPerKwh > 0
       ? Math.round((batteryUnitCost * addonMultiplier) / 100_000) * 100_000
@@ -495,7 +495,7 @@ export function calculatePackages(
     // Max battery = kWp × PSH, rounded UP to nearest 4.8 kWh unit
     const dailyProdRaw = kWp * s.pshHours; // kWp × PSH (tanpa efficiency)
     const maxUnits = Math.max(1, Math.ceil(dailyProdRaw / BATTERY_UNIT_KWH));
-    const maxKwh = maxUnits * BATTERY_UNIT_KWH;
+    const maxKwh = parseFloat((maxUnits * BATTERY_UNIT_KWH).toFixed(1));
 
     // Generate battery options: 1 unit → maxUnits
     const batteryOptions: BatteryOption[] = [];
@@ -503,7 +503,7 @@ export function calculatePackages(
       const kwh = i * BATTERY_UNIT_KWH;
       const totalPrice = i * batteryUnitPrice;
       batteryOptions.push({
-        kwh,
+        kwh: parseFloat(kwh.toFixed(1)),
         unitCount: i,
         price: totalPrice,
         priceFormatted: formatRp(totalPrice),

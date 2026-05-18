@@ -225,7 +225,7 @@ export function HeroSection() {
             className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10"
           >
             {[
-              { value: 500, suffix: "+", label: "Proyek Selesai" },
+              { value: 5, suffix: "+", label: "Tahun Pengalaman" },
               { value: 25, suffix: " Thn", label: "Garansi Panel" },
               { value: 90, suffix: "%", label: "Potensi Hemat" },
               { value: 2, suffix: "+", label: "Region Terlayani" },

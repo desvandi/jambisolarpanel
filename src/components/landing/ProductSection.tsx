@@ -38,7 +38,7 @@ const categoryMeta = [
   {
     id: "silver",
     icon: Home,
-    title: "Powmr Hybrid — Rumah Tangga",
+    title: "Paket Hybrid — Rumah Tangga",
     tagline: "Hybrid System 1 Fase — Cocok untuk kebutuhan rumah tangga di Jambi & sekitarnya",
     tiers: ["silver"],
     showCarportMonitoring: false,
@@ -46,7 +46,7 @@ const categoryMeta = [
   {
     id: "gold",
     icon: Building2,
-    title: "Powmr Hybrid — Bisnis & UMKM",
+    title: "Paket Hybrid — Bisnis & UMKM",
     tagline: "Hybrid System 1 Fase — Solusi bisnis skala menengah hingga besar",
     tiers: ["gold"],
     showCarportMonitoring: true,
@@ -54,7 +54,7 @@ const categoryMeta = [
   {
     id: "platinum",
     icon: Factory,
-    title: "Powmr Hybrid — Industri",
+    title: "Paket Hybrid — Industri",
     tagline: "Hybrid System 3 Fase — Solusi skala besar untuk efisiensi maksimal",
     tiers: ["platinum"],
     showCarportMonitoring: true,
@@ -262,12 +262,12 @@ export function ProductSection() {
                 <strong> PPh</strong> dipotong oleh pihak pembeli (wajib pajak), bukan menambah harga jual.
               </p>
               <p>
-                <strong>Add-on tersedia:</strong> Baterai LiFePO4 48V 100Ah (kelipatan 4,8 kWh), Kanopi Carport (+harga per kWp),
+                <strong>Add-on tersedia:</strong> Baterai Penyimpanan (kelipatan 4,8 kWh), Kanopi Carport (+harga per kWp),
                 dan Smart Monitoring (Basic / Standard / Industrial) untuk paket Bisnis &amp; Industri.
               </p>
               <p>
                 <strong>Baterai:</strong> Kapasitas rekomendasi = kWp x PSH. Saat baterai penuh dan tidak ada
-                pemadaman PLN, sinar matahari langsung supply beban melalui pengaturan SBU/SUB/Mix di inverter Powmr.
+                pemadaman PLN, sinar matahari langsung supply beban melalui pengaturan SBU/SUB/Mix di inverter.
               </p>
             </motion.div>
           )}
@@ -310,12 +310,12 @@ export function ProductSection() {
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
                   <BatteryCharging className="w-3.5 h-3.5 text-gold" />
-                  + Baterai LiFePO4 48V 100Ah — Backup saat PLN padam, unit 4,8 kWh
+                  + Baterai Penyimpanan — Backup saat PLN padam, unit 4,8 kWh
                 </span>
               </div>
 
               {/* Product Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 overflow-hidden">
                 {catProducts.map((product) => {
                   const addOnTotal = getAddOnTotal(product);
                   const currentAddOns = addOns[product.name];
@@ -331,7 +331,7 @@ export function ProductSection() {
                       }`}
                     >
                       {product.popular && (
-                        <span className="absolute -top-3 left-6 px-3 py-1 bg-gold text-navy text-xs font-bold rounded-full shadow-md">
+                        <span className="absolute -top-3 left-6 px-3 py-1 bg-white text-solar text-xs font-bold rounded-full shadow-md border-2 border-solar">
                           PALING POPULER
                         </span>
                       )}
@@ -457,7 +457,7 @@ export function ProductSection() {
                               product.popular ? "text-white/70" : "text-muted-foreground"
                             }`}>
                               <Battery className="w-3.5 h-3.5" />
-                              Baterai LiFePO4 48V 100Ah (Opsional)
+                              Baterai Penyimpanan Energi (Opsional)
                               <span className="inline-flex items-center gap-0.5 text-[10px] font-normal opacity-60">
                                 {showBatteryInfo ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                               </span>
@@ -468,7 +468,7 @@ export function ProductSection() {
                             <p className={`text-xs leading-relaxed mb-2 ${
                               product.popular ? "text-white/50" : "text-muted-foreground"
                             }`}>
-                              Saat baterai penuh &amp; tidak ada pemadaman PLN, sinar matahari langsung supply beban via pengaturan SBU/SUB/Mix di inverter Powmr. Maks = {product.kWp} kWp x 3,75 PSH = {product.batteryMaxKwh} kWh ({product.batteryMaxUnits} unit LiFePO4 48V 100Ah)
+                              Saat baterai penuh &amp; tidak ada pemadaman PLN, sinar matahari langsung supply beban via pengaturan SBU/SUB/Mix di inverter. Maks = {product.kWp} kWp x 3,75 PSH = {product.batteryMaxKwh.toFixed(1)} kWh ({product.batteryMaxUnits} unit Baterai Penyimpanan)
                             </p>
                           )}
 
@@ -499,7 +499,7 @@ export function ProductSection() {
                                 title={`${opt.kwh} kWh = ${opt.unitCount}x unit ${product.batteryUnitKwh} kWh`}
                               >
                                 <span className="font-medium">
-                                  {opt.kwh} kWh
+                                  {opt.kwh.toFixed(1)} kWh
                                   {opt.unitCount === product.batteryMaxUnits && (
                                     <span className="ml-0.5 text-[9px] opacity-70">MAX</span>
                                   )}

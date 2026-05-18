@@ -94,7 +94,7 @@ export function Navbar() {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "glass shadow-lg shadow-black/5" : "bg-transparent"
+        scrolled ? "glass shadow-lg shadow-black/5" : "bg-white/80 dark:bg-transparent backdrop-blur-sm"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

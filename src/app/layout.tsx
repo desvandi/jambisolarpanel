@@ -16,9 +16,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://jayamandiri.co.id"),
-  title: "Jambi Solar Panel | Sistem Energi Mandiri Off-Grid & Hybrid",
+  title: "Jasa Instalasi Panel Surya Jambi | PT Jaya Mandiri Smart Energy",
   description:
-    "Hemat tagihan listrik hingga 90% dengan instalasi PLTS Off-Grid & Hybrid dari Jambi Solar Panel — PT. Jaya Mandiri Smart Energy. Solusi untuk rumah, bisnis, kebun & infrastruktur. Garansi 25 tahun, konsultasi gratis.",
+    "Spesialis instalasi panel surya rumah, bisnis, solar pump & off-grid di Jambi. Survey gratis, garansi resmi, hemat listrik hingga 90%. PT Jaya Mandiri Smart Energy.",
   keywords: [
     "panel surya Jambi",
     "solar panel Jambi",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     apple: "/logo-jmse.png",
   },
   openGraph: {
-    title: "Solusi Energi Mandiri Off-Grid & Hybrid | Jambi Solar Panel",
+    title: "Jasa Instalasi Panel Surya Jambi | PT Jaya Mandiri Smart Energy",
     description:
       "Instalasi PLTS Off-Grid & Hybrid profesional untuk rumah, bisnis, kebun & infrastruktur. Hemat hingga 90%, backup 24 jam, garansi 25 tahun.",
     url: "https://jayamandiri.co.id",
@@ -215,7 +215,7 @@ export default function RootLayout({
                   name: "Berapa biaya pasang panel surya?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Biaya instalasi PLTS Off-Grid & Hybrid bervariasi tergantung kapasitas dan kebutuhan. Untuk rumah tangga, paket mulai dari Powmr 1.3 kWp (tanpa baterai) hingga Powmr 5.2 kWp. Untuk bisnis dan industri, paket mulai dari Powmr 7.15 kWp. Konsultasikan kebutuhan Anda secara GRATIS dengan tim kami.",
+                    text: "Biaya instalasi PLTS Off-Grid & Hybrid bervariasi tergantung kapasitas dan kebutuhan. Untuk rumah tangga, paket mulai dari Paket 1.3 kWp (tanpa baterai) hingga Paket 5.2 kWp. Untuk bisnis dan industri, paket mulai dari Paket 7.15 kWp. Konsultasikan kebutuhan Anda secara GRATIS dengan tim kami.",
                   },
                 },
                 {
@@ -223,7 +223,7 @@ export default function RootLayout({
                   name: "Berapa lama balik modal?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Untuk rumah tangga (paket Powmr 2.6-5.2 kWp), ROI realistis tercapai dalam 8-9 tahun. Untuk bisnis dan industri (paket Powmr 7.15-20.8 kWp), ROI tercapai dalam 5-7 tahun. Perhitungan ini memperhitungkan kenaikan tarif PLN rata-rata 6% per tahun. Total keuntungan bersih dalam 25 tahun mencapai 5-7 kali lipat dari investasi awal.",
+                    text: "Untuk rumah tangga (paket 2.6-5.2 kWp), ROI realistis tercapai dalam 8-9 tahun. Untuk bisnis dan industri (paket 7.15-20.8 kWp), ROI tercapai dalam 5-7 tahun. Perhitungan ini memperhitungkan kenaikan tarif PLN rata-rata 6% per tahun. Total keuntungan bersih dalam 25 tahun mencapai 5-7 kali lipat dari investasi awal.",
                   },
                 },
                 {
