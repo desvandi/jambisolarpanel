@@ -162,7 +162,10 @@ export default function RootLayout({
                 opens: "08:00",
                 closes: "17:00",
               },
-              sameAs: [],
+              sameAs: [
+                "https://www.facebook.com/share/1EMi46VPVc/",
+                "https://www.instagram.com/desvandi101",
+              ],
               aggregateRating: {
                 "@type": "AggregateRating",
                 ratingValue: "4.9",
@@ -196,7 +199,7 @@ export default function RootLayout({
                   name: "Berapa biaya pasang panel surya?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Biaya instalasi panel surya bervariasi tergantung kapasitas dan kebutuhan. Untuk rumah tangga mulai dari puluhan juta rupiah. Konsultasikan kebutuhan Anda secara GRATIS dengan tim kami.",
+                    text: "Biaya instalasi panel surya bervariasi tergantung kapasitas dan kebutuhan. Untuk rumah tangga, paket mulai dari Powmr 1.3 kWp (tanpa baterai) hingga Powmr 5.2 kWp. Untuk bisnis dan industri, paket mulai dari Powmr 7.15 kWp. Konsultasikan kebutuhan Anda secara GRATIS dengan tim kami.",
                   },
                 },
                 {
@@ -204,7 +207,7 @@ export default function RootLayout({
                   name: "Berapa lama balik modal?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Untuk rumah tangga (paket Silver 2-5 kWp), ROI realistis tercapai dalam 8-9 tahun. Untuk bisnis dan industri (paket Gold & Platinum 6,5-20 kWp), ROI tercapai dalam 5-7 tahun. Perhitungan ini memperhitungkan kenaikan tarif PLN rata-rata 6% per tahun. Total keuntungan bersih dalam 25 tahun mencapai 5-7 kali lipat dari investasi awal.",
+                    text: "Untuk rumah tangga (paket Powmr 2.6-5.2 kWp), ROI realistis tercapai dalam 8-9 tahun. Untuk bisnis dan industri (paket Powmr 7.15-20.8 kWp), ROI tercapai dalam 5-7 tahun. Perhitungan ini memperhitungkan kenaikan tarif PLN rata-rata 6% per tahun. Total keuntungan bersih dalam 25 tahun mencapai 5-7 kali lipat dari investasi awal.",
                   },
                 },
                 {

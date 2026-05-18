@@ -75,7 +75,9 @@ export function Footer() {
                 </svg>
               </a>
               <a
-                href="#"
+                href="https://www.facebook.com/share/1EMi46VPVc/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-9 h-9 rounded-lg bg-white/10 hover:bg-solar flex items-center justify-center transition-colors"
                 aria-label="Facebook"
               >
@@ -84,7 +86,9 @@ export function Footer() {
                 </svg>
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/desvandi101?igsh=MXN4ZXpobmVvaXFobQ=="
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-9 h-9 rounded-lg bg-white/10 hover:bg-solar flex items-center justify-center transition-colors"
                 aria-label="Instagram"
               >

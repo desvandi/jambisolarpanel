@@ -22,7 +22,7 @@ function waLink(pkg: CalculatedPackage, addOns?: AddOnState) {
   if (addOns) {
     const parts: string[] = [];
     if (addOns.carport) parts.push(`+ Carport ${formatRp(pkg.carportAddonPrice)}`);
-    if (addOns.battery > 0) parts.push(`+ Baterai Shoto LiFePO4 ${addOns.battery} kWh`);
+    if (addOns.battery > 0) parts.push(`+ Baterai LiFePO4 48V 100Ah ${addOns.battery} kWh`);
     if (addOns.monitoring === "basic") parts.push(`+ Monitoring Basic ${formatRp(pkg.monitoringBasicPrice)}`);
     if (addOns.monitoring === "standard") parts.push(`+ Monitoring Standard ${formatRp(pkg.monitoringStandardPrice)}`);
     if (addOns.monitoring === "industrial") parts.push(`+ Monitoring Industrial ${formatRp(pkg.monitoringIndustrialPrice)}`);
@@ -35,7 +35,7 @@ const categoryMeta = [
   {
     id: "silver",
     icon: Home,
-    title: "Silver Package — Rumah Tangga",
+    title: "Powmr Hybrid — Rumah Tangga",
     tagline: "Hybrid System 1 Fase — Cocok untuk kebutuhan rumah tangga di Jambi & sekitarnya",
     tiers: ["silver"],
     showCarportMonitoring: false,
@@ -43,7 +43,7 @@ const categoryMeta = [
   {
     id: "gold",
     icon: Building2,
-    title: "Gold Package — Bisnis & UMKM",
+    title: "Powmr Hybrid — Bisnis & UMKM",
     tagline: "Hybrid System 1 Fase — Solusi bisnis skala menengah hingga besar",
     tiers: ["gold"],
     showCarportMonitoring: true,
@@ -51,7 +51,7 @@ const categoryMeta = [
   {
     id: "platinum",
     icon: Factory,
-    title: "Platinum Package — Industri",
+    title: "Powmr Hybrid — Industri",
     tagline: "Hybrid System 3 Fase — Solusi skala besar untuk efisiensi maksimal",
     tiers: ["platinum"],
     showCarportMonitoring: true,
@@ -254,8 +254,8 @@ export function ProductSection() {
                 <strong> PPh</strong> dipotong oleh pihak pembeli (wajib pajak), bukan menambah harga jual.
               </p>
               <p>
-                <strong>Add-on tersedia:</strong> Baterai Shoto LiFePO4 (kelipatan 4,8 kWh), Kanopi Carport (+harga per kWp),
-                dan Smart Monitoring (Basic / Standard / Industrial) untuk paket Gold &amp; Platinum.
+                <strong>Add-on tersedia:</strong> Baterai LiFePO4 48V 100Ah (kelipatan 4,8 kWh), Kanopi Carport (+harga per kWp),
+                dan Smart Monitoring (Basic / Standard / Industrial) untuk paket Bisnis &amp; Industri.
               </p>
               <p>
                 <strong>Baterai:</strong> Kapasitas rekomendasi = kWp x PSH. Saat baterai penuh dan tidak ada
@@ -302,7 +302,7 @@ export function ProductSection() {
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground">
                   <BatteryCharging className="w-3.5 h-3.5 text-gold" />
-                  + Baterai Shoto LiFePO4 — Backup saat PLN padam, unit 4,8 kWh
+                  + Baterai LiFePO4 48V 100Ah — Backup saat PLN padam, unit 4,8 kWh
                 </span>
               </div>
 
@@ -449,7 +449,7 @@ export function ProductSection() {
                               product.popular ? "text-white/70" : "text-muted-foreground"
                             }`}>
                               <Battery className="w-3.5 h-3.5" />
-                              Baterai Shoto LiFePO4 (Opsional)
+                              Baterai LiFePO4 48V 100Ah (Opsional)
                               <span className="inline-flex items-center gap-0.5 text-[10px] font-normal opacity-60">
                                 {showBatteryInfo ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                               </span>
@@ -460,7 +460,7 @@ export function ProductSection() {
                             <p className={`text-xs leading-relaxed mb-2 ${
                               product.popular ? "text-white/50" : "text-muted-foreground"
                             }`}>
-                              Saat baterai penuh &amp; tidak ada pemadaman PLN, sinar matahari langsung supply beban via pengaturan SBU/SUB/Mix di inverter Powmr. Maks = {product.kWp} kWp x 3,75 PSH = {product.batteryMaxKwh} kWh ({product.batteryMaxUnits} unit Shoto LiFePO4)
+                              Saat baterai penuh &amp; tidak ada pemadaman PLN, sinar matahari langsung supply beban via pengaturan SBU/SUB/Mix di inverter Powmr. Maks = {product.kWp} kWp x 3,75 PSH = {product.batteryMaxKwh} kWh ({product.batteryMaxUnits} unit LiFePO4 48V 100Ah)
                             </p>
                           )}
 
@@ -505,7 +505,7 @@ export function ProductSection() {
                         </div>
                       )}
 
-                      {/* ===== Carport + Monitoring Add-on (Gold & Platinum only) ===== */}
+                      {/* ===== Carport + Monitoring Add-on (Bisnis & Industri only) ===== */}
                       {cat.showCarportMonitoring && (
                         <div className={`mb-4 p-3 rounded-xl border ${
                           product.popular ? "bg-white/5 border-white/20" : "bg-muted/50 border-border"

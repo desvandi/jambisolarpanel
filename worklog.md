@@ -353,3 +353,25 @@ Stage Summary:
 - H-2 (kWp naming mismatch with 650Wp): Needs product decision on package naming
 - H-1 (internal key names deye/growatt): Needs migration strategy for localStorage
 - C-2 (placeholder Pixel/GA IDs): Needs user to provide real IDs
+---
+Task ID: 1
+Agent: Main Agent
+Task: Rename paket ke Powmr + verifikasi brand material + update social links + localStorage migration
+
+Work Log:
+- Verified all equipment specs: Inverter=Powmr ✅, Panel=LONGi 650Wp ✅, Baterai=LiFePO4 48V 100Ah ✅
+- Renamed 8 packages from Silver/Gold/Platinum to Powmr kWp format with actual calculated values
+- Added localStorage migration system v2→v4 with auto-upgrade on load
+- Updated all category meta titles (Silver Package → Powmr Hybrid)
+- Changed battery display branding from "Shoto LiFePO4" to "LiFePO4 48V 100Ah" in ProductSection UI
+- Updated FAQ answers referencing old package names
+- Updated Schema markup (FAQ + sameAs) with new package names and social URLs
+- Added Facebook (https://www.facebook.com/share/1EMi46VPVc/) and Instagram (https://www.instagram.com/desvandi101) links to Footer
+- Build passes cleanly
+
+Stage Summary:
+- Files modified: pricing.ts, ProductSection.tsx, Footer.tsx, FAQSection.tsx, layout.tsx
+- Package naming: Silver/Gold/Platinum → Powmr 1.3/2.6/3.25/5.2/7.15/10.4/11.7/20.8 kWp
+- localStorage keys migrated from v2 to v4 with auto-migration function
+- Social media links now active (were placeholder "#")
+- Schema sameAs populated with Facebook + Instagram URLs

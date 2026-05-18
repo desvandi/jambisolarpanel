@@ -1,17 +1,19 @@
 /* ============================================================
-   PRICING MODULE v3 — PT. Jaya Mandiri Smart Energy
+   PRICING MODULE v4 — PT. Jaya Mandiri Smart Energy
    Shared pricing logic for ProductSection & Kalibrasi Harga
 
    Update: 18 Mei 2026
+   - Brand: Inverter Powmr | Panel LONGi 650Wp | Baterai LiFePO4 48V 100Ah
+   - Package naming: Powmr kWp (replaces Silver/Gold/Platinum tier names)
    - Battery moved to optional add-on (4.8 kWh units)
    - Battery sizing: kWp × PSH, rounded to nearest 4.8 kWh
-   - Package structure: 1,2,3,5 / 6.5,10 / 11,20 kWp (no bundled battery)
+   - Package structure: 1.3,2.6,3.25,5.2 / 7.15,10.4 / 11.7,20.8 kWp
    - Add-on support (Carport, Smart Monitoring, Battery)
    - PSH Jambi: 3.75 jam | Efficiency: 80%
    - Margin: 35% | PPN: 11%
 
    Battery Logic:
-   - Unit size: 4.8 kWh Shoto LiFePO4 Battery Pack (48V 100Ah)
+   - Unit size: 4.8 kWh LiFePO4 Battery Pack (48V 100Ah)
    - Recommended capacity = kWp × PSH (daily production without efficiency)
    - When battery is full & no PLN outage, solar directly supplies loads
      via Powmr inverter SBU/SUB/Mix priority settings
@@ -40,7 +42,7 @@ export interface ComponentPrices {
   laborBatteryPerKwh: number;    // Battery installation & wiring per kWh
 
   // Battery
-  batteryPerKwh: number;         // Shoto LiFePO4 per kWh
+  batteryPerKwh: number;         // LiFePO4 48V 100Ah per kWh
   bosBatteryPerKwh: number;      // Battery BOS: Tomzn MCCB/AC/DC, cables, fuse per kWh
 
   // Professional Services (lump sum)
@@ -181,12 +183,25 @@ export const inverterMeta: Record<keyof InverterPrices, { capacity: number; phas
 
 // --- Package Definitions (no bundled batteries) ---
 
+// --- Package Name Migration Map (v3 tier-based → v4 Powmr-based) ---
+
+export const packageNameMigration: Record<string, string> = {
+  "Silver 1 kWp": "Powmr 1.3 kWp",
+  "Silver 2 kWp": "Powmr 2.6 kWp",
+  "Silver 3 kWp": "Powmr 3.25 kWp",
+  "Silver 5 kWp": "Powmr 5.2 kWp",
+  "Gold 6.5 kWp": "Powmr 7.15 kWp",
+  "Gold 10 kWp": "Powmr 10.4 kWp",
+  "Platinum 11 kWp": "Powmr 11.7 kWp",
+  "Platinum 20 kWp": "Powmr 20.8 kWp",
+};
+
 export const packageSpecs: PackageSpec[] = [
   // ============================
-  // SILVER — Rumah Tangga (1 Fase)
+  // Rumah Tangga (1 Fase)
   // ============================
   {
-    name: "Silver 1 kWp",
+    name: "Powmr 1.3 kWp",
     desc: "2 panel LONGi 650Wp + Inverter Hybrid Powmr 3.600W. Starter untuk rumah kecil: lampu LED, TV, charger HP, kipas angin.",
     specs: "2× LONGi 650Wp | Powmr 3.6kW Hybrid",
     panelCount: 2,
@@ -195,7 +210,7 @@ export const packageSpecs: PackageSpec[] = [
     popular: false,
   },
   {
-    name: "Silver 2 kWp",
+    name: "Powmr 2.6 kWp",
     desc: "4 panel LONGi 650Wp + Inverter Hybrid Powmr 3.600W. Rumah kecil-menengah: lampu, TV, kipas angin, kulkas kecil.",
     specs: "4× LONGi 650Wp | Powmr 3.6kW Hybrid",
     panelCount: 4,
@@ -204,7 +219,7 @@ export const packageSpecs: PackageSpec[] = [
     popular: false,
   },
   {
-    name: "Silver 3 kWp",
+    name: "Powmr 3.25 kWp",
     desc: "5 panel LONGi 650Wp + Inverter Hybrid Powmr 3.600W. Rumah menengah: AC 1 unit, kulkas, mesin cuci.",
     specs: "5× LONGi 650Wp | Powmr 3.6kW Hybrid",
     panelCount: 5,
@@ -213,7 +228,7 @@ export const packageSpecs: PackageSpec[] = [
     popular: false,
   },
   {
-    name: "Silver 5 kWp",
+    name: "Powmr 5.2 kWp",
     desc: "8 panel LONGi 650Wp + Inverter Hybrid Powmr 6.000W. Rumah keluarga besar: AC 2 unit, water heater, dispenser.",
     specs: "8× LONGi 650Wp | Powmr 6kW Hybrid",
     panelCount: 8,
@@ -223,10 +238,10 @@ export const packageSpecs: PackageSpec[] = [
   },
 
   // ============================
-  // GOLD — Bisnis & UMKM (1 Fase)
+  // Bisnis & UMKM (1 Fase)
   // ============================
   {
-    name: "Gold 6.5 kWp",
+    name: "Powmr 7.15 kWp",
     desc: "11 panel LONGi 650Wp + Inverter Hybrid Powmr 8.000W. Toko, ruko, kantor kecil, cold storage mini, bengkel.",
     specs: "11× LONGi 650Wp | Powmr 8kW Hybrid",
     panelCount: 11,
@@ -235,7 +250,7 @@ export const packageSpecs: PackageSpec[] = [
     popular: false,
   },
   {
-    name: "Gold 10 kWp",
+    name: "Powmr 10.4 kWp",
     desc: "16 panel LONGi 650Wp + Inverter Hybrid Powmr 10.000W. Gudang, restoran, hotel kecil, minimarket, clinic.",
     specs: "16× LONGi 650Wp | Powmr 10kW Hybrid",
     panelCount: 16,
@@ -245,10 +260,10 @@ export const packageSpecs: PackageSpec[] = [
   },
 
   // ============================
-  // PLATINUM — Industri (3 Fase)
+  // Industri (3 Fase)
   // ============================
   {
-    name: "Platinum 11 kWp",
+    name: "Powmr 11.7 kWp",
     desc: "18 panel LONGi 650Wp + Powmr 10.000W 3-Fase Hybrid. Pabrik menengah, processing plant, warehouse besar.",
     specs: "18× LONGi 650Wp | Powmr 10kW 3-Fase",
     panelCount: 18,
@@ -257,7 +272,7 @@ export const packageSpecs: PackageSpec[] = [
     popular: true,
   },
   {
-    name: "Platinum 20 kWp",
+    name: "Powmr 20.8 kWp",
     desc: "32 panel LONGi 650Wp + Powmr 20.000W 3-Fase Hybrid. Mega proyek, industrial complex, pabrik besar, hotel bintang 4.",
     specs: "32× LONGi 650Wp | Powmr 20kW 3-Fase",
     panelCount: 32,
@@ -267,11 +282,55 @@ export const packageSpecs: PackageSpec[] = [
   },
 ];
 
-// --- LocalStorage Keys (v2) ---
+// --- LocalStorage Keys (v4 — migrated from v2/v3) ---
 
-const LS_COMPONENT = "jmse_v2_component_prices";
-const LS_INVERTER = "jmse_v2_inverter_prices";
-const LS_SETTINGS = "jmse_v2_pricing_settings";
+const LS_COMPONENT = "jmse_v4_component_prices";
+const LS_INVERTER = "jmse_v4_inverter_prices";
+const LS_SETTINGS = "jmse_v4_pricing_settings";
+const LS_VERSION = "jmse_pricing_version";
+const CURRENT_VERSION = 4;
+
+// Legacy keys for migration
+const LEGACY_KEYS: Record<number, string[]> = {
+  2: ["jmse_v2_component_prices", "jmse_v2_inverter_prices", "jmse_v2_pricing_settings"],
+  3: ["jmse_v3_component_prices", "jmse_v3_inverter_prices", "jmse_v3_pricing_settings"],
+};
+
+/**
+ * Migrate localStorage data from older versions to current version.
+ * Copies pricing data from legacy keys to new keys.
+ */
+function migrateLocalStorage(): void {
+  if (typeof window === "undefined") return;
+  try {
+    const savedVersion = parseInt(localStorage.getItem(LS_VERSION) || "0", 10);
+    if (savedVersion >= CURRENT_VERSION) return;
+
+    // Try migrating from legacy versions (highest first)
+    for (let v = 3; v >= 2; v--) {
+      const legacy = LEGACY_KEYS[v];
+      if (!legacy) continue;
+
+      const oldComponent = localStorage.getItem(legacy[0]);
+      if (oldComponent) {
+        localStorage.setItem(LS_COMPONENT, oldComponent);
+        localStorage.setItem(LS_INVERTER, localStorage.getItem(legacy[1]) || "{}");
+        localStorage.setItem(LS_SETTINGS, localStorage.getItem(legacy[2]) || "{}");
+        console.log(`[JMSE] Migrated pricing data from v${v} to v${CURRENT_VERSION}`);
+        break;
+      }
+    }
+
+    // Also clear v1 keys for cleanup
+    localStorage.removeItem("jmse_component_prices");
+    localStorage.removeItem("jmse_inverter_prices");
+    localStorage.removeItem("jmse_pricing_settings");
+
+    localStorage.setItem(LS_VERSION, String(CURRENT_VERSION));
+  } catch {
+    // Silent fail — will use defaults
+  }
+}
 
 // --- LocalStorage Helpers ---
 
@@ -284,6 +343,7 @@ export function saveComponentPrices(prices: ComponentPrices): void {
 export function loadComponentPrices(): ComponentPrices {
   if (typeof window === "undefined") return { ...defaultComponentPrices };
   try {
+    migrateLocalStorage();
     const raw = localStorage.getItem(LS_COMPONENT);
     if (!raw) return { ...defaultComponentPrices };
     return { ...defaultComponentPrices, ...JSON.parse(raw) };
@@ -301,6 +361,7 @@ export function saveInverterPrices(prices: InverterPrices): void {
 export function loadInverterPrices(): InverterPrices {
   if (typeof window === "undefined") return { ...defaultInverterPrices };
   try {
+    migrateLocalStorage();
     const raw = localStorage.getItem(LS_INVERTER);
     if (!raw) return { ...defaultInverterPrices };
     return { ...defaultInverterPrices, ...JSON.parse(raw) };
@@ -318,6 +379,7 @@ export function saveSettings(settings: PricingSettings): void {
 export function loadSettings(): PricingSettings {
   if (typeof window === "undefined") return { ...defaultSettings };
   try {
+    migrateLocalStorage();
     const raw = localStorage.getItem(LS_SETTINGS);
     if (!raw) return { ...defaultSettings };
     return { ...defaultSettings, ...JSON.parse(raw) };
@@ -340,6 +402,7 @@ export function clearAllPricing(): void {
 
 export function hasCustomPricing(): boolean {
   if (typeof window === "undefined") return false;
+  migrateLocalStorage();
   return !!(
     localStorage.getItem(LS_COMPONENT) ||
     localStorage.getItem(LS_INVERTER) ||
