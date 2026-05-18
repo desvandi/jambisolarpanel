@@ -459,9 +459,14 @@ export function calculatePackages(
     const monthlySavingsHigh =
       Math.round((dailyKwh * 0.75 * 30 * 1500) / 1_000_000 * 10) / 10;
 
+    // Ensure no floating-point artifacts (e.g. 3.90000000001)
+    const cleanSavingsLow = Math.round(monthlySavingsLow * 10) / 10;
+    const cleanSavingsHigh = Math.round(monthlySavingsHigh * 10) / 10;
+
     const formatSavings = (val: number) => {
-      if (val >= 1) return `${val.toFixed(val % 1 === 0 ? 0 : 1)}jt`;
-      return `${Math.round(val * 1000)}rb`;
+      const clean = Math.round(val * 10) / 10;
+      if (clean >= 1) return `${clean.toFixed(clean % 1 === 0 ? 0 : 1)}jt`;
+      return `${Math.round(clean * 1000)}rb`;
     };
 
     // Add-on prices (with margin & PPN)
@@ -514,7 +519,7 @@ export function calculatePackages(
       priceFormatted: formatRp(price),
       kWp,
       dailyProduction: `~${dailyKwh.toFixed(1)} kWh/hari`,
-      savingsRange: `${formatSavings(monthlySavingsLow)} - ${formatSavings(monthlySavingsHigh)}/bulan`,
+      savingsRange: `${formatSavings(cleanSavingsLow)} - ${formatSavings(cleanSavingsHigh)}/bulan`,
       carportAddonPrice: carportAddon,
       monitoringBasicPrice: monBasic,
       monitoringStandardPrice: monStd,
@@ -557,8 +562,8 @@ export function calculateROI(
   const selfCons = options?.selfConsumption ?? SELF_CONSUMPTION_DEFAULT;
   const increaseRate = options?.plnIncreaseRate ?? PLN_INCREASE_RATE_DEFAULT;
 
-  const annualSavingsBase = dailyKwh * 365 * tariff * selfCons;
-  const monthlySavingsBase = dailyKwh * 30 * tariff * selfCons;
+  const annualSavingsBase = Math.round(dailyKwh * 365 * tariff * selfCons);
+  const monthlySavingsBase = Math.round(dailyKwh * 30 * tariff * selfCons);
 
   // Simple ROI (tarif tetap)
   const roiYears = annualSavingsBase > 0 ? price / annualSavingsBase : 99;
@@ -583,7 +588,7 @@ export function calculateROI(
       cum25 += annualSavingsBase * Math.pow(1 + increaseRate, y);
     }
   }
-  const return25Year = cum25 - price;
+  const return25Year = Math.round(cum25 - price);
   const returnMultiplier = price > 0 ? cum25 / price : 0;
 
   return {

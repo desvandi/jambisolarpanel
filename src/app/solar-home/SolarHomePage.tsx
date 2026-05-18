@@ -82,6 +82,62 @@ export default function SolarHomePage() {
         </div>
       </section>
 
+      {/* Problem → Solution */}
+      <section className="py-16 md:py-20 bg-muted/30">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-8 text-center">
+            Masalah Listrik Rumah Tangga? Kami Punya Solusinya
+          </h2>
+          <div className="space-y-6">
+            {[
+              {
+                problem: "Tagihan PLN terus naik setiap tahun",
+                solution: "PLTS Hybrid menghasilkan listrik gratis dari matahari. Hemat 50-90% tagihan bulanan, dan penghematan terus bertambah seiring kenaikan tarif PLN.",
+                icon: "💸",
+              },
+              {
+                problem: "Listrik sering padam mengganggu aktivitas",
+                solution: "Dengan baterai LiFePO4 sebagai add-on, rumah Anda tetap menyala 24 jam bahkan saat PLN padam. Inverter Powmr Hybrid otomatis switch ke baterai.",
+                icon: "🔌",
+              },
+              {
+                problem: "Inverter PLN berisik & boros listrik",
+                solution: "Inverter Powmr Hybrid bekerja tanpa suara dan mengkonversi DC→AC dengan efisiensi >95%. Tidak ada bahan bakar, tidak ada emisi.",
+                icon: "🔋",
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+                className="p-5 rounded-xl border border-border bg-card"
+              >
+                <div className="flex items-start gap-3 mb-2">
+                  <span className="text-xl flex-shrink-0">{item.icon}</span>
+                  <div>
+                    <p className="font-bold text-red-600 dark:text-red-400 mb-1">{item.problem}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{item.solution}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <a
+              href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20ingin%20konsultasi%20PLTS%20untuk%20rumah%20tangga"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-solar hover:bg-solar-dark text-white font-bold rounded-full transition-all duration-300"
+            >
+              <MessageCircle className="w-4 h-4" />
+              Konsultasi Gratis Sekarang
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Pricing Section */}
       <section className="py-16 md:py-20 bg-muted/30" ref={ref}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

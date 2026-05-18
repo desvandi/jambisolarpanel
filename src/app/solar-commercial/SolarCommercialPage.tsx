@@ -77,6 +77,62 @@ export default function SolarCommercialPage() {
         </div>
       </section>
 
+      {/* Problem → Solution */}
+      <section className="py-16 md:py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-8 text-center">
+            Masalah Biaya Energi Bisnis? Kami Punya Solusinya
+          </h2>
+          <div className="space-y-6">
+            {[
+              {
+                problem: "Biaya listrik operasional semakin besar setiap bulan",
+                solution: "PLTS Hybrid mengurangi biaya tetap listrik bisnis Anda hingga 70-90%. Setiap rupiah yang dihemat langsung meningkatkan profit margin.",
+                icon: "📊",
+              },
+              {
+                problem: "Ruang parkir kosong tanpa fungsi ekonomis",
+                solution: "Kanopi Carport Solar mengubah area parkir menjadi pembangkit listrik. Dual fungsi: naungan kendaraan + produksi energi surya sekaligus.",
+                icon: "🅿️",
+              },
+              {
+                problem: "Tidak tahu performa sistem energi secara real-time",
+                solution: "Smart Monitoring dashboard memberikan data produksi, konsumsi, dan penghematan secara real-time. Laporan bulanan otomatis untuk manajemen.",
+                icon: "📈",
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+                className="p-5 rounded-xl border border-border bg-card"
+              >
+                <div className="flex items-start gap-3 mb-2">
+                  <span className="text-xl flex-shrink-0">{item.icon}</span>
+                  <div>
+                    <p className="font-bold text-red-600 dark:text-red-400 mb-1">{item.problem}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{item.solution}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <a
+              href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20ingin%20konsultasi%20PLTS%20untuk%20bisnis"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-solar hover:bg-solar-dark text-white font-bold rounded-full transition-all duration-300"
+            >
+              <MessageCircle className="w-4 h-4" />
+              Simulasi ROI Custom via WhatsApp
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* ROI Calculator */}
       <section className="py-16 md:py-20 bg-muted/30">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

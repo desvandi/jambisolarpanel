@@ -64,6 +64,62 @@ export default function TenderProcurementPage() {
         </div>
       </section>
 
+      {/* Problem → Solution */}
+      <section className="py-16 md:py-20 bg-muted/30">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-8 text-center">
+            Masalah Proyek Energi Terbarukan? Kami Punya Solusinya
+          </h2>
+          <div className="space-y-6">
+            {[
+              {
+                problem: "Proyek PLTS tender kompleks & banyak persyaratan",
+                solution: "Kami membantu penyusunan dokumen teknis, RAB, dan proposal sesuai standar tender pemerintah/BUMN. Pengalaman menangani proyek skala kecil hingga besar.",
+                icon: "📄",
+              },
+              {
+                problem: "Butuh vendor dengan legalitas lengkap",
+                solution: "PT. Jaya Mandiri Smart Energy adalah perusahaan resmi dengan NIB, Sertifikat Standar, dan dokumen legalitas lengkap untuk memenuhi kualifikasi tender.",
+                icon: "🏢",
+              },
+              {
+                problem: "Takut proyek molor & kualitas buruk",
+                solution: "Project management profesional dengan timeline jelas, milestone tracking, dan quality control di setiap tahap. Tepat waktu, tepat mutu, tepat biaya.",
+                icon: "✅",
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+                className="p-5 rounded-xl border border-border bg-card"
+              >
+                <div className="flex items-start gap-3 mb-2">
+                  <span className="text-xl flex-shrink-0">{item.icon}</span>
+                  <div>
+                    <p className="font-bold text-red-600 dark:text-red-400 mb-1">{item.problem}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{item.solution}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <a
+              href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20ingin%20konsultasi%20pengadaan%20energi%20terbarukan"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-slate-700 hover:bg-slate-800 text-white font-bold rounded-full transition-all duration-300"
+            >
+              <MessageCircle className="w-4 h-4" />
+              Konsultasi Tender via WhatsApp
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Services */}
       <section className="py-16 md:py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

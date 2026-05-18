@@ -3,7 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { ServicePageLayout } from "@/components/landing/ServicePageLayout";
-import { evPackages, evAssumptions } from "@/lib/pricing-ev";
+import { evPackages, evAssumptions, getEVRoiData } from "@/lib/pricing-ev";
 import { formatRp } from "@/lib/pricing";
 import { MessageCircle, Car, Battery, Leaf, Zap, Shield, CheckCircle, ArrowRight } from "lucide-react";
 
@@ -194,6 +194,7 @@ export default function EVChargingPage() {
                       { label: "Inverter", value: pkg.inverter },
                       { label: "Charger", value: pkg.charger },
                       { label: "Hemat/Bulan", value: pkg.monthlySavings },
+                      { label: "ROI", value: `~${pkg.roiYears} tahun` },
                     ].map(spec => (
                       <div key={spec.label} className={`flex items-center justify-between text-xs ${pkg.solarKwp === 5.2 ? "text-white/70" : "text-muted-foreground"}`}>
                         <span>{spec.label}</span>

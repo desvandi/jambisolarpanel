@@ -220,7 +220,7 @@ export function HeroSection() {
               { value: 500, suffix: "+", label: "Proyek Selesai" },
               { value: 25, suffix: " Thn", label: "Garansi Panel" },
               { value: 90, suffix: "%", label: "Potensi Hemat" },
-              { value: 34, suffix: "+", label: "Provinsi Terlayani" },
+              { value: 2, suffix: "+", label: "Region Terlayani" },
             ].map((stat) => (
               <div
                 key={stat.label}

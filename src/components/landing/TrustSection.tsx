@@ -52,8 +52,8 @@ const trustItems = [
   },
   {
     icon: MapPin,
-    title: "Coverage Seluruh Indonesia",
-    desc: "Melayani instalasi di 34 provinsi Indonesia, dari kota besar hingga daerah terpencil tanpa listrik PLN.",
+    title: "Coverage Sumatera & Jawa Barat",
+    desc: "Melayani instalasi di seluruh Sumatera dan Jawa Bagian Barat. Tim teknisi siap ke lokasi Anda untuk survei dan pemasangan.",
   },
 ];
 
@@ -129,7 +129,7 @@ export function TrustSection() {
               </p>
             </div>
             <div className="flex flex-wrap justify-center gap-3">
-              {["ISO 9001", "SNI", "K3", "PLN SLO", "BPK PENGGUNA"].map(
+              {["PT Perorangan", "NIB", "Sertifikat Standar", "SK Kemenkumham"].map(
                 (cert) => (
                   <span
                     key={cert}

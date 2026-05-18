@@ -171,6 +171,38 @@ export default function SolarPumpPage() {
           </div>
         </div>
       </section>
+
+      {/* ROI Analysis */}
+      <section className="py-16 md:py-20 bg-muted/30">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass rounded-2xl p-6 sm:p-8 text-center">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-4">
+              Simulasi Penghematan Solar Pump
+            </h2>
+            <p className="text-muted-foreground mb-6">
+              Contoh: Solar Pump 2 HP — area sawit 2-4 hektar
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+              {[
+                { label: "Biaya Genset/Bulan", value: "Rp 3-8 jt", color: "text-red-500" },
+                { label: "Biaya Solar Pump/Bulan", value: "Rp 0", color: "text-solar" },
+                { label: "Balik Modal", value: "2-4 tahun", color: "text-gold" },
+              ].map(item => (
+                <div key={item.label} className="p-3 rounded-xl bg-solar/5 border border-solar/10">
+                  <p className="text-xs text-muted-foreground mb-1">{item.label}</p>
+                  <p className={`text-lg font-bold ${item.color}`}>{item.value}</p>
+                </div>
+              ))}
+            </div>
+            <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-800/30">
+              <p className="text-sm text-emerald-700 dark:text-emerald-300 leading-relaxed">
+                Setelah <strong>2-4 tahun</strong>, Solar Pump sudah balik modal. Setelah itu, air gratis selama <strong>20+ tahun</strong>. 
+                Total penghematan dalam 25 tahun bisa mencapai <strong>Rp 200-600 juta</strong> dibanding genset.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
     </ServicePageLayout>
   );
 }
