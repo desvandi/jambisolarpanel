@@ -14,14 +14,14 @@
    - Unit size: 4.8 kWh LiFePO4 (easy to source from suppliers)
    - Recommended capacity = kWp × PSH (daily production without efficiency)
    - When battery is full & no PLN outage, solar directly supplies loads
-     via PowMr inverter SBU/SUB/Mix priority settings
+     via Powmr inverter SBU/SUB/Mix priority settings
    ============================================================ */
 
 // --- Types ---
 
 export interface ComponentPrices {
   // Panel
-  panelWattage: number;          // Wp per panel (e.g., 630)
+  panelWattage: number;          // Wp per panel (e.g., LONGi 650Wp)
   panelPerUnit: number;          // Harga 1 panel
 
   // Mounting
@@ -120,7 +120,7 @@ export const BATTERY_UNIT_KWH = 4.8;
 // --- Default Values (Acuan 2026) ---
 
 export const defaultComponentPrices: ComponentPrices = {
-  panelWattage: 630,
+  panelWattage: 650,
   panelPerUnit: 2_500_000,
   mountingPerPanel: 400_000,
   carportPerKwp: 5_000_000,
@@ -159,13 +159,13 @@ export const defaultSettings: PricingSettings = {
 // --- Inverter Display Names ---
 
 export const inverterDisplayNames: Record<keyof InverterPrices, string> = {
-  deye3k6: "DEYE 3.600W Hybrid",
-  deye6k: "DEYE 6.000W Hybrid",
-  deye8k: "DEYE 8.000W Hybrid",
-  growatt10k: "GROWATT SPF 10.000ES Hybrid",
-  deye10k3p: "DEYE 10.000W 3-Fase",
-  deye15k3p: "DEYE 15.000W 3-Fase",
-  deye20k3p: "DEYE 20.000W 3-Fase",
+  deye3k6: "Powmr 3.600W Hybrid",
+  deye6k: "Powmr 6.000W Hybrid",
+  deye8k: "Powmr 8.000W Hybrid",
+  growatt10k: "Powmr 10.000W Hybrid",
+  deye10k3p: "Powmr 10.000W 3-Fase",
+  deye15k3p: "Powmr 15.000W 3-Fase",
+  deye20k3p: "Powmr 20.000W 3-Fase",
 };
 
 // Inverter metadata for kalibrasi detail
@@ -187,8 +187,8 @@ export const packageSpecs: PackageSpec[] = [
   // ============================
   {
     name: "Silver 1 kWp",
-    desc: "2 panel PV 630Wp + Inverter Hybrid DEYE 3.600W. Starter untuk rumah kecil: lampu LED, TV, charger HP, kipas angin.",
-    specs: "2× Panel 630Wp | DEYE 3.6kW Hybrid",
+    desc: "2 panel LONGi 650Wp + Inverter Hybrid Powmr 3.600W. Starter untuk rumah kecil: lampu LED, TV, charger HP, kipas angin.",
+    specs: "2× LONGi 650Wp | Powmr 3.6kW Hybrid",
     panelCount: 2,
     inverterKey: "deye3k6",
     tier: "silver",
@@ -196,8 +196,8 @@ export const packageSpecs: PackageSpec[] = [
   },
   {
     name: "Silver 2 kWp",
-    desc: "4 panel PV 630Wp + Inverter Hybrid DEYE 3.600W. Rumah kecil-menengah: lampu, TV, kipas angin, kulkas kecil.",
-    specs: "4× Panel 630Wp | DEYE 3.6kW Hybrid",
+    desc: "4 panel LONGi 650Wp + Inverter Hybrid Powmr 3.600W. Rumah kecil-menengah: lampu, TV, kipas angin, kulkas kecil.",
+    specs: "4× LONGi 650Wp | Powmr 3.6kW Hybrid",
     panelCount: 4,
     inverterKey: "deye3k6",
     tier: "silver",
@@ -205,8 +205,8 @@ export const packageSpecs: PackageSpec[] = [
   },
   {
     name: "Silver 3 kWp",
-    desc: "5 panel PV 630Wp + Inverter Hybrid DEYE 3.600W. Rumah menengah: AC 1 unit, kulkas, mesin cuci.",
-    specs: "5× Panel 630Wp | DEYE 3.6kW Hybrid",
+    desc: "5 panel LONGi 650Wp + Inverter Hybrid Powmr 3.600W. Rumah menengah: AC 1 unit, kulkas, mesin cuci.",
+    specs: "5× LONGi 650Wp | Powmr 3.6kW Hybrid",
     panelCount: 5,
     inverterKey: "deye3k6",
     tier: "silver",
@@ -214,8 +214,8 @@ export const packageSpecs: PackageSpec[] = [
   },
   {
     name: "Silver 5 kWp",
-    desc: "8 panel PV 630Wp + Inverter Hybrid DEYE 6.000W. Rumah keluarga besar: AC 2 unit, water heater, dispenser.",
-    specs: "8× Panel 630Wp | DEYE 6kW Hybrid",
+    desc: "8 panel LONGi 650Wp + Inverter Hybrid Powmr 6.000W. Rumah keluarga besar: AC 2 unit, water heater, dispenser.",
+    specs: "8× LONGi 650Wp | Powmr 6kW Hybrid",
     panelCount: 8,
     inverterKey: "deye6k",
     tier: "silver",
@@ -227,8 +227,8 @@ export const packageSpecs: PackageSpec[] = [
   // ============================
   {
     name: "Gold 6.5 kWp",
-    desc: "11 panel PV 630Wp + Inverter Hybrid DEYE 8.000W. Toko, ruko, kantor kecil, cold storage mini, bengkel.",
-    specs: "11× Panel 630Wp | DEYE 8kW Hybrid",
+    desc: "11 panel LONGi 650Wp + Inverter Hybrid Powmr 8.000W. Toko, ruko, kantor kecil, cold storage mini, bengkel.",
+    specs: "11× LONGi 650Wp | Powmr 8kW Hybrid",
     panelCount: 11,
     inverterKey: "deye8k",
     tier: "gold",
@@ -236,8 +236,8 @@ export const packageSpecs: PackageSpec[] = [
   },
   {
     name: "Gold 10 kWp",
-    desc: "16 panel PV 630Wp + GROWATT SPF 10.000ES Hybrid. Gudang, restoran, hotel kecil, minimarket, clinic.",
-    specs: "16× Panel 630Wp | GROWATT 10kW Hybrid",
+    desc: "16 panel LONGi 650Wp + Inverter Hybrid Powmr 10.000W. Gudang, restoran, hotel kecil, minimarket, clinic.",
+    specs: "16× LONGi 650Wp | Powmr 10kW Hybrid",
     panelCount: 16,
     inverterKey: "growatt10k",
     tier: "gold",
@@ -249,8 +249,8 @@ export const packageSpecs: PackageSpec[] = [
   // ============================
   {
     name: "Platinum 11 kWp",
-    desc: "18 panel PV 630Wp + DEYE 10.000W 3-Fase Hybrid. Pabrik menengah, processing plant, warehouse besar.",
-    specs: "18× Panel 630Wp | DEYE 10kW 3-Fase",
+    desc: "18 panel LONGi 650Wp + Powmr 10.000W 3-Fase Hybrid. Pabrik menengah, processing plant, warehouse besar.",
+    specs: "18× LONGi 650Wp | Powmr 10kW 3-Fase",
     panelCount: 18,
     inverterKey: "deye10k3p",
     tier: "platinum",
@@ -258,8 +258,8 @@ export const packageSpecs: PackageSpec[] = [
   },
   {
     name: "Platinum 20 kWp",
-    desc: "32 panel PV 630Wp + DEYE 20.000W 3-Fase Hybrid. Mega proyek, industrial complex, pabrik besar, hotel bintang 4.",
-    specs: "32× Panel 630Wp | DEYE 20kW 3-Fase",
+    desc: "32 panel LONGi 650Wp + Powmr 20.000W 3-Fase Hybrid. Mega proyek, industrial complex, pabrik besar, hotel bintang 4.",
+    specs: "32× LONGi 650Wp | Powmr 20kW 3-Fase",
     panelCount: 32,
     inverterKey: "deye20k3p",
     tier: "platinum",
@@ -418,7 +418,7 @@ export function calculatePackages(
     // Battery add-on calculation (4.8 kWh units)
     // MAKS kapasitas = kWp × PSH (kelipatan 4.8 kWh)
     // Logic: saat baterai penuh & tidak ada pemadaman PLN, solar langsung
-    // supply beban via pengaturan SBU/SUB/Mix di inverter PowMr.
+    // supply beban via pengaturan SBU/SUB/Mix di inverter Powmr.
     const batteryUnitCost = batteryCostPerKwh * BATTERY_UNIT_KWH;
     const batteryUnitPrice = batteryCostPerKwh > 0
       ? Math.round((batteryUnitCost * addonMultiplier) / 100_000) * 100_000

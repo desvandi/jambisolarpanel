@@ -305,3 +305,28 @@ Stage Summary:
 - 13 issues fixed across 8 component files
 - Build passes cleanly after all changes
 - Remaining action items (require user input): C3 Pixel/GA IDs, C4 ignoreBuildErrors, C5-C8 PDF scripts creation, H3 Schema rating verification, M2 social media links, M3 BPK certification, H8 logo format
+
+---
+Task ID: b1-b7
+Agent: Main Agent
+Task: Update brand materials to correct specifications per user input
+
+Work Log:
+- Identified all brand references across src/, download/, and kalibrasi page
+- Updated pricing.ts: panelWattage 630→650, all desc/specs strings "630Wp"→"LONGi 650Wp"
+- Updated pricing.ts: inverterDisplayNames all DEYE/GROWATT→Powmr (7 models)
+- Updated pricing.ts: battery comments "LiFePO4"→"Pack LiFePO4 48V 100Ah"
+- Updated kalibrasi-harga/page.tsx: getBrandFromKey() returns "Powmr" for all keys
+- Updated kalibrasi-harga/page.tsx: panel.brand "LONGi", wattage 650, battery.brand "Pack LiFePO4 48V 100Ah", capacityPerUnit 4.8
+- Updated ProductSection.tsx: all battery references now "Pack Baterai LiFePO4 48V 100Ah"
+- Updated ProductSection.tsx: inverter reference "PowMr"→"Powmr"
+- Updated catalog-cover.html: "LONGi 650Wp", "Powmr Hybrid", "Pack Baterai LiFePO4 48V 100Ah"
+- Final grep verification: zero references to DEYE, GROWATT, PowMr, 630Wp, PYLON, BYD, SHOTO
+- Build: PASS
+
+Stage Summary:
+- Brand materials corrected across 4 files: pricing.ts, kalibrasi page, ProductSection, catalog cover
+- Panel: LONGi 650Wp (was generic 630Wp)
+- Inverter: Powmr (was DEYE/GROWATT) — 7 models from 3.6kW to 20kW
+- Battery: Pack LiFePO4 48V 100Ah (was LiFePO4 PYLON/BYD)
+- Internal interface keys kept unchanged (deye3k6, etc.) for localStorage compatibility

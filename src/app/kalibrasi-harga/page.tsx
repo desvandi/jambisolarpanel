@@ -147,16 +147,14 @@ interface DetailedState {
 // --- Default Detailed State ---
 
 function getBrandFromKey(key: string): string {
-  if (key.startsWith("growatt")) return "GROWATT";
-  if (key.startsWith("deye")) return "DEYE";
-  return "OTHER";
+  return "Powmr";
 }
 
 const defaultDetailedState: DetailedState = {
   panel: {
-    brand: "Tier-1 (LONGi/Trina/JA)",
+    brand: "LONGi",
     cellType: "Mono PERC",
-    wattage: 630,
+    wattage: 650,
     pricePerPanel: 2_500_000,
     warrantyPerformance: 25,
     warrantyProduct: 12,
@@ -185,9 +183,9 @@ const defaultDetailedState: DetailedState = {
     {} as InverterDetailMap
   ),
   battery: {
-    brand: "LiFePO4 (PYLON/BYD)",
+    brand: "Pack LiFePO4 48V 100Ah",
     type: "LiFePO4",
-    capacityPerUnit: 5,
+    capacityPerUnit: 4.8,
     dod: 80,
     pricePerKwh: 2_000_000,
     laborPerKwh: 250_000,
