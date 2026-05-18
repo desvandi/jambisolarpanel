@@ -21,7 +21,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <Navbar />
 
-      <main className="flex-1 pb-20 md:pb-0">
+      <main id="main-content" className="flex-1 pb-20 md:pb-0">
         {/* Hero - Above The Fold */}
         <HeroSection />
 

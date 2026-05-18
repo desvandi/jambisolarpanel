@@ -30,8 +30,12 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files (NEVER commit real .env files)
+.env
+.env.local
+.env.*.local
+# Keep .env.example for documentation
+!.env.example
 
 # vercel
 .vercel
@@ -48,7 +52,34 @@ dev.log
 dev.out.log
 test
 prompt
+.Claude
+.claude
 
 server.log
 # Skills directory
 /skills/
+/.zscripts/
+
+# Database files (should never be committed)
+/db/*.db
+/db/*.db-journal
+/db/*.db-wal
+/db/*.db-shm
+
+# Upload directory (contains sensitive legal documents)
+/upload/
+
+# Download directory (contains generated assets)
+/download/
+
+# Lock files (keep bun.lock, remove package-lock.json to avoid conflicts)
+package-lock.json
+bun.lock
+
+# Non-project files
+/examples/
+/mini-services/
+Caddyfile
+worklog.md
+.zscripts/
+claude.md
