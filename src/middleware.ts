@@ -2,14 +2,10 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 /**
- * Middleware untuk proteksi halaman admin dan rate limiting API.
+ * Middleware untuk rate limiting API.
  *
- * - /kalibrasi-harga: dilindungi dengan basic auth menggunakan
- *   env variable ADMIN_PASSWORD (default: "jmse2026")
  * - /api/: rate limiting sederhana berdasarkan IP
  */
-
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "jmse2026";
 
 // Simple in-memory rate limiter (per IP)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -59,38 +55,9 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // Basic auth for /kalibrasi-harga
-  if (pathname.startsWith("/kalibrasi-harga")) {
-    const authHeader = request.headers.get("authorization");
-
-    if (!authHeader || !authHeader.startsWith("Basic ")) {
-      return new NextResponse("Authentication required", {
-        status: 401,
-        headers: {
-          "WWW-Authenticate": 'Basic realm="Admin - Kalibrasi Harga JMSE"',
-        },
-      });
-    }
-
-    const base64Credentials = authHeader.slice(6);
-    let decoded: string;
-    try {
-      decoded = atob(base64Credentials);
-    } catch {
-      return new NextResponse("Invalid credentials", { status: 401 });
-    }
-
-    const [username, password] = decoded.split(":");
-
-    // Accept any username, only check password
-    if (password !== ADMIN_PASSWORD) {
-      return new NextResponse("Invalid credentials", { status: 401 });
-    }
-  }
-
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/kalibrasi-harga/:path*", "/api/:path*"],
+  matcher: ["/api/:path*"],
 };
