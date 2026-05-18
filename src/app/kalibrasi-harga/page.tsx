@@ -44,6 +44,7 @@ import {
   Wrench,
   DollarSign,
   CheckCircle2,
+  Check,
   ArrowLeft,
   TrendingUp,
   Package,

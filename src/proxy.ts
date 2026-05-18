@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 /**
- * Middleware untuk rate limiting API.
+ * Proxy untuk rate limiting API.
  *
  * - /api/: rate limiting sederhana berdasarkan IP
  */
@@ -37,7 +37,7 @@ if (typeof setInterval !== "undefined") {
   }, 60_000);
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Rate limiting for API routes
