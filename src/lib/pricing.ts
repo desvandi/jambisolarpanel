@@ -161,24 +161,24 @@ export const defaultSettings: PricingSettings = {
 // --- Inverter Display Names ---
 
 export const inverterDisplayNames: Record<keyof InverterPrices, string> = {
-  deye3k6: "Inverter Hybrid 3.600W",
-  deye6k: "Inverter Hybrid 6.000W",
-  deye8k: "Inverter Hybrid 8.000W",
-  growatt10k: "Inverter Hybrid 10.000W",
-  deye10k3p: "Inverter Hybrid 10.000W 3-Fase",
-  deye15k3p: "Inverter Hybrid 15.000W 3-Fase",
-  deye20k3p: "Inverter Hybrid 20.000W 3-Fase",
+  deye3k6: "PowMr Hybrid 3.600W",
+  deye6k: "PowMr Hybrid 6.000W",
+  deye8k: "PowMr Hybrid 8.000W",
+  growatt10k: "Growatt Hybrid 10.000W",
+  deye10k3p: "Deye Hybrid 10.000W 3-Fase",
+  deye15k3p: "Deye Hybrid 15.000W 3-Fase",
+  deye20k3p: "Deye Hybrid 20.000W 3-Fase",
 };
 
 // Inverter metadata for kalibrasi detail
-export const inverterMeta: Record<keyof InverterPrices, { capacity: number; phase: string; type: string }> = {
-  deye3k6: { capacity: 3.6, phase: "1-Fase", type: "Hybrid" },
-  deye6k: { capacity: 6.0, phase: "1-Fase", type: "Hybrid" },
-  deye8k: { capacity: 8.0, phase: "1-Fase", type: "Hybrid" },
-  growatt10k: { capacity: 10.0, phase: "1-Fase", type: "Hybrid" },
-  deye10k3p: { capacity: 10.0, phase: "3-Fase", type: "Hybrid" },
-  deye15k3p: { capacity: 15.0, phase: "3-Fase", type: "Hybrid" },
-  deye20k3p: { capacity: 20.0, phase: "3-Fase", type: "Hybrid" },
+export const inverterMeta: Record<keyof InverterPrices, { capacity: number; phase: string; type: string; brand: string }> = {
+  deye3k6: { capacity: 3.6, phase: "1-Fase", type: "Hybrid", brand: "PowMr" },
+  deye6k: { capacity: 6.0, phase: "1-Fase", type: "Hybrid", brand: "PowMr" },
+  deye8k: { capacity: 8.0, phase: "1-Fase", type: "Hybrid", brand: "PowMr" },
+  growatt10k: { capacity: 10.0, phase: "1-Fase", type: "Hybrid", brand: "Growatt" },
+  deye10k3p: { capacity: 10.0, phase: "3-Fase", type: "Hybrid", brand: "Deye" },
+  deye15k3p: { capacity: 15.0, phase: "3-Fase", type: "Hybrid", brand: "Deye" },
+  deye20k3p: { capacity: 20.0, phase: "3-Fase", type: "Hybrid", brand: "Deye" },
 };
 
 // --- Package Definitions (no bundled batteries) ---
@@ -202,7 +202,7 @@ export const packageSpecs: PackageSpec[] = [
   // ============================
   {
     name: "Paket 1.3 kWp",
-    desc: "Inverter Hybrid 3.600W. Starter untuk rumah kecil: lampu LED, TV, charger HP, kipas angin.",
+    desc: "PowMr Hybrid 3.600W. Starter untuk rumah kecil: lampu LED, TV, charger HP, kipas angin.",
     specs: "Kapasitas 1.3 kWp | Inverter Hybrid 1 Fase",
     panelCount: 2,
     inverterKey: "deye3k6",
@@ -211,7 +211,7 @@ export const packageSpecs: PackageSpec[] = [
   },
   {
     name: "Paket 2.6 kWp",
-    desc: "Inverter Hybrid 3.600W. Rumah kecil-menengah: lampu, TV, kipas angin, kulkas kecil.",
+    desc: "PowMr Hybrid 3.600W. Rumah kecil-menengah: lampu, TV, kipas angin, kulkas kecil.",
     specs: "Kapasitas 2.6 kWp | Inverter Hybrid 1 Fase",
     panelCount: 4,
     inverterKey: "deye3k6",
@@ -220,7 +220,7 @@ export const packageSpecs: PackageSpec[] = [
   },
   {
     name: "Paket 3.25 kWp",
-    desc: "Inverter Hybrid 3.600W. Rumah menengah: AC 1 unit, kulkas, mesin cuci.",
+    desc: "PowMr Hybrid 3.600W. Rumah menengah: AC 1 unit, kulkas, mesin cuci.",
     specs: "Kapasitas 3.25 kWp | Inverter Hybrid 1 Fase",
     panelCount: 5,
     inverterKey: "deye3k6",
@@ -229,7 +229,7 @@ export const packageSpecs: PackageSpec[] = [
   },
   {
     name: "Paket 5.2 kWp",
-    desc: "Inverter Hybrid 6.000W. Rumah keluarga besar: AC 2 unit, water heater, dispenser.",
+    desc: "PowMr Hybrid 6.000W. Rumah keluarga besar: AC 2 unit, water heater, dispenser.",
     specs: "Kapasitas 5.2 kWp | Inverter Hybrid 1 Fase",
     panelCount: 8,
     inverterKey: "deye6k",
@@ -242,7 +242,7 @@ export const packageSpecs: PackageSpec[] = [
   // ============================
   {
     name: "Paket 7.15 kWp",
-    desc: "Inverter Hybrid 8.000W. Toko, ruko, kantor kecil, cold storage mini, bengkel.",
+    desc: "PowMr Hybrid 8.000W. Toko, ruko, kantor kecil, cold storage mini, bengkel.",
     specs: "Kapasitas 7.15 kWp | Inverter Hybrid 1 Fase",
     panelCount: 11,
     inverterKey: "deye8k",
@@ -251,7 +251,7 @@ export const packageSpecs: PackageSpec[] = [
   },
   {
     name: "Paket 10.4 kWp",
-    desc: "Inverter Hybrid 10.000W. Gudang, restoran, hotel kecil, minimarket, clinic.",
+    desc: "Growatt Hybrid 10.000W. Gudang, restoran, hotel kecil, minimarket, clinic.",
     specs: "Kapasitas 10.4 kWp | Inverter Hybrid 1 Fase",
     panelCount: 16,
     inverterKey: "growatt10k",
@@ -264,7 +264,7 @@ export const packageSpecs: PackageSpec[] = [
   // ============================
   {
     name: "Paket 11.7 kWp",
-    desc: "Inverter 10.000W 3-Fase Hybrid. Pabrik menengah, processing plant, warehouse besar.",
+    desc: "Deye 10.000W 3-Fase Hybrid. Pabrik menengah, processing plant, warehouse besar.",
     specs: "Kapasitas 11.7 kWp | Inverter Hybrid 3 Fase",
     panelCount: 18,
     inverterKey: "deye10k3p",
@@ -273,7 +273,7 @@ export const packageSpecs: PackageSpec[] = [
   },
   {
     name: "Paket 20.8 kWp",
-    desc: "Inverter 20.000W 3-Fase Hybrid. Mega proyek, industrial complex, pabrik besar, hotel bintang 4.",
+    desc: "Deye 20.000W 3-Fase Hybrid. Mega proyek, industrial complex, pabrik besar, hotel bintang 4.",
     specs: "Kapasitas 20.8 kWp | Inverter Hybrid 3 Fase",
     panelCount: 32,
     inverterKey: "deye20k3p",
@@ -488,20 +488,16 @@ export function calculatePackages(
     // Daily production
     const dailyKwh = kWp * s.pshHours * s.efficiency;
 
-    // Savings estimation (based on PLN average tariff ~Rp 1.500/kWh)
-    const monthlySavingsLow =
-      Math.round((dailyKwh * 0.5 * 30 * 1500) / 1_000_000 * 10) / 10;
-    const monthlySavingsHigh =
-      Math.round((dailyKwh * 0.75 * 30 * 1500) / 1_000_000 * 10) / 10;
-
-    // Ensure no floating-point artifacts (e.g. 3.90000000001)
-    const cleanSavingsLow = Math.round(monthlySavingsLow * 10) / 10;
-    const cleanSavingsHigh = Math.round(monthlySavingsHigh * 10) / 10;
+    // Savings estimation — range 60%-80% self-consumption, using PLN_TARIFF_DEFAULT
+    const monthlySavingsLow = Math.round(dailyKwh * 0.60 * 30 * PLN_TARIFF_DEFAULT);
+    const monthlySavingsHigh = Math.round(dailyKwh * 0.80 * 30 * PLN_TARIFF_DEFAULT);
 
     const formatSavings = (val: number) => {
-      const clean = Math.round(val * 10) / 10;
-      if (clean >= 1) return `${clean.toFixed(clean % 1 === 0 ? 0 : 1)}jt`;
-      return `${Math.round(clean * 1000)}rb`;
+      if (val >= 1_000_000) {
+        const jt = Math.round(val / 100_000) / 10;
+        return `Rp ${jt % 1 === 0 ? jt.toFixed(0) : jt.toFixed(1)}jt`;
+      }
+      return `Rp ${Math.round(val / 1000)}rb`;
     };
 
     // Add-on prices (with margin & PPN)
@@ -554,7 +550,7 @@ export function calculatePackages(
       priceFormatted: formatRp(price),
       kWp,
       dailyProduction: `~${roundTo(dailyKwh, 1).toFixed(1)} kWh/hari`,
-      savingsRange: `${formatSavings(cleanSavingsLow)} - ${formatSavings(cleanSavingsHigh)}/bulan`,
+      savingsRange: `${formatSavings(monthlySavingsLow)} - ${formatSavings(monthlySavingsHigh)}/bulan`,
       carportAddonPrice: carportAddon,
       monitoringBasicPrice: monBasic,
       monitoringStandardPrice: monStd,
@@ -571,7 +567,7 @@ export function calculatePackages(
 
 // --- ROI & Return Calculation ---
 
-export const PLN_TARIFF_DEFAULT = 1500; // Rp/kWh (R-1 1300VA+)
+export const PLN_TARIFF_DEFAULT = 1444.7; // Rp/kWh (R-1 1300VA+, non-subsidi)
 export const SELF_CONSUMPTION_DEFAULT = 0.70; // 70% utilization (hybrid without battery)
 export const PLN_INCREASE_RATE_DEFAULT = 0.06; // 6% per tahun
 
