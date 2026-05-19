@@ -63,7 +63,15 @@ export function SavingsCalculator() {
   // caused by calculatePackages() reading localStorage on client but not on SSR
   const computeAnalysis = useCallback((billValue: number): AnalysisResult | null => {
     const allPkgs = calculatePackages();
-    const rec = recommendPackage(billValue, allPkgs);
+
+    // Guard: if no packages calculated, bail out
+    if (!allPkgs || allPkgs.length === 0) return null;
+
+    // Try recommendPackage first, fall back to first valid package
+    let rec = recommendPackage(billValue, allPkgs);
+    if (!rec) {
+      rec = allPkgs.find((p) => p.kWp > 0 && isFinite(p.kWp)) || null;
+    }
     if (!rec) return null;
 
     const monthlyKwh = billValue / PLN_TARIFF_DEFAULT;
