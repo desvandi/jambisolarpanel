@@ -355,7 +355,13 @@ export function loadComponentPrices(): ComponentPrices {
     migrateLocalStorage();
     const raw = localStorage.getItem(LS_COMPONENT);
     if (!raw) return { ...defaultComponentPrices };
-    return { ...defaultComponentPrices, ...JSON.parse(raw) };
+    const parsed = JSON.parse(raw);
+    if (hasNaN(parsed as unknown as Record<string, unknown>)) {
+      console.warn("[pricing] Corrupted component prices detected (NaN), using defaults");
+      localStorage.removeItem(LS_COMPONENT);
+      return { ...defaultComponentPrices };
+    }
+    return { ...defaultComponentPrices, ...parsed };
   } catch {
     return { ...defaultComponentPrices };
   }
@@ -377,7 +383,13 @@ export function loadInverterPrices(): InverterPrices {
     migrateLocalStorage();
     const raw = localStorage.getItem(LS_INVERTER);
     if (!raw) return { ...defaultInverterPrices };
-    return { ...defaultInverterPrices, ...JSON.parse(raw) };
+    const parsed = JSON.parse(raw);
+    if (hasNaN(parsed as unknown as Record<string, unknown>)) {
+      console.warn("[pricing] Corrupted inverter prices detected (NaN), using defaults");
+      localStorage.removeItem(LS_INVERTER);
+      return { ...defaultInverterPrices };
+    }
+    return { ...defaultInverterPrices, ...parsed };
   } catch {
     return { ...defaultInverterPrices };
   }
@@ -399,7 +411,13 @@ export function loadSettings(): PricingSettings {
     migrateLocalStorage();
     const raw = localStorage.getItem(LS_SETTINGS);
     if (!raw) return { ...defaultSettings };
-    return { ...defaultSettings, ...JSON.parse(raw) };
+    const parsed = JSON.parse(raw);
+    if (hasNaN(parsed as unknown as Record<string, unknown>)) {
+      console.warn("[pricing] Corrupted pricing settings detected (NaN), using defaults");
+      localStorage.removeItem(LS_SETTINGS);
+      return { ...defaultSettings };
+    }
+    return { ...defaultSettings, ...parsed };
   } catch {
     return { ...defaultSettings };
   }

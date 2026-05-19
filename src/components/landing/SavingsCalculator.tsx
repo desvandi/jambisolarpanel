@@ -104,22 +104,43 @@ export function SavingsCalculator() {
   }, []);
 
   const [error, setError] = useState<string | null>(null);
+  const [ready, setReady] = useState(false); // tracks first computation
 
   useEffect(() => {
     try {
       setError(null);
-      setAnalysis(computeAnalysis(bill));
+      const result = computeAnalysis(bill);
+
+      if (result) {
+        setAnalysis(result);
+        setReady(true);
+      } else {
+        // computeAnalysis returned null — packages may be corrupted
+        console.warn("[SavingsCalculator] computeAnalysis returned null, clearing pricing data and retrying");
+        try { clearAllPricing(); } catch (_) {}
+        const retry = computeAnalysis(bill);
+        if (retry) {
+          setAnalysis(retry);
+          setReady(true);
+        } else {
+          // Still null after recovery — set error so error UI shows
+          setError("Gagal memuat kalkulator. Data harga di-reset ke default.");
+          setReady(true);
+        }
+      }
     } catch (err) {
       console.error("[SavingsCalculator] Computation failed:", err);
       setError("Gagal memuat kalkulator. Data harga di-reset ke default.");
-      // Clear corrupted localStorage so next render recovers with defaults
       try { clearAllPricing(); } catch (_) {}
-      // Retry with fresh defaults
       try {
-        setAnalysis(computeAnalysis(bill));
+        const retry = computeAnalysis(bill);
+        if (retry) {
+          setAnalysis(retry);
+        }
       } catch (_) {
         setError("Kalkulator tidak tersedia. Silakan refresh halaman.");
       }
+      setReady(true);
     }
   }, [bill, computeAnalysis]);
 
@@ -139,8 +160,8 @@ export function SavingsCalculator() {
     return () => window.removeEventListener("jmse-pricing-updated", handler);
   }, [bill, computeAnalysis]);
 
-  // Loading skeleton while computing
-  if (!analysis && !error) {
+  // Loading skeleton while computing (only before first computation completes)
+  if (!ready && !error) {
     return (
       <section
         id="kalkulator"
