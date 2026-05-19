@@ -204,7 +204,7 @@ export default function SolarCommercialPage() {
                     <h4 className={`text-base font-bold mb-2 ${pkg.popular ? "text-white" : "text-navy dark:text-white"}`}>{pkg.name}</h4>
                     <p className={`text-sm mb-3 ${pkg.popular ? "text-white/80" : "text-muted-foreground"}`}>{pkg.desc}</p>
                     <p className={`text-xs font-medium mb-3 px-2.5 py-1.5 rounded-lg inline-block ${pkg.popular ? "bg-white/10 text-white/70" : "bg-muted text-muted-foreground"}`}>{pkg.specs}</p>
-                    {pkg.batteryKwh > 0 && <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium mb-3 ml-2 ${pkg.popular ? "bg-white/10 text-gold-light" : "bg-gold/10 text-gold"}`}><Battery className="w-3.5 h-3.5" />LiFePO4 {pkg.batteryKwh} kWh</span>}
+                    {pkg.batteryMaxKwh > 0 && <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium mb-3 ml-2 ${pkg.popular ? "bg-white/10 text-gold-light" : "bg-gold/10 text-gold"}`}><Battery className="w-3.5 h-3.5" />LiFePO4 {pkg.batteryMaxKwh} kWh</span>}
                     <div className={`p-3 rounded-xl mb-4 ${pkg.popular ? "bg-white/10" : "bg-solar/5 border border-solar/10"}`}>
                       <p className={`text-xs ${pkg.popular ? "text-white/60" : "text-muted-foreground"}`}>Produksi: {pkg.dailyProduction}</p>
                       <p className={`text-sm font-bold ${pkg.popular ? "text-gold-light" : "text-solar"}`}>Hemat: {pkg.savingsRange}</p>
@@ -246,7 +246,7 @@ export default function SolarCommercialPage() {
                     <h4 className={`text-base font-bold mb-2 ${pkg.popular ? "text-white" : "text-navy dark:text-white"}`}>{pkg.name}</h4>
                     <p className={`text-sm mb-3 ${pkg.popular ? "text-white/80" : "text-muted-foreground"}`}>{pkg.desc}</p>
                     <p className={`text-xs font-medium mb-3 px-2.5 py-1.5 rounded-lg inline-block ${pkg.popular ? "bg-white/10 text-white/70" : "bg-muted text-muted-foreground"}`}>{pkg.specs}</p>
-                    {pkg.batteryKwh > 0 && <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium mb-3 ml-2 ${pkg.popular ? "bg-white/10 text-gold-light" : "bg-gold/10 text-gold"}`}><Battery className="w-3.5 h-3.5" />LiFePO4 {pkg.batteryKwh} kWh</span>}
+                    {pkg.batteryMaxKwh > 0 && <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium mb-3 ml-2 ${pkg.popular ? "bg-white/10 text-gold-light" : "bg-gold/10 text-gold"}`}><Battery className="w-3.5 h-3.5" />LiFePO4 {pkg.batteryMaxKwh} kWh</span>}
                     <div className={`p-3 rounded-xl mb-4 ${pkg.popular ? "bg-white/10" : "bg-solar/5 border border-solar/10"}`}>
                       <p className={`text-xs ${pkg.popular ? "text-white/60" : "text-muted-foreground"}`}>Produksi: {pkg.dailyProduction}</p>
                       <p className={`text-sm font-bold ${pkg.popular ? "text-gold-light" : "text-solar"}`}>Hemat: {pkg.savingsRange}</p>

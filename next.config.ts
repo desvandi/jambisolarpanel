@@ -2,9 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  turbopack: {
-    root: "..",
-  },
   /* Security headers */
   async headers() {
     return [
@@ -35,9 +32,8 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  /* Note: Once TypeScript errors are resolved, remove ignoreBuildErrors */
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   /* React StrictMode enabled for detecting side effects */
   reactStrictMode: true,

@@ -192,10 +192,10 @@ export default function SolarHomePage() {
                     {pkg.specs}
                   </p>
 
-                  {pkg.batteryKwh > 0 && (
+                  {pkg.batteryMaxKwh > 0 && (
                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium mb-3 ml-2 ${pkg.popular ? "bg-white/10 text-gold-light" : "bg-gold/10 text-gold"}`}>
                       <Battery className="w-3.5 h-3.5" />
-                      LiFePO4 {pkg.batteryKwh} kWh
+                      LiFePO4 {pkg.batteryMaxKwh} kWh
                     </span>
                   )}
 

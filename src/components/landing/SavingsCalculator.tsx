@@ -26,6 +26,9 @@ import {
   PLN_TARIFF_DEFAULT,
   SELF_CONSUMPTION_DEFAULT,
   PLN_INCREASE_RATE_DEFAULT,
+  defaultComponentPrices,
+  defaultInverterPrices,
+  defaultSettings,
 } from "@/lib/pricing";
 
 const WA_LINK =
@@ -40,8 +43,6 @@ const billPresets = [
   { label: "Rp 10jt", value: 10000000 },
 ];
 
-// formatRpShort now imported from @/lib/pricing
-
 interface AnalysisResult {
   recommended: ReturnType<typeof calculatePackages>[0];
   monthlyKwh: number;
@@ -52,40 +53,61 @@ interface AnalysisResult {
   needsCustom: boolean;
 }
 
-export function SavingsCalculator() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [bill, setBill] = useState(2000000);
-  const [showAssumptions, setShowAssumptions] = useState(false);
-  const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
+/**
+ * Run analysis using EXPLICIT defaults (no localStorage).
+ * This is 100% deterministic and always produces valid output.
+ */
+function computeWithDefaults(billValue: number): AnalysisResult {
+  const allPkgs = calculatePackages(
+    defaultComponentPrices,
+    defaultInverterPrices,
+    defaultSettings
+  );
+  const rec = recommendPackage(billValue, allPkgs) || allPkgs[0];
+  const monthlyKwh = billValue / PLN_TARIFF_DEFAULT;
+  const productionKwh = Math.round(rec.kWp * 3.75 * 0.80 * 30);
+  const coverage = Math.round((productionKwh / monthlyKwh) * 100);
+  const dailyKwh = rec.kWp * 3.75 * 0.80;
+  const roi = calculateROI(rec.price, dailyKwh);
+  const co2PerYear = (roi.annualSavingsBase / PLN_TARIFF_DEFAULT) * 0.8 / 1000;
+  const largestPkg = allPkgs[allPkgs.length - 1];
+  const largestProduction = largestPkg
+    ? Math.round(largestPkg.kWp * 3.75 * 0.80 * 30)
+    : 0;
+  const needsCustom = largestProduction < monthlyKwh * 0.5;
 
-  // Compute analysis client-side only (after mount) to avoid hydration mismatch
-  // caused by calculatePackages() reading localStorage on client but not on SSR
-  const computeAnalysis = useCallback((billValue: number): AnalysisResult | null => {
-    const allPkgs = calculatePackages();
+  return {
+    recommended: rec,
+    monthlyKwh: Math.round(monthlyKwh),
+    productionKwh: Math.round(productionKwh),
+    coverage,
+    roi,
+    co2PerYear,
+    needsCustom,
+  };
+}
 
-    // Guard: if no packages calculated, bail out
-    if (!allPkgs || allPkgs.length === 0) return null;
+/**
+ * Run analysis using localStorage (custom pricing from kalibrasi-harga).
+ * Falls back to defaults if anything fails.
+ */
+function computeWithStorage(billValue: number): AnalysisResult {
+  try {
+    const allPkgs = calculatePackages(); // reads from localStorage
+    if (!allPkgs || allPkgs.length === 0) return computeWithDefaults(billValue);
 
-    // Try recommendPackage first, fall back to first valid package
     let rec = recommendPackage(billValue, allPkgs);
     if (!rec) {
       rec = allPkgs.find((p) => p.kWp > 0 && isFinite(p.kWp)) || null;
     }
-    if (!rec) return null;
+    if (!rec) return computeWithDefaults(billValue);
 
     const monthlyKwh = billValue / PLN_TARIFF_DEFAULT;
-    const productionKwhRaw = rec.kWp * 3.75 * 0.80 * 30; // PSH × efficiency × 30 days
-    const productionKwh = Math.round(productionKwhRaw);
+    const productionKwh = Math.round(rec.kWp * 3.75 * 0.80 * 30);
     const coverage = Math.round((productionKwh / monthlyKwh) * 100);
-
-    const dailyKwhRaw = rec.kWp * 3.75 * 0.80;
-    const roi = calculateROI(rec.price, dailyKwhRaw);
-
-    // CO2 saved (Indonesia grid: ~0.8 kg CO2/kWh)
+    const dailyKwh = rec.kWp * 3.75 * 0.80;
+    const roi = calculateROI(rec.price, dailyKwh);
     const co2PerYear = (roi.annualSavingsBase / PLN_TARIFF_DEFAULT) * 0.8 / 1000;
-
-    // Check if largest package still < 50% coverage
     const largestPkg = allPkgs[allPkgs.length - 1];
     const largestProduction = largestPkg
       ? Math.round(largestPkg.kWp * 3.75 * 0.80 * 30)
@@ -101,144 +123,73 @@ export function SavingsCalculator() {
       co2PerYear,
       needsCustom,
     };
-  }, []);
+  } catch (err) {
+    console.error("[SavingsCalculator] computeWithStorage failed:", err);
+    return computeWithDefaults(billValue);
+  }
+}
 
-  const [error, setError] = useState<string | null>(null);
-  const [ready, setReady] = useState(false); // tracks first computation
+export function SavingsCalculator() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [bill, setBill] = useState(2000000);
+  const [showAssumptions, setShowAssumptions] = useState(false);
 
+  // Initialize with DEFAULTS so the calculator ALWAYS renders with real content
+  // on first paint — no empty skeleton, no dependency on localStorage.
+  const [analysis, setAnalysis] = useState<AnalysisResult>(() =>
+    computeWithDefaults(2000000)
+  );
+  const [isCustomPricing, setIsCustomPricing] = useState(false);
+
+  // After mount: try loading custom pricing from localStorage (kalibrasi-harga data)
   useEffect(() => {
     try {
-      setError(null);
-      const result = computeAnalysis(bill);
-
-      if (result) {
-        setAnalysis(result);
-        setReady(true);
-      } else {
-        // computeAnalysis returned null — packages may be corrupted
-        console.warn("[SavingsCalculator] computeAnalysis returned null, clearing pricing data and retrying");
-        try { clearAllPricing(); } catch (_) {}
-        const retry = computeAnalysis(bill);
-        if (retry) {
-          setAnalysis(retry);
-          setReady(true);
-        } else {
-          // Still null after recovery — set error so error UI shows
-          setError("Gagal memuat kalkulator. Data harga di-reset ke default.");
-          setReady(true);
-        }
+      const result = computeWithStorage(bill);
+      setAnalysis(result);
+      // Check if custom pricing is active
+      if (typeof window !== "undefined") {
+        const hasCustom = !!(
+          window.localStorage.getItem("jmse_v4_component_prices") ||
+          window.localStorage.getItem("jmse_v4_inverter_prices") ||
+          window.localStorage.getItem("jmse_v4_pricing_settings")
+        );
+        setIsCustomPricing(hasCustom);
       }
     } catch (err) {
-      console.error("[SavingsCalculator] Computation failed:", err);
-      setError("Gagal memuat kalkulator. Data harga di-reset ke default.");
-      try { clearAllPricing(); } catch (_) {}
-      try {
-        const retry = computeAnalysis(bill);
-        if (retry) {
-          setAnalysis(retry);
-        }
-      } catch (_) {
-        setError("Kalkulator tidak tersedia. Silakan refresh halaman.");
-      }
-      setReady(true);
+      console.error("[SavingsCalculator] Failed to load custom pricing, using defaults:", err);
+      // Keep the default analysis that was already set
     }
-  }, [bill, computeAnalysis]);
+  }, [bill]);
 
-  // Also recompute when pricing settings change
+  // Recompute when pricing settings change (from kalibrasi-harga "Simpan")
   useEffect(() => {
     const handler = () => {
       try {
-        setError(null);
-        setAnalysis(computeAnalysis(bill));
+        const result = computeWithStorage(bill);
+        setAnalysis(result);
+        setIsCustomPricing(true);
       } catch (err) {
-        console.error("[SavingsCalculator] Recompute failed:", err);
-        setError("Gagal memuat kalkulator. Data harga di-reset ke default.");
-        try { clearAllPricing(); } catch (_) {}
+        console.error("[SavingsCalculator] Pricing update failed:", err);
       }
     };
     window.addEventListener("jmse-pricing-updated", handler);
     return () => window.removeEventListener("jmse-pricing-updated", handler);
-  }, [bill, computeAnalysis]);
+  }, [bill]);
 
-  // Loading skeleton while computing (only before first computation completes)
-  if (!ready && !error) {
-    return (
-      <section
-        id="kalkulator"
-        className="py-20 md:py-28 solar-gradient relative overflow-hidden"
-      >
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 text-sm font-semibold text-white bg-white/10 rounded-full border border-white/20">
-              <Calculator className="w-4 h-4" />
-              Kalkulator Penghematan
-            </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-6">
-              Hitung Potensi{" "}
-              <span className="text-gold-light">Penghematan</span> Anda
-            </h2>
-            <p className="text-lg text-white/70 leading-relaxed">
-              Masukkan tagihan listrik bulanan Anda — kami akan menganalisis
-              kebutuhan dan merekomendasikan paket yang paling sesuai.
-            </p>
-          </div>
-          <div className="max-w-4xl mx-auto">
-            <div className="glass rounded-3xl p-6 sm:p-10">
-              <div className="animate-pulse space-y-6">
-                <div className="h-4 bg-muted rounded w-1/3 mx-auto" />
-                <div className="flex justify-center gap-3">
-                  {[1,2,3,4,5,6].map(i => (
-                    <div key={i} className="h-10 w-20 bg-muted rounded-full" />
-                  ))}
-                </div>
-                <div className="h-12 bg-muted rounded w-1/2 mx-auto" />
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                  {[1,2,3,4].map(i => (
-                    <div key={i} className="h-24 bg-muted/50 rounded-2xl" />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  // Recompute when bill changes
+  const handleBillChange = useCallback((value: number) => {
+    setBill(value);
+  }, []);
 
-  if (error) {
-    return (
-      <section
-        id="kalkulator"
-        className="py-20 md:py-28 solar-gradient relative overflow-hidden"
-      >
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 text-sm font-semibold text-white bg-white/10 rounded-full border border-white/20">
-              <Calculator className="w-4 h-4" />
-              Kalkulator Penghematan
-            </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-6">
-              Hitung Potensi{" "}
-              <span className="text-gold-light">Penghematan</span> Anda
-            </h2>
-          </div>
-          <div className="max-w-lg mx-auto">
-            <div className="glass rounded-3xl p-8 text-center">
-              <p className="text-sm text-red-600 dark:text-red-400 mb-4">{error}</p>
-              <button
-                onClick={() => { try { clearAllPricing(); } catch(_){} window.location.reload(); }}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-solar hover:bg-solar-dark text-white font-semibold rounded-full transition-all"
-              >
-                <Zap className="w-4 h-4" /> Reset &amp; Refresh
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  const { recommended: rec, monthlyKwh, productionKwh, coverage, roi, co2PerYear, needsCustom } = analysis;
+  // Derive values from analysis (always non-null due to defaults init)
+  const rec = analysis.recommended;
+  const monthlyKwh = analysis.monthlyKwh;
+  const productionKwh = analysis.productionKwh;
+  const coverage = analysis.coverage;
+  const roi = analysis.roi;
+  const co2PerYear = analysis.co2PerYear;
+  const needsCustom = analysis.needsCustom;
 
   return (
     <section
@@ -281,6 +232,15 @@ export function SavingsCalculator() {
           className="max-w-4xl mx-auto"
         >
           <div className="glass rounded-3xl p-6 sm:p-10">
+            {/* Custom pricing indicator */}
+            {isCustomPricing && (
+              <div className="mb-4 p-3 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/30">
+                <p className="text-xs text-blue-700 dark:text-blue-300 text-center">
+                  Menggunakan harga custom dari Kalibrasi Harga
+                </p>
+              </div>
+            )}
+
             {/* Step 1: Bill Input */}
             <div className="text-center mb-8">
               <p className="text-sm font-medium text-navy/60 dark:text-white/60 mb-4">
@@ -290,7 +250,7 @@ export function SavingsCalculator() {
                 {billPresets.map((preset) => (
                   <button
                     key={preset.value}
-                    onClick={() => setBill(preset.value)}
+                    onClick={() => handleBillChange(preset.value)}
                     className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 ${
                       bill === preset.value
                         ? "bg-solar text-white shadow-lg shadow-solar/30"
@@ -470,7 +430,7 @@ export function SavingsCalculator() {
               >
                 <p>
                   <strong>Tarif PLN:</strong> Rp {PLN_TARIFF_DEFAULT.toLocaleString("id-ID")}/kWh
-                  (tarif R-1 1300VA ke atas, non-subsidi). Bisnis & industri mungkin memiliki
+                  (tarif R-1 1300VA ke atas, non-subsidi). Bisnis &amp; industri mungkin memiliki
                   tarif berbeda.
                 </p>
                 <p>
