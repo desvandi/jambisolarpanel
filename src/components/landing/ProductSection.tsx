@@ -12,6 +12,10 @@ import {
   defaultComponentPrices,
   defaultInverterPrices,
   defaultSettings,
+  loadRemotePricing,
+  saveComponentPrices,
+  saveInverterPrices,
+  saveSettings,
 } from "@/lib/pricing";
 
 interface AddOnState {
@@ -85,19 +89,43 @@ export function ProductSection() {
   const [addOns, setAddOns] = useState<Record<string, AddOnState>>({});
   const [activeFilter, setActiveFilter] = useState<CategoryFilter>("all");
 
-  // Load localStorage data after mount (client-only), then listen for changes
+  // Load pricing: remote (Google Sheets) → localStorage → defaults
   useEffect(() => {
-    const loadFromStorage = () => {
-      setPackages(calculatePackages());
-      setIsCustom(hasCustomPricing());
-    };
-    loadFromStorage();
-    window.addEventListener("storage", loadFromStorage);
-    window.addEventListener("jmse-pricing-updated", loadFromStorage);
-    return () => {
-      window.removeEventListener("storage", loadFromStorage);
-      window.removeEventListener("jmse-pricing-updated", loadFromStorage);
-    };
+    let cancelled = false;
+
+    (async () => {
+      // Priority 1: Remote (synced across all devices)
+      try {
+        const remote = await loadRemotePricing();
+        if (cancelled) return;
+        if (remote) {
+          const pkgs = calculatePackages(remote.components, remote.inverters, remote.settings);
+          if (pkgs && pkgs.length > 0 && pkgs[0].kWp > 0) {
+            setPackages(pkgs);
+            setIsCustom(true);
+            // Cache to localStorage for offline
+            saveComponentPrices(remote.components);
+            saveInverterPrices(remote.inverters);
+            saveSettings(remote.settings);
+            return;
+          }
+        }
+      } catch {
+        // Remote unavailable — fall through to localStorage
+      }
+
+      // Priority 2: localStorage
+      if (cancelled) return;
+      const localPkgs = calculatePackages(); // reads from localStorage
+      const hasLocal = hasCustomPricing();
+      if (localPkgs.length > 0 && localPkgs[0].kWp > 0 && hasLocal) {
+        setPackages(localPkgs);
+        setIsCustom(true);
+      }
+      // Otherwise keep the defaults already set in useState
+    })();
+
+    return () => { cancelled = true; };
   }, []);
 
   // Listen for category selection from Hero quick selector

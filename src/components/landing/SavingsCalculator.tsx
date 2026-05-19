@@ -29,6 +29,11 @@ import {
   defaultComponentPrices,
   defaultInverterPrices,
   defaultSettings,
+  loadRemotePricing,
+  saveRemotePricing,
+  saveComponentPrices,
+  saveInverterPrices,
+  saveSettings,
 } from "@/lib/pricing";
 
 const WA_LINK =
@@ -129,6 +134,35 @@ function computeWithStorage(billValue: number): AnalysisResult {
   }
 }
 
+/** Build analysis result from given packages and recommended package */
+function computeWithPackages(
+  billValue: number,
+  rec: ReturnType<typeof calculatePackages>[0],
+  allPkgs: ReturnType<typeof calculatePackages>
+): AnalysisResult {
+  const monthlyKwh = billValue / PLN_TARIFF_DEFAULT;
+  const productionKwh = Math.round(rec.kWp * 3.75 * 0.80 * 30);
+  const coverage = Math.round((productionKwh / monthlyKwh) * 100);
+  const dailyKwh = rec.kWp * 3.75 * 0.80;
+  const roi = calculateROI(rec.price, dailyKwh);
+  const co2PerYear = (roi.annualSavingsBase / PLN_TARIFF_DEFAULT) * 0.8 / 1000;
+  const largestPkg = allPkgs[allPkgs.length - 1];
+  const largestProduction = largestPkg
+    ? Math.round(largestPkg.kWp * 3.75 * 0.80 * 30)
+    : 0;
+  const needsCustom = largestProduction < monthlyKwh * 0.5;
+
+  return {
+    recommended: rec,
+    monthlyKwh: Math.round(monthlyKwh),
+    productionKwh: Math.round(productionKwh),
+    coverage,
+    roi,
+    co2PerYear,
+    needsCustom,
+  };
+}
+
 export function SavingsCalculator() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -136,30 +170,59 @@ export function SavingsCalculator() {
   const [showAssumptions, setShowAssumptions] = useState(false);
 
   // Initialize with DEFAULTS so the calculator ALWAYS renders with real content
-  // on first paint — no empty skeleton, no dependency on localStorage.
+  // on first paint — no empty skeleton, no dependency on network/localStorage.
   const [analysis, setAnalysis] = useState<AnalysisResult>(() =>
     computeWithDefaults(2000000)
   );
-  const [isCustomPricing, setIsCustomPricing] = useState(false);
+  // Track where pricing data comes from (for UI badge)
+  const [pricingSource, setPricingSource] = useState<"default" | "remote" | "local">("default");
 
-  // After mount: try loading custom pricing from localStorage (kalibrasi-harga data)
+  // After mount: fetch remote pricing (Google Sheets), then localStorage as fallback
   useEffect(() => {
-    try {
-      const result = computeWithStorage(bill);
-      setAnalysis(result);
-      // Check if custom pricing is active
-      if (typeof window !== "undefined") {
-        const hasCustom = !!(
-          window.localStorage.getItem("jmse_v4_component_prices") ||
-          window.localStorage.getItem("jmse_v4_inverter_prices") ||
-          window.localStorage.getItem("jmse_v4_pricing_settings")
-        );
-        setIsCustomPricing(hasCustom);
+    let cancelled = false;
+
+    (async () => {
+      // Priority 1: Remote (Google Sheets) — synced across all devices
+      try {
+        const remote = await loadRemotePricing();
+        if (cancelled) return;
+
+        if (remote) {
+          const pkgs = calculatePackages(remote.components, remote.inverters, remote.settings);
+          if (pkgs && pkgs.length > 0) {
+            const rec = recommendPackage(bill, pkgs) || pkgs[0];
+            if (rec && isFinite(rec.kWp) && rec.kWp > 0) {
+              setAnalysis(computeWithPackages(bill, rec, pkgs));
+              setPricingSource("remote");
+              // Sync remote data to localStorage for offline use
+              saveComponentPrices(remote.components);
+              saveInverterPrices(remote.inverters);
+              saveSettings(remote.settings);
+              return;
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("[SavingsCalculator] Remote pricing unavailable:", err);
       }
-    } catch (err) {
-      console.error("[SavingsCalculator] Failed to load custom pricing, using defaults:", err);
-      // Keep the default analysis that was already set
-    }
+
+      // Priority 2: localStorage (kalibrasi-harga data on this device)
+      try {
+        const result = computeWithStorage(bill);
+        if (cancelled) return;
+        if (result && isFinite(result.recommended.kWp) && result.recommended.kWp > 0) {
+          setAnalysis(result);
+          setPricingSource("local");
+          return;
+        }
+      } catch {
+        // Keep defaults
+      }
+
+      // Priority 3: defaults (already set in useState initializer)
+    })();
+
+    return () => { cancelled = true; };
   }, [bill]);
 
   // Recompute when pricing settings change (from kalibrasi-harga "Simpan")
@@ -168,7 +231,7 @@ export function SavingsCalculator() {
       try {
         const result = computeWithStorage(bill);
         setAnalysis(result);
-        setIsCustomPricing(true);
+        setPricingSource("local");
       } catch (err) {
         console.error("[SavingsCalculator] Pricing update failed:", err);
       }
@@ -233,10 +296,17 @@ export function SavingsCalculator() {
         >
           <div className="glass rounded-3xl p-6 sm:p-10">
             {/* Custom pricing indicator */}
-            {isCustomPricing && (
+            {pricingSource === "remote" && (
               <div className="mb-4 p-3 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/30">
                 <p className="text-xs text-blue-700 dark:text-blue-300 text-center">
-                  Menggunakan harga custom dari Kalibrasi Harga
+                  Menggunakan harga dari Google Sheets (sinkron semua device)
+                </p>
+              </div>
+            )}
+            {pricingSource === "local" && (
+              <div className="mb-4 p-3 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/30">
+                <p className="text-xs text-amber-700 dark:text-amber-300 text-center">
+                  Menggunakan harga custom dari Kalibrasi Harga (device ini)
                 </p>
               </div>
             )}

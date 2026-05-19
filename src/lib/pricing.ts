@@ -707,3 +707,102 @@ export function formatRpShort(num: number): string {
 export function parseRpToNumber(str: string): number {
   return parseInt(str.replace(/\D/g, ""), 10) || 0;
 }
+
+// --- Remote Pricing (Google Sheets sync) ---
+
+import {
+  fetchRemotePricing,
+  pushRemotePricing,
+  type RemotePricingData,
+} from "./pricing-api";
+
+/** Convert remote flat data to typed ComponentPrices */
+function remoteToComponentPrices(d: RemotePricingData): ComponentPrices {
+  return {
+    panelWattage: Number(d.panelWattage) || defaultComponentPrices.panelWattage,
+    panelPerUnit: Number(d.panelPerUnit) || defaultComponentPrices.panelPerUnit,
+    mountingPerPanel: Number(d.mountingPerPanel) || defaultComponentPrices.mountingPerPanel,
+    carportPerKwp: Number(d.carportPerKwp) || defaultComponentPrices.carportPerKwp,
+    bosPerPanel: Number(d.bosPerPanel) || defaultComponentPrices.bosPerPanel,
+    spdGroundingPerSystem: Number(d.spdGroundingPerSystem) || defaultComponentPrices.spdGroundingPerSystem,
+    laborPerPanel: Number(d.laborPerPanel) || defaultComponentPrices.laborPerPanel,
+    laborInverterPerUnit: Number(d.laborInverterPerUnit) || defaultComponentPrices.laborInverterPerUnit,
+    laborBatteryPerKwh: Number(d.laborBatteryPerKwh) || defaultComponentPrices.laborBatteryPerKwh,
+    batteryPerKwh: Number(d.batteryPerKwh) || defaultComponentPrices.batteryPerKwh,
+    bosBatteryPerKwh: Number(d.bosBatteryPerKwh) || defaultComponentPrices.bosBatteryPerKwh,
+    surveyDesignFee: Number(d.surveyDesignFee) || defaultComponentPrices.surveyDesignFee,
+    commissioningFee: Number(d.commissioningFee) || defaultComponentPrices.commissioningFee,
+    logisticsPerPanel: Number(d.logisticsPerPanel) || defaultComponentPrices.logisticsPerPanel,
+    monitoringBasic: Number(d.monitoringBasic) || defaultComponentPrices.monitoringBasic,
+    monitoringStandard: Number(d.monitoringStandard) || defaultComponentPrices.monitoringStandard,
+    monitoringIndustrial: Number(d.monitoringIndustrial) || defaultComponentPrices.monitoringIndustrial,
+  };
+}
+
+/** Convert remote flat data to typed InverterPrices */
+function remoteToInverterPrices(d: RemotePricingData): InverterPrices {
+  return {
+    deye3k6: Number(d.deye3k6) || defaultInverterPrices.deye3k6,
+    deye6k: Number(d.deye6k) || defaultInverterPrices.deye6k,
+    deye8k: Number(d.deye8k) || defaultInverterPrices.deye8k,
+    growatt10k: Number(d.growatt10k) || defaultInverterPrices.growatt10k,
+    deye10k3p: Number(d.deye10k3p) || defaultInverterPrices.deye10k3p,
+    deye15k3p: Number(d.deye15k3p) || defaultInverterPrices.deye15k3p,
+    deye20k3p: Number(d.deye20k3p) || defaultInverterPrices.deye20k3p,
+  };
+}
+
+/** Convert remote flat data to typed PricingSettings */
+function remoteToSettings(d: RemotePricingData): PricingSettings {
+  return {
+    marginPct: Number(d.marginPct) || defaultSettings.marginPct,
+    ppnPct: Number(d.ppnPct) || defaultSettings.ppnPct,
+    pshHours: Number(d.pshHours) || defaultSettings.pshHours,
+    efficiency: Number(d.efficiency) || defaultSettings.efficiency,
+  };
+}
+
+/**
+ * Fetch pricing from Google Sheets via API.
+ * Returns { components, inverters, settings } or null if API not configured / fails.
+ * Client-side only — must be called from useEffect or event handler.
+ */
+export async function loadRemotePricing(): Promise<{
+  components: ComponentPrices;
+  inverters: InverterPrices;
+  settings: PricingSettings;
+} | null> {
+  try {
+    const remote = await fetchRemotePricing();
+    if (!remote) return null;
+
+    return {
+      components: remoteToComponentPrices(remote),
+      inverters: remoteToInverterPrices(remote),
+      settings: remoteToSettings(remote),
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Push pricing to Google Sheets via API.
+ * Client-side only — call from kalibrasi-harga "Simpan" handler.
+ * Returns true on success.
+ */
+export async function saveRemotePricing(
+  components: ComponentPrices,
+  inverters: InverterPrices,
+  settings: PricingSettings
+): Promise<boolean> {
+  const flat: Record<string, number> = {
+    ...components,
+    ...inverters,
+    marginPct: settings.marginPct,
+    ppnPct: settings.ppnPct,
+    pshHours: settings.pshHours,
+    efficiency: settings.efficiency,
+  };
+  return pushRemotePricing(flat);
+}

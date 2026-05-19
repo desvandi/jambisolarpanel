@@ -19,6 +19,7 @@ import {
   saveSettings,
   clearAllPricing,
   packageSpecs,
+  saveRemotePricing,
 } from "@/lib/pricing";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -679,6 +680,7 @@ export default function KalibrasiHargaPage() {
   const [copied, setCopied] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
   const [activeTab, setActiveTab] = useState("panel");
+  const [syncStatus, setSyncStatus] = useState<"idle" | "syncing" | "synced" | "error">("idle");
 
   // Compute aggregated values from detailed state
   const { components, inverters, settings } = useMemo(
@@ -710,8 +712,9 @@ export default function KalibrasiHargaPage() {
   const computedSurveyDesign =
     detailed.services.surveyFee + detailed.services.designFee;
 
-  // Save handler
-  const handleSave = useCallback(() => {
+  // Save handler — saves to localStorage AND Google Sheets (remote)
+  const handleSave = useCallback(async () => {
+    // 1. Save locally (always works)
     saveDetailedState(detailed);
     saveComponentPrices(components);
     saveInverterPrices(inverters);
@@ -719,6 +722,16 @@ export default function KalibrasiHargaPage() {
     window.dispatchEvent(new Event("jmse-pricing-updated"));
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
+
+    // 2. Push to Google Sheets (async, may fail gracefully)
+    setSyncStatus("syncing");
+    try {
+      const success = await saveRemotePricing(components, inverters, settings);
+      setSyncStatus(success ? "synced" : "error");
+    } catch {
+      setSyncStatus("error");
+    }
+    setTimeout(() => setSyncStatus("idle"), 5000);
   }, [detailed, components, inverters, settings]);
 
   // Reset handler
@@ -901,6 +914,31 @@ export default function KalibrasiHargaPage() {
                 >
                   <CheckCircle2 className="w-3 h-3" />
                   Tersimpan
+                </Badge>
+              )}
+              {syncStatus === "syncing" && (
+                <Badge
+                  variant="outline"
+                  className="text-blue-600 border-blue-300 bg-blue-50 gap-1 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800"
+                >
+                  Sync ke Google Sheets...
+                </Badge>
+              )}
+              {syncStatus === "synced" && (
+                <Badge
+                  variant="outline"
+                  className="text-emerald-600 border-emerald-300 bg-emerald-50 gap-1 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800"
+                >
+                  <CheckCircle2 className="w-3 h-3" />
+                  Synced
+                </Badge>
+              )}
+              {syncStatus === "error" && (
+                <Badge
+                  variant="outline"
+                  className="text-amber-600 border-amber-300 bg-amber-50 gap-1 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800"
+                >
+                  Sync gagal
                 </Badge>
               )}
               <Button
