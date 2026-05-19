@@ -147,7 +147,8 @@ interface DetailedState {
 // --- Default Detailed State ---
 
 function getBrandFromKey(key: string): string {
-  return "Powmr";
+  const meta = inverterMeta[key as keyof typeof inverterMeta];
+  return meta?.brand || "PowMr";
 }
 
 const defaultDetailedState: DetailedState = {

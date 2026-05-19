@@ -27,10 +27,10 @@ export interface RemotePricingData {
   monitoringStandard: number;
   monitoringIndustrial: number;
   // Inverter
-  deye3k6: number;
-  deye6k: number;
-  deye8k: number;
-  growatt10k: number;
+  powmr3k6: number;
+  powmr6k: number;
+  powmr8k: number;
+  powmr10k: number;
   deye10k3p: number;
   deye15k3p: number;
   deye20k3p: number;

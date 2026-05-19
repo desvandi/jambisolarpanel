@@ -504,10 +504,9 @@ export function SavingsCalculator() {
                   tarif berbeda.
                 </p>
                 <p>
-                  <strong>Self-consumption:</strong> {Math.round(SELF_CONSUMPTION_DEFAULT * 100)}%
-                  — persentase produksi solar yang langsung digunakan oleh bangunan.
-                  Sisa {100 - Math.round(SELF_CONSUMPTION_DEFAULT * 100)}% terbuang karena
-                  produksi puncak terjadi saat siang hari ketika beban rumah tangga relatif rendah.
+                  <strong>Penghematan:</strong> 100% produksi solar dihitung sebagai penghematan
+                  (dailyKwh × 30 hari × tarif PLN). Sistem hybrid memungkinkan seluruh energi
+                  solar dimanfaatkan — baik langsung oleh beban maupun disimpan di baterai.
                 </p>
                 <p>
                   <strong>PSH Jambi:</strong> 3,75 jam/hari (rata-rata iradiasi matahari).

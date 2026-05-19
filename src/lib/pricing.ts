@@ -59,10 +59,10 @@ export interface ComponentPrices {
 }
 
 export interface InverterPrices {
-  deye3k6: number;
-  deye6k: number;
-  deye8k: number;
-  growatt10k: number;
+  powmr3k6: number;
+  powmr6k: number;
+  powmr8k: number;
+  powmr10k: number;
   deye10k3p: number;
   deye15k3p: number;
   deye20k3p: number;
@@ -142,10 +142,10 @@ export const defaultComponentPrices: ComponentPrices = {
 };
 
 export const defaultInverterPrices: InverterPrices = {
-  deye3k6: 7_000_000,
-  deye6k: 12_000_000,
-  deye8k: 16_000_000,
-  growatt10k: 18_000_000,
+  powmr3k6: 7_000_000,
+  powmr6k: 12_000_000,
+  powmr8k: 16_000_000,
+  powmr10k: 18_000_000,
   deye10k3p: 26_000_000,
   deye15k3p: 38_000_000,
   deye20k3p: 52_000_000,
@@ -161,10 +161,10 @@ export const defaultSettings: PricingSettings = {
 // --- Inverter Display Names ---
 
 export const inverterDisplayNames: Record<keyof InverterPrices, string> = {
-  deye3k6: "PowMr Hybrid 3.600W",
-  deye6k: "PowMr Hybrid 6.000W",
-  deye8k: "PowMr Hybrid 8.000W",
-  growatt10k: "Growatt Hybrid 10.000W",
+  powmr3k6: "PowMr Hybrid 3.600W",
+  powmr6k: "PowMr Hybrid 6.000W",
+  powmr8k: "PowMr Hybrid 8.000W",
+  powmr10k: "PowMr Hybrid 10.000W",
   deye10k3p: "Deye Hybrid 10.000W 3-Fase",
   deye15k3p: "Deye Hybrid 15.000W 3-Fase",
   deye20k3p: "Deye Hybrid 20.000W 3-Fase",
@@ -172,10 +172,10 @@ export const inverterDisplayNames: Record<keyof InverterPrices, string> = {
 
 // Inverter metadata for kalibrasi detail
 export const inverterMeta: Record<keyof InverterPrices, { capacity: number; phase: string; type: string; brand: string }> = {
-  deye3k6: { capacity: 3.6, phase: "1-Fase", type: "Hybrid", brand: "PowMr" },
-  deye6k: { capacity: 6.0, phase: "1-Fase", type: "Hybrid", brand: "PowMr" },
-  deye8k: { capacity: 8.0, phase: "1-Fase", type: "Hybrid", brand: "PowMr" },
-  growatt10k: { capacity: 10.0, phase: "1-Fase", type: "Hybrid", brand: "Growatt" },
+  powmr3k6: { capacity: 3.6, phase: "1-Fase", type: "Hybrid", brand: "PowMr" },
+  powmr6k: { capacity: 6.0, phase: "1-Fase", type: "Hybrid", brand: "PowMr" },
+  powmr8k: { capacity: 8.0, phase: "1-Fase", type: "Hybrid", brand: "PowMr" },
+  powmr10k: { capacity: 10.0, phase: "1-Fase", type: "Hybrid", brand: "PowMr" },
   deye10k3p: { capacity: 10.0, phase: "3-Fase", type: "Hybrid", brand: "Deye" },
   deye15k3p: { capacity: 15.0, phase: "3-Fase", type: "Hybrid", brand: "Deye" },
   deye20k3p: { capacity: 20.0, phase: "3-Fase", type: "Hybrid", brand: "Deye" },
@@ -205,7 +205,7 @@ export const packageSpecs: PackageSpec[] = [
     desc: "PowMr Hybrid 3.600W. Starter untuk rumah kecil: lampu LED, TV, charger HP, kipas angin.",
     specs: "Kapasitas 1.3 kWp | Inverter Hybrid 1 Fase",
     panelCount: 2,
-    inverterKey: "deye3k6",
+    inverterKey: "powmr3k6",
     tier: "silver",
     popular: false,
   },
@@ -214,7 +214,7 @@ export const packageSpecs: PackageSpec[] = [
     desc: "PowMr Hybrid 3.600W. Rumah kecil-menengah: lampu, TV, kipas angin, kulkas kecil.",
     specs: "Kapasitas 2.6 kWp | Inverter Hybrid 1 Fase",
     panelCount: 4,
-    inverterKey: "deye3k6",
+    inverterKey: "powmr3k6",
     tier: "silver",
     popular: false,
   },
@@ -223,7 +223,7 @@ export const packageSpecs: PackageSpec[] = [
     desc: "PowMr Hybrid 3.600W. Rumah menengah: AC 1 unit, kulkas, mesin cuci.",
     specs: "Kapasitas 3.25 kWp | Inverter Hybrid 1 Fase",
     panelCount: 5,
-    inverterKey: "deye3k6",
+    inverterKey: "powmr3k6",
     tier: "silver",
     popular: false,
   },
@@ -232,7 +232,7 @@ export const packageSpecs: PackageSpec[] = [
     desc: "PowMr Hybrid 6.000W. Rumah keluarga besar: AC 2 unit, water heater, dispenser.",
     specs: "Kapasitas 5.2 kWp | Inverter Hybrid 1 Fase",
     panelCount: 8,
-    inverterKey: "deye6k",
+    inverterKey: "powmr6k",
     tier: "silver",
     popular: true,
   },
@@ -245,16 +245,16 @@ export const packageSpecs: PackageSpec[] = [
     desc: "PowMr Hybrid 8.000W. Toko, ruko, kantor kecil, cold storage mini, bengkel.",
     specs: "Kapasitas 7.15 kWp | Inverter Hybrid 1 Fase",
     panelCount: 11,
-    inverterKey: "deye8k",
+    inverterKey: "powmr8k",
     tier: "gold",
     popular: false,
   },
   {
     name: "Paket 10.4 kWp",
-    desc: "Growatt Hybrid 10.000W. Gudang, restoran, hotel kecil, minimarket, clinic.",
+    desc: "PowMr Hybrid 10.000W. Gudang, restoran, hotel kecil, minimarket, clinic.",
     specs: "Kapasitas 10.4 kWp | Inverter Hybrid 1 Fase",
     panelCount: 16,
-    inverterKey: "growatt10k",
+    inverterKey: "powmr10k",
     tier: "gold",
     popular: true,
   },
@@ -284,16 +284,17 @@ export const packageSpecs: PackageSpec[] = [
 
 // --- LocalStorage Keys (v4 — migrated from v2/v3) ---
 
-const LS_COMPONENT = "jmse_v4_component_prices";
-const LS_INVERTER = "jmse_v4_inverter_prices";
-const LS_SETTINGS = "jmse_v4_pricing_settings";
+const LS_COMPONENT = "jmse_v5_component_prices";
+const LS_INVERTER = "jmse_v5_inverter_prices";
+const LS_SETTINGS = "jmse_v5_pricing_settings";
 const LS_VERSION = "jmse_pricing_version";
-const CURRENT_VERSION = 4;
+const CURRENT_VERSION = 5;
 
-// Legacy keys for migration
+// Legacy keys for migration (clear on v5 — inverter key names changed)
 const LEGACY_KEYS: Record<number, string[]> = {
   2: ["jmse_v2_component_prices", "jmse_v2_inverter_prices", "jmse_v2_pricing_settings"],
   3: ["jmse_v3_component_prices", "jmse_v3_inverter_prices", "jmse_v3_pricing_settings"],
+  4: ["jmse_v4_component_prices", "jmse_v4_inverter_prices", "jmse_v4_pricing_settings"],
 };
 
 /**
@@ -307,9 +308,20 @@ function migrateLocalStorage(): void {
     if (savedVersion >= CURRENT_VERSION) return;
 
     // Try migrating from legacy versions (highest first)
-    for (let v = 3; v >= 2; v--) {
+    for (let v = 4; v >= 2; v--) {
       const legacy = LEGACY_KEYS[v];
       if (!legacy) continue;
+
+      // v4 inverter keys changed (deye3k6→powmr3k6, growatt10k→powmr10k, etc.)
+      // Only migrate component prices and settings — use fresh inverter defaults
+      if (v === 4) {
+        const oldComponent = localStorage.getItem(legacy[0]);
+        const oldSettings = localStorage.getItem(legacy[2]);
+        if (oldComponent) localStorage.setItem(LS_COMPONENT, oldComponent);
+        if (oldSettings) localStorage.setItem(LS_SETTINGS, oldSettings);
+        console.log(`[JMSE] Migrated v${v} component/settings to v${CURRENT_VERSION} (inverter keys reset)`);
+        break;
+      }
 
       const oldComponent = localStorage.getItem(legacy[0]);
       if (oldComponent) {
@@ -488,9 +500,11 @@ export function calculatePackages(
     // Daily production
     const dailyKwh = kWp * s.pshHours * s.efficiency;
 
-    // Savings estimation — range 60%-80% self-consumption, using PLN_TARIFF_DEFAULT
-    const monthlySavingsLow = Math.round(dailyKwh * 0.60 * 30 * PLN_TARIFF_DEFAULT);
-    const monthlySavingsHigh = Math.round(dailyKwh * 0.80 * 30 * PLN_TARIFF_DEFAULT);
+    // Savings estimation — range based on PLN tariff classes (no self-consumption reduction)
+    // Low: Rp1,352/kWh (R-1 900VA) | High: Rp1,444.7/kWh (R-1 1300VA+)
+    const PLN_TARIFF_LOW = 1352;
+    const monthlySavingsLow = Math.round(dailyKwh * 30 * PLN_TARIFF_LOW);
+    const monthlySavingsHigh = Math.round(dailyKwh * 30 * PLN_TARIFF_DEFAULT);
 
     const formatSavings = (val: number) => {
       if (val >= 1_000_000) {
@@ -568,7 +582,7 @@ export function calculatePackages(
 // --- ROI & Return Calculation ---
 
 export const PLN_TARIFF_DEFAULT = 1444.7; // Rp/kWh (R-1 1300VA+, non-subsidi)
-export const SELF_CONSUMPTION_DEFAULT = 0.70; // 70% utilization (hybrid without battery)
+export const SELF_CONSUMPTION_DEFAULT = 1.0; // 100% — full production counted as savings
 export const PLN_INCREASE_RATE_DEFAULT = 0.06; // 6% per tahun
 
 export interface ROIResult {
@@ -738,10 +752,10 @@ function remoteToComponentPrices(d: RemotePricingData): ComponentPrices {
 /** Convert remote flat data to typed InverterPrices */
 function remoteToInverterPrices(d: RemotePricingData): InverterPrices {
   return {
-    deye3k6: Number(d.deye3k6) || defaultInverterPrices.deye3k6,
-    deye6k: Number(d.deye6k) || defaultInverterPrices.deye6k,
-    deye8k: Number(d.deye8k) || defaultInverterPrices.deye8k,
-    growatt10k: Number(d.growatt10k) || defaultInverterPrices.growatt10k,
+    powmr3k6: Number(d.powmr3k6) || defaultInverterPrices.powmr3k6,
+    powmr6k: Number(d.powmr6k) || defaultInverterPrices.powmr6k,
+    powmr8k: Number(d.powmr8k) || defaultInverterPrices.powmr8k,
+    powmr10k: Number(d.powmr10k) || defaultInverterPrices.powmr10k,
     deye10k3p: Number(d.deye10k3p) || defaultInverterPrices.deye10k3p,
     deye15k3p: Number(d.deye15k3p) || defaultInverterPrices.deye15k3p,
     deye20k3p: Number(d.deye20k3p) || defaultInverterPrices.deye20k3p,
