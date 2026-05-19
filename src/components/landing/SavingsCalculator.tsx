@@ -15,6 +15,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { useEffect } from "react";
+import { clearAllPricing } from "@/lib/pricing";
 import {
   calculatePackages,
   calculateROI,
@@ -94,18 +95,119 @@ export function SavingsCalculator() {
     };
   }, []);
 
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
-    setAnalysis(computeAnalysis(bill));
+    try {
+      setError(null);
+      setAnalysis(computeAnalysis(bill));
+    } catch (err) {
+      console.error("[SavingsCalculator] Computation failed:", err);
+      setError("Gagal memuat kalkulator. Data harga di-reset ke default.");
+      // Clear corrupted localStorage so next render recovers with defaults
+      try { clearAllPricing(); } catch (_) {}
+      // Retry with fresh defaults
+      try {
+        setAnalysis(computeAnalysis(bill));
+      } catch (_) {
+        setError("Kalkulator tidak tersedia. Silakan refresh halaman.");
+      }
+    }
   }, [bill, computeAnalysis]);
 
   // Also recompute when pricing settings change
   useEffect(() => {
-    const handler = () => setAnalysis(computeAnalysis(bill));
+    const handler = () => {
+      try {
+        setError(null);
+        setAnalysis(computeAnalysis(bill));
+      } catch (err) {
+        console.error("[SavingsCalculator] Recompute failed:", err);
+        setError("Gagal memuat kalkulator. Data harga di-reset ke default.");
+        try { clearAllPricing(); } catch (_) {}
+      }
+    };
     window.addEventListener("jmse-pricing-updated", handler);
     return () => window.removeEventListener("jmse-pricing-updated", handler);
   }, [bill, computeAnalysis]);
 
-  if (!analysis) return null;
+  // Loading skeleton while computing
+  if (!analysis && !error) {
+    return (
+      <section
+        id="kalkulator"
+        className="py-20 md:py-28 solar-gradient relative overflow-hidden"
+      >
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 text-sm font-semibold text-white bg-white/10 rounded-full border border-white/20">
+              <Calculator className="w-4 h-4" />
+              Kalkulator Penghematan
+            </span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-6">
+              Hitung Potensi{" "}
+              <span className="text-gold-light">Penghematan</span> Anda
+            </h2>
+            <p className="text-lg text-white/70 leading-relaxed">
+              Masukkan tagihan listrik bulanan Anda — kami akan menganalisis
+              kebutuhan dan merekomendasikan paket yang paling sesuai.
+            </p>
+          </div>
+          <div className="max-w-4xl mx-auto">
+            <div className="glass rounded-3xl p-6 sm:p-10">
+              <div className="animate-pulse space-y-6">
+                <div className="h-4 bg-muted rounded w-1/3 mx-auto" />
+                <div className="flex justify-center gap-3">
+                  {[1,2,3,4,5,6].map(i => (
+                    <div key={i} className="h-10 w-20 bg-muted rounded-full" />
+                  ))}
+                </div>
+                <div className="h-12 bg-muted rounded w-1/2 mx-auto" />
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  {[1,2,3,4].map(i => (
+                    <div key={i} className="h-24 bg-muted/50 rounded-2xl" />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section
+        id="kalkulator"
+        className="py-20 md:py-28 solar-gradient relative overflow-hidden"
+      >
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 text-sm font-semibold text-white bg-white/10 rounded-full border border-white/20">
+              <Calculator className="w-4 h-4" />
+              Kalkulator Penghematan
+            </span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-6">
+              Hitung Potensi{" "}
+              <span className="text-gold-light">Penghematan</span> Anda
+            </h2>
+          </div>
+          <div className="max-w-lg mx-auto">
+            <div className="glass rounded-3xl p-8 text-center">
+              <p className="text-sm text-red-600 dark:text-red-400 mb-4">{error}</p>
+              <button
+                onClick={() => { try { clearAllPricing(); } catch(_){} window.location.reload(); }}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-solar hover:bg-solar-dark text-white font-semibold rounded-full transition-all"
+              >
+                <Zap className="w-4 h-4" /> Reset &amp; Refresh
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   const { recommended: rec, monthlyKwh, productionKwh, coverage, roi, co2PerYear, needsCustom } = analysis;
 

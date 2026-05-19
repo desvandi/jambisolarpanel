@@ -334,8 +334,17 @@ function migrateLocalStorage(): void {
 
 // --- LocalStorage Helpers ---
 
+/** Check if an object contains any NaN or non-finite numeric values */
+function hasNaN(obj: Record<string, unknown>): boolean {
+  return Object.values(obj).some((v) => typeof v === "number" && !isFinite(v));
+}
+
 export function saveComponentPrices(prices: ComponentPrices): void {
   if (typeof window !== "undefined") {
+    if (hasNaN(prices as unknown as Record<string, unknown>)) {
+      console.warn("[pricing] Skipping save: ComponentPrices contains NaN");
+      return;
+    }
     localStorage.setItem(LS_COMPONENT, JSON.stringify(prices));
   }
 }
@@ -354,6 +363,10 @@ export function loadComponentPrices(): ComponentPrices {
 
 export function saveInverterPrices(prices: InverterPrices): void {
   if (typeof window !== "undefined") {
+    if (hasNaN(prices as unknown as Record<string, unknown>)) {
+      console.warn("[pricing] Skipping save: InverterPrices contains NaN");
+      return;
+    }
     localStorage.setItem(LS_INVERTER, JSON.stringify(prices));
   }
 }
@@ -372,6 +385,10 @@ export function loadInverterPrices(): InverterPrices {
 
 export function saveSettings(settings: PricingSettings): void {
   if (typeof window !== "undefined") {
+    if (hasNaN(settings as unknown as Record<string, unknown>)) {
+      console.warn("[pricing] Skipping save: PricingSettings contains NaN");
+      return;
+    }
     localStorage.setItem(LS_SETTINGS, JSON.stringify(settings));
   }
 }
@@ -613,11 +630,15 @@ export function recommendPackage(
   let bestScore = Infinity;
 
   for (const pkg of packages) {
+    // Skip packages with invalid kWp (e.g. from corrupted localStorage)
+    if (!pkg.kWp || !isFinite(pkg.kWp) || pkg.kWp <= 0) continue;
+
     const productionKwh = pkg.kWp * defaultSettings.pshHours * defaultSettings.efficiency * 30;
     const pct = (productionKwh / monthlyKwh) * 100;
 
     // Score: distance from 80% coverage (sweet spot)
     let score: number;
+    if (!isFinite(pct)) continue; // skip NaN/Infinity
     if (pct < 50) {
       score = 1000 + (50 - pct);
     } else if (pct > 120) {
