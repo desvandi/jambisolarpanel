@@ -12,6 +12,7 @@ const footerLinks: Record<string, { label: string; href?: string; msg?: string }
   Layanan: [
     { label: "PLTS Rumah Tangga", href: "/solar-home" },
     { label: "PLTS Bisnis & Industri", href: "/solar-commercial" },
+    { label: "Sewa PLTS — Bayar Bulanan", href: "/sewa-plts" },
     { label: "PJUTS", href: "/pjuts" },
     { label: "Solar Water Pump", href: "/solar-pump" },
     { label: "EV Charging", href: "/ev-charging" },
