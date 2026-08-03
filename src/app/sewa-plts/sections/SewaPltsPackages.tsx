@@ -23,6 +23,7 @@ import {
   formatRentalRpShort,
   estimateMonthlyProduction,
   getInstallationFee,
+  getInstallationTier,
   getInstallationInstallment,
   packageCategories,
   type PackageCategory,
@@ -174,6 +175,7 @@ export function SewaPltsPackages() {
           {packages.map((pkg, i) => {
             const monthlyProduction = estimateMonthlyProduction(pkg.kWp);
             const installationFee = getInstallationFee(pkg.kWp);
+            const installationTier = getInstallationTier(pkg.kWp);
             const installment = getInstallationInstallment(pkg.kWp);
             const annualSavings = pkg.monthlyPrice * 12 - pkg.annualPrice;
 
@@ -349,7 +351,7 @@ export function SewaPltsPackages() {
                   </div>
                 </div>
 
-                {/* Installation fee — once-off, cicilan 2 bulan */}
+                {/* Installation fee — once-off, tiered, cicilan 2 bulan */}
                 <div
                   className={`p-3 rounded-xl mb-4 flex items-start gap-2 ${
                     pkg.popular
@@ -368,7 +370,7 @@ export function SewaPltsPackages() {
                         pkg.popular ? "text-white/90" : "text-navy dark:text-white"
                       }`}
                     >
-                      Instalasi:{" "}
+                      Instalasi + bongkar akhir:{" "}
                       <span className={pkg.popular ? "text-gold-light" : "text-solar"}>
                         {formatRentalRp(installationFee)}
                       </span>
@@ -379,9 +381,8 @@ export function SewaPltsPackages() {
                           pkg.popular ? "text-white/60" : "text-muted-foreground"
                         }`}
                       >
-                        Cicil {installment.months} bln @{" "}
+                        Tier {installationTier.label} • Cicil {installment.months} bln @{" "}
                         {formatRentalRpShort(installment.installmentPerMonth)}/bln
-                        {" • "}termasuk bongkar akhir kontrak
                       </p>
                     )}
                   </div>
@@ -463,7 +464,8 @@ export function SewaPltsPackages() {
           </p>
           <p className="text-xs text-muted-foreground">
             <strong className="text-navy dark:text-white">Biaya instalasi</strong>{" "}
-            dibayar sekali di awal kontrak, dapat dicicil maksimal 2 bulan, dan
+            ditentukan per tier: 1-3 kWp = Rp 2jt, 4-7 kWp = Rp 5jt, 8-10 kWp = Rp 8jt.
+            Dibayar sekali di awal kontrak, dapat dicicil maksimal 2 bulan, dan
             sudah mencakup pembongkaran equipment saat kontrak berakhir.
           </p>
         </motion.div>
