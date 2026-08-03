@@ -199,37 +199,47 @@ export const rentalPackages: RentalPackage[] = [
   },
 ];
 
-/** Daftar keunggulan program Sewa PLTS (Solar as a Service). */
+/**
+ * Daftar keunggulan program Sewa PLTS (Solar as a Service).
+ *
+ * Dua manfaat UTAMA yang ditonjolkan diurutan pertama:
+ *   1. Backup saat PLN padam  — sistem otomatis mengambil alih beban.
+ *   2. Turunkan tagihan listrik — jadwal timer menghemat pemakaian PLN.
+ *
+ * Dua manfaat ini adalah diferensiator utama vs kompetitor yang PLTS-nya
+ * hanya sebagai penghemat (tidak bisa backup) atau hanya backup
+ * (tidak hemat tagihan).
+ */
 export const rentalBenefits: { icon: string; title: string; desc: string }[] = [
   {
-    icon: "Wallet",
-    title: "Tanpa Investasi Besar",
-    desc: "Nikmati PLTS tanpa perlu mengeluarkan puluhan juta rupiah di depan. Cukup bayar biaya sewa bulanan terjangkau.",
+    icon: "ShieldCheck",
+    title: "Backup Otomatis Saat PLN Padam",
+    desc: "Saat grid PLN mati, sistem otomatis mengalihkan beban rumah ke inverter & baterai dalam hitungan detik. Lampu, kulkas, dan peralatan penting tetap menyala — tanpa genset, tanpa UPS tambahan, tanpa kepanikan.",
   },
   {
     icon: "TrendingDown",
-    title: "Tagihan Listrik Lebih Hemat",
-    desc: "Potensi penghematan tagihan PLN hingga 90%. Biaya sewa sering kali lebih kecil dari penghematan yang didapat.",
+    title: "Tagihan Listrik Bulanan Turun",
+    desc: "Beban rumah dialihkan ke surya & baterai pada jam-jam sibuk tarif PLN. Hasilnya: tagihan PLN turun signifikan setiap bulan, sementara biaya sewa tetap dan dapat diprediksi.",
   },
   {
-    icon: "Leaf",
-    title: "Ramah Lingkungan",
-    desc: "Beralih ke energi terbarukan tanpa carbon footprint awal yang besar. Berkontribusi aktif mengurangi emisi CO₂.",
+    icon: "Wallet",
+    title: "Tanpa Investasi Besar",
+    desc: "Nikmati PLTS tanpa perlu mengeluarkan puluhan juta rupiah di depan. Cukup bayar biaya sewa bulanan terjangkau, langsung nikmati manfaat hari ini.",
   },
   {
     icon: "Wrench",
     title: "Instalasi Profesional",
-    desc: "Tim teknisi bersertifikat memasang sistem sesuai standar K3 dan SNI. Survei, desain, dan commissioning gratis.",
+    desc: "Tim teknisi bersertifikat memasang sistem sesuai standar K3 dan SNI. Survei, desain, dan commissioning gratis — termasuk konfigurasi timer & relay optimal untuk rumah Anda.",
   },
   {
     icon: "ShieldCheck",
     title: "Maintenance Tersedia",
-    desc: "Pemeliharaan rutin dan perbaikan selama masa kontrak ditangani oleh tim kami. Tanpa biaya tersembunyi.",
+    desc: "Pemeliharaan rutin dan perbaikan selama masa kontrak ditangani oleh tim kami. Tanpa biaya tersembunyi, tanpa kejutan tagihan servis.",
   },
   {
     icon: "ArrowUpCircle",
     title: "Bisa Upgrade Kapasitas",
-    desc: "Kebutuhan listrik bertambah? Kapasitas dapat ditingkatkan sesuai kebutuhan tanpa memulai dari nol.",
+    desc: "Kebutuhan listrik bertambah? Kapasitas dapat ditingkatkan sesuai kebutuhan tanpa memulai dari nol. Fleksibilitas penuh selama masa kontrak.",
   },
 ];
 
@@ -258,6 +268,18 @@ export const rentalComparison: ComparisonRow[] = [
     buy: "Hanya tagihan PLN sisa (kecil)",
     rent: "Tagihan PLN sisa + biaya sewa (tetap)",
     winner: "buy",
+  },
+  {
+    aspect: "Backup Saat PLN Padam",
+    buy: "Hanya jika beli paket baterai tambahan (mahal)",
+    rent: "Sudah termasuk — otomatis switch ke baterai",
+    winner: "rent",
+  },
+  {
+    aspect: "Penghematan Tagihan",
+    buy: "Ya, tapi butuh konfigurasi sendiri (rumit)",
+    rent: "Sudah dikonfigurasi optimal oleh tim kami",
+    winner: "rent",
   },
   {
     aspect: "Maintenance",
@@ -328,7 +350,12 @@ export const rentalFaqs: RentalFaqItem[] = [
   {
     question: "Apakah sistem tetap bekerja saat PLN padam?",
     answer:
-      "Ya. Sistem yang kami sewakan adalah PLTS Hybrid Off-Grid, yang artinya dilengkapi dengan baterai LiFePO4 sebagai penyimpanan. Saat PLN padam, inverter hybrid otomatis berpindah ke mode baterai dalam hitungan milidetik — lampu, kulkas, dan peralatan penting tetap menyala. Durasi backup tergantung kapasitas baterai paket yang dipilih dan beban aktual rumah Anda.",
+      "Ya, dan ini salah satu manfaat utama program kami. Saat PLN padam, sistem otomatis mengalihkan beban rumah Anda ke inverter dan baterai LiFePO4 dalam hitungan detik — lampu, kulkas, dan peralatan penting tetap menyala tanpa perlu genset atau UPS tambahan. Sistem ini dirancang dengan konfigurasi cerdas: ketika grid PLN kembali normal, beban otomatis kembali dipasok PLN. Durasi backup tergantung kapasitas baterai paket yang dipilih dan beban aktual rumah Anda, namun untuk pemakaian normal rumah tangga, baterai kami mampu memenuhi kebutuhan esensial selama pemadaman berjam-jam.",
+  },
+  {
+    question: "Bagaimana sistem mengurangi tagihan listrik bulanan saya?",
+    answer:
+      "Selain sebagai backup, sistem dikonfigurasi untuk mengoptimalkan biaya listrik harian Anda. Pada jam-jam tertentu (misalnya malam hari saat tarif PLN tinggi atau saat baterai penuh), beban rumah otomatis dialihkan ke inverter sehingga pemakaian dari PLN berkurang. Hasilnya, tagihan PLN bulanan turun signifikan. Tim kami akan mengkonfigurasi jadwal switching yang optimal sesuai pola pemakaian rumah Anda — Anda tidak perlu pusing dengan setting teknis, cukup nikmati tagihan yang lebih hemat setiap bulan.",
   },
   {
     question: "Berapa lama kontrak minimum dan bagaimana pembayaran?",
@@ -343,7 +370,7 @@ export const rentalFaqs: RentalFaqItem[] = [
   {
     question: "Apakah saya tetap membutuhkan PLN?",
     answer:
-      "Sistem ini bersifat Hybrid — artinya tetap terhubung dengan PLN sebagai backup. Saat produksi surya tinggi, beban rumah dipasok dari surya. Saat surya rendah (malam/hujan), beban diambil dari baterai atau PLN. Konfigurasi ini memberi Anda tiga lapis keandalan: surya, baterai, dan PLN. Anda tetap membayar tagihan PLN, namun jauh lebih kecil dari sebelumnya.",
+      "Ya, sistem ini bersifat Hybrid — tetap terhubung dengan PLN, namun peran PLN berubah dari sumber utama menjadi sumber sekunder. Saat produksi surya tinggi atau baterai penuh, beban rumah dipasok dari surya/inverter. Saat surya rendah (malam/hujan berkepanjangan), beban diambil dari baterai atau PLN. Konfigurasi ini memberi Anda tiga lapis keandalan: surya, baterai, dan PLN — sekaligus dua manfaat ganda: tagihan PLN turun dan rumah tetap menyala saat PLN padam. Anda tetap membayar tagihan PLN, namun jauh lebih kecil dari sebelumnya.",
   },
 ];
 
@@ -352,14 +379,14 @@ export const rentalHero = {
   badge: "Solar as a Service — Bayar Bulanan",
   title: "Gunakan PLTS Sekarang. Bayarnya Bulanan.",
   subtitle:
-    "Nikmati listrik tenaga surya tanpa investasi puluhan juta rupiah. Mulai dari hanya Rp 650 ribu per bulan.",
+    "Satu sistem, dua manfaat: tagihan listrik turun setiap bulan, dan rumah tetap menyala saat PLN padam. Tanpa investasi puluhan juta rupiah — mulai hanya Rp 650 ribu/bulan.",
   primaryCta: "Hitung Paket Saya",
   secondaryCta: "Konsultasi WhatsApp",
   stats: [
     { label: "Mulai dari", value: "Rp 650rb", suffix: "/bulan" },
+    { label: "Backup PLN padam", value: "Otomatis", suffix: "" },
+    { label: "Hemat tagihan", value: "Hingga 90%", suffix: "" },
     { label: "Kontrak minimum", value: "12", suffix: "bulan" },
-    { label: "Maintenance", value: "Termasuk", suffix: "" },
-    { label: "Garansi", value: "Selama kontrak", suffix: "" },
   ],
 } as const;
 

@@ -8,6 +8,7 @@ import { Footer } from "@/components/landing/Footer";
 import { FloatingButtons } from "@/components/landing/FloatingButtons";
 import { ConsultationForm } from "@/components/landing/ConsultationForm";
 import { SewaPltsHero } from "./sections/SewaPltsHero";
+import { SewaPltsDualMode } from "./sections/SewaPltsDualMode";
 import { SewaPltsBenefits } from "./sections/SewaPltsBenefits";
 import { SewaPltsPackages } from "./sections/SewaPltsPackages";
 import { SewaPltsComparison } from "./sections/SewaPltsComparison";
@@ -20,12 +21,13 @@ import { SewaPltsFinalCta } from "./sections/SewaPltsFinalCta";
  *
  * Struktur:
  *   1. Hero
- *   2. Keunggulan
- *   3. Daftar Paket
- *   4. Perbandingan Beli vs Sewa
- *   5. Kalkulator
- *   6. FAQ
- *   7. CTA WhatsApp (Final)
+ *   2. Dual Mode (backup + hemat) — sorotan dua manfaat utama
+ *   3. Keunggulan
+ *   4. Daftar Paket
+ *   5. Perbandingan Beli vs Sewa
+ *   6. Kalkulator
+ *   7. FAQ
+ *   8. CTA WhatsApp (Final)
  *
  * Seluruh konten (paket, harga, FAQ, CTA) diambil dari src/lib/rentalPackages.ts
  * sehingga owner cukup mengubah satu file untuk update harga.
@@ -47,6 +49,7 @@ export default function SewaPltsPage() {
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.4 }}
         >
+          <SewaPltsDualMode />
           <SewaPltsBenefits />
           <SewaPltsPackages />
           <SewaPltsComparison />

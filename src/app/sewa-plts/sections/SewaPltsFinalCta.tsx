@@ -56,10 +56,11 @@ export function SewaPltsFinalCta() {
           {/* Value chips */}
           <div className="flex flex-wrap justify-center gap-3 mb-10">
             {[
+              { icon: Shield, text: "Backup otomatis saat PLN padam" },
+              { icon: Zap, text: "Tagihan listrik turun hingga 90%" },
               { icon: Sun, text: "Tanpa investasi awal" },
-              { icon: Shield, text: "Maintenance termasuk" },
-              { icon: Zap, text: "Instalasi profesional" },
-              { icon: TrendingUp, text: "Bisa upgrade kapasitas" },
+              { icon: TrendingUp, text: "Maintenance termasuk" },
+              { icon: Shield, text: "Bisa upgrade kapasitas" },
             ].map((chip) => (
               <span
                 key={chip.text}
