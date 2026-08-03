@@ -59,55 +59,70 @@ export const rentalProgramConfig = {
 } as const;
 
 /**
- * Mapping kapasitas kWp → biaya pengadaan barang + jasa instalasi (sekali bayar).
+ * Tarif bertingkat (tiered) untuk jasa instalasi awal + bongkar akhir sewa.
  *
  * Sudah mencakup:
  *   - Survei, desain, engineering
- *   - Panel, inverter, baterai, mounting, proteksi
- *   - Pemasangan & commissioning
+ *   - Pemasangan panel, inverter, baterai, mounting, proteksi
+ *   - Commissioning & testing
  *   - Pembongkaran/percabutan equipment saat kontrak berakhir
  *
- * Data diambil dari tabel harga owner (per 1 kWp = Rp 25jt, dst).
+ * Tarif per tier (tidak lagi per-kWp):
+ *   - Paket 1 – 3 kWp  : Rp 2.000.000
+ *   - Paket 4 – 7 kWp  : Rp 5.000.000
+ *   - Paket 8 – 10 kWp : Rp 8.000.000
+ *
  * Owner dapat memperbarui angka di sini tanpa mengubah file lain.
  */
-export const installationFeeByKwp: Record<number, number> = {
-  1: 25_000_000,
-  2: 45_000_000,
-  3: 63_000_000,
-  4: 81_000_000,
-  5: 98_000_000,
-  6: 114_000_000,
-  7: 129_000_000,
-  8: 143_000_000,
-  9: 156_000_000,
-  10: 180_000_000,
-};
+export interface InstallationTier {
+  /** Rentang kWp minimum (inklusif). */
+  minKwp: number;
+  /** Rentang kWp maksimum (inklusif). */
+  maxKwp: number;
+  /** Biaya instalasi untuk tier ini (Rupiah). */
+  fee: number;
+  /** Label tier untuk ditampilkan di UI. */
+  label: string;
+}
+
+export const installationFeeTiers: InstallationTier[] = [
+  { minKwp: 1, maxKwp: 3, fee: 2_000_000, label: "Paket 1 – 3 kWp" },
+  { minKwp: 4, maxKwp: 7, fee: 5_000_000, label: "Paket 4 – 7 kWp" },
+  { minKwp: 8, maxKwp: 10, fee: 8_000_000, label: "Paket 8 – 10 kWp" },
+];
 
 /**
  * Hitung biaya instalasi untuk sebuah paket berdasarkan kWp.
- * Jika kWp tidak ada di mapping, interpolasi linier dari data terdekat.
+ * Menggunakan tier lookup: paket 1-3 kWp = Rp 2jt, 4-7 kWp = Rp 5jt, 8-10 kWp = Rp 8jt.
+ * Jika kWp di atas 10, gunakan tier tertinggi.
  */
 export function getInstallationFee(kWp: number): number {
-  if (installationFeeByKwp[kWp] !== undefined) {
-    return installationFeeByKwp[kWp];
-  }
-  // Fallback: interpolasi linier dari kWp terdekat
-  const keys = Object.keys(installationFeeByKwp)
-    .map(Number)
-    .sort((a, b) => a - b);
-  if (kWp <= keys[0]) return installationFeeByKwp[keys[0]];
-  if (kWp >= keys[keys.length - 1]) return installationFeeByKwp[keys[keys.length - 1]];
-  for (let i = 0; i < keys.length - 1; i++) {
-    const lo = keys[i];
-    const hi = keys[i + 1];
-    if (kWp >= lo && kWp <= hi) {
-      const ratio = (kWp - lo) / (hi - lo);
-      return Math.round(
-        installationFeeByKwp[lo] + ratio * (installationFeeByKwp[hi] - installationFeeByKwp[lo])
-      );
+  for (const tier of installationFeeTiers) {
+    if (kWp >= tier.minKwp && kWp <= tier.maxKwp) {
+      return tier.fee;
     }
   }
-  return installationFeeByKwp[keys[0]];
+  // Jika kWp > 10, gunakan tier tertinggi
+  if (kWp > installationFeeTiers[installationFeeTiers.length - 1].maxKwp) {
+    return installationFeeTiers[installationFeeTiers.length - 1].fee;
+  }
+  // Fallback: tier terendah
+  return installationFeeTiers[0].fee;
+}
+
+/**
+ * Ambil tier instalasi untuk sebuah paket (untuk label UI).
+ */
+export function getInstallationTier(kWp: number): InstallationTier {
+  for (const tier of installationFeeTiers) {
+    if (kWp >= tier.minKwp && kWp <= tier.maxKwp) {
+      return tier;
+    }
+  }
+  if (kWp > installationFeeTiers[installationFeeTiers.length - 1].maxKwp) {
+    return installationFeeTiers[installationFeeTiers.length - 1];
+  }
+  return installationFeeTiers[0];
 }
 
 /**
@@ -558,7 +573,7 @@ export const rentalComparison: ComparisonRow[] = [
   {
     aspect: "Investasi Awal",
     buy: "Rp 25 – 180 juta (sesuai kapasitas, bayar penuh)",
-    rent: "Rp 25 – 180 juta (bisa dicicil 2 bulan, termasuk bongkar akhir)",
+    rent: "Rp 2 – 8 juta (tier 1-3 / 4-7 / 8-10 kWp, bisa cicil 2 bulan)",
     winner: "rent",
   },
   {
@@ -669,12 +684,12 @@ export const rentalFaqs: RentalFaqItem[] = [
   {
     question: "Apakah ada biaya instalasi awal?",
     answer:
-      "Ya, ada biaya pengadaan barang + jasa instalasi yang dibayar sekali di awal kontrak. Biayanya bervariasi sesuai kapasitas paket: paket Starter 1 kWp = Rp 25.000.000; paket Home 2 kWp = Rp 45.000.000; paket Family 3 kWp = Rp 63.000.000; paket Premium 4 kWp = Rp 81.000.000; paket Business 5 kWp = Rp 98.000.000; dan seterusnya hingga paket Enterprise 10 kWp = Rp 180.000.000. Biaya ini sudah mencakup survei, desain, engineering, seluruh peralatan (panel, inverter, baterai, mounting, proteksi), pemasangan, commissioning & testing — sekaligus pembongkaran equipment saat kontrak berakhir. Biayanya dapat dicicil maksimal 2 bulan.",
+      "Ya, ada biaya jasa instalasi awal + bongkar akhir kontrak yang dibayar sekali di awal. Biayanya ditentukan oleh tier kapasitas paket, bukan per-kWp: paket 1 – 3 kWp (Starter, Home, Family) = Rp 2.000.000; paket 4 – 7 kWp (Premium, Business, Estate, Villa) = Rp 5.000.000; paket 8 – 10 kWp (Commercial, Industrial, Enterprise) = Rp 8.000.000. Biaya ini sudah mencakup survei, desain, engineering, pemasangan lengkap (panel, inverter, baterai, mounting, proteksi), commissioning & testing — sekaligus pembongkaran/percabutan equipment saat kontrak berakhir. Jadi tidak ada biaya tambahan untuk bongkar di akhir. Biayanya dapat dicicil maksimal 2 bulan.",
   },
   {
     question: "Apakah biaya instalasi bisa dicicil?",
     answer:
-      "Ya, biaya instalasi dapat dicicil maksimal 2 bulan. Selama 2 bulan pertama kontrak, Anda membayar: harga sewa bulanan + (biaya instalasi ÷ 2). Contoh untuk paket Home 2 kWp: bulan 1 & 2 = Rp 1.720.000 (sewa) + Rp 22.500.000 (cicilan instalasi) = Rp 24.220.000/bulan. Mulai bulan ke-3, Anda hanya membayar Rp 1.720.000/bulan. Skema ini membantu menjaga cashflow Anda di awal kontrak tanpa perlu mengeluarkan dana besar sekaligus.",
+      "Ya, biaya instalasi dapat dicicil maksimal 2 bulan. Selama 2 bulan pertama kontrak, Anda membayar: harga sewa bulanan + (biaya instalasi ÷ 2). Contoh untuk paket Home 2 kWp (tier 1-3 kWp, biaya instalasi Rp 2.000.000): bulan 1 & 2 = Rp 1.720.000 (sewa) + Rp 1.000.000 (cicilan instalasi) = Rp 2.720.000/bulan. Mulai bulan ke-3, Anda hanya membayar Rp 1.720.000/bulan. Contoh lain untuk paket Business 5 kWp (tier 4-7 kWp, biaya instalasi Rp 5.000.000): bulan 1 & 2 = Rp 3.730.000 (sewa) + Rp 2.500.000 (cicilan) = Rp 6.230.000/bulan, lalu bulan 3+ = Rp 3.730.000/bulan. Skema ini membantu menjaga cashflow Anda di awal kontrak.",
   },
   {
     question: "Apakah ada opsi bayar tahunan?",
@@ -703,12 +718,12 @@ export const rentalHero = {
   badge: "Solar as a Service — Bayar Bulanan",
   title: "Gunakan PLTS Sekarang. Bayarnya Bulanan.",
   subtitle:
-    "Satu sistem, dua manfaat: tagihan listrik turun setiap bulan, dan rumah tetap menyala saat PLN padam. Cukup bayar biaya instalasi sekali di awal (bisa dicicil 2 bulan — termasuk bongkar saat kontrak selesai), lalu bayar sewa bulanan mulai Rp 960 ribu.",
+    "Satu sistem, dua manfaat: tagihan listrik turun setiap bulan, dan rumah tetap menyala saat PLN padam. Cukup bayar biaya instalasi sekali di awal (mulai Rp 2jt — bisa dicicil 2 bulan, termasuk bongkar saat kontrak selesai), lalu bayar sewa bulanan mulai Rp 960 ribu.",
   primaryCta: "Hitung Paket Saya",
   secondaryCta: "Konsultasi WhatsApp",
   stats: [
     { label: "Sewa mulai dari", value: "Rp 960rb", suffix: "/bulan" },
-    { label: "Cicilan instalasi", value: "2 bulan", suffix: "max" },
+    { label: "Instalasi mulai", value: "Rp 2jt", suffix: "sekali bayar" },
     { label: "Backup PLN padam", value: "Otomatis", suffix: "" },
     { label: "Hemat tagihan", value: "Hingga 90%", suffix: "" },
   ],
