@@ -16,8 +16,7 @@ import {
   Calendar,
   Check,
   AlertTriangle,
-  ArrowDownCircle,
-  ArrowUpCircle,
+  ShieldCheck,
 } from "lucide-react";
 import {
   rentalCalculatorConfig,
@@ -75,9 +74,9 @@ export function SewaPltsCalculator() {
     (recSavings
       ? `- Coverage: ${recSavings.coveragePercent}%\n` +
         `- Pengurangan tagihan PLN: ${formatRentalRp(recSavings.plnSaving)}/bulan\n` +
-        `- Net saving: ${formatRentalRpShort(recSavings.netSaving)}/bulan\n`
+        `- Backup baterai: ${recSavings.pkg.storageKwh} kWh (tetap nyala saat PLN padam)\n`
       : "") +
-    `- Biaya instalasi: ${formatRentalRp(installationFee)} (cicil 2 bln)\n\n` +
+    `- Biaya Survey & Instalasi: ${formatRentalRp(installationFee)} (cicil 2 bln)\n\n` +
     `Mohon konsultasi lebih lanjut. Terima kasih.`;
 
   return (
@@ -294,64 +293,22 @@ export function SewaPltsCalculator() {
                     </span>
                   </div>
 
-                  {/* Savings breakdown untuk paket rekomendasi */}
-                  <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div className="p-2 rounded-lg bg-white/50 dark:bg-white/5">
-                      <p className="text-muted-foreground flex items-center gap-1">
-                        <ArrowDownCircle className="w-3 h-3 text-solar" />
-                        Pengurangan tagihan PLN
+                  {/* Value box: Backup PLN padam — menonjolkan nilai tambah */}
+                  <div className="mt-1 p-3 rounded-lg bg-gradient-to-r from-solar/10 to-emerald-500/10 border border-solar/20 flex items-start gap-2.5">
+                    <ShieldCheck className="w-5 h-5 text-solar flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="text-xs font-bold text-navy dark:text-white">
+                        Tetap Nyala Walau PLN Mati 🔌
                       </p>
-                      <p className="font-bold text-solar">
-                        −{formatRentalRpShort(recSavings.plnSaving)}
+                      <p className="text-[11px] text-muted-foreground leading-relaxed mt-0.5">
+                        Bukan sekadar hemat tagihan — rumah Anda tetap menyala
+                        otomatis saat PLN padam. Sistem ini juga{" "}
+                        <strong className="text-solar">mengurangi tagihan PLN hingga {recSavings.coveragePercent}%</strong>{" "}
+                        dengan kapasitas produksi {recSavings.monthlyProduction.toLocaleString("id-ID")} kWh/bulan.
+                        Nilai backup ini tidak didapat dari PLN biasa.
                       </p>
-                      <p className="text-[10px] text-muted-foreground">/bulan</p>
-                    </div>
-                    <div className="p-2 rounded-lg bg-white/50 dark:bg-white/5">
-                      <p className="text-muted-foreground flex items-center gap-1">
-                        <ArrowUpCircle className="w-3 h-3 text-amber-600 dark:text-amber-400" />
-                        Biaya sewa PLTS
-                      </p>
-                      <p className="font-bold text-amber-600 dark:text-amber-400">
-                        +{formatRentalRpShort(pkg.monthlyPrice)}
-                      </p>
-                      <p className="text-[10px] text-muted-foreground">/bulan</p>
                     </div>
                   </div>
-
-                  {/* Net saving highlight */}
-                  <div
-                    className={`mt-2 p-3 rounded-lg flex items-center justify-between ${
-                      recSavings.netSaving >= 0
-                        ? "bg-solar/10 border border-solar/20"
-                        : "bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/30"
-                    }`}
-                  >
-                    <div>
-                      <p className="text-xs text-muted-foreground">Net Saving /bulan</p>
-                      <p className="text-[10px] text-muted-foreground">
-                        (pengurangan PLN − sewa)
-                      </p>
-                    </div>
-                    <p
-                      className={`text-xl font-extrabold ${
-                        recSavings.netSaving >= 0
-                          ? "text-solar"
-                          : "text-red-600 dark:text-red-400"
-                      }`}
-                    >
-                      {recSavings.netSaving >= 0 ? "+" : ""}
-                      {formatRentalRpShort(recSavings.netSaving)}
-                    </p>
-                  </div>
-
-                  {recSavings.netSaving < 0 && (
-                    <p className="mt-2 text-[11px] text-amber-700 dark:text-amber-300 leading-relaxed">
-                      <AlertTriangle className="w-3 h-3 inline mr-1" />
-                      Net saving negatif berarti total outflow (sisa PLN + sewa) melebihi
-                      tagihan PLN awal Anda. Pertimbangkan naikkan budget atau konsultasi
-                      paket custom.
-                    </p>
-                  )}
                 </div>
 
                 {/* Reason / analisis */}
@@ -428,9 +385,10 @@ export function SewaPltsCalculator() {
                   </h3>
                 </div>
                 <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
-                  Bandingkan dampak finansial setiap paket terhadap tagihan PLN Anda
-                  ({formatRentalRp(plnCostBefore)}/bulan). Diurutkan dari net saving
-                  tertinggi.
+                  Bandingkan dampak setiap paket terhadap tagihan PLN Anda
+                  ({formatRentalRp(plnCostBefore)}/bulan). Semua paket sudah
+                  termasuk <strong className="text-solar">backup otomatis saat PLN padam</strong> —
+                  nilai yang tidak didapat dari PLN biasa.
                 </p>
 
                 {/* Table header (desktop) */}
@@ -439,8 +397,8 @@ export function SewaPltsCalculator() {
                   <div className="col-span-2 text-right">Sewa/bln</div>
                   <div className="col-span-2 text-right">PLN turun</div>
                   <div className="col-span-2 text-right">Sisa PLN</div>
-                  <div className="col-span-2 text-right">Total outflow</div>
-                  <div className="col-span-1 text-right">Net</div>
+                  <div className="col-span-2 text-right">Backup</div>
+                  <div className="col-span-1 text-right">Coverage</div>
                 </div>
 
                 {/* Table rows */}
@@ -516,25 +474,27 @@ export function SewaPltsCalculator() {
                           </p>
                         </div>
 
-                        {/* Total outflow */}
+                        {/* Backup (durasi baterai saat PLN padam) */}
                         <div className="col-span-3 md:col-span-2 text-right">
-                          <p className="text-[10px] text-muted-foreground md:hidden">Total</p>
-                          <p className="font-semibold text-navy dark:text-white">
-                            {formatRentalRpShort(s.totalOutflow)}
+                          <p className="text-[10px] text-muted-foreground md:hidden">Backup</p>
+                          <p className="font-semibold text-emerald-600 dark:text-emerald-400">
+                            {s.pkg.storageKwh} kWh
                           </p>
+                          <p className="text-[9px] text-muted-foreground">baterai LiFePO4</p>
                         </div>
 
-                        {/* Net saving */}
+                        {/* Coverage */}
                         <div className="col-span-12 md:col-span-1 text-right">
                           <p
                             className={`font-bold ${
-                              s.netSaving >= 0
+                              s.coveragePercent >= 70
                                 ? "text-solar"
-                                : "text-red-600 dark:text-red-400"
+                                : s.coveragePercent >= 40
+                                ? "text-amber-600 dark:text-amber-400"
+                                : "text-muted-foreground"
                             }`}
                           >
-                            {s.netSaving >= 0 ? "+" : ""}
-                            {formatRentalRpShort(s.netSaving)}
+                            {s.coveragePercent}%
                           </p>
                         </div>
                       </div>
@@ -611,29 +571,31 @@ export function SewaPltsCalculator() {
                   memungkinkan seluruh energi surya dimanfaatkan.
                 </p>
                 <p>
-                  <strong>Net saving:</strong> penghematan tagihan PLN dikurangi
-                  biaya sewa. Pada bulan-bulan dengan produksi tinggi, net
-                  saving positif. Pada bulan mendung, tetap ada penghematan
-                  karena baterai menyimpan energi siang untuk malam.
+                  <strong>Pengurangan tagihan PLN:</strong> jumlah Rupiah yang
+                  dihemat dari tagihan PLN berkat produksi surya yang menutupi
+                  sebagian pemakaian. Semakin besar paket, semakin besar
+                  pengurangannya.
                 </p>
                 <p>
-                  <strong>Biaya instalasi:</strong> dibayar sekali di awal
-                  kontrak, besaran sesuai kapasitas paket (lihat daftar paket).
-                  Sudah mencakup survei, desain, instalasi lengkap,
-                  commissioning, dan pembongkaran equipment saat kontrak
-                  berakhir. Dapat dicicil maksimal 2 bulan — selama 2 bulan
-                  pertama, tagihan = sewa bulanan + (biaya instalasi ÷ 2).
+                  <strong>Backup baterai:</strong> semua paket dilengkapi baterai
+                  LiFePO4 yang membuat rumah tetap menyala otomatis saat PLN
+                  padam — nilai yang tidak didapat dari PLN biasa. Kapasitas
+                  baterai menentukan berapa lama rumah bisa bertahan saat
+                  pemadaman.
+                </p>
+                <p>
+                  <strong>Biaya Survey & Instalasi Awal:</strong> dibayar sekali
+                  di awal kontrak, besaran sesuai tier kapasitas paket (1-3 kWp
+                  = Rp 2jt, 4-7 kWp = Rp 5jt, 8-10 kWp = Rp 8jt). Sudah
+                  mencakup survei, desain, instalasi lengkap, commissioning,
+                  dan pembongkaran equipment saat kontrak berakhir. Dapat
+                  dicicil maksimal 2 bulan — selama 2 bulan pertama, tagihan =
+                  sewa bulanan + (biaya instalasi ÷ 2).
                 </p>
                 <p>
                   <strong>Bayar tahunan:</strong> opsi pembayaran di muka untuk
                   12 bulan, dengan total lebih hemat dibanding 12× harga
                   bulanan. Selisih hemat ditampilkan otomatis di atas.
-                </p>
-                <p>
-                  <strong>Payback instalasi:</strong> estimasi jumlah bulan
-                  sampai akumulasi net saving bulanan menyamai biaya instalasi
-                  awal. Setelah titik ini, semua penghematan adalah keuntungan
-                  bersih bagi Anda.
                 </p>
                 <p>
                   <strong>Catatan:</strong> Angka bersifat estimasi. Konsultasi
