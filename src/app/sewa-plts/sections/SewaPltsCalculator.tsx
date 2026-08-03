@@ -7,27 +7,38 @@ import {
   Zap,
   Wallet,
   TrendingUp,
+  TrendingDown,
   MessageCircle,
   Sun,
   Info,
   ChevronDown,
   ChevronUp,
   Calendar,
+  Check,
+  AlertTriangle,
+  ArrowDownCircle,
+  ArrowUpCircle,
 } from "lucide-react";
 import {
   rentalCalculatorConfig,
   recommendRentalPackage,
+  computeAllPackageSavings,
   estimateMonthlyProduction,
   formatRentalRp,
   formatRentalRpShort,
   buildWhatsAppUrl,
   getInstallationFee,
   getInstallationInstallment,
+  type PackageSavingsResult,
 } from "@/lib/rentalPackages";
 
 /**
- * Section "Kalkulator" — simulator sederhana yang merekomendasikan
- * paket sewa berdasarkan pemakaian listrik & budget bulanan.
+ * Section "Kalkulator" — simulator yang merekomendasikan paket sewa
+ * berdasarkan pemakaian listrik & KEMAMPUAN FINANSIAL (budget) user.
+ *
+ * Output:
+ *   1. Rekomendasi paket yang terjangkau sesuai budget + net saving terbaik
+ *   2. Tabel komparasi pengurangan tagihan untuk SEMUA paket
  */
 export function SewaPltsCalculator() {
   const ref = useRef(null);
@@ -36,32 +47,37 @@ export function SewaPltsCalculator() {
   const [usage, setUsage] = useState<number>(400); // kWh/bulan
   const [budget, setBudget] = useState<number>(1720000); // Rp/bulan (paket Home)
   const [showAssumptions, setShowAssumptions] = useState(false);
+  const [showAllPackages, setShowAllPackages] = useState(false);
 
   const recommendation = recommendRentalPackage(usage, budget);
   const pkg = recommendation?.package;
-  const monthlyProduction = pkg ? estimateMonthlyProduction(pkg.kWp) : 0;
-  const coverage = usage > 0 ? Math.min(Math.round((monthlyProduction / usage) * 100), 100) : 0;
-  const plnCostBefore = usage * rentalCalculatorConfig.plnTariffPerKwh;
-  const plnCostAfter = Math.max(usage - monthlyProduction, 0) * rentalCalculatorConfig.plnTariffPerKwh;
-  const monthlyNetSaving = plnCostBefore - plnCostAfter - (pkg?.monthlyPrice ?? 0);
+  const recSavings = recommendation?.savings ?? null;
 
-  // One-off installation fee (paid once at start of contract, can be installment)
+  // Hitung savings untuk semua paket (untuk tabel komparasi)
+  const allSavings = computeAllPackageSavings(usage, budget);
+
+  // Nilai-nilai dari rekomendasi utama
+  const plnCostBefore = usage * rentalCalculatorConfig.plnTariffPerKwh;
   const installationFee = pkg ? getInstallationFee(pkg.kWp) : 0;
   const installment = pkg ? getInstallationInstallment(pkg.kWp) : null;
-  // Months needed for cumulative net savings to recover installation fee
-  const installationPaybackMonths =
-    monthlyNetSaving > 0 ? Math.ceil(installationFee / monthlyNetSaving) : null;
-  // Annual savings if user pays yearly instead of monthly
   const annualSavings = pkg ? pkg.monthlyPrice * 12 - pkg.annualPrice : 0;
+
+  // Tampilkan hanya top 5 di default, sisanya bisa di-expand
+  const visibleSavings = showAllPackages ? allSavings : allSavings.slice(0, 5);
+  const hiddenCount = allSavings.length - visibleSavings.length;
 
   const waMsg =
     `Halo Jambi Solar Panel.\n\n` +
     `Saya sudah coba kalkulator Sewa PLTS di website:\n` +
-    `- Pemakaian: ${usage} kWh/bulan\n` +
-    `- Budget: ${formatRentalRp(budget)}/bulan\n` +
-    `- Rekomendasi: ${pkg?.name ?? "-"} (${pkg ? formatRentalRp(pkg.monthlyPrice) : "-"} /bulan)\n` +
-    `- Bayar tahunan: ${pkg ? formatRentalRp(pkg.annualPrice) : "-"} (hemat ${pkg ? formatRentalRpShort(annualSavings) : "-"})\n` +
-    `- Biaya instalasi: ${pkg ? formatRentalRp(installationFee) : "-"} (cicil 2 bln)\n\n` +
+    `- Pemakaian: ${usage} kWh/bulan (tagihan PLN ≈ ${formatRentalRp(plnCostBefore)}/bulan)\n` +
+    `- Budget sewa: ${formatRentalRp(budget)}/bulan\n\n` +
+    `Rekomendasi: ${pkg?.name ?? "-"} (${pkg ? formatRentalRp(pkg.monthlyPrice) : "-"}/bulan)\n` +
+    (recSavings
+      ? `- Coverage: ${recSavings.coveragePercent}%\n` +
+        `- Pengurangan tagihan PLN: ${formatRentalRp(recSavings.plnSaving)}/bulan\n` +
+        `- Net saving: ${formatRentalRpShort(recSavings.netSaving)}/bulan\n`
+      : "") +
+    `- Biaya instalasi: ${formatRentalRp(installationFee)} (cicil 2 bln)\n\n` +
     `Mohon konsultasi lebih lanjut. Terima kasih.`;
 
   return (
@@ -167,97 +183,141 @@ export function SewaPltsCalculator() {
             </div>
 
             {/* Step 3: Recommendation result */}
-            {pkg && (
+            {pkg && recSavings && (
               <div className="p-5 rounded-2xl bg-gradient-to-br from-solar/5 to-gold/5 border border-solar/15 mb-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Sun className="w-5 h-5 text-solar" />
                   <h3 className="font-bold text-navy dark:text-white text-base">
-                    Rekomendasi Paket untuk Anda
+                    Rekomendasi Paket Sesuai Budget Anda
                   </h3>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                  {/* Recommended package */}
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-solar/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Calculator className="w-4 h-4 text-solar" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Paket Rekomendasi</p>
-                      <p className="font-bold text-solar text-base">{pkg.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {pkg.kWp} kWp + {pkg.storageKwh} kWh baterai
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Price */}
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Wallet className="w-4 h-4 text-gold" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Biaya Sewa</p>
-                      <p className="font-bold text-navy dark:text-white">
-                        {formatRentalRp(pkg.monthlyPrice)}/bulan
-                      </p>
-                      <p className="text-xs text-muted-foreground">Sudah termasuk PPN</p>
-                    </div>
-                  </div>
-
-                  {/* Production */}
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Produksi Sistem</p>
-                      <p className="font-bold text-navy dark:text-white">
-                        {monthlyProduction.toLocaleString("id-ID")} kWh/bulan
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        Offset ~{coverage}% pemakaian Anda
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Net saving */}
-                  <div className="flex items-start gap-3">
-                    <div
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                        monthlyNetSaving >= 0
-                          ? "bg-solar/10"
-                          : "bg-amber-500/10"
-                      }`}
-                    >
-                      <TrendingUp
-                        className={`w-4 h-4 ${
-                          monthlyNetSaving >= 0
-                            ? "text-solar"
-                            : "text-amber-600 dark:text-amber-400"
-                        }`}
-                      />
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Estimasi Net Saving</p>
-                      <p
-                        className={`font-bold ${
-                          monthlyNetSaving >= 0
-                            ? "text-solar"
-                            : "text-amber-600 dark:text-amber-400"
-                        }`}
-                      >
-                        {monthlyNetSaving >= 0 ? "+" : ""}
-                        {formatRentalRpShort(monthlyNetSaving)}/bulan
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        Setelah dikurangi biaya sewa
-                      </p>
-                    </div>
-                  </div>
+                {/* Headline: tagihan PLN awal */}
+                <div className="mb-4 p-3 rounded-xl bg-navy/5 dark:bg-white/5 border border-border">
+                  <p className="text-xs text-muted-foreground text-center">
+                    Tagihan PLN Anda saat ini (estimasi)
+                  </p>
+                  <p className="text-2xl font-extrabold text-navy dark:text-white text-center">
+                    {formatRentalRp(plnCostBefore)}
+                    <span className="text-sm font-medium text-muted-foreground ml-1">/bulan</span>
+                  </p>
+                  <p className="text-[11px] text-muted-foreground text-center mt-1">
+                    Berdasarkan {usage.toLocaleString("id-ID")} kWh × Rp{" "}
+                    {rentalCalculatorConfig.plnTariffPerKwh.toLocaleString("id-ID")}/kWh
+                  </p>
                 </div>
 
-                {/* Reason */}
+                {/* Recommended package card */}
+                <div
+                  className={`p-4 rounded-xl mb-4 border-2 ${
+                    recSavings.netSaving >= 0
+                      ? "bg-solar/5 border-solar/30"
+                      : "bg-amber-50 dark:bg-amber-900/10 border-amber-300 dark:border-amber-700"
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="w-9 h-9 rounded-lg bg-solar flex items-center justify-center flex-shrink-0">
+                        <Calculator className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wide">
+                          Paket Rekomendasi
+                        </p>
+                        <p className="text-lg font-bold text-solar">{pkg.name}</p>
+                        <p className="text-[11px] text-muted-foreground">
+                          {pkg.kWp} kWp + {pkg.storageKwh} kWh baterai
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[11px] text-muted-foreground">Sewa</p>
+                      <p className="text-base font-bold text-navy dark:text-white">
+                        {formatRentalRpShort(pkg.monthlyPrice)}
+                      </p>
+                      <p className="text-[10px] text-muted-foreground">/bulan</p>
+                    </div>
+                  </div>
+
+                  {/* Affordability badge */}
+                  <div className="flex items-center gap-2 mb-3">
+                    {recSavings.affordable ? (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
+                        <Check className="w-3 h-3" />
+                        Terjangkau untuk budget Anda
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+                        <AlertTriangle className="w-3 h-3" />
+                        Di atas budget (gap {formatRentalRpShort(pkg.monthlyPrice - budget)})
+                      </span>
+                    )}
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                      Coverage {recSavings.coveragePercent}%
+                    </span>
+                  </div>
+
+                  {/* Savings breakdown untuk paket rekomendasi */}
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="p-2 rounded-lg bg-white/50 dark:bg-white/5">
+                      <p className="text-muted-foreground flex items-center gap-1">
+                        <ArrowDownCircle className="w-3 h-3 text-solar" />
+                        Pengurangan tagihan PLN
+                      </p>
+                      <p className="font-bold text-solar">
+                        −{formatRentalRpShort(recSavings.plnSaving)}
+                      </p>
+                      <p className="text-[10px] text-muted-foreground">/bulan</p>
+                    </div>
+                    <div className="p-2 rounded-lg bg-white/50 dark:bg-white/5">
+                      <p className="text-muted-foreground flex items-center gap-1">
+                        <ArrowUpCircle className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                        Biaya sewa PLTS
+                      </p>
+                      <p className="font-bold text-amber-600 dark:text-amber-400">
+                        +{formatRentalRpShort(pkg.monthlyPrice)}
+                      </p>
+                      <p className="text-[10px] text-muted-foreground">/bulan</p>
+                    </div>
+                  </div>
+
+                  {/* Net saving highlight */}
+                  <div
+                    className={`mt-2 p-3 rounded-lg flex items-center justify-between ${
+                      recSavings.netSaving >= 0
+                        ? "bg-solar/10 border border-solar/20"
+                        : "bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/30"
+                    }`}
+                  >
+                    <div>
+                      <p className="text-xs text-muted-foreground">Net Saving /bulan</p>
+                      <p className="text-[10px] text-muted-foreground">
+                        (pengurangan PLN − sewa)
+                      </p>
+                    </div>
+                    <p
+                      className={`text-xl font-extrabold ${
+                        recSavings.netSaving >= 0
+                          ? "text-solar"
+                          : "text-red-600 dark:text-red-400"
+                      }`}
+                    >
+                      {recSavings.netSaving >= 0 ? "+" : ""}
+                      {formatRentalRpShort(recSavings.netSaving)}
+                    </p>
+                  </div>
+
+                  {recSavings.netSaving < 0 && (
+                    <p className="mt-2 text-[11px] text-amber-700 dark:text-amber-300 leading-relaxed">
+                      <AlertTriangle className="w-3 h-3 inline mr-1" />
+                      Net saving negatif berarti total outflow (sisa PLN + sewa) melebihi
+                      tagihan PLN awal Anda. Pertimbangkan naikkan budget atau konsultasi
+                      paket custom.
+                    </p>
+                  )}
+                </div>
+
+                {/* Reason / analisis */}
                 <div className="p-3 rounded-xl bg-muted/50 border border-border mb-3">
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     <strong className="text-navy dark:text-white">Analisis:</strong>{" "}
@@ -290,20 +350,6 @@ export function SewaPltsCalculator() {
                             (digabung dengan sewa bulanan di 2 bulan pertama).
                           </>
                         )}
-                        {installationPaybackMonths !== null && monthlyNetSaving > 0 && (
-                          <>
-                            {" "}
-                            Dengan net saving{" "}
-                            <strong className="text-solar">
-                              {formatRentalRpShort(monthlyNetSaving)}/bulan
-                            </strong>
-                            , biaya instalasi kembali dalam{" "}
-                            <strong className="text-solar">
-                              ~{installationPaybackMonths} bulan
-                            </strong>
-                            .
-                          </>
-                        )}
                       </p>
                     </div>
                   </div>
@@ -326,8 +372,7 @@ export function SewaPltsCalculator() {
                           <strong className="text-emerald-600 dark:text-emerald-400">
                             {formatRentalRpShort(annualSavings)}/tahun
                           </strong>{" "}
-                          dibanding bayar bulanan 12×. Cocok untuk mengunci biaya
-                          operasional setahun ke depan.
+                          dibanding bayar bulanan 12×.
                         </p>
                       </div>
                     </div>
@@ -336,29 +381,161 @@ export function SewaPltsCalculator() {
               </div>
             )}
 
-            {/* Savings breakdown */}
-            {pkg && (
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                <div className="text-center p-4 rounded-2xl bg-solar/5 border border-solar/10">
-                  <p className="text-xs text-muted-foreground mb-1">Tagihan PLN Sebelum</p>
-                  <p className="text-lg sm:text-xl font-bold text-red-500/80 dark:text-red-400">
-                    {formatRentalRpShort(plnCostBefore)}
-                  </p>
+            {/* Step 4: Comparison table — semua paket */}
+            {allSavings.length > 0 && (
+              <div className="p-5 rounded-2xl bg-card border border-border mb-6">
+                <div className="flex items-center gap-2 mb-1">
+                  <TrendingDown className="w-5 h-5 text-solar" />
+                  <h3 className="font-bold text-navy dark:text-white text-base">
+                    Estimasi Pengurangan Tagihan — Semua Paket
+                  </h3>
                 </div>
-                <div className="text-center p-4 rounded-2xl bg-solar/5 border border-solar/10">
-                  <p className="text-xs text-muted-foreground mb-1">Tagihan PLN Setelah</p>
-                  <p className="text-lg sm:text-xl font-bold text-solar">
-                    {formatRentalRpShort(plnCostAfter)}
-                  </p>
+                <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
+                  Bandingkan dampak finansial setiap paket terhadap tagihan PLN Anda
+                  ({formatRentalRp(plnCostBefore)}/bulan). Diurutkan dari net saving
+                  tertinggi.
+                </p>
+
+                {/* Table header (desktop) */}
+                <div className="hidden md:grid grid-cols-12 gap-2 px-3 py-2 text-[11px] font-semibold text-muted-foreground uppercase tracking-wide bg-muted/50 rounded-lg">
+                  <div className="col-span-3">Paket</div>
+                  <div className="col-span-2 text-right">Sewa/bln</div>
+                  <div className="col-span-2 text-right">PLN turun</div>
+                  <div className="col-span-2 text-right">Sisa PLN</div>
+                  <div className="col-span-2 text-right">Total outflow</div>
+                  <div className="col-span-1 text-right">Net</div>
                 </div>
-                <div className="col-span-2 lg:col-span-1 text-center p-4 rounded-2xl bg-gold/5 border border-gold/20">
-                  <p className="text-xs text-muted-foreground mb-1">Total Outflow/Bulan</p>
-                  <p className="text-lg sm:text-xl font-bold text-gold">
-                    {formatRentalRpShort(plnCostAfter + pkg.monthlyPrice)}
-                  </p>
-                  <p className="text-[10px] text-muted-foreground">
-                    PLN sisa + sewa
-                  </p>
+
+                {/* Table rows */}
+                <div className="space-y-1.5 mt-2">
+                  {visibleSavings.map((s) => {
+                    const isRecommended = pkg && s.pkg.id === pkg.id;
+                    return (
+                      <div
+                        key={s.pkg.id}
+                        className={`grid grid-cols-12 gap-2 px-3 py-2.5 rounded-lg text-xs items-center transition-colors ${
+                          isRecommended
+                            ? "bg-solar/10 border border-solar/30 ring-1 ring-solar/20"
+                            : s.affordable
+                            ? "bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-900/20"
+                            : "bg-muted/30 border border-border"
+                        }`}
+                      >
+                        {/* Paket name + badges */}
+                        <div className="col-span-12 md:col-span-3">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            {isRecommended && (
+                              <span className="text-[9px] font-bold text-white bg-solar px-1.5 py-0.5 rounded">
+                                REKOMENDASI
+                              </span>
+                            )}
+                            <span className="font-bold text-navy dark:text-white">
+                              {s.pkg.name}
+                            </span>
+                            <span className="text-[10px] text-muted-foreground">
+                              {s.pkg.kWp} kWp
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1 mt-0.5">
+                            {!isRecommended && s.affordable && (
+                              <span className="inline-flex items-center gap-0.5 text-[9px] text-emerald-600 dark:text-emerald-400">
+                                <Check className="w-2.5 h-2.5" />
+                                terjangkau
+                              </span>
+                            )}
+                            {!s.affordable && (
+                              <span className="inline-flex items-center gap-0.5 text-[9px] text-amber-600 dark:text-amber-400">
+                                <AlertTriangle className="w-2.5 h-2.5" />
+                                di atas budget
+                              </span>
+                            )}
+                            <span className="text-[9px] text-muted-foreground">
+                              cover {s.coveragePercent}%
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Sewa */}
+                        <div className="col-span-3 md:col-span-2 text-right">
+                          <p className="text-[10px] text-muted-foreground md:hidden">Sewa</p>
+                          <p className="font-semibold text-navy dark:text-white">
+                            {formatRentalRpShort(s.pkg.monthlyPrice)}
+                          </p>
+                        </div>
+
+                        {/* PLN turun */}
+                        <div className="col-span-3 md:col-span-2 text-right">
+                          <p className="text-[10px] text-muted-foreground md:hidden">PLN turun</p>
+                          <p className="font-semibold text-solar">
+                            −{formatRentalRpShort(s.plnSaving)}
+                          </p>
+                        </div>
+
+                        {/* Sisa PLN */}
+                        <div className="col-span-3 md:col-span-2 text-right">
+                          <p className="text-[10px] text-muted-foreground md:hidden">Sisa PLN</p>
+                          <p className="font-semibold text-muted-foreground">
+                            {formatRentalRpShort(s.plnRemaining)}
+                          </p>
+                        </div>
+
+                        {/* Total outflow */}
+                        <div className="col-span-3 md:col-span-2 text-right">
+                          <p className="text-[10px] text-muted-foreground md:hidden">Total</p>
+                          <p className="font-semibold text-navy dark:text-white">
+                            {formatRentalRpShort(s.totalOutflow)}
+                          </p>
+                        </div>
+
+                        {/* Net saving */}
+                        <div className="col-span-12 md:col-span-1 text-right">
+                          <p
+                            className={`font-bold ${
+                              s.netSaving >= 0
+                                ? "text-solar"
+                                : "text-red-600 dark:text-red-400"
+                            }`}
+                          >
+                            {s.netSaving >= 0 ? "+" : ""}
+                            {formatRentalRpShort(s.netSaving)}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Expand button */}
+                {hiddenCount > 0 && (
+                  <button
+                    onClick={() => setShowAllPackages(!showAllPackages)}
+                    className="w-full mt-3 py-2 text-xs font-semibold text-solar hover:bg-solar/5 rounded-lg transition-colors flex items-center justify-center gap-1"
+                  >
+                    {showAllPackages ? (
+                      <>
+                        <ChevronUp className="w-3.5 h-3.5" />
+                        Tampilkan lebih sedikit
+                      </>
+                    ) : (
+                      <>
+                        <ChevronDown className="w-3.5 h-3.5" />
+                        Tampilkan {hiddenCount} paket lainnya
+                      </>
+                    )}
+                  </button>
+                )}
+
+                {/* Legend */}
+                <div className="mt-3 flex flex-wrap gap-3 text-[10px] text-muted-foreground">
+                  <span className="inline-flex items-center gap-1">
+                    <span className="w-2 h-2 rounded bg-solar" /> Rekomendasi
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <span className="w-2 h-2 rounded bg-emerald-400" /> Terjangkau (≤ budget {formatRentalRpShort(budget)}/bln)
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <span className="w-2 h-2 rounded bg-amber-400" /> Di atas budget
+                  </span>
                 </div>
               </div>
             )}
