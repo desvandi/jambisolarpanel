@@ -7,6 +7,7 @@ import {
   buildWhatsAppUrl,
   getCheapestRentalPackage,
   formatRentalRp,
+  getInstallationFee,
 } from "@/lib/rentalPackages";
 
 /**
@@ -56,10 +57,11 @@ export function SewaPltsFinalCta() {
           {/* Value chips */}
           <div className="flex flex-wrap justify-center gap-3 mb-10">
             {[
+              { icon: Shield, text: "Backup otomatis saat PLN padam" },
+              { icon: Zap, text: "Tagihan listrik turun hingga 90%" },
               { icon: Sun, text: "Tanpa investasi awal" },
-              { icon: Shield, text: "Maintenance termasuk" },
-              { icon: Zap, text: "Instalasi profesional" },
-              { icon: TrendingUp, text: "Bisa upgrade kapasitas" },
+              { icon: TrendingUp, text: "Maintenance termasuk" },
+              { icon: Shield, text: "Bisa upgrade kapasitas" },
             ].map((chip) => (
               <span
                 key={chip.text}
@@ -73,10 +75,16 @@ export function SewaPltsFinalCta() {
 
           {/* Price reminder */}
           {cheapest && (
-            <p className="text-base text-gold-light font-semibold mb-6">
-              Mulai dari {formatRentalRp(cheapest.monthlyPrice)}/bulan — Paket{" "}
-              {cheapest.name} ({cheapest.kWp} kWp + {cheapest.storageKwh} kWh)
-            </p>
+            <div className="mb-6 text-center">
+              <p className="text-base text-gold-light font-semibold">
+                Mulai dari {formatRentalRp(cheapest.monthlyPrice)}/bulan — Paket{" "}
+                {cheapest.name} ({cheapest.kWp} kWp + {cheapest.storageKwh} kWh)
+              </p>
+              <p className="text-xs text-white/60 mt-1">
+                + biaya instalasi sekali bayar {formatRentalRp(getInstallationFee(cheapest.kWp))}{" "}
+                (termasuk bongkar saat kontrak selesai)
+              </p>
+            </div>
           )}
 
           {/* CTA buttons */}

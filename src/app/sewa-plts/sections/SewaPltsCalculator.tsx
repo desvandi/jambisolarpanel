@@ -12,6 +12,7 @@ import {
   Info,
   ChevronDown,
   ChevronUp,
+  Calendar,
 } from "lucide-react";
 import {
   rentalCalculatorConfig,
@@ -20,6 +21,8 @@ import {
   formatRentalRp,
   formatRentalRpShort,
   buildWhatsAppUrl,
+  getInstallationFee,
+  getInstallationInstallment,
 } from "@/lib/rentalPackages";
 
 /**
@@ -31,7 +34,7 @@ export function SewaPltsCalculator() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   const [usage, setUsage] = useState<number>(400); // kWh/bulan
-  const [budget, setBudget] = useState<number>(1150000); // Rp/bulan
+  const [budget, setBudget] = useState<number>(1720000); // Rp/bulan (paket Home)
   const [showAssumptions, setShowAssumptions] = useState(false);
 
   const recommendation = recommendRentalPackage(usage, budget);
@@ -42,12 +45,23 @@ export function SewaPltsCalculator() {
   const plnCostAfter = Math.max(usage - monthlyProduction, 0) * rentalCalculatorConfig.plnTariffPerKwh;
   const monthlyNetSaving = plnCostBefore - plnCostAfter - (pkg?.monthlyPrice ?? 0);
 
+  // One-off installation fee (paid once at start of contract, can be installment)
+  const installationFee = pkg ? getInstallationFee(pkg.kWp) : 0;
+  const installment = pkg ? getInstallationInstallment(pkg.kWp) : null;
+  // Months needed for cumulative net savings to recover installation fee
+  const installationPaybackMonths =
+    monthlyNetSaving > 0 ? Math.ceil(installationFee / monthlyNetSaving) : null;
+  // Annual savings if user pays yearly instead of monthly
+  const annualSavings = pkg ? pkg.monthlyPrice * 12 - pkg.annualPrice : 0;
+
   const waMsg =
     `Halo Jambi Solar Panel.\n\n` +
     `Saya sudah coba kalkulator Sewa PLTS di website:\n` +
     `- Pemakaian: ${usage} kWh/bulan\n` +
     `- Budget: ${formatRentalRp(budget)}/bulan\n` +
-    `- Rekomendasi: ${pkg?.name ?? "-"} (${pkg ? formatRentalRp(pkg.monthlyPrice) : "-"} /bulan)\n\n` +
+    `- Rekomendasi: ${pkg?.name ?? "-"} (${pkg ? formatRentalRp(pkg.monthlyPrice) : "-"} /bulan)\n` +
+    `- Bayar tahunan: ${pkg ? formatRentalRp(pkg.annualPrice) : "-"} (hemat ${pkg ? formatRentalRpShort(annualSavings) : "-"})\n` +
+    `- Biaya instalasi: ${pkg ? formatRentalRp(installationFee) : "-"} (cicil 2 bln)\n\n` +
     `Mohon konsultasi lebih lanjut. Terima kasih.`;
 
   return (
@@ -244,12 +258,81 @@ export function SewaPltsCalculator() {
                 </div>
 
                 {/* Reason */}
-                <div className="p-3 rounded-xl bg-muted/50 border border-border">
+                <div className="p-3 rounded-xl bg-muted/50 border border-border mb-3">
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     <strong className="text-navy dark:text-white">Analisis:</strong>{" "}
                     {recommendation?.reason}
                   </p>
                 </div>
+
+                {/* Installation fee notice */}
+                <div className="p-3 rounded-xl bg-gradient-to-r from-gold/5 to-solar/5 border border-gold/20">
+                  <div className="flex items-start gap-2">
+                    <Wallet className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="text-xs font-semibold text-navy dark:text-white">
+                        Biaya instalasi:{" "}
+                        <span className="text-gold">{formatRentalRp(installationFee)}</span>
+                      </p>
+                      <p className="text-[11px] text-muted-foreground mt-0.5 leading-relaxed">
+                        Dibayar di awal kontrak, sudah termasuk bongkar saat kontrak selesai.
+                        {installment && (
+                          <>
+                            {" "}
+                            Bisa dicicil{" "}
+                            <strong className="text-gold">
+                              {installment.months} bulan
+                            </strong>{" "}
+                            @{" "}
+                            <strong className="text-gold">
+                              {formatRentalRpShort(installment.installmentPerMonth)}/bulan
+                            </strong>{" "}
+                            (digabung dengan sewa bulanan di 2 bulan pertama).
+                          </>
+                        )}
+                        {installationPaybackMonths !== null && monthlyNetSaving > 0 && (
+                          <>
+                            {" "}
+                            Dengan net saving{" "}
+                            <strong className="text-solar">
+                              {formatRentalRpShort(monthlyNetSaving)}/bulan
+                            </strong>
+                            , biaya instalasi kembali dalam{" "}
+                            <strong className="text-solar">
+                              ~{installationPaybackMonths} bulan
+                            </strong>
+                            .
+                          </>
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Annual payment option */}
+                {annualSavings > 0 && (
+                  <div className="mt-2 p-3 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-800/30">
+                    <div className="flex items-start gap-2">
+                      <Calendar className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-xs font-semibold text-navy dark:text-white">
+                          Opsi bayar tahunan:{" "}
+                          <span className="text-emerald-600 dark:text-emerald-400">
+                            {formatRentalRp(pkg.annualPrice)}
+                          </span>
+                        </p>
+                        <p className="text-[11px] text-muted-foreground mt-0.5 leading-relaxed">
+                          Lebih hemat{" "}
+                          <strong className="text-emerald-600 dark:text-emerald-400">
+                            {formatRentalRpShort(annualSavings)}/tahun
+                          </strong>{" "}
+                          dibanding bayar bulanan 12×. Cocok untuk mengunci biaya
+                          operasional setahun ke depan.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -318,6 +401,25 @@ export function SewaPltsCalculator() {
                   biaya sewa. Pada bulan-bulan dengan produksi tinggi, net
                   saving positif. Pada bulan mendung, tetap ada penghematan
                   karena baterai menyimpan energi siang untuk malam.
+                </p>
+                <p>
+                  <strong>Biaya instalasi:</strong> dibayar sekali di awal
+                  kontrak, besaran sesuai kapasitas paket (lihat daftar paket).
+                  Sudah mencakup survei, desain, instalasi lengkap,
+                  commissioning, dan pembongkaran equipment saat kontrak
+                  berakhir. Dapat dicicil maksimal 2 bulan — selama 2 bulan
+                  pertama, tagihan = sewa bulanan + (biaya instalasi ÷ 2).
+                </p>
+                <p>
+                  <strong>Bayar tahunan:</strong> opsi pembayaran di muka untuk
+                  12 bulan, dengan total lebih hemat dibanding 12× harga
+                  bulanan. Selisih hemat ditampilkan otomatis di atas.
+                </p>
+                <p>
+                  <strong>Payback instalasi:</strong> estimasi jumlah bulan
+                  sampai akumulasi net saving bulanan menyamai biaya instalasi
+                  awal. Setelah titik ini, semua penghematan adalah keuntungan
+                  bersih bagi Anda.
                 </p>
                 <p>
                   <strong>Catatan:</strong> Angka bersifat estimasi. Konsultasi
