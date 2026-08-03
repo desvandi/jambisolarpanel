@@ -2,12 +2,14 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Check, MessageCircle, Zap, Battery, TrendingUp } from "lucide-react";
+import { Check, MessageCircle, Zap, Battery, TrendingUp, Wrench } from "lucide-react";
 import {
   getActiveRentalPackages,
   buildWhatsAppUrl,
   formatRentalRp,
   estimateMonthlyProduction,
+  getInstallationFee,
+  rentalProgramConfig,
 } from "@/lib/rentalPackages";
 
 /**
@@ -179,6 +181,41 @@ export function SewaPltsPackages() {
                   </p>
                 </div>
 
+                {/* Installation fee — once-off */}
+                <div
+                  className={`p-3 rounded-xl mb-4 flex items-start gap-2 ${
+                    pkg.popular
+                      ? "bg-white/10 border border-white/10"
+                      : "bg-muted/50 border border-border"
+                  }`}
+                >
+                  <Wrench
+                    className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
+                      pkg.popular ? "text-gold-light" : "text-solar"
+                    }`}
+                  />
+                  <div>
+                    <p
+                      className={`text-xs font-semibold ${
+                        pkg.popular ? "text-white/90" : "text-navy dark:text-white"
+                      }`}
+                    >
+                      Instalasi sekali bayar:{" "}
+                      <span className={pkg.popular ? "text-gold-light" : "text-solar"}>
+                        {formatRentalRp(getInstallationFee(pkg.kWp))}
+                      </span>
+                    </p>
+                    <p
+                      className={`text-[11px] mt-0.5 leading-relaxed ${
+                        pkg.popular ? "text-white/60" : "text-muted-foreground"
+                      }`}
+                    >
+                      {formatRentalRp(rentalProgramConfig.installationFeePerKwp)}/kWp × {pkg.kWp} kWp — termasuk
+                      bongkar saat kontrak selesai
+                    </p>
+                  </div>
+                </div>
+
                 {/* Features */}
                 <ul
                   className={`space-y-2 mb-6 flex-1 ${
@@ -223,16 +260,24 @@ export function SewaPltsPackages() {
         </div>
 
         {/* Bottom note */}
-        <motion.p
+        <motion.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.4, delay: 0.4 }}
-          className="text-center text-xs text-muted-foreground mt-8 max-w-2xl mx-auto"
+          className="mt-8 max-w-2xl mx-auto space-y-2 text-center"
         >
-          Harga dapat berubah sewaktu-waktu mengikuti kondisi pasar. Hubungi
-          tim kami via WhatsApp untuk penawaran terbaru dan opsi pembayaran
-          tahunan (tersedia diskon khusus).
-        </motion.p>
+          <p className="text-xs text-muted-foreground">
+            Harga dapat berubah sewaktu-waktu mengikuti kondisi pasar. Hubungi
+            tim kami via WhatsApp untuk penawaran terbaru dan opsi pembayaran
+            tahunan (tersedia diskon khusus).
+          </p>
+          <p className="text-xs text-muted-foreground">
+            <strong className="text-navy dark:text-white">Biaya instalasi</strong>{" "}
+            ({formatRentalRp(rentalProgramConfig.installationFeePerKwp)}/kWp) dibayar
+            sekali di awal kontrak dan sudah mencakup pembongkaran equipment saat
+            kontrak berakhir — tidak ada biaya tambahan untuk bongkar di akhir.
+          </p>
+        </motion.div>
       </div>
     </section>
   );

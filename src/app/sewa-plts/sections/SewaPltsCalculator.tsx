@@ -20,6 +20,8 @@ import {
   formatRentalRp,
   formatRentalRpShort,
   buildWhatsAppUrl,
+  getInstallationFee,
+  rentalProgramConfig,
 } from "@/lib/rentalPackages";
 
 /**
@@ -42,12 +44,19 @@ export function SewaPltsCalculator() {
   const plnCostAfter = Math.max(usage - monthlyProduction, 0) * rentalCalculatorConfig.plnTariffPerKwh;
   const monthlyNetSaving = plnCostBefore - plnCostAfter - (pkg?.monthlyPrice ?? 0);
 
+  // One-off installation fee (paid once at start of contract)
+  const installationFee = pkg ? getInstallationFee(pkg.kWp) : 0;
+  // Months needed for cumulative net savings to recover installation fee
+  const installationPaybackMonths =
+    monthlyNetSaving > 0 ? Math.ceil(installationFee / monthlyNetSaving) : null;
+
   const waMsg =
     `Halo Jambi Solar Panel.\n\n` +
     `Saya sudah coba kalkulator Sewa PLTS di website:\n` +
     `- Pemakaian: ${usage} kWh/bulan\n` +
     `- Budget: ${formatRentalRp(budget)}/bulan\n` +
-    `- Rekomendasi: ${pkg?.name ?? "-"} (${pkg ? formatRentalRp(pkg.monthlyPrice) : "-"} /bulan)\n\n` +
+    `- Rekomendasi: ${pkg?.name ?? "-"} (${pkg ? formatRentalRp(pkg.monthlyPrice) : "-"} /bulan)\n` +
+    `- Biaya instalasi: ${pkg ? formatRentalRp(installationFee) : "-"} (sekali bayar)\n\n` +
     `Mohon konsultasi lebih lanjut. Terima kasih.`;
 
   return (
@@ -244,11 +253,42 @@ export function SewaPltsCalculator() {
                 </div>
 
                 {/* Reason */}
-                <div className="p-3 rounded-xl bg-muted/50 border border-border">
+                <div className="p-3 rounded-xl bg-muted/50 border border-border mb-3">
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     <strong className="text-navy dark:text-white">Analisis:</strong>{" "}
                     {recommendation?.reason}
                   </p>
+                </div>
+
+                {/* Installation fee notice */}
+                <div className="p-3 rounded-xl bg-gradient-to-r from-gold/5 to-solar/5 border border-gold/20">
+                  <div className="flex items-start gap-2">
+                    <Wallet className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="text-xs font-semibold text-navy dark:text-white">
+                        Biaya instalasi sekali bayar:{" "}
+                        <span className="text-gold">{formatRentalRp(installationFee)}</span>
+                      </p>
+                      <p className="text-[11px] text-muted-foreground mt-0.5 leading-relaxed">
+                        {formatRentalRp(rentalProgramConfig.installationFeePerKwp)}/kWp × {pkg.kWp} kWp — dibayar di awal kontrak,
+                        sudah termasuk bongkar saat kontrak selesai.
+                        {installationPaybackMonths !== null && monthlyNetSaving > 0 && (
+                          <>
+                            {" "}
+                            Dengan net saving{" "}
+                            <strong className="text-solar">
+                              {formatRentalRpShort(monthlyNetSaving)}/bulan
+                            </strong>
+                            , biaya instalasi kembali dalam{" "}
+                            <strong className="text-solar">
+                              ~{installationPaybackMonths} bulan
+                            </strong>
+                            .
+                          </>
+                        )}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -318,6 +358,20 @@ export function SewaPltsCalculator() {
                   biaya sewa. Pada bulan-bulan dengan produksi tinggi, net
                   saving positif. Pada bulan mendung, tetap ada penghematan
                   karena baterai menyimpan energi siang untuk malam.
+                </p>
+                <p>
+                  <strong>Biaya instalasi:</strong>{" "}
+                  {formatRentalRp(rentalProgramConfig.installationFeePerKwp)}/kWp ×
+                  kapasitas paket, dibayar sekali di awal kontrak. Sudah
+                  mencakup survei, desain, instalasi lengkap, commissioning,
+                  dan pembongkaran equipment saat kontrak berakhir. Bukan bagian
+                  dari biaya bulanan.
+                </p>
+                <p>
+                  <strong>Payback instalasi:</strong> estimasi jumlah bulan
+                  sampai akumulasi net saving bulanan menyamai biaya instalasi
+                  awal. Setelah titik ini, semua penghematan adalah keuntungan
+                  bersih bagi Anda.
                 </p>
                 <p>
                   <strong>Catatan:</strong> Angka bersifat estimasi. Konsultasi

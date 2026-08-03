@@ -40,7 +40,29 @@ export const rentalProgramConfig = {
   pshHours: 3.75,
   /** Efisiensi sistem. */
   systemEfficiency: 0.8,
+  /**
+   * Biaya instalasi awal per kWp (Rupiah).
+   *
+   * Dibayar sekali di awal kontrak. Sudah mencakup:
+   *   - Survei, desain, dan engineering
+   *   - Pemasangan panel, inverter, baterai, mounting
+   *   - Commissioning & testing
+   *   - Pembongkaran/percabutan equipment saat kontrak berakhir
+   *     (tidak perlu biaya tambahan untuk bongkar di akhir)
+   *
+   * Cara mengubah: ubah satu angka di bawah — semua paket
+   * otomatis menghitung ulang biaya instalasinya.
+   */
+  installationFeePerKwp: 1_000_000,
 } as const;
+
+/**
+ * Hitung biaya instalasi untuk sebuah paket.
+ * Biaya = installationFeePerKwp × kWp paket.
+ */
+export function getInstallationFee(kWp: number): number {
+  return rentalProgramConfig.installationFeePerKwp * kWp;
+}
 
 /** Definisi satu paket sewa PLTS. */
 export interface RentalPackage {
@@ -260,7 +282,7 @@ export const rentalComparison: ComparisonRow[] = [
   {
     aspect: "Investasi Awal",
     buy: "Rp 25 – 100 juta+ (sesuai kapasitas)",
-    rent: "Rp 0 — tanpa DP, tanpa biaya instalasi",
+    rent: "Rp 1jt/kWp sekali bayar (instalasi + bongkar akhir kontrak)",
     winner: "rent",
   },
   {
@@ -363,6 +385,16 @@ export const rentalFaqs: RentalFaqItem[] = [
       "Kontrak minimum adalah 12 bulan, dengan opsi perpanjangan otomatis. Pembayaran sewa dilakukan bulanan di mellow melalui transfer bank atau virtual account yang akan dikirimkan setiap awal bulan. Tersedia juga opsi pembayaran tahunan dengan diskon khusus — hubungi tim kami untuk detail lebih lanjut.",
   },
   {
+    question: "Apakah ada biaya instalasi awal?",
+    answer:
+      "Ya, ada biaya instalasi sekali bayar sebesar Rp 1.000.000 per kWp kapasitas paket yang dipilih. Contoh: paket Home 2 kWp = Rp 2.000.000; paket Premium 4 kWp = Rp 4.000.000. Biaya ini sudah mencakup survei, desain, engineering, pemasangan lengkap (panel, inverter, baterai, mounting, proteksi), commissioning & testing — sekaligus pembongkaran/percabutan equipment saat kontrak berakhir. Jadi tidak ada biaya tambahan untuk bongkar di akhir. Biaya ini jauh lebih kecil dari investasi beli putus (Rp 25-100 juta) dan dapat dicicil melalui pembayaran tahunan jika diinginkan.",
+  },
+  {
+    question: "Apakah biaya instalasi bisa dikembalikan jika berhenti di tengah jalan?",
+    answer:
+      "Biaya instalasi bersifat non-refundable karena langsung digunakan untuk pekerjaan instalasi fisik (material, tenaga kerja, commissioning) yang sudah dilakukan. Jika kontrak berakhir sesuai tenor, biaya bongkar sudah termasuk — tanpa biaya tambahan. Untuk terminasi dini sebelum kontrak minimum 12 bulan, ada penalti sesuai perjanjian yang akan dijelaskan saat penandatanganan kontrak. Hubungi tim kami untuk skenario khusus seperti relokasi rumah.",
+  },
+  {
     question: "Apakah ada survei sebelum pemasangan?",
     answer:
       "Ya, survei gratis adalah bagian dari layanan. Tim kami akan datang untuk mengecek kondisi atap, arah hadap, sudut kemiringan, kapasitas panel yang muat, serta pola konsumsi listrik Anda. Dari hasil survei, kami akan merekomendasikan paket yang paling sesuai — Anda bebas memilih atau menolak tanpa biaya.",
@@ -379,14 +411,14 @@ export const rentalHero = {
   badge: "Solar as a Service — Bayar Bulanan",
   title: "Gunakan PLTS Sekarang. Bayarnya Bulanan.",
   subtitle:
-    "Satu sistem, dua manfaat: tagihan listrik turun setiap bulan, dan rumah tetap menyala saat PLN padam. Tanpa investasi puluhan juta rupiah — mulai hanya Rp 650 ribu/bulan.",
+    "Satu sistem, dua manfaat: tagihan listrik turun setiap bulan, dan rumah tetap menyala saat PLN padam. Cukup bayar biaya instalasi sekali di awal (Rp 1jt/kWp — termasuk bongkar saat kontrak selesai), lalu bayar sewa bulanan mulai Rp 650 ribu.",
   primaryCta: "Hitung Paket Saya",
   secondaryCta: "Konsultasi WhatsApp",
   stats: [
-    { label: "Mulai dari", value: "Rp 650rb", suffix: "/bulan" },
+    { label: "Sewa mulai dari", value: "Rp 650rb", suffix: "/bulan" },
+    { label: "Biaya instalasi", value: "Rp 1jt", suffix: "/kWp" },
     { label: "Backup PLN padam", value: "Otomatis", suffix: "" },
     { label: "Hemat tagihan", value: "Hingga 90%", suffix: "" },
-    { label: "Kontrak minimum", value: "12", suffix: "bulan" },
   ],
 } as const;
 

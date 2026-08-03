@@ -7,6 +7,7 @@ import {
   buildWhatsAppUrl,
   getCheapestRentalPackage,
   formatRentalRp,
+  getInstallationFee,
 } from "@/lib/rentalPackages";
 
 /**
@@ -74,10 +75,16 @@ export function SewaPltsFinalCta() {
 
           {/* Price reminder */}
           {cheapest && (
-            <p className="text-base text-gold-light font-semibold mb-6">
-              Mulai dari {formatRentalRp(cheapest.monthlyPrice)}/bulan — Paket{" "}
-              {cheapest.name} ({cheapest.kWp} kWp + {cheapest.storageKwh} kWh)
-            </p>
+            <div className="mb-6 text-center">
+              <p className="text-base text-gold-light font-semibold">
+                Mulai dari {formatRentalRp(cheapest.monthlyPrice)}/bulan — Paket{" "}
+                {cheapest.name} ({cheapest.kWp} kWp + {cheapest.storageKwh} kWh)
+              </p>
+              <p className="text-xs text-white/60 mt-1">
+                + biaya instalasi sekali bayar {formatRentalRp(getInstallationFee(cheapest.kWp))}{" "}
+                (termasuk bongkar saat kontrak selesai)
+              </p>
+            </div>
           )}
 
           {/* CTA buttons */}
