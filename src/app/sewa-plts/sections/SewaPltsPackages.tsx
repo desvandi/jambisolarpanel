@@ -8,12 +8,16 @@ import {
   Zap,
   Battery,
   TrendingUp,
+  TrendingDown,
   Wrench,
   Calendar,
   LayoutGrid,
   Home as HomeIcon,
   Building2,
   Factory,
+  ShieldCheck,
+  Users,
+  ArrowRight,
   type LucideIcon,
 } from "lucide-react";
 import {
@@ -27,6 +31,7 @@ import {
   getInstallationInstallment,
   packageCategories,
   type PackageCategory,
+  type RentalPackage,
 } from "@/lib/rentalPackages";
 
 /** Peta nama icon string -> komponen Lucide. */
@@ -38,14 +43,28 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 /**
+ * Format harga beli ke format ringkas "Rp 45jt" untuk badge.
+ */
+function formatBuyPriceShort(value: number): string {
+  if (value >= 1_000_000) {
+    const jt = value / 1_000_000;
+    const str = jt % 1 === 0 ? jt.toFixed(0) : jt.toFixed(1);
+    return `Rp ${str}jt`;
+  }
+  return formatRentalRp(value);
+}
+
+/**
  * Section "Daftar Paket" — menampilkan semua paket sewa PLTS yang aktif
  * dalam grid kartu, dengan filter kategori (Semua / Rumah / Bisnis / Industri).
  *
- * Setiap kartu menampilkan:
- *   - Nama paket + kapasitas (kWp + kWh)
- *   - Estimasi produksi bulanan
+ * Setiap kartu menampilkan (benefit-oriented):
+ *   - Badge "Tanpa investasi Rp X jt" (buyPrice)
+ *   - Nama paket + targetUser (siapa pengguna ideal)
+ *   - canPower: daftar peralatan yang bisa dinyalakan
+ *   - Simulasi beli vs sewa (cashflow comparison)
  *   - Harga sewa bulanan (utama) + harga tahunan (alternatif)
- *   - Biaya instalasi (sekali bayar, bisa cicil 2 bulan)
+ *   - Biaya Survey & Instalasi Awal (cicil 2 bulan)
  *   - Fitur paket
  *   - CTA WhatsApp
  */
@@ -206,8 +225,22 @@ export function SewaPltsPackages() {
                   </span>
                 )}
 
+                {/* Badge: Tanpa investasi */}
+                <div className="mb-3">
+                  <span
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ${
+                      pkg.popular
+                        ? "bg-white/20 text-white border border-white/30"
+                        : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
+                    }`}
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5" />
+                    Tanpa investasi {formatBuyPriceShort(pkg.buyPrice)}
+                  </span>
+                </div>
+
                 {/* Header */}
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <Zap
                       className={`w-5 h-5 ${pkg.popular ? "text-gold-light" : "text-solar"}`}
@@ -230,43 +263,115 @@ export function SewaPltsPackages() {
                     >
                       {categoryLabel(pkg.category)}
                     </span>
-                    <span
-                      className={`text-xs font-bold px-2 py-1 rounded-md ${
-                        pkg.popular ? "bg-white/15 text-white" : "bg-solar/10 text-solar"
-                      }`}
-                    >
-                      {pkg.kWp} kWp
-                    </span>
                   </div>
+                </div>
+
+                {/* Target user */}
+                <div
+                  className={`flex items-center gap-1.5 mb-3 text-xs ${
+                    pkg.popular ? "text-white/85" : "text-muted-foreground"
+                  }`}
+                >
+                  <Users className={`w-3.5 h-3.5 ${pkg.popular ? "text-gold-light" : "text-solar"}`} />
+                  <span className="font-semibold">{pkg.targetUser}</span>
                 </div>
 
                 {/* Description */}
                 <p
-                  className={`text-xs mb-3 leading-relaxed ${
+                  className={`text-xs mb-4 leading-relaxed ${
                     pkg.popular ? "text-white/85" : "text-muted-foreground"
                   }`}
                 >
                   {pkg.description}
                 </p>
 
-                {/* Specs badges */}
-                <div className="flex flex-wrap gap-2 mb-3">
-                  <span
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold ${
-                      pkg.popular ? "bg-white/15 text-white" : "bg-gold/10 text-gold"
+                {/* Simulasi Beli vs Sewa */}
+                <div
+                  className={`p-3 rounded-xl mb-4 ${
+                    pkg.popular
+                      ? "bg-white/10 border border-white/15"
+                      : "bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/15 dark:to-teal-900/15 border border-emerald-200 dark:border-emerald-800/30"
+                  }`}
+                >
+                  <p
+                    className={`text-[10px] font-bold uppercase tracking-wide mb-2 ${
+                      pkg.popular ? "text-gold-light" : "text-emerald-700 dark:text-emerald-400"
                     }`}
                   >
-                    <Battery className="w-3.5 h-3.5" />
-                    {pkg.storageKwh} kWh
-                  </span>
-                  <span
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold ${
-                      pkg.popular ? "bg-white/15 text-white" : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                    Simulasi: Beli vs Sewa
+                  </p>
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className={pkg.popular ? "text-white/70" : "text-muted-foreground"}>
+                        Jika beli (sekali bayar)
+                      </span>
+                      <span className={`font-bold line-through ${pkg.popular ? "text-white/60" : "text-red-500/70 dark:text-red-400"}`}>
+                        {formatRentalRp(pkg.buyPrice)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className={pkg.popular ? "text-white/70" : "text-muted-foreground"}>
+                        Jika sewa (cicilan bulanan)
+                      </span>
+                      <span className={`font-bold ${pkg.popular ? "text-white" : "text-solar"}`}>
+                        {formatRentalRpShort(pkg.monthlyPrice)}/bln
+                      </span>
+                    </div>
+                    <div
+                      className={`pt-1.5 mt-1.5 border-t ${
+                        pkg.popular ? "border-white/15" : "border-emerald-200 dark:border-emerald-800/30"
+                      }`}
+                    >
+                      <p
+                        className={`text-[11px] leading-relaxed font-medium ${
+                          pkg.popular ? "text-white/90" : "text-emerald-700 dark:text-emerald-300"
+                        }`}
+                      >
+                        💡 Anda tetap punya{" "}
+                        <strong className={pkg.popular ? "text-gold-light" : "text-emerald-700 dark:text-emerald-400"}>
+                          {formatBuyPriceShort(pkg.buyPrice)}
+                        </strong>{" "}
+                        untuk usaha atau kebutuhan lain.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* canPower: peralatan yang bisa dinyalakan */}
+                <div className="mb-4">
+                  <p
+                    className={`text-[10px] font-bold uppercase tracking-wide mb-2 ${
+                      pkg.popular ? "text-white/70" : "text-muted-foreground"
                     }`}
                   >
-                    <TrendingUp className="w-3.5 h-3.5" />
-                    {monthlyProduction.toLocaleString("id-ID")} kWh/bln
-                  </span>
+                    Bisa Menyalakan:
+                  </p>
+                  <ul className="grid grid-cols-1 gap-1">
+                    {pkg.canPower.slice(0, 5).map((item, idx) => (
+                      <li
+                        key={idx}
+                        className={`flex items-start gap-1.5 text-[11px] ${
+                          pkg.popular ? "text-white/85" : "text-muted-foreground"
+                        }`}
+                      >
+                        <Check
+                          className={`w-3 h-3 mt-0.5 flex-shrink-0 ${
+                            pkg.popular ? "text-gold-light" : "text-solar"
+                          }`}
+                        />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                    {pkg.canPower.length > 5 && (
+                      <li
+                        className={`text-[11px] italic ${
+                          pkg.popular ? "text-white/60" : "text-muted-foreground"
+                        }`}
+                      >
+                        + {pkg.canPower.length - 5} peralatan lainnya
+                      </li>
+                    )}
+                  </ul>
                 </div>
 
                 {/* Price — bulanan (utama) */}
@@ -351,7 +456,7 @@ export function SewaPltsPackages() {
                   </div>
                 </div>
 
-                {/* Installation fee — once-off, tiered, cicilan 2 bulan */}
+                {/* Biaya Survey & Instalasi Awal */}
                 <div
                   className={`p-3 rounded-xl mb-4 flex items-start gap-2 ${
                     pkg.popular
@@ -370,7 +475,7 @@ export function SewaPltsPackages() {
                         pkg.popular ? "text-white/90" : "text-navy dark:text-white"
                       }`}
                     >
-                      Instalasi + bongkar akhir:{" "}
+                      Survey & Instalasi Awal:{" "}
                       <span className={pkg.popular ? "text-gold-light" : "text-solar"}>
                         {formatRentalRp(installationFee)}
                       </span>
@@ -381,52 +486,19 @@ export function SewaPltsPackages() {
                           pkg.popular ? "text-white/60" : "text-muted-foreground"
                         }`}
                       >
-                        Tier {installationTier.label} • Cicil {installment.months} bln @{" "}
+                        Dibayar sekali di awal • Cicil {installment.months} bln @{" "}
                         {formatRentalRpShort(installment.installmentPerMonth)}/bln
                       </p>
                     )}
                   </div>
                 </div>
 
-                {/* Features */}
-                <ul
-                  className={`space-y-1.5 mb-5 flex-1 ${
-                    pkg.popular ? "text-white/90" : ""
-                  }`}
-                >
-                  {pkg.features.slice(0, 6).map((f, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-xs">
-                      <Check
-                        className={`w-3.5 h-3.5 mt-0.5 flex-shrink-0 ${
-                          pkg.popular ? "text-gold-light" : "text-solar"
-                        }`}
-                      />
-                      <span
-                        className={
-                          pkg.popular ? "text-white/90" : "text-muted-foreground"
-                        }
-                      >
-                        {f}
-                      </span>
-                    </li>
-                  ))}
-                  {pkg.features.length > 6 && (
-                    <li
-                      className={`text-xs italic ${
-                        pkg.popular ? "text-white/60" : "text-muted-foreground"
-                      }`}
-                    >
-                      + {pkg.features.length - 6} fitur lainnya
-                    </li>
-                  )}
-                </ul>
-
                 {/* CTA */}
                 <a
                   href={buildWhatsAppUrl(waMsg)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
+                  className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold text-sm transition-all duration-300 mt-auto ${
                     pkg.popular
                       ? "bg-white text-solar hover:bg-white/90"
                       : "bg-solar text-white hover:bg-solar-dark"
