@@ -182,10 +182,19 @@ export interface RentalPackage {
   monthlyPrice: number;
   /** Harga sewa tahunan (Rupiah, dibayar di muka, sudah termasuk PPN). */
   annualPrice: number;
+  /**
+   * Harga beli normal (Rupiah) — untuk badge "Tanpa investasi Rp X juta"
+   * dan simulasi beli vs sewa.
+   */
+  buyPrice: number;
   /** Kategori paket untuk filter (rumah / bisnis / industri). */
   category: PackageCategory;
-  /** Deskripsi singkat paket. */
+  /** Deskripsi singkat paket (benefit-oriented, bukan spesifikasi). */
   description: string;
+  /** Target pengguna (misal "Rumah 2-4 penghuni"). */
+  targetUser: string;
+  /** Daftar peralatan/aplikasi yang bisa dinyalakan oleh paket ini. */
+  canPower: string[];
   /** Estimasi pemakaian yang cocok (kWh/bulan). */
   estimatedMonthlyKwh: string;
   /** Estimasi penghematan tagihan listrik. */
@@ -238,14 +247,22 @@ export const packageCategories: {
 /**
  * Daftar paket sewa PLTS (1 kWp – 10 kWp).
  *
- * Harga sewa bulanan sudah dibulatkan ke atas ke puluhan ribu terdekat.
- * Harga sewa tahunan diambil dari tabel owner (sudah total diskon vs 12× bulanan).
- * Biaya instalasi (pengadaan + jasa instalasi + bongkar akhir kontrak) diambil
- * dari `installationFeeByKwp` di atas — bisa dicicil maksimal 2 bulan.
+ * Harga sewa bulanan sudah disesuaikan agar kompetitif vs harga beli.
+ * Harga sewa tahunan = bulanan × 12 × 0.95 (diskon 5% untuk bayar tahunan).
+ * Harga beli normal (buyPrice) digunakan untuk badge "Tanpa investasi"
+ * dan simulasi beli vs sewa.
+ * Biaya Survey & Instalasi Awal diambil dari `installationFeeTiers`
+ * (tier 1-3 kWp = Rp 2jt, 4-7 kWp = Rp 5jt, 8-10 kWp = Rp 8jt) — bisa cicil 2 bulan.
+ *
+ * Copywriting paket berorientasi MANFAAT (bukan spesifikasi):
+ *   - targetUser: siapa pengguna ideal paket ini
+ *   - canPower: daftar peralatan/aplikasi yang bisa dinyalakan
+ *   - description: fokus ke outcome, bukan angka teknis
  *
  * Cara mengubah harga:
- *   - Untuk harga sewa: ubah `monthlyPrice` & `annualPrice` di paket terkait.
- *   - Untuk biaya instalasi: ubah di `installationFeeByKwp` mapping di atas.
+ *   - Harga sewa: ubah `monthlyPrice` (annualPrice otomatis dihitung jika pakai helper)
+ *   - Harga beli: ubah `buyPrice`
+ *   - Biaya instalasi: ubah di `installationFeeTiers`
  *   Tidak perlu mengubah file lain.
  *
  * Cara menonaktifkan paket:
@@ -257,13 +274,23 @@ export const rentalPackages: RentalPackage[] = [
     name: "Starter",
     kWp: 1,
     storageKwh: 5.12,
-    monthlyPrice: 960_000,
-    annualPrice: 10_950_612,
+    monthlyPrice: 790_000,
+    annualPrice: 9_006_000,
+    buyPrice: 25_000_000,
     category: "rumah",
+    targetUser: "Rumah kecil / studio 1-2 penghuni",
+    canPower: [
+      "Lampu rumah seluruh ruangan",
+      "Kulkas kecil 1 pintu",
+      "TV LED 32-43 inch",
+      "Kipas angin 2-3 unit",
+      "Charger HP & laptop",
+      "Router WiFi",
+    ],
     description:
-      "Paket awal untuk rumah kecil atau apartemen. Cocok untuk beban ringan seperti lampu, kulkas, TV, dan kipas.",
+      "Paket awal untuk rumah kecil, studio, atau apartemen. Cocok untuk beban ringan harian — lampu, kulkas, TV, dan kipas tetap menyala tanpa tagihan PLN yang membengkak.",
     estimatedMonthlyKwh: "90 – 120 kWh",
-    savingsRange: "Hemat hingga Rp 300rb/bulan",
+    savingsRange: "Hemat hingga Rp 200rb/bulan",
     features: [
       "1 kWp Panel Surya LONGi",
       "Baterai LiFePO4 5.12 kWh",
@@ -279,13 +306,24 @@ export const rentalPackages: RentalPackage[] = [
     name: "Home",
     kWp: 2,
     storageKwh: 10.24,
-    monthlyPrice: 1_720_000,
-    annualPrice: 19_711_102,
+    monthlyPrice: 1_350_000,
+    annualPrice: 15_390_000,
+    buyPrice: 45_000_000,
     category: "rumah",
+    targetUser: "Rumah keluarga 2-4 penghuni",
+    canPower: [
+      "Kulkas 2 pintu",
+      "TV LED + soundbar",
+      "AC 1 PK (8-10 jam/hari)",
+      "Mesin cuci",
+      "Pompa air",
+      "Lampu seluruh ruangan",
+      "Perangkat elektronik harian",
+    ],
     description:
-      "Paket terpopuler untuk rumah keluarga. Mendukung AC 1 PK, kulkas, TV, mesin cuci, dan pompa air.",
+      "Paket terpopuler untuk rumah keluarga. Mendukung AC 1 PK, kulkas, TV, mesin cuci, dan pompa air — semuanya berjalan lancar tanpa khawatir tagihan PLN meledak.",
     estimatedMonthlyKwh: "180 – 240 kWh",
-    savingsRange: "Hemat hingga Rp 550rb/bulan",
+    savingsRange: "Hemat hingga Rp 450rb/bulan",
     features: [
       "2 kWp Panel Surya LONGi",
       "Baterai LiFePO4 10.24 kWh",
@@ -303,13 +341,25 @@ export const rentalPackages: RentalPackage[] = [
     name: "Family",
     kWp: 3,
     storageKwh: 15.36,
-    monthlyPrice: 2_400_000,
-    annualPrice: 27_595_542,
+    monthlyPrice: 1_850_000,
+    annualPrice: 21_090_000,
+    buyPrice: 63_000_000,
     category: "rumah",
+    targetUser: "Rumah keluarga besar 4-6 penghuni",
+    canPower: [
+      "2 unit AC 1 PK",
+      "Kulkas besar 2 pintu",
+      "Water heater",
+      "Mesin cuci + dryer",
+      "Pompa air 1/2 PK",
+      "TV + home theater",
+      "Rice cooker & microwave",
+      "Setrika listrik",
+    ],
     description:
-      "Untuk keluarga dengan 2 AC, kulkas besar, water heater, dan peralatan rumah tangga modern lainnya.",
+      "Untuk keluarga besar dengan 2 AC, kulkas besar, water heater, dan peralatan rumah tangga modern. Tagihan PLN turun drastis, rumah tetap nyaman.",
     estimatedMonthlyKwh: "270 – 360 kWh",
-    savingsRange: "Hemat hingga Rp 800rb/bulan",
+    savingsRange: "Hemat hingga Rp 700rb/bulan",
     features: [
       "3 kWp Panel Surya LONGi",
       "Baterai LiFePO4 15.36 kWh",
@@ -327,13 +377,25 @@ export const rentalPackages: RentalPackage[] = [
     name: "Premium",
     kWp: 4,
     storageKwh: 20.48,
-    monthlyPrice: 3_080_000,
-    annualPrice: 35_479_983,
+    monthlyPrice: 2_300_000,
+    annualPrice: 26_220_000,
+    buyPrice: 81_000_000,
     category: "rumah",
+    targetUser: "Rumah besar 5-8 penghuni / smart home",
+    canPower: [
+      "3-4 unit AC 1 PK",
+      "Kulkas besar + freezer",
+      "Water heater + pompa",
+      "Smart home devices",
+      "Home theater + TV LED",
+      "Mesin cuci + dryer + dishwasher",
+      "Pompa air 1 PK",
+      "Peralatan dapur lengkap",
+    ],
     description:
-      "Untuk rumah besar dengan 3–4 AC, peralatan smart home, dan kebutuhan listrik tinggi sepanjang hari.",
+      "Untuk rumah besar dengan 3-4 AC, peralatan smart home, dan kebutuhan listrik tinggi sepanjang hari. Ideal untuk keluarga modern yang aktif.",
     estimatedMonthlyKwh: "360 – 480 kWh",
-    savingsRange: "Hemat hingga Rp 1jt/bulan",
+    savingsRange: "Hemat hingga Rp 950rb/bulan",
     features: [
       "4 kWp Panel Surya LONGi",
       "Baterai LiFePO4 20.48 kWh",
@@ -352,13 +414,24 @@ export const rentalPackages: RentalPackage[] = [
     name: "Business",
     kWp: 5,
     storageKwh: 25.6,
-    monthlyPrice: 3_730_000,
-    annualPrice: 42_926_399,
+    monthlyPrice: 2_750_000,
+    annualPrice: 31_350_000,
+    buyPrice: 98_000_000,
     category: "bisnis",
+    targetUser: "Kos-kosan / rumah besar / bisnis kecil",
+    canPower: [
+      "AC 5 PK atau 5 unit AC 1 PK",
+      "Kulkas komersial",
+      "Mesin kantor (printer, komputer)",
+      "Pompa air industri ringan",
+      "CCTV + DVR",
+      "WiFi enterprise",
+      "Peralatan rumah tangga lengkap",
+    ],
     description:
-      "Untuk rumah besar, kos-kosan, atau bisnis kecil. Mendukung beban komersial seperti AC 5 PK dan kantor.",
+      "Untuk rumah besar, kos-kosan, atau bisnis kecil. Mendukung beban komersial seperti AC 5 PK dan peralatan kantor — tagihan operasional jadi terprediksi.",
     estimatedMonthlyKwh: "450 – 600 kWh",
-    savingsRange: "Hemat hingga Rp 1.3jt/bulan",
+    savingsRange: "Hemat hingga Rp 1.2jt/bulan",
     features: [
       "5 kWp Panel Surya LONGi",
       "Baterai LiFePO4 25.6 kWh",
@@ -378,11 +451,23 @@ export const rentalPackages: RentalPackage[] = [
     name: "Estate",
     kWp: 6,
     storageKwh: 30.72,
-    monthlyPrice: 4_340_000,
-    annualPrice: 49_934_791,
+    monthlyPrice: 3_200_000,
+    annualPrice: 36_480_000,
+    buyPrice: 114_000_000,
     category: "bisnis",
+    targetUser: "Rumah mewah / villa / guest house",
+    canPower: [
+      "6-8 unit AC 1 PK atau 2 unit AC 5 PK",
+      "Kulkas besar + freezer komersial",
+      "Smart home system lengkap",
+      "Pompa air industri",
+      "Water heater central",
+      "Home cinema + audio system",
+      "CCTV + smart security",
+      "Peralatan dapur premium",
+    ],
     description:
-      "Untuk rumah mewah, villa, atau guest house dengan banyak AC dan peralatan premium berjalan serentak.",
+      "Untuk rumah mewah, villa, atau guest house dengan banyak AC dan peralatan premium berjalan serentak. Listrik mewah tanpa tagihan yang mewah.",
     estimatedMonthlyKwh: "540 – 720 kWh",
     savingsRange: "Hemat hingga Rp 1.6jt/bulan",
     features: [
@@ -404,11 +489,23 @@ export const rentalPackages: RentalPackage[] = [
     name: "Villa",
     kWp: 7,
     storageKwh: 35.84,
-    monthlyPrice: 4_910_000,
-    annualPrice: 56_505_158,
+    monthlyPrice: 3_600_000,
+    annualPrice: 41_040_000,
+    buyPrice: 129_000_000,
     category: "bisnis",
+    targetUser: "Villa / homestay / properti komersial menengah",
+    canPower: [
+      "7-10 unit AC 1 PK atau 3 unit AC 5 PK",
+      "Dapur komersial lengkap",
+      "Sistem pendingin kolam renang",
+      "Pompa air industri 1 PK",
+      "Smart home + entertainment",
+      "CCTV 16 channel + NVR",
+      "Peralatan laundry",
+      "AC kamar tamu & kamar tidur",
+    ],
     description:
-      "Untuk villa, homestay, atau properti komersial menengah dengan tingkat okupansi tinggi dan beban listrik besar.",
+      "Untuk villa, homestay, atau properti komersial menengah dengan tingkat okupansi tinggi dan beban listrik besar. Optimalkan margin usaha dengan biaya listrik yang stabil.",
     estimatedMonthlyKwh: "630 – 840 kWh",
     savingsRange: "Hemat hingga Rp 1.8jt/bulan",
     features: [
@@ -431,11 +528,23 @@ export const rentalPackages: RentalPackage[] = [
     name: "Commercial",
     kWp: 8,
     storageKwh: 40.96,
-    monthlyPrice: 5_440_000,
-    annualPrice: 62_637_500,
+    monthlyPrice: 3_950_000,
+    annualPrice: 45_030_000,
+    buyPrice: 143_000_000,
     category: "industri",
+    targetUser: "Ruko / restoran / kantor kecil",
+    canPower: [
+      "10-12 unit AC 1 PK atau 4 unit AC 5 PK",
+      "Dapur restoran lengkap",
+      "Server room + networking",
+      "Mesin kasir & POS multiple",
+      "Cold storage komersial",
+      "Pompa air industri 2 PK",
+      "CCTV 32 channel + NVR",
+      "Peralatan kantor lengkap",
+    ],
     description:
-      "Untuk ruko, restoran, atau kantor kecil dengan operasional 12 jam/hari dan kebutuhan listrik komersial.",
+      "Untuk ruko, restoran, atau kantor kecil dengan operasional 12 jam/hari dan kebutuhan listrik komersial. Tagihan operasional jadi transparan dan terkontrol.",
     estimatedMonthlyKwh: "720 – 960 kWh",
     savingsRange: "Hemat hingga Rp 2jt/bulan",
     features: [
@@ -458,11 +567,23 @@ export const rentalPackages: RentalPackage[] = [
     name: "Industrial",
     kWp: 9,
     storageKwh: 46.08,
-    monthlyPrice: 5_940_000,
-    annualPrice: 68_331_819,
+    monthlyPrice: 4_300_000,
+    annualPrice: 49_020_000,
+    buyPrice: 156_000_000,
     category: "industri",
+    targetUser: "Bengkel / workshop / pabrik kecil",
+    canPower: [
+      "12-15 unit AC atau 5 unit AC 5 PK",
+      "Motor listrik 5-10 HP",
+      "Mesin produksi ringan",
+      "Kompressor angin industri",
+      "Welding machine",
+      "Cold storage besar",
+      "Pompa air industri 3 PK",
+      "Lighting pabrik LED",
+    ],
     description:
-      "Untuk bengkel, workshop, atau pabrik kecil dengan motor listrik, mesin produksi, dan beban industri ringan.",
+      "Untuk bengkel, workshop, atau pabrik kecil dengan motor listrik, mesin produksi, dan beban industri ringan. Optimalkan biaya produksi dengan energi surya.",
     estimatedMonthlyKwh: "810 – 1.080 kWh",
     savingsRange: "Hemat hingga Rp 2.3jt/bulan",
     features: [
@@ -486,11 +607,23 @@ export const rentalPackages: RentalPackage[] = [
     name: "Enterprise",
     kWp: 10,
     storageKwh: 51.2,
-    monthlyPrice: 6_850_000,
-    annualPrice: 78_844_406,
+    monthlyPrice: 4_700_000,
+    annualPrice: 53_580_000,
+    buyPrice: 180_000_000,
     category: "industri",
+    targetUser: "Pabrik menengah / hotel / fasilitas besar 24/7",
+    canPower: [
+      "15-20 unit AC atau 6 unit AC 5 PK",
+      "Motor listrik 10-20 HP",
+      "Mesin produksi menengah",
+      "Server room + data center",
+      "Cold storage industri",
+      "Pompa air industri 5 PK",
+      "Sistem keamanan lengkap",
+      "Lighting gedung LED",
+    ],
     description:
-      "Untuk pabrik menengah, hotel, atau fasilitas besar dengan beban listrik 24/7 dan kebutuhan redundansi tinggi.",
+      "Untuk pabrik menengah, hotel, atau fasilitas besar dengan beban listrik 24/7 dan kebutuhan redundansi tinggi. Energi terbarukan untuk operasional tanpa henti.",
     estimatedMonthlyKwh: "900 – 1.200 kWh",
     savingsRange: "Hemat hingga Rp 2.6jt/bulan",
     features: [
@@ -579,7 +712,7 @@ export const rentalComparison: ComparisonRow[] = [
   {
     aspect: "Biaya Bulanan",
     buy: "Hanya tagihan PLN sisa (kecil)",
-    rent: "Tagihan PLN sisa + sewa (Rp 960rb – Rp 6,85jt/bulan)",
+    rent: "Tagihan PLN sisa + sewa (Rp 790rb – Rp 4,7jt/bulan)",
     winner: "buy",
   },
   {
@@ -682,24 +815,29 @@ export const rentalFaqs: RentalFaqItem[] = [
       "Kontrak minimum adalah 12 bulan, dengan opsi perpanjangan otomatis. Pembayaran sewa dapat dilakukan dua cara: (1) bulanan di awal bulan via transfer bank atau virtual account, atau (2) tahunan di muka dengan total harga tahunan yang sudah lebih hemat dibanding 12× harga bulanan. Tersedia juga berbagai opsi pembayaran fleksibel lain — hubungi tim kami untuk detail.",
   },
   {
-    question: "Apakah ada biaya instalasi awal?",
+    question: "Apakah ada biaya survey & instalasi awal?",
     answer:
-      "Ya, ada biaya jasa instalasi awal + bongkar akhir kontrak yang dibayar sekali di awal. Biayanya ditentukan oleh tier kapasitas paket, bukan per-kWp: paket 1 – 3 kWp (Starter, Home, Family) = Rp 2.000.000; paket 4 – 7 kWp (Premium, Business, Estate, Villa) = Rp 5.000.000; paket 8 – 10 kWp (Commercial, Industrial, Enterprise) = Rp 8.000.000. Biaya ini sudah mencakup survei, desain, engineering, pemasangan lengkap (panel, inverter, baterai, mounting, proteksi), commissioning & testing — sekaligus pembongkaran/percabutan equipment saat kontrak berakhir. Jadi tidak ada biaya tambahan untuk bongkar di akhir. Biayanya dapat dicicil maksimal 2 bulan.",
+      "Ya, ada Biaya Survey & Instalasi Awal yang dibayar sekali di awal kontrak. Biayanya ditentukan oleh tier kapasitas paket: paket 1-3 kWp (Starter, Home, Family) = Rp 2.000.000; paket 4-7 kWp (Premium, Business, Estate, Villa) = Rp 5.000.000; paket 8-10 kWp (Commercial, Industrial, Enterprise) = Rp 8.000.000. Biaya ini sudah mencakup survei lokasi, desain sistem, engineering, pemasangan lengkap (panel, inverter, baterai, mounting, proteksi), commissioning & testing, sekaligus pembongkaran equipment saat kontrak berakhir. Tujuan biaya ini adalah untuk menjaga kualitas instalasi dan mencegah pembatalan sepihak. Dapat dicicil maksimal 2 bulan.",
   },
   {
-    question: "Apakah biaya instalasi bisa dicicil?",
+    question: "Kenapa ada biaya instalasi padahal saya menyewa?",
     answer:
-      "Ya, biaya instalasi dapat dicicil maksimal 2 bulan. Selama 2 bulan pertama kontrak, Anda membayar: harga sewa bulanan + (biaya instalasi ÷ 2). Contoh untuk paket Home 2 kWp (tier 1-3 kWp, biaya instalasi Rp 2.000.000): bulan 1 & 2 = Rp 1.720.000 (sewa) + Rp 1.000.000 (cicilan instalasi) = Rp 2.720.000/bulan. Mulai bulan ke-3, Anda hanya membayar Rp 1.720.000/bulan. Contoh lain untuk paket Business 5 kWp (tier 4-7 kWp, biaya instalasi Rp 5.000.000): bulan 1 & 2 = Rp 3.730.000 (sewa) + Rp 2.500.000 (cicilan) = Rp 6.230.000/bulan, lalu bulan 3+ = Rp 3.730.000/bulan. Skema ini membantu menjaga cashflow Anda di awal kontrak.",
+      "Pertanyaan yang bagus. Biaya Survey & Instalasi Awal BUKAN biaya kepemilikan — ini adalah biaya operasional untuk memastikan sistem terpasang dengan kualitas terbaik di rumah Anda. Bayangkan seperti memasang internet fiber: Anda menyewa layanan bulanan, tapi ada biaya pemasangan kabel & ONT sekali di awal. Demikian juga PLTS sewa: ada biaya pemasangan panel, inverter, dan baterai di atap Anda. Selisihnya: dengan sewa, Anda HEMAT puluhan juta rupiah karena tidak perlu membeli equipment (paket 2 kWp beli = Rp 45jt, sewa = Rp 1,35jt/bulan). Dan saat kontrak selesai, biaya bongkar SUDAH TERMASUK — tanpa biaya tambahan.",
+  },
+  {
+    question: "Apakah biaya survey & instalasi bisa dicicil?",
+    answer:
+      "Ya, biaya Survey & Instalasi Awal dapat dicicil maksimal 2 bulan. Selama 2 bulan pertama kontrak, Anda membayar: harga sewa bulanan + (biaya instalasi ÷ 2). Contoh untuk paket Home 2 kWp (tier 1-3 kWp, biaya Rp 2.000.000): bulan 1 & 2 = Rp 1.350.000 (sewa) + Rp 1.000.000 (cicilan) = Rp 2.350.000/bulan. Mulai bulan ke-3, Anda hanya membayar Rp 1.350.000/bulan. Contoh lain untuk paket Business 5 kWp (tier 4-7 kWp, biaya Rp 5.000.000): bulan 1 & 2 = Rp 2.750.000 (sewa) + Rp 2.500.000 (cicilan) = Rp 5.250.000/bulan, lalu bulan 3+ = Rp 2.750.000/bulan. Skema ini membantu menjaga cashflow Anda di awal kontrak.",
   },
   {
     question: "Apakah ada opsi bayar tahunan?",
     answer:
-      "Ya. Selain pembayaran bulanan, kami menyediakan opsi bayar tahunan di muka dengan total harga yang sudah lebih hemat dibanding 12× harga bulanan. Contoh untuk paket Home 2 kWp: pembayaran bulanan 12× Rp 1.720.000 = Rp 20.640.000/tahun, sedangkan bayar tahunan hanya Rp 19.711.102 (hemat sekitar Rp 929rb/tahun). Opsi ini cocok untuk Anda yang ingin mengunci biaya operasional setahun ke depan dan mendapatkan diskon. Hubungi tim kami untuk skema pembayaran tahunan paket lainnya.",
+      "Ya. Selain pembayaran bulanan, kami menyediakan opsi bayar tahunan di muka dengan diskon 5% dibanding 12× harga bulanan. Contoh untuk paket Home 2 kWp: pembayaran bulanan 12× Rp 1.350.000 = Rp 16.200.000/tahun, sedangkan bayar tahunan hanya Rp 15.390.000 (hemat Rp 810rb/tahun). Opsi ini cocok untuk Anda yang ingin mengunci biaya operasional setahun ke depan dan mendapatkan diskon. Hubungi tim kami untuk skema pembayaran tahunan paket lainnya.",
   },
   {
     question: "Apakah biaya instalasi bisa dikembalikan jika berhenti di tengah jalan?",
     answer:
-      "Biaya instalasi bersifat non-refundable karena langsung digunakan untuk pekerjaan instalasi fisik (pengadaan material, tenaga kerja, commissioning) yang sudah dilakukan. Jika kontrak berakhir sesuai tenor, biaya bongkar sudah termasuk — tanpa biaya tambahan. Untuk terminasi dini sebelum kontrak minimum 12 bulan, ada penalti sesuai perjanjian yang akan dijelaskan saat penandatanganan kontrak. Hubungi tim kami untuk skenario khusus seperti relokasi rumah.",
+      "Biaya Survey & Instalasi Awal bersifat non-refundable karena langsung digunakan untuk pekerjaan instalasi fisik (pengadaan material, tenaga kerja, commissioning) yang sudah dilakukan. Jika kontrak berakhir sesuai tenor, biaya bongkar sudah termasuk — tanpa biaya tambahan. Untuk terminasi dini sebelum kontrak minimum 12 bulan, ada penalti sesuai perjanjian yang akan dijelaskan saat penandatanganan kontrak. Hubungi tim kami untuk skenario khusus seperti relokasi rumah.",
   },
   {
     question: "Apakah ada survei sebelum pemasangan?",
@@ -718,12 +856,12 @@ export const rentalHero = {
   badge: "Solar as a Service — Bayar Bulanan",
   title: "Gunakan PLTS Sekarang. Bayarnya Bulanan.",
   subtitle:
-    "Satu sistem, dua manfaat: tagihan listrik turun setiap bulan, dan rumah tetap menyala saat PLN padam. Cukup bayar biaya instalasi sekali di awal (mulai Rp 2jt — bisa dicicil 2 bulan, termasuk bongkar saat kontrak selesai), lalu bayar sewa bulanan mulai Rp 960 ribu.",
-  primaryCta: "Hitung Paket Saya",
-  secondaryCta: "Konsultasi WhatsApp",
+    "Satu sistem, dua manfaat: tagihan listrik turun setiap bulan, dan rumah tetap menyala saat PLN padam. Cukup bayar biaya instalasi sekali di awal (mulai Rp 2jt — bisa dicicil 2 bulan, termasuk bongkar saat kontrak selesai), lalu bayar sewa bulanan mulai Rp 790 ribu.",
+  primaryCta: "Hitung Penghematan Saya",
+  secondaryCta: "Konsultasi Gratis Sekarang",
   stats: [
-    { label: "Sewa mulai dari", value: "Rp 960rb", suffix: "/bulan" },
-    { label: "Instalasi mulai", value: "Rp 2jt", suffix: "sekali bayar" },
+    { label: "Sewa mulai dari", value: "Rp 790rb", suffix: "/bulan" },
+    { label: "Tanpa investasi", value: "Rp 25jt+", suffix: "" },
     { label: "Backup PLN padam", value: "Otomatis", suffix: "" },
     { label: "Hemat tagihan", value: "Hingga 90%", suffix: "" },
   ],
@@ -750,16 +888,16 @@ export const rentalCalculatorConfig = {
   ],
   /** Preset budget bulanan (Rupiah) — disesuaikan dengan harga sewa baru. */
   budgetPresets: [
-    { label: "Rp 960rb", value: 960000 },
-    { label: "Rp 1.72jt", value: 1720000 },
-    { label: "Rp 2.4jt", value: 2400000 },
-    { label: "Rp 3.08jt", value: 3080000 },
-    { label: "Rp 3.73jt", value: 3730000 },
-    { label: "Rp 4.34jt", value: 4340000 },
-    { label: "Rp 4.91jt", value: 4910000 },
-    { label: "Rp 5.44jt", value: 5440000 },
-    { label: "Rp 5.94jt", value: 5940000 },
-    { label: "Rp 6.85jt", value: 6850000 },
+    { label: "Rp 790rb", value: 790000 },
+    { label: "Rp 1.35jt", value: 1350000 },
+    { label: "Rp 1.85jt", value: 1850000 },
+    { label: "Rp 2.3jt", value: 2300000 },
+    { label: "Rp 2.75jt", value: 2750000 },
+    { label: "Rp 3.2jt", value: 3200000 },
+    { label: "Rp 3.6jt", value: 3600000 },
+    { label: "Rp 3.95jt", value: 3950000 },
+    { label: "Rp 4.3jt", value: 4300000 },
+    { label: "Rp 4.7jt", value: 4700000 },
   ],
   /** Tarif PLN default (Rupiah/kWh) — R-1 1300VA+ non-subsidi. */
   plnTariffPerKwh: 1444,

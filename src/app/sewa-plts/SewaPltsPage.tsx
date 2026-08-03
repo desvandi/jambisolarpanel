@@ -12,6 +12,7 @@ import { SewaPltsDualMode } from "./sections/SewaPltsDualMode";
 import { SewaPltsBenefits } from "./sections/SewaPltsBenefits";
 import { SewaPltsComparisonTable } from "./sections/SewaPltsComparisonTable";
 import { SewaPltsPackages } from "./sections/SewaPltsPackages";
+import { SewaPltsIncluded } from "./sections/SewaPltsIncluded";
 import { SewaPltsComparison } from "./sections/SewaPltsComparison";
 import { SewaPltsCalculator } from "./sections/SewaPltsCalculator";
 import { SewaPltsFaq } from "./sections/SewaPltsFaq";
@@ -25,11 +26,12 @@ import { SewaPltsFinalCta } from "./sections/SewaPltsFinalCta";
  *   2. Dual Mode (backup + hemat) — sorotan dua manfaat utama
  *   3. Keunggulan
  *   4. Tabel Komparasi (ringkasan 10 paket)
- *   5. Daftar Paket (dengan filter kategori)
- *   6. Perbandingan Beli vs Sewa
- *   7. Kalkulator
- *   8. FAQ
- *   9. CTA WhatsApp (Final)
+ *   5. Daftar Paket (dengan filter kategori) — benefit-oriented + badge "Tanpa investasi"
+ *   6. Sudah Termasuk (rasa aman) — NEW
+ *   7. Perbandingan Beli vs Sewa
+ *   8. Kalkulator
+ *   9. FAQ
+ *   10. CTA WhatsApp (Final)
  *
  * Seluruh konten (paket, harga, FAQ, CTA) diambil dari src/lib/rentalPackages.ts
  * sehingga owner cukup mengubah satu file untuk update harga.
@@ -61,6 +63,7 @@ export default function SewaPltsPage() {
           <SewaPltsBenefits />
           <SewaPltsComparisonTable onSelectPackage={handleSelectPackage} />
           <SewaPltsPackages />
+          <SewaPltsIncluded />
           <SewaPltsComparison />
           <SewaPltsCalculator />
           <SewaPltsFaq />
