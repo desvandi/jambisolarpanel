@@ -31,6 +31,7 @@ const navItems: NavItem[] = [
       { label: "Maintenance", href: "/maintenance" },
     ],
   },
+  { label: "Sewa PLTS", href: "/sewa-plts" },
   { label: "Tender & Pengadaan", href: "/tender-procurement" },
   { label: "Kalkulator", href: "#kalkulator" },
   { label: "FAQ", href: "#faq" },
