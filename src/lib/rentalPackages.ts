@@ -731,13 +731,22 @@ export const rentalHero = {
 
 /** Konfigurasi kalkulator sewa. */
 export const rentalCalculatorConfig = {
-  /** Preset pemakaian listrik bulanan (kWh). */
+  /**
+   * Preset pemakaian listrik bulanan (kWh).
+   * Diperluas hingga 3.000 kWh agar bisa men-triger rekomendasi paket besar
+   * (Estate, Villa, Commercial, Industrial, Enterprise).
+   */
   usagePresets: [
     { label: "200 kWh", value: 200 },
     { label: "400 kWh", value: 400 },
     { label: "600 kWh", value: 600 },
     { label: "900 kWh", value: 900 },
     { label: "1.200 kWh", value: 1200 },
+    { label: "1.500 kWh", value: 1500 },
+    { label: "1.800 kWh", value: 1800 },
+    { label: "2.100 kWh", value: 2100 },
+    { label: "2.400 kWh", value: 2400 },
+    { label: "3.000 kWh", value: 3000 },
   ],
   /** Preset budget bulanan (Rupiah) — disesuaikan dengan harga sewa baru. */
   budgetPresets: [
@@ -754,6 +763,12 @@ export const rentalCalculatorConfig = {
   ],
   /** Tarif PLN default (Rupiah/kWh) — R-1 1300VA+ non-subsidi. */
   plnTariffPerKwh: 1444,
+  /** Batas minimum & maksimum input manual pemakaian (kWh). */
+  usageMin: 50,
+  usageMax: 5000,
+  /** Batas minimum & maksimum input manual budget (Rupiah). */
+  budgetMin: 500000,
+  budgetMax: 10_000_000,
 } as const;
 
 /** Helper: format Rupiah penuh (Rp 1.150.000). */
@@ -882,16 +897,20 @@ export function computeAllPackageSavings(
 /**
  * Rekomendasikan paket berdasarkan pemakaian listrik + budget bulanan.
  *
- * Algoritma baru (budget-aware):
- *   1. Hitung savings untuk semua paket.
- *   2. Prioritas #1: paket terjangkau (monthlyPrice <= budget) dengan net saving tertinggi.
- *   3. Prioritas #2: jika tidak ada yang terjangkau, ambil paket termurah
- *      (paling mendekati budget) + jelaskan gap.
- *   4. Jika ada paket terjangkau tapi net saving negatif (rugi), tetap rekomendasikan
- *      tapi beri peringatan + sarankan paket custom.
+ * Algoritma (budget-aware, capacity-aware):
  *
- * Tujuan: rekomendasi harus selalu sesuai kemampuan finansial user,
- * bukan hanya kebutuhan teknis.
+ *   1. Dari semua paket terjangkau (monthlyPrice <= budget):
+ *      a. Jika ada yang net saving POSITIF → pilih yang net saving tertinggi.
+ *      b. Jika SEMUA net saving negatif → pilih yang coverage TERTINGGI
+ *         (memberi penghematan PLN terbesar meski masih rugi bersih),
+ *         karena paket lebih besar menutupi lebih banyak kWh.
+ *
+ *   2. Jika TIDAK ADA paket terjangkau sama sekali:
+ *      pilih paket termurah (paling dekat ke budget) + jelaskan gap.
+ *
+ * Tujuan: rekomendasi memperhitungkan KEMAMPUAN FINANSIAL (budget)
+ * dan KEBUTUHAN TEKNIS (coverage). Paket besar direkomendasikan
+ * ketika user punya pemakaian & budget yang sesuai.
  */
 export function recommendRentalPackage(
   monthlyKwh: number,
@@ -902,33 +921,41 @@ export function recommendRentalPackage(
 
   const allSavings = computeAllPackageSavings(monthlyKwh, monthlyBudget);
 
-  // 1. Paket terjangkau (affordable) dengan net saving tertinggi
+  // 1. Filter paket terjangkau (affordable)
   const affordable = allSavings.filter((s) => s.affordable);
+
   if (affordable.length > 0) {
-    const best = affordable[0]; // sudah sorted by netSaving desc
-    if (best.netSaving >= 0) {
+    // 1a. Cari yang net saving POSITIF → pilih net saving tertinggi
+    const positiveNetSaving = affordable.filter((s) => s.netSaving >= 0);
+    if (positiveNetSaving.length > 0) {
+      // Sudah sorted by netSaving desc di computeAllPackageSavings,
+      // tapi re-sort untuk safety
+      const best = positiveNetSaving.sort((a, b) => b.netSaving - a.netSaving)[0];
       return {
         package: best.pkg,
         savings: best,
-        reason: `Paket ${best.pkg.name} (${best.pkg.kWp} kWp) terjangkau untuk budget Anda (Rp ${best.pkg.monthlyPrice.toLocaleString("id-ID")}/bulan ≤ budget Rp ${monthlyBudget.toLocaleString("id-ID")}) dan memberi net saving positif ${formatRentalRpShort(best.netSaving)}/bulan. Coverage: ${best.coveragePercent}% dari pemakaian ${monthlyKwh} kWh Anda.`,
+        reason: `Paket ${best.pkg.name} (${best.pkg.kWp} kWp) terjangkau untuk budget Anda (${formatRentalRp(best.pkg.monthlyPrice)}/bulan ≤ budget ${formatRentalRp(monthlyBudget)}/bulan) dan memberi net saving positif ${formatRentalRpShort(best.netSaving)}/bulan. Coverage ${best.coveragePercent}% dari pemakaian ${monthlyKwh.toLocaleString("id-ID")} kWh Anda — pengurangan tagihan PLN ${formatRentalRpShort(best.plnSaving)}/bulan.`,
       };
     }
-    // Terjangkau tapi net saving negatif — tetap rekomendasi dengan peringatan
+
+    // 1b. Semua affordable punya net saving negatif → pilih coverage TERTINGGI
+    // (paket terbesar yang masih terjangkau, memberi penghematan PLN terbesar)
+    const bestCoverage = affordable.sort((a, b) => b.coveragePercent - a.coveragePercent)[0];
     return {
-      package: best.pkg,
-      savings: best,
-      reason: `Paket ${best.pkg.name} (${best.pkg.kWp} kWp) adalah paket terjangkau terbaik untuk budget Anda, namun net saving masih negatif (${formatRentalRpShort(best.netSaving)}/bulan) karena pemakaian Anda tinggi. Coverage hanya ${best.coveragePercent}%. Disarankan konsultasi untuk paket custom atau naikkan budget.`,
+      package: bestCoverage.pkg,
+      savings: bestCoverage,
+      reason: `Paket ${bestCoverage.pkg.name} (${bestCoverage.pkg.kWp} kWp) adalah paket terbesar yang terjangkau untuk budget Anda (${formatRentalRp(bestCoverage.pkg.monthlyPrice)}/bulan). Coverage ${bestCoverage.coveragePercent}% — pengurangan tagihan PLN ${formatRentalRpShort(bestCoverage.plnSaving)}/bulan. Namun net saving masih negatif (${formatRentalRpShort(bestCoverage.netSaving)}/bulan) karena pemakaian ${monthlyKwh.toLocaleString("id-ID")} kWh Anda tinggi. Disarankan: naikkan budget atau konsultasi paket custom untuk coverage 100%.`,
     };
   }
 
-  // 2. Tidak ada yang terjangkau — ambil paket termurah (paling dekat ke budget)
+  // 2. Tidak ada paket terjangkau — ambil termurah (paling dekat ke budget)
   const sortedByPriceAsc = [...allSavings].sort((a, b) => a.pkg.monthlyPrice - b.pkg.monthlyPrice);
   const cheapest = sortedByPriceAsc[0];
   const gap = cheapest.pkg.monthlyPrice - monthlyBudget;
   return {
     package: cheapest.pkg,
     savings: cheapest,
-    reason: `Tidak ada paket yang terjangkau untuk budget Rp ${monthlyBudget.toLocaleString("id-ID")}/bulan. Paket termurah adalah ${cheapest.pkg.name} (${cheapest.pkg.kWp} kWp) di ${formatRentalRp(cheapest.pkg.monthlyPrice)}/bulan — kekurangan ${formatRentalRpShort(gap)}/bulan. Coverage: ${cheapest.coveragePercent}%. Disarankan: naikkan budget atau konsultasi paket custom.`,
+    reason: `Tidak ada paket terjangkau untuk budget ${formatRentalRp(monthlyBudget)}/bulan. Paket termurah: ${cheapest.pkg.name} (${cheapest.pkg.kWp} kWp) di ${formatRentalRp(cheapest.pkg.monthlyPrice)}/bulan — kekurangan ${formatRentalRpShort(gap)}/bulan. Coverage ${cheapest.coveragePercent}%. Disarankan: naikkan budget atau konsultasi paket custom.`,
   };
 }
 

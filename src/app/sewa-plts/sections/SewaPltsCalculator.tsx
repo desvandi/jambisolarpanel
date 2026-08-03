@@ -127,12 +127,12 @@ export function SewaPltsCalculator() {
                 <Zap className="w-4 h-4 text-solar" />
                 Pemakaian listrik bulanan Anda:
               </p>
-              <div className="flex flex-wrap justify-center gap-2 mb-6">
+              <div className="flex flex-wrap justify-center gap-2 mb-3">
                 {rentalCalculatorConfig.usagePresets.map((preset) => (
                   <button
                     key={preset.value}
                     onClick={() => setUsage(preset.value)}
-                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                    className={`px-3 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 ${
                       usage === preset.value
                         ? "bg-solar text-white shadow-lg shadow-solar/30"
                         : "bg-white dark:bg-navy text-navy dark:text-white border border-border hover:border-solar/50"
@@ -141,6 +141,24 @@ export function SewaPltsCalculator() {
                     {preset.label}
                   </button>
                 ))}
+              </div>
+              {/* Manual input for usage */}
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <label className="text-xs text-muted-foreground">Atau ketik manual:</label>
+                <input
+                  type="number"
+                  min={rentalCalculatorConfig.usageMin}
+                  max={rentalCalculatorConfig.usageMax}
+                  value={usage}
+                  onChange={(e) => {
+                    const v = parseInt(e.target.value, 10);
+                    if (!isNaN(v)) {
+                      setUsage(Math.max(rentalCalculatorConfig.usageMin, Math.min(rentalCalculatorConfig.usageMax, v)));
+                    }
+                  }}
+                  className="w-28 px-3 py-1.5 text-sm text-center font-semibold rounded-lg border border-border bg-white dark:bg-navy text-navy dark:text-white focus:outline-none focus:border-solar focus:ring-2 focus:ring-solar/20"
+                />
+                <span className="text-xs text-muted-foreground">kWh</span>
               </div>
               <div className="text-3xl sm:text-4xl font-extrabold text-solar">
                 {usage.toLocaleString("id-ID")}
@@ -159,12 +177,12 @@ export function SewaPltsCalculator() {
                 <Wallet className="w-4 h-4 text-solar" />
                 Budget bulanan untuk sewa PLTS:
               </p>
-              <div className="flex flex-wrap justify-center gap-2 mb-6">
+              <div className="flex flex-wrap justify-center gap-2 mb-3">
                 {rentalCalculatorConfig.budgetPresets.map((preset) => (
                   <button
                     key={preset.value}
                     onClick={() => setBudget(preset.value)}
-                    className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                    className={`px-3 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 ${
                       budget === preset.value
                         ? "bg-solar text-white shadow-lg shadow-solar/30"
                         : "bg-white dark:bg-navy text-navy dark:text-white border border-border hover:border-solar/50"
@@ -173,6 +191,25 @@ export function SewaPltsCalculator() {
                     {preset.label}
                   </button>
                 ))}
+              </div>
+              {/* Manual input for budget */}
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <label className="text-xs text-muted-foreground">Atau ketik manual:</label>
+                <input
+                  type="number"
+                  min={rentalCalculatorConfig.budgetMin}
+                  max={rentalCalculatorConfig.budgetMax}
+                  step={50000}
+                  value={budget}
+                  onChange={(e) => {
+                    const v = parseInt(e.target.value, 10);
+                    if (!isNaN(v)) {
+                      setBudget(Math.max(rentalCalculatorConfig.budgetMin, Math.min(rentalCalculatorConfig.budgetMax, v)));
+                    }
+                  }}
+                  className="w-32 px-3 py-1.5 text-sm text-center font-semibold rounded-lg border border-border bg-white dark:bg-navy text-navy dark:text-white focus:outline-none focus:border-solar focus:ring-2 focus:ring-solar/20"
+                />
+                <span className="text-xs text-muted-foreground">Rp</span>
               </div>
               <div className="text-3xl sm:text-4xl font-extrabold text-solar">
                 {formatRentalRp(budget)}
