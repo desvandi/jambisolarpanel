@@ -91,7 +91,7 @@ export const rentalPackages: RentalPackage[] = [
     name: "Starter",
     kWp: 1,
     storageKwh: 5.12,
-    monthlyPrice: 650000,
+    monthlyPrice: 950000,
     description:
       "Paket awal untuk rumah kecil atau apartemen. Cocok untuk beban ringan seperti lampu, kulkas, TV, dan kipas.",
     estimatedMonthlyKwh: "90 – 120 kWh",
@@ -111,7 +111,7 @@ export const rentalPackages: RentalPackage[] = [
     name: "Home",
     kWp: 2,
     storageKwh: 10.24,
-    monthlyPrice: 1150000,
+    monthlyPrice: 1850000,
     description:
       "Paket terpopuler untuk rumah keluarga. Mendukung AC 1 PK, kulkas, TV, mesin cuci, dan pompa air.",
     estimatedMonthlyKwh: "180 – 240 kWh",
@@ -133,7 +133,7 @@ export const rentalPackages: RentalPackage[] = [
     name: "Family",
     kWp: 3,
     storageKwh: 15.36,
-    monthlyPrice: 1600000,
+    monthlyPrice: 2500000,
     description:
       "Untuk keluarga dengan 2 AC, kulkas besar, water heater, dan peralatan rumah tangga modern lainnya.",
     estimatedMonthlyKwh: "270 – 360 kWh",
@@ -155,7 +155,7 @@ export const rentalPackages: RentalPackage[] = [
     name: "Premium",
     kWp: 4,
     storageKwh: 20.48,
-    monthlyPrice: 2000000,
+    monthlyPrice: 3000000,
     description:
       "Untuk rumah besar dengan 3–4 AC, peralatan smart home, dan kebutuhan listrik tinggi sepanjang hari.",
     estimatedMonthlyKwh: "360 – 480 kWh",
@@ -178,7 +178,7 @@ export const rentalPackages: RentalPackage[] = [
     name: "Business",
     kWp: 5,
     storageKwh: 25.6,
-    monthlyPrice: 2500000,
+    monthlyPrice: 3500000,
     description:
       "Untuk rumah besar, kos-kosan, atau bisnis kecil. Mendukung beban komersial seperti AC 5 PK dan kantor.",
     estimatedMonthlyKwh: "450 – 600 kWh",
