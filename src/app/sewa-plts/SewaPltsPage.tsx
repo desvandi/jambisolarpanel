@@ -10,6 +10,7 @@ import { ConsultationForm } from "@/components/landing/ConsultationForm";
 import { SewaPltsHero } from "./sections/SewaPltsHero";
 import { SewaPltsDualMode } from "./sections/SewaPltsDualMode";
 import { SewaPltsBenefits } from "./sections/SewaPltsBenefits";
+import { SewaPltsComparisonTable } from "./sections/SewaPltsComparisonTable";
 import { SewaPltsPackages } from "./sections/SewaPltsPackages";
 import { SewaPltsComparison } from "./sections/SewaPltsComparison";
 import { SewaPltsCalculator } from "./sections/SewaPltsCalculator";
@@ -23,11 +24,12 @@ import { SewaPltsFinalCta } from "./sections/SewaPltsFinalCta";
  *   1. Hero
  *   2. Dual Mode (backup + hemat) — sorotan dua manfaat utama
  *   3. Keunggulan
- *   4. Daftar Paket
- *   5. Perbandingan Beli vs Sewa
- *   6. Kalkulator
- *   7. FAQ
- *   8. CTA WhatsApp (Final)
+ *   4. Tabel Komparasi (ringkasan 10 paket)
+ *   5. Daftar Paket (dengan filter kategori)
+ *   6. Perbandingan Beli vs Sewa
+ *   7. Kalkulator
+ *   8. FAQ
+ *   9. CTA WhatsApp (Final)
  *
  * Seluruh konten (paket, harga, FAQ, CTA) diambil dari src/lib/rentalPackages.ts
  * sehingga owner cukup mengubah satu file untuk update harga.
@@ -35,6 +37,12 @@ import { SewaPltsFinalCta } from "./sections/SewaPltsFinalCta";
 export default function SewaPltsPage() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  /** Scroll ke section paket & aktifkan filter sesuai paket yang dipilih di tabel. */
+  const handleSelectPackage = () => {
+    const el = document.getElementById("paket");
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -51,6 +59,7 @@ export default function SewaPltsPage() {
         >
           <SewaPltsDualMode />
           <SewaPltsBenefits />
+          <SewaPltsComparisonTable onSelectPackage={handleSelectPackage} />
           <SewaPltsPackages />
           <SewaPltsComparison />
           <SewaPltsCalculator />

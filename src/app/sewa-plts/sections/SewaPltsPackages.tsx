@@ -1,8 +1,21 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { Check, MessageCircle, Zap, Battery, TrendingUp, Wrench, Calendar } from "lucide-react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useRef, useState } from "react";
+import {
+  Check,
+  MessageCircle,
+  Zap,
+  Battery,
+  TrendingUp,
+  Wrench,
+  Calendar,
+  LayoutGrid,
+  Home as HomeIcon,
+  Building2,
+  Factory,
+  type LucideIcon,
+} from "lucide-react";
 import {
   getActiveRentalPackages,
   buildWhatsAppUrl,
@@ -11,11 +24,21 @@ import {
   estimateMonthlyProduction,
   getInstallationFee,
   getInstallationInstallment,
+  packageCategories,
+  type PackageCategory,
 } from "@/lib/rentalPackages";
+
+/** Peta nama icon string -> komponen Lucide. */
+const iconMap: Record<string, LucideIcon> = {
+  LayoutGrid,
+  Home: HomeIcon,
+  Building2,
+  Factory,
+};
 
 /**
  * Section "Daftar Paket" — menampilkan semua paket sewa PLTS yang aktif
- * dalam grid kartu. Harga diambil dari rentalPackages.ts.
+ * dalam grid kartu, dengan filter kategori (Semua / Rumah / Bisnis / Industri).
  *
  * Setiap kartu menampilkan:
  *   - Nama paket + kapasitas (kWp + kWh)
@@ -28,7 +51,36 @@ import {
 export function SewaPltsPackages() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const packages = getActiveRentalPackages();
+  const [activeCategory, setActiveCategory] = useState<PackageCategory | "all">("all");
+
+  const allPackages = getActiveRentalPackages();
+  const packages =
+    activeCategory === "all"
+      ? allPackages
+      : allPackages.filter((p) => p.category === activeCategory);
+
+  /** Warna badge per kategori. */
+  const categoryBadge = (cat: PackageCategory) => {
+    switch (cat) {
+      case "rumah":
+        return "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300";
+      case "bisnis":
+        return "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300";
+      case "industri":
+        return "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300";
+    }
+  };
+
+  const categoryLabel = (cat: PackageCategory) => {
+    switch (cat) {
+      case "rumah":
+        return "Rumah";
+      case "bisnis":
+        return "Bisnis";
+      case "industri":
+        return "Industri";
+    }
+  };
 
   return (
     <section className="py-16 md:py-24 bg-muted/30" id="paket" ref={ref}>
@@ -51,11 +103,74 @@ export function SewaPltsPackages() {
             Semua harga sewa sudah termasuk PPN 11% dan maintenance berkala
             selama masa kontrak. Biaya instalasi dibayar sekali di awal (bisa
             dicicil 2 bulan) dan sudah mencakup bongkar saat kontrak selesai.
+            Gunakan filter di bawah untuk memilih kategori yang sesuai.
           </p>
         </motion.div>
 
+        {/* Category filter */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10"
+        >
+          {packageCategories.map((cat) => {
+            const Icon = iconMap[cat.icon] ?? LayoutGrid;
+            const isActive = activeCategory === cat.id;
+            const count =
+              cat.id === "all"
+                ? allPackages.length
+                : allPackages.filter((p) => p.category === cat.id).length;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`group flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 border ${
+                  isActive
+                    ? "bg-solar text-white border-solar shadow-lg shadow-solar/30"
+                    : "bg-card text-navy dark:text-white border-border hover:border-solar/40 hover:bg-solar/5"
+                }`}
+                title={cat.description}
+              >
+                <Icon className="w-4 h-4" />
+                <span>{cat.label}</span>
+                <span
+                  className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                    isActive
+                      ? "bg-white/20 text-white"
+                      : "bg-muted text-muted-foreground"
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </motion.div>
+
+        {/* Active category description */}
+        <motion.p
+          key={activeCategory}
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+          className="text-center text-xs text-muted-foreground mb-8"
+        >
+          {packageCategories.find((c) => c.id === activeCategory)?.description}
+          {" • "}
+          Menampilkan <strong className="text-navy dark:text-white">{packages.length}</strong> paket
+        </motion.p>
+
         {/* Grid packages */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <AnimatePresence mode="popLayout">
+        <motion.div
+          key={activeCategory}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
           {packages.map((pkg, i) => {
             const monthlyProduction = estimateMonthlyProduction(pkg.kWp);
             const installationFee = getInstallationFee(pkg.kWp);
@@ -103,13 +218,24 @@ export function SewaPltsPackages() {
                       {pkg.name}
                     </h3>
                   </div>
-                  <span
-                    className={`text-xs font-bold px-2 py-1 rounded-md ${
-                      pkg.popular ? "bg-white/15 text-white" : "bg-solar/10 text-solar"
-                    }`}
-                  >
-                    {pkg.kWp} kWp
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span
+                      className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                        pkg.popular
+                          ? "bg-white/15 text-white/90"
+                          : categoryBadge(pkg.category)
+                      }`}
+                    >
+                      {categoryLabel(pkg.category)}
+                    </span>
+                    <span
+                      className={`text-xs font-bold px-2 py-1 rounded-md ${
+                        pkg.popular ? "bg-white/15 text-white" : "bg-solar/10 text-solar"
+                      }`}
+                    >
+                      {pkg.kWp} kWp
+                    </span>
+                  </div>
                 </div>
 
                 {/* Description */}
@@ -311,7 +437,17 @@ export function SewaPltsPackages() {
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
+        </AnimatePresence>
+
+        {/* Empty state (just in case) */}
+        {packages.length === 0 && (
+          <div className="text-center py-12 text-muted-foreground">
+            <p className="text-sm">
+              Tidak ada paket di kategori ini. Coba kategori lain.
+            </p>
+          </div>
+        )}
 
         {/* Bottom note */}
         <motion.div

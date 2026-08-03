@@ -150,6 +150,9 @@ export function getMonthlyBill(kWp: number, monthlyPrice: number, monthIndex: nu
   return monthlyPrice;
 }
 
+/** Kategori paket untuk filter di UI. */
+export type PackageCategory = "rumah" | "bisnis" | "industri";
+
 /** Definisi satu paket sewa PLTS. */
 export interface RentalPackage {
   /** Identifier unik (slug-friendly). */
@@ -164,6 +167,8 @@ export interface RentalPackage {
   monthlyPrice: number;
   /** Harga sewa tahunan (Rupiah, dibayar di muka, sudah termasuk PPN). */
   annualPrice: number;
+  /** Kategori paket untuk filter (rumah / bisnis / industri). */
+  category: PackageCategory;
   /** Deskripsi singkat paket. */
   description: string;
   /** Estimasi pemakaian yang cocok (kWh/bulan). */
@@ -181,6 +186,39 @@ export interface RentalPackage {
   /** Status aktif/nonaktif. false = disembunyikan dari halaman. */
   active: boolean;
 }
+
+/** Konfigurasi kategori paket untuk filter UI. */
+export const packageCategories: {
+  id: PackageCategory | "all";
+  label: string;
+  description: string;
+  icon: string;
+}[] = [
+  {
+    id: "all",
+    label: "Semua Paket",
+    description: "Tampilkan seluruh 10 paket dari 1 – 10 kWp",
+    icon: "LayoutGrid",
+  },
+  {
+    id: "rumah",
+    label: "Rumah",
+    description: "1 – 4 kWp — rumah kecil hingga besar",
+    icon: "Home",
+  },
+  {
+    id: "bisnis",
+    label: "Bisnis",
+    description: "5 – 7 kWp — kos, villa, ruko, restoran",
+    icon: "Building2",
+  },
+  {
+    id: "industri",
+    label: "Industri",
+    description: "8 – 10 kWp — workshop, pabrik, hotel, fasilitas besar",
+    icon: "Factory",
+  },
+];
 
 /**
  * Daftar paket sewa PLTS (1 kWp – 10 kWp).
@@ -206,6 +244,7 @@ export const rentalPackages: RentalPackage[] = [
     storageKwh: 5.12,
     monthlyPrice: 960_000,
     annualPrice: 10_950_612,
+    category: "rumah",
     description:
       "Paket awal untuk rumah kecil atau apartemen. Cocok untuk beban ringan seperti lampu, kulkas, TV, dan kipas.",
     estimatedMonthlyKwh: "90 – 120 kWh",
@@ -227,6 +266,7 @@ export const rentalPackages: RentalPackage[] = [
     storageKwh: 10.24,
     monthlyPrice: 1_720_000,
     annualPrice: 19_711_102,
+    category: "rumah",
     description:
       "Paket terpopuler untuk rumah keluarga. Mendukung AC 1 PK, kulkas, TV, mesin cuci, dan pompa air.",
     estimatedMonthlyKwh: "180 – 240 kWh",
@@ -250,6 +290,7 @@ export const rentalPackages: RentalPackage[] = [
     storageKwh: 15.36,
     monthlyPrice: 2_400_000,
     annualPrice: 27_595_542,
+    category: "rumah",
     description:
       "Untuk keluarga dengan 2 AC, kulkas besar, water heater, dan peralatan rumah tangga modern lainnya.",
     estimatedMonthlyKwh: "270 – 360 kWh",
@@ -273,6 +314,7 @@ export const rentalPackages: RentalPackage[] = [
     storageKwh: 20.48,
     monthlyPrice: 3_080_000,
     annualPrice: 35_479_983,
+    category: "rumah",
     description:
       "Untuk rumah besar dengan 3–4 AC, peralatan smart home, dan kebutuhan listrik tinggi sepanjang hari.",
     estimatedMonthlyKwh: "360 – 480 kWh",
@@ -297,6 +339,7 @@ export const rentalPackages: RentalPackage[] = [
     storageKwh: 25.6,
     monthlyPrice: 3_730_000,
     annualPrice: 42_926_399,
+    category: "bisnis",
     description:
       "Untuk rumah besar, kos-kosan, atau bisnis kecil. Mendukung beban komersial seperti AC 5 PK dan kantor.",
     estimatedMonthlyKwh: "450 – 600 kWh",
@@ -322,6 +365,7 @@ export const rentalPackages: RentalPackage[] = [
     storageKwh: 30.72,
     monthlyPrice: 4_340_000,
     annualPrice: 49_934_791,
+    category: "bisnis",
     description:
       "Untuk rumah mewah, villa, atau guest house dengan banyak AC dan peralatan premium berjalan serentak.",
     estimatedMonthlyKwh: "540 – 720 kWh",
@@ -347,6 +391,7 @@ export const rentalPackages: RentalPackage[] = [
     storageKwh: 35.84,
     monthlyPrice: 4_910_000,
     annualPrice: 56_505_158,
+    category: "bisnis",
     description:
       "Untuk villa, homestay, atau properti komersial menengah dengan tingkat okupansi tinggi dan beban listrik besar.",
     estimatedMonthlyKwh: "630 – 840 kWh",
@@ -373,6 +418,7 @@ export const rentalPackages: RentalPackage[] = [
     storageKwh: 40.96,
     monthlyPrice: 5_440_000,
     annualPrice: 62_637_500,
+    category: "industri",
     description:
       "Untuk ruko, restoran, atau kantor kecil dengan operasional 12 jam/hari dan kebutuhan listrik komersial.",
     estimatedMonthlyKwh: "720 – 960 kWh",
@@ -399,6 +445,7 @@ export const rentalPackages: RentalPackage[] = [
     storageKwh: 46.08,
     monthlyPrice: 5_940_000,
     annualPrice: 68_331_819,
+    category: "industri",
     description:
       "Untuk bengkel, workshop, atau pabrik kecil dengan motor listrik, mesin produksi, dan beban industri ringan.",
     estimatedMonthlyKwh: "810 – 1.080 kWh",
@@ -426,6 +473,7 @@ export const rentalPackages: RentalPackage[] = [
     storageKwh: 51.2,
     monthlyPrice: 6_850_000,
     annualPrice: 78_844_406,
+    category: "industri",
     description:
       "Untuk pabrik menengah, hotel, atau fasilitas besar dengan beban listrik 24/7 dan kebutuhan redundansi tinggi.",
     estimatedMonthlyKwh: "900 – 1.200 kWh",
