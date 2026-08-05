@@ -44,7 +44,7 @@ export function SewaPltsCalculator() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   const [usage, setUsage] = useState<number>(400); // kWh/bulan
-  const [budget, setBudget] = useState<number>(1720000); // Rp/bulan (paket Home)
+  const [budget, setBudget] = useState<number>(1550000); // Rp/bulan (paket Home)
   const [showAssumptions, setShowAssumptions] = useState(false);
   const [showAllPackages, setShowAllPackages] = useState(false);
 
