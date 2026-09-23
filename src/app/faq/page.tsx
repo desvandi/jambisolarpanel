@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { MessageCircle, BookOpen, Calculator, HelpCircle } from "lucide-react";
+import { MessageCircle, BookOpen, Calculator, HelpCircle, BookMarked } from "lucide-react";
 import { SitePageLayout } from "@/components/site/SitePageLayout";
 import { FaqCategoryPanels } from "@/components/faq/FaqCategoryPanels";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -100,6 +100,20 @@ export default function FaqPage() {
                   </p>
                   <p className="text-xs text-muted-foreground mt-0.5">
                     Daftar harga 1,3–20,8 kWp, transparan &amp; siap cetak
+                  </p>
+                </div>
+              </Link>
+              <Link
+                href="/istilah-plts"
+                className="group flex items-center gap-3 p-4 rounded-xl bg-card/70 border border-border hover:border-solar/30 transition-all duration-200"
+              >
+                <BookMarked className="w-5 h-5 text-solar shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-navy dark:text-white group-hover:text-solar transition-colors">
+                    Kamus Istilah PLTS
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    30 istilah panel surya dijelaskan sederhana
                   </p>
                 </div>
               </Link>

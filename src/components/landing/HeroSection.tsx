@@ -48,6 +48,8 @@ export function HeroSection() {
               "radial-gradient(ellipse 80% 60% at 30% 45%, rgba(15, 23, 42, 0.35) 0%, rgba(15, 23, 42, 0.65) 60%, rgba(15, 23, 42, 0.8) 100%)",
           }}
         />
+        {/* Sun glow — aksen hangat bernapas (reduced-motion-safe) */}
+        <div aria-hidden="true" className="hero-sun-glow" />
       </div>
 
       {/* Animated particles */}

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Clock, Calendar, CheckCircle } from "lucide-react";
+import { Clock, Calendar, CheckCircle, BookMarked } from "lucide-react";
 import { notFound } from "next/navigation";
 import { SitePageLayout } from "@/components/site/SitePageLayout";
 import { ArticleBlocks } from "@/components/artikel/ArticleBlocks";
@@ -135,6 +135,20 @@ export default async function ArticleDetailPage({ params }: Props) {
             <div className="mt-10 pt-6 border-t border-border">
               <ArticleShare title={article.title} />
             </div>
+
+            {/* Link ke kamus istilah — internal linking */}
+            <Link
+              href="/istilah-plts"
+              className="group mt-6 flex items-center justify-between gap-4 p-4 rounded-xl bg-muted/40 hover:bg-solar/10 border border-border hover:border-solar/30 transition-all"
+            >
+              <span className="flex items-center gap-3 text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+                <BookMarked className="w-4 h-4 text-solar flex-shrink-0" />
+                Ada istilah yang belum dikenal? Buka Kamus Istilah PLTS
+              </span>
+              <span className="text-solar font-semibold text-sm group-hover:translate-x-1 transition-transform flex-shrink-0">
+                &rarr;
+              </span>
+            </Link>
 
             {/* Author box — E-E-A-T */}
             <ArticleAuthorBox />

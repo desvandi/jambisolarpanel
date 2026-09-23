@@ -549,6 +549,166 @@
 }
 
 /* ============================================
+   Kamus Istilah (glossary) — kartu & navigasi
+   ============================================ */
+.term-card {
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.term-card:hover {
+  border-color: rgba(22, 163, 74, 0.35);
+  box-shadow: 0 10px 30px -12px rgba(22, 163, 74, 0.18);
+  transform: translateY(-2px);
+}
+
+.term-card:focus-within {
+  border-color: rgba(22, 163, 74, 0.5);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+}
+
+.term-letter-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.08);
+  border: 1px solid rgba(22, 163, 74, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.dark .term-letter-badge {
+  color: #4ade80;
+  background: rgba(22, 163, 74, 0.12);
+  box-shadow: none;
+}
+
+.glossary-related-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #16a34a;
+  position: relative;
+  padding-bottom: 1px;
+}
+
+.dark .glossary-related-link {
+  color: #4ade80;
+}
+
+.glossary-related-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 0;
+  background: currentColor;
+  transition: width 0.25s ease;
+}
+
+.glossary-related-link:hover::after {
+  width: 100%;
+}
+
+.glossary-related-link:hover {
+  gap: 0.55rem;
+  transition: gap 0.25s ease;
+}
+
+/* ============================================
+   Hero — sun glow breathing (halus, pelan)
+   ============================================ */
+@keyframes sun-breathe {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.06);
+  }
+}
+
+.hero-sun-glow {
+  position: absolute;
+  width: 55vw;
+  height: 55vw;
+  max-width: 720px;
+  max-height: 720px;
+  top: -12%;
+  right: -8%;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    rgba(22, 163, 74, 0.16) 0%,
+    rgba(22, 163, 74, 0.06) 45%,
+    transparent 70%
+  );
+  pointer-events: none;
+  animation: sun-breathe 9s ease-in-out infinite;
+}
+
+/* Keyboard focus ring untuk kartu-link (aksesibilitas) */
+.card-focus:focus-visible {
+  outline: 2px solid rgba(22, 163, 74, 0.7);
+  outline-offset: 3px;
+  border-radius: 1rem;
+}
+
+/* Label kecil "eyebrow" di atas judul bagian */
+.eyebrow-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #16a34a;
+}
+
+.dark .eyebrow-label {
+  color: #4ade80;
+}
+
+.eyebrow-label::before {
+  content: "";
+  width: 1.5rem;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, #16a34a);
+}
+
+.dark .eyebrow-label::before {
+  background: linear-gradient(90deg, transparent, #4ade80);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-sun-glow {
+    animation: none;
+  }
+  .term-card:hover,
+  .glossary-related-link:hover {
+    transform: none;
+  }
+}
+
+/* ============================================
    Print stylesheet — daftar harga siap cetak
    ============================================ */
 @media print {

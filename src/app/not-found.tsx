@@ -126,6 +126,13 @@ export default function NotFound() {
               >
                 artikel &amp; panduan panel surya
               </Link>{" "}
+              dan{" "}
+              <Link
+                href="/istilah-plts"
+                className="text-solar font-semibold hover:underline underline-offset-2"
+              >
+                kamus istilah PLTS
+              </Link>{" "}
               kami untuk mempelajari PLTS lebih dalam.
             </p>
           </div>

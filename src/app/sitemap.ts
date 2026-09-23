@@ -31,6 +31,7 @@ const LAST_MODIFIED = {
   artikelIndex: "2026-09-23",
   faq: "2026-09-24",
   kalkulatorPlts: "2026-09-24",
+  istilahPlts: "2026-09-24",
 } as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -51,6 +52,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/artikel`, lastModified: LAST_MODIFIED.artikelIndex },
     { url: `${SITE_URL}/faq`, lastModified: LAST_MODIFIED.faq },
     { url: `${SITE_URL}/kalkulator-plts`, lastModified: LAST_MODIFIED.kalkulatorPlts },
+    { url: `${SITE_URL}/istilah-plts`, lastModified: LAST_MODIFIED.istilahPlts },
   ];
 
   const caseStudyPages: MetadataRoute.Sitemap = caseStudies.map((cs) => ({

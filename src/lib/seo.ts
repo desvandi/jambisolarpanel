@@ -335,6 +335,33 @@ export function softwareAppJsonLd({
   };
 }
 
+/** DefinedTermSet schema — Kamus Istilah PLTS (data dari src/lib/glossary.ts). */
+export function glossaryJsonLd(
+  terms: { id: string; term: string; definition: string; category: string }[]
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "DefinedTermSet",
+    name: "Kamus Istilah PLTS & Panel Surya — Jambi Solar Panel",
+    description:
+      "Glosarium istilah panel surya dan PLTS dalam Bahasa Indonesia: kWp, kWh, PSH, inverter hybrid, baterai LiFePO4, DoD, ROI, PJUTS, dan lainnya.",
+    url: `${SITE_URL}/istilah-plts`,
+    inLanguage: "id-ID",
+    hasDefinedTerm: terms.map((t) => ({
+      "@type": "DefinedTerm",
+      "@id": `${SITE_URL}/istilah-plts#${t.id}`,
+      name: t.term,
+      description: t.definition,
+      termCode: t.id,
+      inDefinedTermSet: {
+        "@type": "DefinedTermSet",
+        name: "Kamus Istilah PLTS & Panel Surya — Jambi Solar Panel",
+        url: `${SITE_URL}/istilah-plts`,
+      },
+    })),
+  };
+}
+
 /** WebSite schema untuk homepage. */
 export function webSiteJsonLd() {
   return {
