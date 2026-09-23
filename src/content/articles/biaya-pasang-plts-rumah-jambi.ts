@@ -36,7 +36,7 @@ export const article: Article = {
         ],
         [
           "Inverter hybrid",
-          "PowMr 1 fase (3,6/6/8/10 kW) untuk rumah; Deye 3 fase (10/15/20 kW) untuk beban besar",
+          "Inverter hybrid 1 fase (3,6/6/8/10 kW) untuk rumah; inverter 3 fase (10/15/20 kW) untuk beban besar",
           "Wajib — menyesuaikan beban puncak rumah",
         ],
         [

@@ -59,7 +59,7 @@ export const article: Article = {
     { type: "h3", text: "Degradasi panel seiring usia" },
     {
       type: "p",
-      text: "Semua panel surya mengalami degradasi output dari tahun ke tahun, tetapi pada panel monokristalin berkualitas lajuannya sangat kecil — umumnya di bawah 1% per tahun. Panel kelas atas seperti LONGi 650 Wp yang kami gunakan dilindungi garansi performa 25 tahun yang menjamin degradasi output tetap minimal hingga akhir periode. Dalam perencanaan kapasitas, degradasi tahun-tahun awal ini sudah tercakup oleh margin keamanan paket.",
+      text: "Semua panel surya mengalami degradasi output dari tahun ke tahun, tetapi pada panel monokristalin berkualitas lajuannya sangat kecil — umumnya di bawah 1% per tahun. Panel kelas atas 650 Wp yang kami gunakan dilindungi garansi performa 25 tahun yang menjamin degradasi output tetap minimal hingga akhir periode. Dalam perencanaan kapasitas, degradasi tahun-tahun awal ini sudah tercakup oleh margin keamanan paket.",
     },
     { type: "h2", text: "Estimasi Produksi 1 kWp per Musim di Jambi" },
     {

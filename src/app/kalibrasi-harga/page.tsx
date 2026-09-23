@@ -148,12 +148,12 @@ interface DetailedState {
 
 function getBrandFromKey(key: string): string {
   const meta = inverterMeta[key as keyof typeof inverterMeta];
-  return meta?.brand || "PowMr";
+  return meta?.brand || "Hybrid";
 }
 
 const defaultDetailedState: DetailedState = {
   panel: {
-    brand: "LONGi",
+    brand: "Monokristalin PERC",
     cellType: "Mono PERC",
     wattage: 650,
     pricePerPanel: 2_500_000,
@@ -184,7 +184,7 @@ const defaultDetailedState: DetailedState = {
     {} as InverterDetailMap
   ),
   battery: {
-    brand: "Shoto LiFePO4 Battery Pack",
+    brand: "LiFePO4 Battery Pack",
     type: "LiFePO4",
     capacityPerUnit: 4.8,
     dod: 80,

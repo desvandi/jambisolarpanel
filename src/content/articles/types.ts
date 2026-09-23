@@ -6,8 +6,8 @@
  * - JANGAN mengarang klaim bisnis (jumlah pelanggan, rating, proyek fiktif,
  *   statistik tanpa sumber).
  * - Angka teknis boleh memakai data internal situs yang nyata:
- *   PSH Jambi 3.75 jam, efisiensi sistem 80%, panel LONGi 650Wp,
- *   inverter PowMr/Deye hybrid, baterai LiFePO4 48V 100Ah (unit 4.8 kWh),
+ *   PSH Jambi 3.75 jam, efisiensi sistem 80%, panel 650Wp,
+ *   inverter hybrid 1/3 fase, baterai LiFePO4 48V 100Ah (unit 4.8 kWh),
  *   tarif PLN acuan Rp1.352–1.444,70/kWh (R-1), PPN 11%.
  */
 

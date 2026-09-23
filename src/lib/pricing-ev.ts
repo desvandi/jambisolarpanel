@@ -4,9 +4,9 @@ import { formatRpShort } from "./pricing";
    EV CHARGING PRICING — PT. Jaya Mandiri Smart Energy
    EV Charging Terintegrasi PLTS
 
-   Charger: XCMG AC 7.2kW
-   Panel: LONGi 650Wp
-   Inverter: Powmr Hybrid
+   Charger: AC 7.2kW
+   Panel: 650Wp
+   Inverter: Hybrid
 
    Update 18 Mei 2026:
    - Realistic ROI calculation based on actual PLTS production
@@ -32,7 +32,7 @@ export interface EVPackage {
 
 // Realistic EV charging assumptions
 export const evAssumptions = {
-  evBatteryKwh: 7.2,           // Typical EV battery (Wuling Air, BYD Dolphin)
+  evBatteryKwh: 7.2,           // Kapasitas baterai EV kota tipikal
   chargesPerDay: 2,             // Morning + evening
   dailyChargingKwh: 14.4,       // 7.2 × 2
   monthlyChargingKwh: 432,      // 14.4 × 30
@@ -109,7 +109,7 @@ export const evPackages: EVPackage[] = [
   {
     name: "EV Home Charger Only",
     solarKwp: 0,
-    charger: "XCMG 7.2kW AC",
+    charger: "Charger AC 7.2kW",
     price: 25_000_000,
     panel: "-",
     inverter: "-",
@@ -123,7 +123,7 @@ export const evPackages: EVPackage[] = [
   {
     name: "EV Solar 5.2 kWp + Charger",
     solarKwp: 5.2,
-    charger: "XCMG 7.2kW AC",
+    charger: "Charger AC 7.2kW",
     price: 135_000_000,
     panel: "8× Panel Surya 650Wp",
     inverter: "Inverter Hybrid 5kW",
@@ -137,7 +137,7 @@ export const evPackages: EVPackage[] = [
   {
     name: "EV Solar 7.8 kWp + Charger",
     solarKwp: 7.8,
-    charger: "XCMG 7.2kW AC",
+    charger: "Charger AC 7.2kW",
     price: 185_000_000,
     panel: "12× Panel Surya 650Wp",
     inverter: "Inverter Hybrid 8kW",
@@ -151,7 +151,7 @@ export const evPackages: EVPackage[] = [
   {
     name: "EV Solar 10.4 kWp + Charger",
     solarKwp: 10.4,
-    charger: "XCMG 7.2kW AC",
+    charger: "Charger AC 7.2kW",
     price: 240_000_000,
     panel: "16× Panel Surya 650Wp",
     inverter: "Inverter Hybrid 10kW",

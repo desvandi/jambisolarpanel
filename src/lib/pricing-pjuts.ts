@@ -2,7 +2,7 @@
    PJUTS PRICING — PT. Jaya Mandiri Smart Energy
    Penerangan Jalan Umum Tenaga Surya
 
-   Brand: LONGi Panel + BYD LiFePO4 Battery + LED Lamp
+   Komponen: Panel Surya + Baterai LiFePO4 + LED Lamp
    Features: Auto on/off, remote monitoring, 3-year warranty
    ============================================================ */
 

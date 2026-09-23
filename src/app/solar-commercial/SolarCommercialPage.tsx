@@ -87,7 +87,7 @@ export default function SolarCommercialPage() {
             {[
               {
                 problem: "Biaya listrik operasional semakin besar setiap bulan",
-                solution: "PLTS Hybrid mengurangi biaya tetap listrik bisnis Anda hingga 70-90%. Setiap rupiah yang dihemat langsung meningkatkan profit margin.",
+                solution: "PLTS Hybrid berpotensi mengurangi biaya listrik bisnis Anda 70-90%, tergantung kapasitas sistem dan profil beban. Setiap rupiah yang dihemat langsung meningkatkan profit margin.",
                 icon: "📊",
               },
               {

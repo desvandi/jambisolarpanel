@@ -61,10 +61,6 @@ export function Footer() {
               Menyediakan solusi energi surya profesional untuk rumah, bisnis, kebun, dan industri.
               Mitra energi mandiri terpercaya Anda di Sumatera &amp; Jawa Bagian Barat.
             </p>
-            <div className="text-xs text-white/40 leading-relaxed mb-4 max-w-sm">
-              Tangkit Baru Residence Blok D15, Jl. H. Saing, RT.001/RW.001,
-              Desa Tangkit Baru, Kec. Sungai Gelam, Kabupaten Muaro Jambi, Jambi 36373
-            </div>
             <div className="flex gap-2">
               <a
                 href={wa("Halo PT. Jaya Mandiri Smart Energy, saya menghubungi dari WhatsApp di footer website")}
@@ -168,7 +164,10 @@ export function Footer() {
               >
                 +62 813-2819-0707
               </a>
-              <p className="text-xs text-white/40 mt-1">Tangkit Baru, Sungai Gelam, Muaro Jambi</p>
+              <p className="text-xs text-white/40 mt-2 leading-relaxed">
+                Tangkit Baru Residence Blok D15, Jl. H. Saing, RT.001/RW.001,
+                Desa Tangkit Baru, Kec. Sungai Gelam, Kabupaten Muaro Jambi, Jambi 36373
+              </p>
             </div>
           </div>
         </div>

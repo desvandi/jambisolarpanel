@@ -49,7 +49,7 @@ const trustItems = [
   {
     icon: Shield,
     title: "Garansi Komprehensif",
-    desc: "Garansi panel surya 25 tahun performa, inverter Powmr 5 tahun, baterai LiFePO4 5 tahun, dan garansi instalasi profesional oleh tim kami.",
+    desc: "Garansi panel surya 25 tahun performa, inverter 5 tahun, baterai LiFePO4 5 tahun, dan garansi instalasi profesional oleh tim kami.",
   },
   {
     icon: Wrench,

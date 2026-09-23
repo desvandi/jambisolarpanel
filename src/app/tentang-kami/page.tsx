@@ -92,12 +92,12 @@ const workProcess = [
 const equipment = [
   {
     icon: Sun,
-    name: "Panel Surya LONGi",
+    name: "Panel Surya Monokristalin",
     desc: "Panel monocrystalline 650Wp dengan garansi performa 25 tahun.",
   },
   {
     icon: Zap,
-    name: "Inverter Hybrid PowMr & Deye",
+    name: "Inverter Hybrid 1 & 3 Fase",
     desc: "Inverter hybrid 1 fase (3,6–10 kW) dan 3 fase (10–20 kW) dengan garansi 5–10 tahun.",
   },
   {

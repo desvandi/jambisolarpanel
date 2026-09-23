@@ -268,7 +268,7 @@ export function ProductSection() {
               </p>
               <p>
                 <strong>Biaya per paket:</strong> Panel + Mounting + BOS + Inverter
-                + Proteksi (SPD, Grounding, Tomzn MCCB AC/DC) + Jasa Instalasi + Survei &amp; Desain + Commissioning + Logistik.
+                + Proteksi (SPD, Grounding, MCCB AC/DC) + Jasa Instalasi + Survei &amp; Desain + Commissioning + Logistik.
               </p>
               <p>
                 <strong>Margin:</strong> 35% dari HPP (Harga Pokok Produksi).

@@ -58,7 +58,7 @@ export function SewaPltsFinalCta() {
           <div className="flex flex-wrap justify-center gap-3 mb-10">
             {[
               { icon: Shield, text: "Backup otomatis saat PLN padam" },
-              { icon: Zap, text: "Tagihan listrik turun hingga 90%" },
+              { icon: Zap, text: "Potensi tagihan turun hingga 90%" },
               { icon: Sun, text: "Tanpa investasi awal" },
               { icon: TrendingUp, text: "Maintenance termasuk" },
               { icon: Shield, text: "Bisa upgrade kapasitas" },

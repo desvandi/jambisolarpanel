@@ -92,17 +92,17 @@ export default function SolarHomePage() {
             {[
               {
                 problem: "Tagihan PLN terus naik setiap tahun",
-                solution: "PLTS Hybrid menghasilkan listrik gratis dari matahari. Hemat 50-90% tagihan bulanan, dan penghematan terus bertambah seiring kenaikan tarif PLN.",
+                solution: "PLTS Hybrid menghasilkan listrik gratis dari matahari. Potensi hemat 50-90% tagihan bulanan tergantung kapasitas sistem dan profil beban, dan penghematan terus bertambah seiring kenaikan tarif PLN.",
                 icon: "💸",
               },
               {
                 problem: "Listrik sering padam mengganggu aktivitas",
-                solution: "Dengan baterai LiFePO4 sebagai add-on, rumah Anda tetap menyala 24 jam bahkan saat PLN padam. Inverter Powmr Hybrid otomatis switch ke baterai.",
+                solution: "Dengan baterai LiFePO4 sebagai add-on, rumah Anda tetap menyala 24 jam bahkan saat PLN padam. Inverter hybrid otomatis switch ke baterai.",
                 icon: "🔌",
               },
               {
                 problem: "Inverter PLN berisik & boros listrik",
-                solution: "Inverter Powmr Hybrid bekerja tanpa suara dan mengkonversi DC→AC dengan efisiensi >95%. Tidak ada bahan bakar, tidak ada emisi.",
+                solution: "Inverter hybrid bekerja tanpa suara dan mengkonversi DC→AC dengan efisiensi >95%. Tidak ada bahan bakar, tidak ada emisi.",
                 icon: "🔋",
               },
             ].map((item, i) => (

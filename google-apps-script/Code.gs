@@ -22,6 +22,12 @@
  *   Setelah deploy, buka sheet dan jalankan initializeSheet()
  *   dari Apps Script editor (klik Run > initializeSheet) untuk
  *   mengisi sheet dengan data default.
+ *
+ *   CATATAN: Nama key inverter bersifat generik (tanpa nama merek)
+ *   dan harus sama dengan InverterPrices di src/lib/pricing.ts.
+ *   Jika sheet Anda masih memakai key inverter versi lama,
+ *   redeploy script ini lalu jalankan ulang initializeSheet()
+ *   agar key di sheet ikut diperbarui.
  * ================================================================
  */
 
@@ -52,13 +58,13 @@ const DEFAULT_PRICING = {
   monitoringStandard: 8000000,
   monitoringIndustrial: 25000000,
   // ---- Inverter ----
-  deye3k6: 7000000,
-  deye6k: 12000000,
-  deye8k: 16000000,
-  growatt10k: 18000000,
-  deye10k3p: 26000000,
-  deye15k3p: 38000000,
-  deye20k3p: 52000000,
+  inv3k6: 7000000,
+  inv6k: 12000000,
+  inv8k: 16000000,
+  inv10k: 18000000,
+  inv3p10k: 26000000,
+  inv3p15k: 38000000,
+  inv3p20k: 52000000,
   // ---- Pengaturan ----
   marginPct: 35,
   ppnPct: 11,
@@ -85,13 +91,13 @@ const LABELS = {
   monitoringBasic: 'Monitoring Basic (Rp)',
   monitoringStandard: 'Monitoring Standard (Rp)',
   monitoringIndustrial: 'Monitoring Industrial (Rp)',
-  deye3k6: 'Inverter Deye 3.600W (Rp)',
-  deye6k: 'Inverter Deye 6.000W (Rp)',
-  deye8k: 'Inverter Deye 8.000W (Rp)',
-  growatt10k: 'Inverter Growatt 10.000W (Rp)',
-  deye10k3p: 'Inverter Deye 10kW 3-Phase (Rp)',
-  deye15k3p: 'Inverter Deye 15kW 3-Phase (Rp)',
-  deye20k3p: 'Inverter Deye 20kW 3-Phase (Rp)',
+  inv3k6: 'Inverter Hybrid 3.600W (Rp)',
+  inv6k: 'Inverter Hybrid 6.000W (Rp)',
+  inv8k: 'Inverter Hybrid 8.000W (Rp)',
+  inv10k: 'Inverter Hybrid 10.000W (Rp)',
+  inv3p10k: 'Inverter Hybrid 10kW 3-Fase (Rp)',
+  inv3p15k: 'Inverter Hybrid 15kW 3-Fase (Rp)',
+  inv3p20k: 'Inverter Hybrid 20kW 3-Fase (Rp)',
   marginPct: 'Margin (%)',
   ppnPct: 'PPN (%)',
   pshHours: 'PSH Jambi (jam)',
@@ -106,8 +112,8 @@ const CATEGORIES = {
   batteryPerKwh: 'Komponen', bosBatteryPerKwh: 'Komponen', surveyDesignFee: 'Komponen',
   commissioningFee: 'Komponen', logisticsPerPanel: 'Komponen', monitoringBasic: 'Komponen',
   monitoringStandard: 'Komponen', monitoringIndustrial: 'Komponen',
-  deye3k6: 'Inverter', deye6k: 'Inverter', deye8k: 'Inverter',
-  growatt10k: 'Inverter', deye10k3p: 'Inverter', deye15k3p: 'Inverter', deye20k3p: 'Inverter',
+  inv3k6: 'Inverter', inv6k: 'Inverter', inv8k: 'Inverter',
+  inv10k: 'Inverter', inv3p10k: 'Inverter', inv3p15k: 'Inverter', inv3p20k: 'Inverter',
   marginPct: 'Pengaturan', ppnPct: 'Pengaturan', pshHours: 'Pengaturan', efficiency: 'Pengaturan',
 };
 

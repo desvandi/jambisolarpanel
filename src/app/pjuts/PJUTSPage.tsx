@@ -10,7 +10,7 @@ import { MessageCircle, Sun, Shield, Clock, MapPin, Wrench, CheckCircle } from "
 const benefits = [
   { icon: MapPin, title: "Tanpa Kabel PLN", desc: "Berdiri mandiri di mana saja — jalan desa, perkebunan, area terpencil" },
   { icon: Sun, title: "Auto On/Off", desc: "Sensor cahaya otomatis, menyala saat gelap dan mati saat pagi" },
-  { icon: Shield, title: "Garansi 3 Tahun", desc: "Panel LONGi + baterai BYD LiFePO4 berkualitas tinggi" },
+  { icon: Shield, title: "Garansi 3 Tahun", desc: "Panel surya + baterai LiFePO4 berkualitas tinggi" },
   { icon: Clock, title: "Gratis Instalasi", desc: "Pemasangan tiang all-in-one oleh tim teknisi berpengalaman" },
   { icon: Wrench, title: "Perawatan Mudah", desc: "Sistem all-in-one minim perawatan, panel self-cleaning" },
   { icon: CheckCircle, title: "Tahan Cuaca", desc: "Rating IP65/IP66, tahan hujan deras dan panas terik" },
@@ -25,7 +25,7 @@ export default function PJUTSPage() {
       subBrand="Jambi Solar Agro — PJUTS"
       title="Penerangan Jalan Umum Tenaga Surya (PJUTS)"
       tagline="Cahaya untuk jalan desa, perkebunan, kawasan industri — tanpa kabel PLN."
-      description="Solusi penerangan jalan mandiri tanpa koneksi PLN. Menggunakan panel surya LONGi, baterai LiFePO4 BYD, dan LED SMD berkualitas tinggi dalam tiang all-in-one. Cocok untuk jalan desa, akses perkebunan sawit, kawasan industri, dan area publik."
+      description="Solusi penerangan jalan mandiri tanpa koneksi PLN. Menggunakan panel surya monokristalin, baterai LiFePO4, dan LED SMD berkualitas tinggi dalam tiang all-in-one. Cocok untuk jalan desa, akses perkebunan sawit, kawasan industri, dan area publik."
       breadcrumbs={[{ label: "Solusi", href: "/" }, { label: "PJUTS" }]}
       waText="Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan paket PJUTS. Mohon informasi lebih lanjut mengenai harga dan spesifikasi."
     >
@@ -80,7 +80,7 @@ export default function PJUTSPage() {
               },
               {
                 problem: "Genset untuk PJU boros BBM & perawatan rutin",
-                solution: "Solar panel + baterai LiFePO4 BYD bekerja tanpa bahan bakar. System all-in-one minim perawatan, cukup bersih panel 2x setahun.",
+                solution: "Solar panel + baterai LiFePO4 bekerja tanpa bahan bakar. System all-in-one minim perawatan, cukup bersih panel 2x setahun.",
                 icon: "⛽",
               },
             ].map((item, i) => (

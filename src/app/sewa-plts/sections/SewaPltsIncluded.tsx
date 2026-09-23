@@ -111,7 +111,7 @@ export function SewaPltsIncluded() {
               ✅ Garansi pekerjaan didukung langsung oleh PT. Jaya Mandiri Smart Energy
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              Bekerja sama dengan brand terpercaya: LONGi, Powmr, LiFePO4
+              Menggunakan komponen berkualitas: panel surya monokristalin, inverter hybrid, baterai LiFePO4
             </p>
           </div>
         </motion.div>

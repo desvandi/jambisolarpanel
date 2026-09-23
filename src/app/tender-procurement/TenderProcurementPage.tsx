@@ -9,7 +9,7 @@ const services = [
   { icon: ClipboardList, title: "EPC (Engineering, Procurement, Construction)", desc: "Layanan lengkap dari desain, pengadaan material, hingga konstruksi dan commissioning sistem energi terbarukan." },
   { icon: FileText, title: "RAB & Proposal Teknis", desc: "Penyusunan Rencana Anggaran Biaya dan proposal teknis sesuai standar yang dibutuhkan untuk proses tender." },
   { icon: Search, title: "Survei & Desain Sistem", desc: "Survei lokasi profesional, analisis kebutuhan energi, dan desain sistem optimal berdasarkan kondisi site." },
-  { icon: Package, title: "Pengadaan Material", desc: "Supply panel surya LONGi, inverter, baterai LiFePO4, dan komponen BOS dari brand-brand terpercaya." },
+  { icon: Package, title: "Pengadaan Material", desc: "Supply panel surya, inverter, baterai LiFePO4, dan komponen BOS dari brand-brand terpercaya." },
   { icon: Wrench, title: "Maintenance Contract", desc: "Kontrak pemeliharaan berkala untuk menjaga performa sistem tetap optimal sepanjang masa operasional." },
 ];
 

@@ -116,6 +116,7 @@ export function Navbar() {
                 alt="JMSE Logo"
                 width={40}
                 height={40}
+                priority
                 className="w-full h-full object-cover rounded-xl"
               />
             </div>

@@ -69,7 +69,7 @@ export const article: Article = {
       type: "ul",
       items: [
         "Panel surya monokristalin 650Wp — dipasang dalam string untuk mencapai kapasitas target; 10 kWp setara sekitar 16 panel.",
-        "Inverter hybrid seperti PowMr atau Deye — mengubah arus DC menjadi AC sekaligus mengatur alur daya antara panel, baterai, dan beban.",
+        "Inverter hybrid — mengubah arus DC menjadi AC sekaligus mengatur alur daya antara panel, baterai, dan beban.",
         "Baterai LiFePO4 48V 100Ah — modular 4,8 kWh per unit, disusun sesuai kebutuhan cadangan malam hari.",
         "Proteksi lengkap: MCB DC, SPD penahan surja petir, dan grounding — krusial untuk area terbuka di dalam kebun.",
         "Monitoring arus dan tegangan untuk memantau kesehatan sistem langsung dari kantor kebun.",

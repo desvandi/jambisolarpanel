@@ -2,7 +2,7 @@
    SOLAR PUMP PRICING — PT. Jaya Mandiri Smart Energy
    Pompa Air Tenaga Surya untuk Irigasi & Pertanian
 
-   Brand: Samking Submersible Pump + LONGi 650Wp Panel
+   Komponen: Pompa Submersible + Panel Surya 650Wp
    Features: Auto-dry run protection, MPPT controller
    ============================================================ */
 

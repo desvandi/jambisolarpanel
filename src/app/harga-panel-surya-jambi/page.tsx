@@ -64,8 +64,8 @@ const batteryUnitPrice = batteryUnit?.priceFormatted ?? "";
 const batteryUnitKwh = batteryUnit?.kwh ?? 4.8;
 
 const includedItems = [
-  `Panel surya ${defaultComponentPrices.panelWattage}Wp per unit (LONGi)`,
-  "Inverter hybrid (PowMr / Deye sesuai paket)",
+  `Panel surya monokristalin ${defaultComponentPrices.panelWattage}Wp per unit`,
+  "Inverter hybrid (1-fase / 3-fase sesuai paket)",
   "Mounting atap (bracket, baut, struktur)",
   "Kabel & konektor (BOS: MC4, kabel DC/AC)",
   "Proteksi sistem: SPD, grounding, MCB DC & breaker AC",
