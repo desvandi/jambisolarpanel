@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { SitePageLayout } from "@/components/site/SitePageLayout";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { PrintPricelistButton } from "@/components/harga/PrintPricelistButton";
 import { buildMetadata, breadcrumbJsonLd, SITE_URL, serviceJsonLd } from "@/lib/seo";
 import {
   calculatePackages,
@@ -138,10 +139,26 @@ export default function HargaPanelSuryaPage() {
         }}
       />
 
-      {/* Disclaimer */}
-      <div className="border-b border-border bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <p className="flex items-start gap-2.5 text-sm text-muted-foreground leading-relaxed">
+      {/* Header khusus cetak — hanya tampil saat print */}
+      <div className="print-only px-4 pt-6 pb-2 border-b-2 border-navy">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-lg font-extrabold text-navy">Jambi Solar Panel</p>
+            <p className="text-xs">PT. Jaya Mandiri Smart Energy</p>
+          </div>
+          <div className="text-right text-xs">
+            <p className="font-semibold">Daftar Harga Paket PLTS</p>
+            <p>Periode: September 2026</p>
+            <p>WhatsApp: +62 813-2819-0707</p>
+            <p>jambisolarpanel.vercel.app</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Disclaimer + tombol cetak */}
+      <div className="border-b border-border bg-muted/30 no-print">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-start gap-3">
+          <p className="flex-1 flex items-start gap-2.5 text-sm text-muted-foreground leading-relaxed">
             <Info className="w-4 h-4 text-solar flex-shrink-0 mt-0.5" />
             <span>
               Semua harga di bawah adalah harga <strong>“mulai dari”</strong> per paket
@@ -150,6 +167,7 @@ export default function HargaPanelSuryaPage() {
               final. Terakhir diperbarui: September 2026.
             </span>
           </p>
+          <PrintPricelistButton />
         </div>
       </div>
 

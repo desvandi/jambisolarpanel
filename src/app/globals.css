@@ -376,3 +376,128 @@
 .footer-link:hover {
   padding-left: 0.375rem;
 }
+
+/* Hide scrollbar for horizontal chip rows (keyboard/scroll still works) */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ============================================
+   Print stylesheet — daftar harga siap cetak
+   ============================================ */
+@media print {
+  /* Sembunyikan elemen non-esensial.
+     .fixed menangkap navbar, floating CTA, mobile sticky bar,
+     scroll-to-top, dan reading progress sekaligus. */
+  nav,
+  footer,
+  .no-print,
+  .fixed,
+  .sticky,
+  [aria-label="Hubungi via WhatsApp"],
+  [aria-label="Telepon"],
+  [aria-label="Scroll ke atas"] {
+    display: none !important;
+  }
+
+  /* Reset warna & background untuk hemat tinta.
+     Browser tidak mencetak background secara default — jadi teks putih
+     (header navy, th tabel) HARUS dipaksa gelap agar tidak "hilang". */
+  body {
+    background: #fff !important;
+    color: #0f172a !important;
+  }
+
+  .text-white,
+  [class*="text-white"],
+  .text-navy,
+  .dark .text-white,
+  .dark [class*="text-white"] {
+    color: #0f172a !important;
+  }
+
+  main {
+    padding-top: 0 !important;
+  }
+
+  /* Header halaman (navy) → transparan di print */
+  .bg-gradient-to-br,
+  .bg-gradient-to-r,
+  .solar-gradient,
+  [class*="from-navy"],
+  [class*="bg-navy"],
+  [class*="bg-muted"],
+  [class*="bg-solar"],
+  [class*="bg-card"] {
+    background: transparent !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Border untuk thead tabel (bg navy tidak tercetak) */
+  thead th {
+    color: #0f172a !important;
+    border-bottom: 2px solid #0f172a !important;
+  }
+
+  /* Header halaman: teks gelap di atas putih */
+  .print-keep-colors,
+  .print-keep-colors * {
+    color: #0f172a !important;
+    background: transparent !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Header cetak khusus — hanya tampil saat print */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Tabel: border jelas, hindari pemenggalan baris */
+  table {
+    font-size: 11px !important;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr {
+    page-break-inside: avoid;
+  }
+
+  section {
+    page-break-inside: auto;
+  }
+
+  /* Layout lebih rapat */
+  .py-14,
+  .py-20,
+  .md\:py-20 {
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+  }
+
+  /* Header halaman SitePageLayout (pt-32) & hero — rapatkan */
+  section.relative {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    min-height: auto !important;
+  }
+
+  a {
+    text-decoration: none !important;
+    color: inherit !important;
+  }
+}
+
+/* Elemen khusus cetak — tersembunyi di layar */
+.print-only {
+  display: none;
+}

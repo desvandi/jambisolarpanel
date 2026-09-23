@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Clock, Calendar, CheckCircle } from "lucide-react";
+import { Clock, Calendar, CheckCircle } from "lucide-react";
 import { notFound } from "next/navigation";
 import { SitePageLayout } from "@/components/site/SitePageLayout";
 import { ArticleBlocks } from "@/components/artikel/ArticleBlocks";
 import { ArticleToc } from "@/components/artikel/ArticleToc";
 import { ArticleShare } from "@/components/artikel/ArticleShare";
 import { ReadingProgress } from "@/components/artikel/ReadingProgress";
+import { ArticleAuthorBox } from "@/components/artikel/ArticleAuthorBox";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildTocHeadings } from "@/lib/anchor";
 import {
@@ -135,30 +136,8 @@ export default async function ArticleDetailPage({ params }: Props) {
               <ArticleShare title={article.title} />
             </div>
 
-            {/* Penulis & CTA */}
-            <div className="mt-8 p-6 rounded-2xl bg-card border border-border flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
-              <div>
-                <p className="font-bold text-navy dark:text-white">
-                  Ditulis oleh Tim Teknis Jambi Solar Panel
-                </p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  PT. Jaya Mandiri Smart Energy — penyedia jasa instalasi PLTS di
-                  Jambi, Sumatera &amp; Jawa Bagian Barat.{" "}
-                  <Link href="/tentang-kami" className="text-solar hover:underline underline-offset-2">
-                    Tentang kami
-                  </Link>
-                </p>
-              </div>
-              <a
-                href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy%2C%20saya%20baru%20saja%20membaca%20artikel%20di%20website%20anda%20dan%20ingin%20konsultasi%20tentang%20PLTS"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-solar hover:bg-solar-dark text-white font-semibold text-sm rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-solar/30 flex-shrink-0"
-              >
-                Konsultasi Gratis
-                <ArrowRight className="w-4 h-4" />
-              </a>
-            </div>
+            {/* Author box — E-E-A-T */}
+            <ArticleAuthorBox />
           </div>
 
           {/* Desktop sticky ToC */}

@@ -29,6 +29,7 @@ const LAST_MODIFIED = {
   proyek: "2026-09-23",
   hargaPanelSurya: "2026-09-23",
   artikelIndex: "2026-09-23",
+  faq: "2026-09-24",
 } as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -47,6 +48,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/proyek`, lastModified: LAST_MODIFIED.proyek },
     { url: `${SITE_URL}/harga-panel-surya-jambi`, lastModified: LAST_MODIFIED.hargaPanelSurya },
     { url: `${SITE_URL}/artikel`, lastModified: LAST_MODIFIED.artikelIndex },
+    { url: `${SITE_URL}/faq`, lastModified: LAST_MODIFIED.faq },
   ];
 
   const caseStudyPages: MetadataRoute.Sitemap = caseStudies.map((cs) => ({

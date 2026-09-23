@@ -26,7 +26,7 @@ const footerLinks: Record<string, { label: string; href?: string; msg?: string }
     { label: "Harga Panel Surya Jambi", href: "/harga-panel-surya-jambi" },
     { label: "Artikel & Panduan", href: "/artikel" },
     { label: "Testimoni", href: "/#testimoni" },
-    { label: "FAQ", href: "/#faq" },
+    { label: "FAQ", href: "/faq" },
   ],
 };
 

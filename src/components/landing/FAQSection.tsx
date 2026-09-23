@@ -1,16 +1,19 @@
 "use client";
 
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { homepageFaqs } from "@/lib/faq";
+import { homepageFaqs, allFaqItems } from "@/lib/faq";
 
 /**
  * FAQ UI membaca dari src/lib/faq.ts — sumber yang sama dengan FAQPage JSON-LD.
  * Tanpa framer-motion untuk mengurangi JavaScript pada section bawah fold.
+ * Link ke halaman /faq untuk pertanyaan tambahan (sewa, area layanan, dst.).
  */
 export function FAQSection() {
   return (
@@ -47,6 +50,17 @@ export function FAQSection() {
               </AccordionItem>
             ))}
           </Accordion>
+        </div>
+
+        {/* Link ke halaman FAQ lengkap */}
+        <div className="mt-8 text-center">
+          <Link
+            href="/faq"
+            className="group inline-flex items-center gap-2 px-6 py-3 rounded-full border border-solar/30 bg-card text-solar font-semibold text-sm transition-all duration-300 hover:bg-solar hover:text-white hover:border-solar hover:shadow-lg hover:shadow-solar/30"
+          >
+            Lihat semua {allFaqItems.length} pertanyaan di halaman FAQ
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          </Link>
         </div>
       </div>
     </section>

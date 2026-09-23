@@ -38,7 +38,7 @@ const navItems: NavItem[] = [
   { label: "Sewa PLTS", href: "/sewa-plts" },
   { label: "Proyek", href: "/proyek" },
   { label: "Artikel", href: "/artikel" },
-  { label: "FAQ", href: "#faq" },
+  { label: "FAQ", href: "/faq" },
 ];
 
 export function Navbar() {
