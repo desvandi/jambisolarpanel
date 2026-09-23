@@ -39,9 +39,9 @@ const AREA_OPTIONS: AreaOption[] = [
 ];
 
 const JARAK_OPTIONS = [
-  { id: "pendek", label: "< 200 meter", count: 4, hint: "≈ 4–8 titik lampu" },
-  { id: "sedang", label: "200–500 meter", count: 8, hint: "≈ 8–15 titik lampu" },
-  { id: "panjang", label: "> 500 meter", count: 15, hint: "≥ 15 titik lampu" },
+  { id: "pendek", label: "< 200 meter", countMin: 4, countMax: 8, hint: "≈ 4–8 titik lampu" },
+  { id: "sedang", label: "200–500 meter", countMin: 8, countMax: 15, hint: "≈ 8–15 titik lampu" },
+  { id: "panjang", label: "> 500 meter", countMin: 15, countMax: 25, hint: "≥ 15 titik lampu", openEnded: true },
 ];
 
 function formatRpShort(value: number): string {
@@ -67,11 +67,16 @@ export function PjutsConfigurator() {
       pjutsPackages[pjutsPackages.length - 1]
     : null;
 
-  const estMin = recommended && jarak ? recommended.price * Math.max(2, Math.floor(jarak.count / 2)) : null;
-  const estMax = recommended && jarak ? recommended.price * (jarak.count + 2) : null;
+  // Estimasi total = harga/titik × rentang jumlah titik PADA TOMBOL PILIHAN —
+  // konsisten dengan hint "≈ N–M titik" yang terbaca di atas, bukan rumus tersembunyi.
+  const estMin = recommended && jarak ? recommended.price * jarak.countMin : null;
+  const estMax = recommended && jarak ? recommended.price * jarak.countMax : null;
+  const estPoints = jarak
+    ? `≈ ${jarak.countMin}–${jarak.countMax} titik · jarak antar tiang ideal 30–50 m`
+    : "";
 
   const waMessage = recommended
-    ? `Halo PT. Jaya Mandiri Smart Energy, saya sudah mencoba pemilih paket PJUTS: area "${area?.label}" dengan jarak ${jarak?.label ?? "-"}. Rekomendasi: ${recommended.name} (${formatRpShort(recommended.price)}/titik). Mohon info lebih lanjut & jadwal survei gratis.`
+    ? `Halo PT. Jaya Mandiri Smart Energy, saya sudah mencoba pemilih paket PJUTS: area "${area?.label}" dengan jarak ${jarak?.label ?? "-"}. Rekomendasi: ${recommended.name} (${formatRpShort(recommended.price)}/titik)${estMin && estMax ? `, estimasi kasar ${formatRpShort(estMin)} – ${formatRpShort(estMax)}${jarak?.openEnded ? "+" : ""}` : ""}. Mohon info lebih lanjut & jadwal survei gratis.`
     : "";
 
   return (
@@ -200,8 +205,9 @@ export function PjutsConfigurator() {
                       Estimasi kasar untuk {jarak?.label}:{" "}
                       <strong className="text-navy dark:text-white">
                         {formatRpShort(estMin)} – {formatRpShort(estMax)}
+                        {jarak?.openEnded ? "+" : ""}
                       </strong>{" "}
-                      (jarak antar tiang ideal 30–50 m)
+                      ({estPoints})
                     </p>
                   ) : null}
                 </div>

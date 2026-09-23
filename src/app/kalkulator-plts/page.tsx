@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { SitePageLayout } from "@/components/site/SitePageLayout";
 import { SavingsCalculator } from "@/components/landing/SavingsCalculator";
+import { KebutuhanCalculator } from "@/components/kalkulator/KebutuhanCalculator";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildMetadata, breadcrumbJsonLd, softwareAppJsonLd } from "@/lib/seo";
 import { FAQ_PRODUKSI, FAQ_ROI } from "@/lib/faq";
@@ -20,7 +21,7 @@ export const metadata: Metadata = buildMetadata({
   path: "/kalkulator-plts",
   title: "Kalkulator Panel Surya Jambi | Estimasi Paket & Hemat Listrik",
   description:
-    "Hitung estimasi paket PLTS, produksi energi, dan penghematan tagihan listrik dari tagihan bulanan Anda — kalkulator panel surya Jambi dengan parameter PSH Jambi 3,75 jam.",
+    "Dua cara menghitung: dari tagihan listrik bulanan atau dari daftar perangkat (audit beban) — dapatkan estimasi paket PLTS, kebutuhan kWp, grafik balik modal, dan penghematan dengan parameter PSH Jambi 3,75 jam.",
   ogImageAlt: "Kalkulator estimasi penghematan panel surya — Jambi Solar Panel",
 });
 
@@ -83,7 +84,7 @@ export default function KalkulatorPltsPage() {
           Kalkulator <span className="text-solar-light">Panel Surya</span> &amp; PLTS
         </>
       }
-      description="Masukkan tagihan listrik bulanan Anda dan dapatkan estimasi paket PLTS yang sesuai, produksi energi, penghematan per bulan, hingga ROI — dihitung dengan parameter iradiasi matahari wilayah Jambi."
+      description="Dua cara menghitung kebutuhan PLTS Anda: dari tagihan listrik bulanan atau dari daftar perangkat listrik (audit beban). Dapatkan estimasi paket, kebutuhan kWp, grafik balik modal, hingga ROI — dihitung dengan parameter iradiasi matahari wilayah Jambi."
       breadcrumbs={[{ label: "Kalkulator PLTS" }]}
     >
       <JsonLd
@@ -96,7 +97,7 @@ export default function KalkulatorPltsPage() {
         data={softwareAppJsonLd({
           name: "Kalkulator Panel Surya Jambi",
           description:
-            "Kalkulator web gratis untuk menghitung estimasi paket PLTS, produksi energi, penghematan tagihan listrik, dan ROI berdasarkan tagihan listrik bulanan — dengan parameter iradiasi matahari (PSH) wilayah Jambi 3,75 jam/hari.",
+            "Kalkulator web gratis dengan dua metode: hitung dari tagihan listrik bulanan atau dari daftar perangkat listrik (audit beban). Dapatkan estimasi paket PLTS, kebutuhan kWp, grafik balik modal 25 tahun, dan ROI — dengan parameter iradiasi matahari (PSH) wilayah Jambi 3,75 jam/hari.",
           path: "/kalkulator-plts",
         })}
       />
@@ -161,8 +162,11 @@ export default function KalkulatorPltsPage() {
         </div>
       </section>
 
-      {/* Kalkulator */}
+      {/* Kalkulator — cara 1: dari tagihan */}
       <SavingsCalculator />
+
+      {/* Kalkulator — cara 2: dari daftar perangkat */}
+      <KebutuhanCalculator />
 
       {/* FAQ terkait (konten terlihat; FAQPage JSON-LD tetap di halaman /faq) */}
       <section aria-labelledby="faq-heading" className="py-14 md:py-20">

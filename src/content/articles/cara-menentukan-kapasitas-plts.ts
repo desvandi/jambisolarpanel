@@ -7,6 +7,7 @@ export const article: Article = {
     "Pelajari cara menentukan kapasitas PLTS melalui audit beban listrik: inventaris perangkat, hitung kebutuhan Wh harian, lalu konversi ke kWp panel surya.",
   category: "Panduan Teknis",
   date: "2026-09-23",
+  updated: "2026-09-24",
   readingMinutes: 8,
   keyTakeaways: [
     "Audit beban adalah langkah pertama menentukan kapasitas PLTS: catat daya setiap perangkat dan jam pemakaiannya, lalu hitung kebutuhan energi harian dalam Wh.",
@@ -121,6 +122,12 @@ export const article: Article = {
       text: "Sudah punya angka kebutuhan energi harian rumah Anda? Cocokkan dengan rentang paket PLTS rumah tangga kami.",
       href: "/solar-home",
       label: "Lihat Paket PLTS Rumah",
+    },
+    {
+      type: "cta",
+      text: "Ingin mencoba audit beban tanpa kertas dan pena? Kalkulator perangkat kami memakai tabel acuan pada artikel ini — atur jumlah unit dan jam pemakaian, kebutuhan kWp dihitung otomatis.",
+      href: "/kalkulator-plts",
+      label: "Coba Kalkulator dari Perangkat",
     },
     { type: "h2", text: "Kesalahan Umum saat Menentukan Kapasitas PLTS" },
     {

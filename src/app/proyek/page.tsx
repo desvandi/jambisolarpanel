@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Zap, Layers, MapPinned } from "lucide-react";
 import { SitePageLayout } from "@/components/site/SitePageLayout";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { CountUp } from "@/components/ui/CountUp";
 import { buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
 import { caseStudies } from "@/content/caseStudies";
 import {
@@ -88,9 +89,9 @@ export default function ProyekPage() {
   const totalKwp = caseStudies.reduce((sum, cs) => sum + cs.kapasitasKwp, 0);
 
   const stats = [
-    { icon: Zap, value: `${totalKwp} kWp`, label: "Total kapasitas studi kasus terdokumentasi" },
-    { icon: Layers, value: "3 segmen", label: "Rumah & villa, perkebunan, bisnis & industri" },
-    { icon: MapPinned, value: "6 provinsi", label: "Keberadaan proyek: Jambi, Riau, Sumsel, Sumbar, Babel, Lampung" },
+    { icon: Zap, value: totalKwp, suffix: " kWp", label: "Total kapasitas studi kasus terdokumentasi" },
+    { icon: Layers, value: 3, suffix: " segmen", label: "Rumah & villa, perkebunan, bisnis & industri" },
+    { icon: MapPinned, value: 6, suffix: " provinsi", label: "Keberadaan proyek: Jambi, Riau, Sumsel, Sumbar, Babel, Lampung" },
   ];
 
   return (
@@ -124,7 +125,7 @@ export default function ProyekPage() {
                 </div>
                 <div>
                   <p className="text-2xl font-extrabold text-navy dark:text-white">
-                    {s.value}
+                    <CountUp value={s.value} suffix={s.suffix} />
                   </p>
                   <p className="text-xs text-muted-foreground leading-relaxed mt-0.5">
                     {s.label}

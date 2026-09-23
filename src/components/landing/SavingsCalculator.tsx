@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useEffect } from "react";
 import { clearAllPricing } from "@/lib/pricing";
+import { SavingsProjection } from "@/components/landing/SavingsProjection";
 import {
   calculatePackages,
   calculateROI,
@@ -35,8 +36,8 @@ import {
   saveSettings,
 } from "@/lib/pricing";
 
-const WA_LINK =
-  "https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20sudah%20menghitung%20estimasi%20penghematan%20di%20kalkulator%20website%20anda%20dan%20tertarik%20untuk%20konsultasi%20lebih%20lanjut";
+// Pesan WA dibangun dinamis dari hasil simulasi terkini (lihat waHref di
+// dalam komponen) — prospek datang dengan konteks lengkap, bukan pesan generik.
 
 const billPresets = [
   { label: "Rp 500rb", value: 500000 },
@@ -234,6 +235,16 @@ export function SavingsCalculator() {
   const roi = analysis.roi;
   const co2PerYear = analysis.co2PerYear;
   const needsCustom = analysis.needsCustom;
+
+  // Tautan WA membawa ringkasan hasil — lead terprakualifikasi.
+  const waHref = `https://wa.me/6281328190707?text=${encodeURIComponent(
+    `Halo PT. Jaya Mandiri Smart Energy, saya sudah mencoba kalkulator di website anda:\n` +
+      `- Tagihan listrik: ${formatRp(bill)}/bulan\n` +
+      `- Rekomendasi: ${rec.name} — ${rec.priceFormatted}\n` +
+      `- Estimasi hemat: ${formatRpShort(roi.monthlySavingsBase)}/bulan\n` +
+      `- Estimasi balik modal: ~${roi.roiYearsWithIncrease} tahun\n` +
+      `Mohon info lebih lanjut & jadwal survei gratis. Terima kasih.`
+  )}`;
 
   return (
     <section
@@ -456,6 +467,14 @@ export function SavingsCalculator() {
               </div>
             </div>
 
+            {/* Proyeksi 25 tahun — grafik balik modal */}
+            <SavingsProjection
+              price={rec.price}
+              annualSavingsBase={roi.annualSavingsBase}
+              increaseRate={PLN_INCREASE_RATE_DEFAULT}
+              breakevenYear={roi.roiYearsWithIncrease}
+            />
+
             {/* Key insight box */}
             <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-800/30 mb-6">
               <p className="text-center text-sm text-emerald-700 dark:text-emerald-300 leading-relaxed">
@@ -530,7 +549,7 @@ export function SavingsCalculator() {
                 Konsultasi dengan tim kami — gratis!
               </p>
               <a
-                href={WA_LINK}
+                href={waHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-solar hover:bg-solar-dark text-white font-bold rounded-full transition-all duration-300 hover:shadow-xl hover:shadow-solar/30 hover:scale-105 btn-shine"
