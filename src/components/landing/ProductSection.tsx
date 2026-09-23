@@ -1,7 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Home, Building2, Factory, Zap, MessageCircle, Battery, BatteryCharging, Info, ChevronDown, ChevronUp, Car, Monitor, Sparkles, TreePine } from "lucide-react";
 import {
   type CalculatedPackage,
@@ -76,8 +75,6 @@ const filterTabs: { id: CategoryFilter; label: string; icon: React.ElementType }
 ];
 
 export function ProductSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [showCalc, setShowCalc] = useState(false);
   const [showBatteryInfo, setShowBatteryInfo] = useState(false);
   // Initialize with explicit defaults to match SSR output (avoids hydration mismatch
@@ -197,13 +194,10 @@ export function ProductSection() {
   };
 
   return (
-    <section id="produk" className="py-20 md:py-28 bg-muted/30" ref={ref}>
+    <section id="produk" className="py-20 md:py-28 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
+        <div
           className="text-center max-w-3xl mx-auto mb-10"
         >
           <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-solar bg-solar/10 rounded-full">
@@ -218,13 +212,10 @@ export function ProductSection() {
             (PSH 3,75 jam). Harga sudah termasuk PPN 11%, instalasi, survei,
             desain, dan garansi resmi. Baterai tersedia sebagai add-on opsional.
           </p>
-        </motion.div>
+        </div>
 
         {/* Quick Category Filter Tabs */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.4, delay: 0.1 }}
+        <div
           className="flex flex-wrap justify-center gap-2 mb-10"
         >
           {filterTabs.map((tab) => (
@@ -245,13 +236,10 @@ export function ProductSection() {
               <span className="sm:hidden">{tab.label.split(" ")[0]}</span>
             </button>
           ))}
-        </motion.div>
+        </div>
 
         {/* PSH Info Box */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.4, delay: 0.15 }}
+        <div
           className="max-w-3xl mx-auto mb-12 p-4 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/30"
         >
           <button
@@ -271,9 +259,7 @@ export function ProductSection() {
             )}
           </button>
           {showCalc && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
+            <div
               className="mt-3 text-xs text-blue-600 dark:text-blue-400 space-y-2 leading-relaxed"
             >
               <p>
@@ -297,9 +283,9 @@ export function ProductSection() {
                 <strong>Baterai:</strong> Kapasitas rekomendasi = kWp x PSH. Saat baterai penuh dan tidak ada
                 pemadaman PLN, sinar matahari langsung supply beban melalui pengaturan SBU/SUB/Mix di inverter.
               </p>
-            </motion.div>
+            </div>
           )}
-        </motion.div>
+        </div>
 
         {/* Categories */}
         {categoryMeta.map((cat, catIdx) => {
@@ -310,12 +296,9 @@ export function ProductSection() {
             (activeFilter === "silver" && cat.id === "silver");
 
           return (
-            <motion.div
+            <div
               key={cat.title}
               id={`category-${cat.id}`}
-              initial={{ opacity: 0, y: 40 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: catIdx * 0.15 }}
               className={`mb-16 last:mb-0 ${!shouldShow ? "hidden" : ""}`}
             >
               <div className="flex items-center gap-3 mb-4">
@@ -622,15 +605,12 @@ export function ProductSection() {
                   );
                 })}
               </div>
-            </motion.div>
+            </div>
           );
         })}
 
         {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.6 }}
+        <div
           className="text-center mt-12"
         >
           <p className="text-muted-foreground mb-4">
@@ -645,7 +625,7 @@ export function ProductSection() {
           >
             Konsultasi Custom Proposal Gratis
           </a>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

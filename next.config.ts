@@ -2,6 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  /* Image optimization — kualitas yang digunakan komponen Image */
+  images: {
+    qualities: [75, 85],
+    formats: ["image/avif", "image/webp"],
+  },
   /* Security headers */
   async headers() {
     return [

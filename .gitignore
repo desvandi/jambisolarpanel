@@ -83,3 +83,6 @@ Caddyfile
 worklog.md
 .zscripts/
 claude.md
+# Sandbox QA artifacts (not part of the project)
+/tests/
+/tool-results/

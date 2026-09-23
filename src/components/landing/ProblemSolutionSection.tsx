@@ -1,7 +1,5 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
 import {
   ZapOff,
   Receipt,
@@ -28,7 +26,7 @@ const painPoints = [
     problem: "Tagihan Listrik Semakin Mahal",
     desc: "Tarif PLN naik rata-rata 6% setiap tahun. Tagihan bulanan yang semakin membengkak menggerus keuntungan bisnis dan pengeluaran rumah tangga Anda.",
     solution:
-      "Panel surya menghasilkan listrik gratis dari matahari. Dengan sistem hybrid, Anda bisa menghemat 50-90% tagihan PLN setiap bulannya. ROI tercapai dalam 5-8 tahun, lalu listrik gratis selama 25+ tahun.",
+      "Panel surya menghasilkan listrik dari matahari dan memangkas ketergantungan pada tarif PLN yang terus naik. Besaran penghematan tergantung kapasitas sistem dan profil pemakaian — ROI rumah tangga umumnya 8-9 tahun, bisnis 5-7 tahun, lalu listrik hampir gratis selama 25+ tahun. Hitung simulasi Anda di kalkulator kami.",
     cta: "Hitung Penghematan Saya",
     ctaWa: "Halo PT. Jaya Mandiri Smart Energy, saya ingin menghitung potensi penghematan tagihan listrik dengan panel surya",
   },
@@ -62,17 +60,12 @@ const painPoints = [
 ];
 
 export function ProblemSolutionSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="masalah" className="pt-20 md:pt-28 pb-12 md:pb-16 bg-background" ref={ref}>
+    <section id="masalah" className="pt-20 md:pt-28 pb-12 md:pb-16 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
+        <div
           className="text-center max-w-3xl mx-auto mb-16"
         >
           <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-red-600 bg-red-50 dark:bg-red-900/20 rounded-full">
@@ -88,16 +81,13 @@ export function ProblemSolutionSection() {
             kebutuhan real Anda. Bukan sekadar menjual panel — kami memberikan
             solusi total.
           </p>
-        </motion.div>
+        </div>
 
         {/* Problem-Solution Cards */}
         <div className="space-y-6">
           {painPoints.map((item, i) => (
-            <motion.div
+            <div
               key={item.problem}
-              initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
               className="group relative p-6 md:p-8 rounded-2xl border border-border bg-card hover:shadow-xl transition-all duration-300 overflow-hidden"
             >
               <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-red-400 to-solar" />
@@ -153,7 +143,7 @@ export function ProblemSolutionSection() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

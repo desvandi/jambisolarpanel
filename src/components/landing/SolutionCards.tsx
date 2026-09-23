@@ -1,7 +1,5 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
 import Link from "next/link";
 import {
   Home,
@@ -18,7 +16,7 @@ const solutions = [
     icon: Home,
     subBrand: "Jambi Solar Home",
     title: "Panel Surya untuk Rumah",
-    description: "Hemat tagihan PLN hingga 90%, listrik tetap nyala 24 jam saat padam. Investasi sekali, gratis 25+ tahun. Cocok untuk rumah, villa, guest house.",
+    description: "Kurangi tagihan listrik & tetap nyala saat PLN padam dengan sistem hybrid + baterai. Investasi sekali, manfaat 25+ tahun. Cocok untuk rumah, villa, guest house.",
     href: "/solar-home",
     color: "bg-solar",
   },
@@ -42,7 +40,7 @@ const solutions = [
     icon: Car,
     subBrand: "Jambi Solar EV",
     title: "PLTS + EV Charging Terintegrasi",
-    description: "Isi daya kendaraan listrik dari matahari — hemat hingga jutaan per tahun. Cocok untuk rumah tangga dan area parkir komersial.",
+    description: "Isi daya kendaraan listrik dari energi matahari untuk menekan biaya operasional. Cocok untuk rumah tangga dan area parkir komersial.",
     href: "/ev-charging",
     color: "bg-amber-600",
   },
@@ -64,32 +62,13 @@ const solutions = [
   },
 ];
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
-
 export function SolutionCards() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="solusi" className="py-20 md:py-28" ref={ref}>
+    <section id="solusi" className="py-20 md:py-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
+        <div
           className="text-center max-w-3xl mx-auto mb-16"
         >
           <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-solar bg-solar/10 rounded-full">
@@ -101,20 +80,20 @@ export function SolutionCards() {
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
             Dari rumah tangga hingga infrastruktur besar — kami menyediakan solusi
-            energi surya Off-Grid &amp; Hybrid yang komprehensif. Dipercaya untuk rumah, kebun, bisnis, dan proyek infrastruktur di Sumatera &amp; Jawa.
-            Paket mulai dari <strong className="text-solar">Rp 6 jutaan</strong>.
+            energi surya Off-Grid &amp; Hybrid yang komprehensif. Melayani rumah, kebun, bisnis, dan proyek infrastruktur di Sumatera &amp; Jawa. Lihat{" "}
+            <Link href="/harga-panel-surya-jambi" className="text-solar font-bold hover:underline underline-offset-2">
+              harga paket PLTS
+            </Link>
+            .
           </p>
-        </motion.div>
+        </div>
 
         {/* Solution Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
+        <div
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {solutions.map((sol) => (
-            <motion.div key={sol.subBrand} variants={cardVariants}>
+            <div key={sol.subBrand}>
               <Link
                 href={sol.href}
                 className="group block p-6 rounded-2xl border border-border bg-card hover:border-solar/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-full"
@@ -138,9 +117,9 @@ export function SolutionCards() {
                   <ArrowRight className="w-4 h-4" />
                 </span>
               </Link>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

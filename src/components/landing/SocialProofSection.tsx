@@ -1,10 +1,15 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { Star, Quote, MapPin, CheckCircle, TrendingDown, Zap } from "lucide-react";
+import { Star, Quote, MapPin, CheckCircle, TrendingDown, Zap, ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
+/**
+ * Testimoni & portofolio.
+ * Klaim angka agregat (rating/review count) sengaja tidak digunakan karena
+ * tidak memiliki sumber terverifikasi. Testimoni adalah konten yang sudah
+ * ada di situs; portofolio ditautkan ke studi kasus terperinci.
+ */
 const testimonials = [
   {
     name: "Bapak Hendra",
@@ -87,6 +92,7 @@ const portfolioItems = [
     image: "/portfolio-residential.jpg",
     tag: "Residential",
     result: "Tagihan Rp 4jt → Rp 500rb",
+    caseStudy: "/studi-kasus/villa-jambi-5-kwp-hybrid",
   },
   {
     title: "Gudang Industri Palembang",
@@ -94,6 +100,7 @@ const portfolioItems = [
     image: "/portfolio-industrial.jpg",
     tag: "Industrial (Custom)",
     result: "Hemat 60% biaya operasional",
+    caseStudy: "/studi-kasus/gudang-palembang-50-kwp-hybrid",
   },
   {
     title: "Kebun Sawit Riau",
@@ -101,46 +108,35 @@ const portfolioItems = [
     image: "/portfolio-plantation.jpg",
     tag: "Agriculture",
     result: "Listrik mandiri 24 jam",
+    caseStudy: "/studi-kasus/kebun-sawit-riau-10-kwp-off-grid",
   },
 ];
 
 export function SocialProofSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section id="testimoni" className="py-20 md:py-28 bg-background" ref={ref}>
+    <section id="testimoni" className="py-20 md:py-28 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center max-w-3xl mx-auto mb-16"
-        >
+        <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 text-sm font-semibold text-solar bg-solar/10 rounded-full">
             <Star className="w-4 h-4 fill-current" />
             Testimoni &amp; Portofolio
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-navy dark:text-white mb-6">
-            Dipercaya{" "}
-            <span className="gradient-text">Ratusan Pelanggan</span>
+            Kata <span className="gradient-text">Pelanggan Kami</span>
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Jangan hanya percaya kata kami. Dengarkan langsung pengalaman para
-            pelanggan yang telah merasakan manfaat sistem panel surya dari PT.
-            Jaya Mandiri Smart Energy.
+            Dengarkan langsung pengalaman pelanggan yang telah memasang sistem
+            panel surya bersama PT. Jaya Mandiri Smart Energy — dari rumah
+            tangga, toko, kebun sawit, hingga cold storage.
           </p>
-        </motion.div>
+        </div>
 
         {/* Testimonials Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-          {testimonials.map((t, i) => (
-            <motion.div
+          {testimonials.map((t) => (
+            <div
               key={t.name}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.4, delay: i * 0.08 }}
               className="relative p-6 rounded-2xl bg-card border border-border hover:shadow-lg hover:border-solar/20 transition-all duration-300"
             >
               <Quote className="absolute top-4 right-4 w-8 h-8 text-solar/10" />
@@ -201,31 +197,29 @@ export function SocialProofSection() {
                   {t.savings}
                 </span>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Portfolio Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
+        <div>
           <h3 className="text-2xl font-bold text-navy dark:text-white mb-8 text-center">
-            Portofolio Proyek Terbaru
+            Portofolio Proyek
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {portfolioItems.map((item) => (
-              <div
+              <Link
                 key={item.title}
+                href={item.caseStudy}
                 className="group relative overflow-hidden rounded-2xl border border-border hover:shadow-xl transition-all duration-300"
               >
                 <div className="aspect-[4/3] relative">
                   <Image
                     src={item.image}
-                    alt={item.title}
+                    alt={`${item.title} — instalasi PLTS ${item.tag.toLowerCase()} oleh Jambi Solar Panel`}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-transparent to-transparent" />
                   <span className="absolute top-3 left-3 px-3 py-1 bg-solar text-white text-xs font-semibold rounded-full">
@@ -238,12 +232,26 @@ export function SocialProofSection() {
                   <div className="absolute bottom-3 left-3 right-3">
                     <h4 className="text-white font-bold text-lg">{item.title}</h4>
                     <p className="text-white/70 text-sm">{item.desc}</p>
+                    <span className="inline-flex items-center gap-1 mt-2 text-xs font-semibold text-solar-light group-hover:gap-2 transition-all">
+                      Baca studi kasus <ArrowRight className="w-3 h-3" />
+                    </span>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
-        </motion.div>
+
+          {/* Link ke halaman proyek */}
+          <div className="text-center mt-8">
+            <Link
+              href="/proyek"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-solar/30 text-solar font-semibold text-sm hover:bg-solar hover:text-white transition-colors"
+            >
+              Lihat Semua Proyek &amp; Studi Kasus
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
   );

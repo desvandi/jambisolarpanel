@@ -9,7 +9,10 @@ export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
 
   // Prevent hydration mismatch
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   if (!mounted) {
     return (

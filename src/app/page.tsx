@@ -1,5 +1,3 @@
-"use client";
-
 import { Navbar } from "@/components/landing/Navbar";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { SolutionCards } from "@/components/landing/SolutionCards";
@@ -15,10 +13,20 @@ import { LeadFormSection } from "@/components/landing/LeadFormSection";
 import { Footer } from "@/components/landing/Footer";
 import { FloatingButtons } from "@/components/landing/FloatingButtons";
 import { ExitIntentPopup } from "@/components/landing/ExitIntentPopup";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { faqJsonLd } from "@/lib/seo";
+import { homepageFaqs } from "@/lib/faq";
 
+/**
+ * Homepage = Server Component (SEO-first).
+ * Komponen interaktif (calculator, form, popup) adalah client islands.
+ * FAQPage JSON-LD dibangun dari sumber data yang sama dengan FAQ UI
+ * (src/lib/faq.ts) agar structured data selalu identik dengan konten terlihat.
+ */
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <JsonLd data={faqJsonLd(homepageFaqs)} />
       <Navbar />
 
       <main id="main-content" className="flex-1 pb-20 md:pb-0">

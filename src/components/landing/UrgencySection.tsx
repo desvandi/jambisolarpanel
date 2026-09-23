@@ -1,7 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Clock, Gift, MessageCircle, ArrowRight } from "lucide-react";
 
 const WA_LINK =
@@ -64,11 +63,9 @@ function CountdownTimer() {
 }
 
 export function UrgencySection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section className="py-20 md:py-28 relative overflow-hidden" ref={ref}>
+    <section className="py-20 md:py-28 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 solar-gradient" />
       <div className="absolute inset-0 pointer-events-none">
@@ -77,10 +74,7 @@ export function UrgencySection() {
       </div>
 
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
+        <div
         >
           {/* Badge */}
           <span className="inline-flex items-center gap-2 px-4 py-2 mb-6 bg-gold/20 backdrop-blur-sm border border-gold/30 rounded-full text-gold-light text-sm font-bold animate-shimmer">
@@ -143,7 +137,7 @@ export function UrgencySection() {
             <MessageCircle className="w-6 h-6" />
             Klaim Konsultasi Gratis Sekarang
           </a>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

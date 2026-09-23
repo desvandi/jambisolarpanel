@@ -1,0 +1,47 @@
+/**
+ * SINGLE SOURCE OF TRUTH untuk FAQ homepage.
+ *
+ * FAQ UI (src/components/landing/FAQSection.tsx) dan FAQPage JSON-LD
+ * (src/app/layout.tsx / src/app/page.tsx) HARUS membaca dari file ini
+ * agar structured data selalu identik dengan konten yang terlihat.
+ */
+
+export interface FaqItem {
+  q: string;
+  a: string;
+}
+
+export const homepageFaqs: FaqItem[] = [
+  {
+    q: "Berapa biaya pasang panel surya?",
+    a: "Biaya instalasi panel surya bervariasi tergantung kapasitas sistem dan kebutuhan spesifik Anda. Untuk rumah tangga, paket mulai dari Paket 1.3 kWp (tanpa baterai) hingga Paket 5.2 kWp. Untuk bisnis dan industri, paket mulai dari Paket 7.15 kWp. Semua harga sudah termasuk PPN 11%, peralatan, instalasi, survei, desain, dan garansi resmi. Tersedia juga add-on Kanopi Carport dan Smart Monitoring untuk paket Bisnis & Industri. Kami menyediakan konsultasi dan survei gratis untuk memberikan estimasi biaya yang akurat sesuai kebutuhan Anda. Rincian harga per kapasitas dapat dilihat di halaman Harga Panel Surya Jambi.",
+  },
+  {
+    q: "Berapa lama balik modal (ROI)?",
+    a: "Masa balik modal (Return on Investment) bervariasi tergantung kapasitas sistem dan kebutuhan listrik Anda. Untuk rumah tangga (paket 2.6-5.2 kWp), ROI realistis tercapai dalam 8-9 tahun. Untuk bisnis dan industri (paket 7.15-20.8 kWp), ROI tercapai dalam 5-7 tahun karena skala ekonomi yang lebih besar. Perhitungan ini sudah memperhitungkan kenaikan tarif PLN rata-rata 6% per tahun. Yang lebih penting: dalam 25 tahun umur panel, total keuntungan bersih mencapai 5-7 kali lipat dari investasi awal — artinya investasi Rp 100 juta menghasilkan keuntungan bersih Rp 500-700 juta selama masa pakai sistem. Kami akan memberikan perhitungan ROI detail saat konsultasi.",
+  },
+  {
+    q: "Apakah sistem bisa bekerja tanpa PLN?",
+    a: "Ya, absolut bisa! Sistem PLTS Off-Grid dirancang khusus untuk area yang tidak terjangkau jaringan PLN. Sistem ini menggunakan panel surya yang terhubung ke baterai penyimpanan, sehingga Anda mendapatkan pasokan listrik 24 jam tanpa bergantung pada PLN. Ini sangat ideal untuk kebun, pondok, vila terpencil, pos keamanan, dan area rural lainnya. Tim kami akan melakukan survei dan desain yang tepat untuk memastikan sistem berjalan optimal.",
+  },
+  {
+    q: "Bagaimana performa panel surya saat hujan atau mendung?",
+    a: "Panel surya modern tetap menghasilkan energi listrik meskipun saat mendung atau hujan, meskipun kapasitasnya berkurang sekitar 10-25% dibandingkan cuaca cerah. Indonesia yang beriklim tropis justru merupakan lokasi ideal untuk panel surya karena intensitas matahari yang tinggi sepanjang tahun. Untuk sistem Hybrid dan Off-Grid, baterai penyimpanan akan memastikan pasokan listrik tetap stabil. Anda juga tetap bisa menggunakan listrik PLN sebagai backup pada sistem Hybrid.",
+  },
+  {
+    q: "Berapa lama garansi yang diberikan?",
+    a: "Kami memberikan garansi yang sangat komprehensif: Panel surya bergaransi performa hingga 25 tahun dengan penurunan output minimal. Inverter bergaransi 5-10 tahun tergantung merek dan model. Baterai penyimpanan bergaransi 5-10 tahun. Instalasi dan pekerjaan bergaransi 2 tahun. Semua garansi didukung langsung oleh PT. Jaya Mandiri Smart Energy dan didokumentasikan secara resmi dalam perjanjian kerja.",
+  },
+  {
+    q: "Apakah tersedia opsi cicilan?",
+    a: "Ya, kami memahami bahwa investasi panel surya memerlukan perencanaan keuangan yang matang. Kami menyediakan beberapa opsi pembayaran termasuk cicilan untuk memudahkan Anda. Skema pembayaran dapat disesuaikan dengan kondisi finansial Anda. Alternatif lain, tersedia program Sewa PLTS dengan skema bayar bulanan tanpa investasi awal. Hubungi tim sales kami via WhatsApp untuk mendapatkan informasi lebih detail mengenai opsi cicilan dan skema pembayaran yang tersedia saat ini.",
+  },
+  {
+    q: "Apakah atap rumah saya cocok untuk panel surya?",
+    a: "Sebagian besar jenis atap cocok untuk instalasi panel surya, termasuk atap datar (flat), atap miring (pitched), dan atap genteng. Faktor penting yang perlu dipertimbangkan adalah arah hadap atap (idealnya menghadap utara/selatan di Indonesia), kemiringan atap, kondisi struktural atap, dan tidak adanya bayangan yang signifikan. Tim kami akan melakukan survei gratis untuk menilai kelayakan atap Anda dan memberikan rekomendasi terbaik.",
+  },
+  {
+    q: "Berapa lama proses instalasi?",
+    a: "Proses instalasi standar untuk rumah tangga biasanya memakan waktu 1-3 hari kerja tergantung kapasitas sistem. Untuk proyek bisnis dan industri, waktu instalasi bisa 1-2 minggu. Keseluruhan proses dari survei, desain, pengadaan material, hingga instalasi biasanya memakan waktu 2-4 minggu. Kami berkomitmen untuk menyelesaikan proyek dengan cepat tanpa mengorbankan kualitas.",
+  },
+];

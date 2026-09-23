@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { MessageCircle, Send } from "lucide-react";
 
 const kebutuhanOptions = [
@@ -46,11 +45,7 @@ Mohon informasi lebih lanjut. Terima kasih.`;
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
+    <div
       className="glass rounded-2xl p-6 sm:p-8"
     >
       <div className="text-center mb-8">
@@ -147,6 +142,6 @@ Mohon informasi lebih lanjut. Terima kasih.`;
           Kirim via WhatsApp
         </button>
       </form>
-    </motion.div>
+    </div>
   );
 }

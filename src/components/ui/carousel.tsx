@@ -95,6 +95,7 @@ function Carousel({
 
   React.useEffect(() => {
     if (!api) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- sinkronisasi awal state scroll carousel (implementasi standar shadcn/embla)
     onSelect(api)
     api.on("reInit", onSelect)
     api.on("select", onSelect)

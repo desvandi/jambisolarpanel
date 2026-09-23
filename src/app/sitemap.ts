@@ -1,70 +1,63 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/seo";
+import { articles } from "@/content/articles";
+import { caseStudies } from "@/content/caseStudies";
 
-const BASE_URL = "https://jambisolarpanel.vercel.app";
+/**
+ * Sitemap — HANYA berisi URL canonical (https://jambisolarpanel.vercel.app).
+ *
+ * lastModified memakai tanggal perubahan konten yang nyata, BUKAN new Date()
+ * (Google menggunakan lastmod sebagai sinyal scheduling crawl).
+ * priority & changeFrequency dihilangkan karena tidak digunakan Google.
+ *
+ * Halaman admin/internal (/kalibrasi-harga, /api) TIDAK dimasukkan.
+ */
+
+/** Tanggal pembaruan signifikan terakhir per route (ISO). */
+const LAST_MODIFIED = {
+  home: "2026-09-23",
+  solarHome: "2026-09-23",
+  solarCommercial: "2026-09-23",
+  pjuts: "2026-09-23",
+  solarPump: "2026-09-23",
+  evCharging: "2026-09-23",
+  smartIot: "2026-09-23",
+  maintenance: "2026-09-23",
+  tenderProcurement: "2026-09-23",
+  sewaPlts: "2026-09-23",
+  tentangKami: "2026-09-23",
+  proyek: "2026-09-23",
+  hargaPanelSurya: "2026-09-23",
+  artikelIndex: "2026-09-23",
+} as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages: MetadataRoute.Sitemap = [
-    {
-      url: BASE_URL,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1.0,
-    },
-    {
-      url: `${BASE_URL}/solar-home`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${BASE_URL}/solar-commercial`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${BASE_URL}/pjuts`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/solar-pump`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/ev-charging`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/smart-iot`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/maintenance`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${BASE_URL}/tender-procurement`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/sewa-plts`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
+    { url: `${SITE_URL}/`, lastModified: LAST_MODIFIED.home },
+    { url: `${SITE_URL}/solar-home`, lastModified: LAST_MODIFIED.solarHome },
+    { url: `${SITE_URL}/solar-commercial`, lastModified: LAST_MODIFIED.solarCommercial },
+    { url: `${SITE_URL}/pjuts`, lastModified: LAST_MODIFIED.pjuts },
+    { url: `${SITE_URL}/solar-pump`, lastModified: LAST_MODIFIED.solarPump },
+    { url: `${SITE_URL}/ev-charging`, lastModified: LAST_MODIFIED.evCharging },
+    { url: `${SITE_URL}/smart-iot`, lastModified: LAST_MODIFIED.smartIot },
+    { url: `${SITE_URL}/maintenance`, lastModified: LAST_MODIFIED.maintenance },
+    { url: `${SITE_URL}/tender-procurement`, lastModified: LAST_MODIFIED.tenderProcurement },
+    { url: `${SITE_URL}/sewa-plts`, lastModified: LAST_MODIFIED.sewaPlts },
+    { url: `${SITE_URL}/tentang-kami`, lastModified: LAST_MODIFIED.tentangKami },
+    { url: `${SITE_URL}/proyek`, lastModified: LAST_MODIFIED.proyek },
+    { url: `${SITE_URL}/harga-panel-surya-jambi`, lastModified: LAST_MODIFIED.hargaPanelSurya },
+    { url: `${SITE_URL}/artikel`, lastModified: LAST_MODIFIED.artikelIndex },
   ];
 
-  return staticPages;
+  const caseStudyPages: MetadataRoute.Sitemap = caseStudies.map((cs) => ({
+    url: `${SITE_URL}/studi-kasus/${cs.slug}`,
+    lastModified: LAST_MODIFIED.proyek,
+  }));
+
+  const articlePages: MetadataRoute.Sitemap = articles.map((article) => ({
+    url: `${SITE_URL}/artikel/${article.slug}`,
+    lastModified: article.updated || article.date,
+  }));
+
+  return [...staticPages, ...caseStudyPages, ...articlePages];
 }

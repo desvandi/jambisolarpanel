@@ -2,9 +2,11 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 /**
- * Proxy untuk rate limiting API.
+ * Proxy (middleware Next.js 16)
  *
- * - /api/: rate limiting sederhana berdasarkan IP
+ * 1. /api/: rate limiting sederhana berdasarkan IP
+ * 2. /kalibrasi-harga: Basic Auth (ADMIN_PASSWORD) + X-Robots-Tag noindex
+ *    (halaman admin/internal tidak boleh menjadi sumber indexable content)
  */
 
 // Simple in-memory rate limiter (per IP)
@@ -37,6 +39,33 @@ if (typeof setInterval !== "undefined") {
   }, 60_000);
 }
 
+/** Validasi Authorization: Basic (username apa pun, password = ADMIN_PASSWORD). */
+function isAuthorized(request: NextRequest, adminPassword: string): boolean {
+  const authHeader = request.headers.get("authorization");
+  if (!authHeader || !authHeader.startsWith("Basic ")) {
+    return false;
+  }
+  try {
+    const decoded = Buffer.from(authHeader.slice(6), "base64").toString("utf-8");
+    const sepIndex = decoded.indexOf(":");
+    if (sepIndex === -1) return false;
+    const password = decoded.slice(sepIndex + 1);
+    return password === adminPassword;
+  } catch {
+    return false;
+  }
+}
+
+function unauthorizedResponse() {
+  return new NextResponse("Akses ditolak. Halaman ini memerlukan autentikasi admin.", {
+    status: 401,
+    headers: {
+      "WWW-Authenticate": 'Basic realm="Kalibrasi Harga — Admin", charset="UTF-8"',
+      "X-Robots-Tag": "noindex, nofollow",
+    },
+  });
+}
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -53,11 +82,39 @@ export function proxy(request: NextRequest) {
         { status: 429 }
       );
     }
+    return NextResponse.next();
+  }
+
+  // Protect internal admin page /kalibrasi-harga
+  if (pathname === "/kalibrasi-harga" || pathname.startsWith("/kalibrasi-harga/")) {
+    const adminPassword = process.env.ADMIN_PASSWORD;
+
+    if (!adminPassword) {
+      // Tanpa ADMIN_PASSWORD: hanya boleh diakses di development.
+      if (process.env.NODE_ENV === "production") {
+        return new NextResponse(
+          "Kalibrasi Harga dinonaktifkan. Set ADMIN_PASSWORD pada environment variables untuk mengaktifkan akses admin.",
+          { status: 403, headers: { "X-Robots-Tag": "noindex, nofollow" } }
+        );
+      }
+      // Dev: izinkan, tapi tetap kirim X-Robots-Tag sebagai defense-in-depth.
+      const res = NextResponse.next();
+      res.headers.set("X-Robots-Tag", "noindex, nofollow");
+      return res;
+    }
+
+    if (!isAuthorized(request, adminPassword)) {
+      return unauthorizedResponse();
+    }
+
+    const res = NextResponse.next();
+    res.headers.set("X-Robots-Tag", "noindex, nofollow");
+    return res;
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/api/:path*"],
+  matcher: ["/api/:path*", "/kalibrasi-harga", "/kalibrasi-harga/:path*"],
 };

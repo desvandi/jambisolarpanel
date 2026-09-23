@@ -7,6 +7,7 @@ import {
 import { Footer } from "@/components/landing/Footer";
 import { FloatingButtons } from "@/components/landing/FloatingButtons";
 import { ConsultationForm } from "@/components/landing/ConsultationForm";
+import { RelatedServices } from "@/components/landing/RelatedServices";
 import { SewaPltsHero } from "./sections/SewaPltsHero";
 import { SewaPltsDualMode } from "./sections/SewaPltsDualMode";
 import { SewaPltsBenefits } from "./sections/SewaPltsBenefits";
@@ -69,6 +70,9 @@ export default function SewaPltsPage() {
           <SewaPltsFaq />
           <SewaPltsFinalCta />
         </motion.div>
+
+        {/* Internal linking — layanan terkait */}
+        <RelatedServices />
 
         {/* Consultation CTA Section — mengikuti pola service page lainnya */}
         <section className="py-16 md:py-24 bg-muted/30">

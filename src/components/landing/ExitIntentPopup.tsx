@@ -24,26 +24,19 @@ export function ExitIntentPopup() {
   );
 
   useEffect(() => {
+    // Exit intent hanya untuk desktop (mouse leave).
+    // Di mobile, popup full-screen TIDAK ditampilkan agar tidak menghalangi
+    // konten utama (intrusive interstitial) — CTA mobile sudah tersedia
+    // via FloatingButtons yang persisten.
+    const isTouchDevice =
+      typeof window !== "undefined" &&
+      ("ontouchstart" in window || navigator.maxTouchPoints > 0);
+
+    if (isTouchDevice) return;
+
     document.addEventListener("mouseleave", handleMouseLeave);
     return () => document.removeEventListener("mouseleave", handleMouseLeave);
   }, [handleMouseLeave]);
-
-  // Mobile exit intent: trigger when user scrolls back up quickly
-  useEffect(() => {
-    let lastScroll = window.scrollY;
-    let hasScrolledDown = false;
-    const onScroll = () => {
-      const curr = window.scrollY;
-      if (curr > 600) hasScrolledDown = true;
-      if (hasScrolledDown && curr < lastScroll && curr < 300 &&
-        !dismissed && !sessionStorage.getItem("exitPopupDismissed")) {
-        setShow(true);
-      }
-      lastScroll = curr;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [dismissed]);
 
   const handleClose = () => {
     setShow(false);

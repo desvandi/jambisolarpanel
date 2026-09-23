@@ -6,6 +6,7 @@ import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { FloatingButtons } from "@/components/landing/FloatingButtons";
 import { ConsultationForm } from "@/components/landing/ConsultationForm";
+import { RelatedServices } from "@/components/landing/RelatedServices";
 import { Home, ChevronRight, CheckCircle, Zap, Shield } from "lucide-react";
 import { ReactNode } from "react";
 
@@ -184,6 +185,9 @@ export function ServicePageLayout({
 
         {/* Content */}
         {children}
+
+        {/* Internal linking — layanan terkait */}
+        <RelatedServices />
 
         {/* Consultation CTA Section */}
         <section className="py-16 md:py-24 bg-muted/30">

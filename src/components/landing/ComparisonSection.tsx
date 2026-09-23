@@ -1,7 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { BarChart3, Zap, Battery, Plug } from "lucide-react";
 
 const WA_LINK =
@@ -10,23 +9,23 @@ const WA_LINK =
 const comparisons = [
   {
     category: "Biaya Bulanan",
-    pln: { icon: Plug, text: "Naik terus setiap tahun", value: "Rp 2-5jt+", color: "text-red-500" },
+    pln: { icon: Plug, text: "Naik terus setiap tahun", value: "Terus membayar", color: "text-red-500" },
     solar: { icon: Zap, text: "Hampir Rp 0 setelah ROI", value: "Rp 0*", color: "text-solar" },
   },
   {
     category: "Kenaikan Tarif",
-    pln: { icon: Plug, text: "Rata-rata naik 5-10% per tahun", value: "5-10%/thn", color: "text-red-500" },
+    pln: { icon: Plug, text: "Riwayat kenaikan rata-rata ±6% per tahun", value: "±6%/thn", color: "text-red-500" },
     solar: { icon: Zap, text: "Tidak terpengaruh tarif PLN", value: "0%", color: "text-solar" },
   },
   {
     category: "Keandalan",
-    pln: { icon: Plug, text: "Risiko padam, terutama daerah tertentu", value: "80-90%", color: "text-red-500" },
-    solar: { icon: Battery, text: "Energi tersimpan 24/7, hujan atau cerah", value: "99%+", color: "text-solar" },
+    pln: { icon: Plug, text: "Risiko padam, terutama daerah tertentu", value: "Tidak pasti", color: "text-red-500" },
+    solar: { icon: Battery, text: "Energi tersimpan di baterai, hujan atau cerah", value: "Backup 24/7", color: "text-solar" },
   },
   {
     category: "Nilai Properti",
-    pln: { icon: Plug, text: "Tidak ada peningkatan nilai", value: "0%", color: "text-red-500" },
-    solar: { icon: Zap, text: "Naik 4-6% menurut studi properti", value: "+4-6%", color: "text-solar" },
+    pln: { icon: Plug, text: "Tidak ada peningkatan nilai", value: "—", color: "text-red-500" },
+    solar: { icon: Zap, text: "Instalasi PLTS menjadi nilai tambah aset", value: "Nilai tambah", color: "text-solar" },
   },
   {
     category: "Masa Pakai Sistem",
@@ -41,17 +40,12 @@ const comparisons = [
 ];
 
 export function ComparisonSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [showSolar, setShowSolar] = useState(true);
 
   return (
-    <section className="py-16 md:py-20 bg-muted/30" ref={ref}>
+    <section className="py-16 md:py-20 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
+        <div
           className="text-center max-w-3xl mx-auto mb-16"
         >
           <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 text-sm font-semibold text-solar bg-solar/10 rounded-full">
@@ -66,7 +60,7 @@ export function ComparisonSection() {
             Lihat perbandingan nyata antara menggunakan listrik PLN konvensional
             dengan beralih ke sistem panel surya. Angka tidak pernah berbohong.
           </p>
-        </motion.div>
+        </div>
 
         {/* Toggle */}
         <div className="flex justify-center mb-12">
@@ -95,20 +89,14 @@ export function ComparisonSection() {
         </div>
 
         {/* Comparison Cards */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
+        <div
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {comparisons.map((item, i) => {
             const data = showSolar ? item.solar : item.pln;
             return (
-              <motion.div
+              <div
                 key={item.category}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
                 className={`p-6 rounded-2xl border transition-all duration-500 ${
                   showSolar
                     ? "bg-card border-solar/20 hover:border-solar/40"
@@ -135,16 +123,13 @@ export function ComparisonSection() {
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {data.text}
                 </p>
-              </motion.div>
+              </div>
             );
           })}
-        </motion.div>
+        </div>
 
         {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.5 }}
+        <div
           className="text-center mt-12"
         >
           <p className="text-sm text-muted-foreground mb-2">
@@ -158,7 +143,7 @@ export function ComparisonSection() {
           >
             Beralih ke Panel Surya Sekarang
           </a>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

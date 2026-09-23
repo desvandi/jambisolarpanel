@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import Image from "next/image";
@@ -29,11 +30,13 @@ const navItems: NavItem[] = [
       { label: "EV Charging", href: "/ev-charging" },
       { label: "Smart IoT & CCTV", href: "/smart-iot" },
       { label: "Maintenance", href: "/maintenance" },
+      { label: "Tender & Pengadaan", href: "/tender-procurement" },
     ],
   },
+  { label: "Harga", href: "/harga-panel-surya-jambi" },
   { label: "Sewa PLTS", href: "/sewa-plts" },
-  { label: "Tender & Pengadaan", href: "/tender-procurement" },
-  { label: "Kalkulator", href: "#kalkulator" },
+  { label: "Proyek", href: "/proyek" },
+  { label: "Artikel", href: "/artikel" },
   { label: "FAQ", href: "#faq" },
 ];
 
@@ -62,22 +65,27 @@ export function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleNavClick = useCallback((href: string) => {
-    setMobileOpen(false);
-    setOpenDropdown(null);
-    // Check if it's an internal anchor
-    if (href.startsWith("#")) {
-      // If we're on the home page, scroll to section
-      const el = document.querySelector(href);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-      } else {
-        // Navigate to home first, then scroll
-        window.location.href = "/" + href;
+  const router = useRouter();
+
+  const handleNavClick = useCallback(
+    (href: string) => {
+      setMobileOpen(false);
+      setOpenDropdown(null);
+      // Check if it's an internal anchor
+      if (href.startsWith("#")) {
+        // If we're on the home page, scroll to section
+        const el = document.querySelector(href);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        } else {
+          // Navigate to home first, then scroll
+          router.push("/" + href);
+        }
       }
-    }
-    // External links (href starting with /) are handled by Link component
-  }, []);
+      // External links (href starting with /) are handled by Link component
+    },
+    [router]
+  );
 
   const handleDropdownEnter = useCallback((label: string) => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);

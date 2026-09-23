@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Home, Building2, Sprout, Zap, Car, Cpu } from "lucide-react";
+import { Home, Building2, Sprout, Sun, Car, Cpu, MapPin } from "lucide-react";
 
 const WA_HERO =
   "https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20tertarik%20konsultasi%20solusi%20energi%20mandiri%20dari%20website%20anda";
@@ -19,53 +18,11 @@ const features = [
 const funnelButtons = [
   { label: "Rumah Tangga", href: "/solar-home", icon: Home },
   { label: "Bisnis & Industri", href: "/solar-commercial", icon: Building2 },
-  { label: "Kebun & Perkebunan", href: "/pjuts", icon: Sprout },
-  { label: "Infrastruktur & PJUTS", href: "/tender-procurement", icon: Zap },
+  { label: "Kebun & Perkebunan", href: "/solar-pump", icon: Sprout },
+  { label: "PJUTS & Infrastruktur", href: "/pjuts", icon: Sun },
   { label: "EV Charging", href: "/ev-charging", icon: Car },
   { label: "Smart IoT & CCTV", href: "/smart-iot", icon: Cpu },
 ];
-
-function AnimatedCounter({ end, suffix = "" }: { end: number; suffix?: string }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const [started, setStarted] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started) {
-          setStarted(true);
-        }
-      },
-      { threshold: 0.5 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [started]);
-
-  useEffect(() => {
-    if (!started) return;
-    let current = 0;
-    const step = end / 60;
-    const timer = setInterval(() => {
-      current += step;
-      if (current >= end) {
-        setCount(end);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(current));
-      }
-    }, 25);
-    return () => clearInterval(timer);
-  }, [started, end]);
-
-  return (
-    <span ref={ref} className="tabular-nums">
-      {count}
-      {suffix}
-    </span>
-  );
-}
 
 export function HeroSection() {
   return (
@@ -74,11 +31,12 @@ export function HeroSection() {
       <div className="absolute inset-0 z-0">
         <Image
           src="/hero-solar.jpg"
-          alt="Instalasi Panel Surya Profesional"
+          alt="Instalasi panel surya profesional untuk rumah dan bisnis di Jambi"
           fill
           className="object-cover"
           priority
           quality={85}
+          sizes="100vw"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/80 to-navy/60" />
         <div className="absolute inset-0 bg-gradient-to-t from-navy/60 via-transparent to-transparent" />
@@ -113,37 +71,26 @@ export function HeroSection() {
             <span>Jambi Solar Panel &mdash; by PT. Jaya Mandiri Smart Energy</span>
           </motion.div>
 
-          {/* Trust badge */}
+          {/* Trust badge — fakta layanan, bukan klaim angka tanpa sumber */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-sm"
           >
-            <span className="flex items-center gap-1">
-              {[...Array(5)].map((_, i) => (
-                <svg
-                  key={i}
-                  className="w-4 h-4 text-gold-light fill-current"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              ))}
-            </span>
-            <span>Dipercaya Ratusan Pelanggan Rumah &amp; Bisnis</span>
+            <MapPin className="w-4 h-4 text-solar-light flex-shrink-0" />
+            <span>Melayani Jambi, Sumatera &amp; Jawa Bagian Barat</span>
           </motion.div>
 
-          {/* Headline */}
+          {/* Headline — satu intent utama: jasa pasang panel surya / PLTS Jambi */}
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6"
           >
-            Solusi Panel Surya Jambi — Energi Mandiri{" "}
-            <span className="gradient-text">Off-Grid &amp; Hybrid</span>{" "}
-            untuk Rumah, Bisnis, Kebun, dan Infrastruktur
+            Jasa Pasang Panel Surya &amp;{" "}
+            <span className="gradient-text">PLTS di Jambi</span>
           </motion.h1>
 
           {/* Subheadline */}
@@ -153,7 +100,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-lg sm:text-xl text-solar-light font-semibold mb-2 max-w-2xl"
           >
-            PLTS &bull; PJUTS &bull; Solar Pump &bull; EV Charging &bull; Smart IoT
+            Survey, desain, pengadaan, instalasi, dan maintenance sistem PLTS
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 30 }}
@@ -161,7 +108,22 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.22 }}
             className="text-sm text-white/50 mb-8 max-w-2xl"
           >
-            Hemat listrik, tetap nyala saat PLN padam, cocok untuk rumah, kebun, bisnis &amp; infrastruktur. Dipercaya 500+ pelanggan di Sumatera &amp; Jawa. Paket mulai dari Rp 6 jutaan.
+            Untuk rumah, bisnis, kebun, dan industri di Jambi. Hemat tagihan
+            listrik, tetap nyala saat PLN padam &mdash; lihat{" "}
+            <Link
+              href="/harga-panel-surya-jambi"
+              className="underline decoration-solar/60 underline-offset-2 hover:text-solar-light transition-colors"
+            >
+              harga paket PLTS
+            </Link>{" "}
+            atau{" "}
+            <Link
+              href="/sewa-plts"
+              className="underline decoration-solar/60 underline-offset-2 hover:text-solar-light transition-colors"
+            >
+              sewa PLTS bayar bulanan
+            </Link>
+            .
           </motion.p>
 
           {/* CTA Buttons */}
@@ -217,7 +179,7 @@ export function HeroSection() {
             </div>
           </motion.div>
 
-          {/* Savings Counter */}
+          {/* Facts — hanya klaim yang dapat diverifikasi */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -225,17 +187,17 @@ export function HeroSection() {
             className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10"
           >
             {[
-              { value: 5, suffix: "+", label: "Tahun Pengalaman" },
-              { value: 25, suffix: " Thn", label: "Garansi Panel" },
-              { value: 90, suffix: "%", label: "Potensi Hemat" },
-              { value: 2, suffix: "+", label: "Region Terlayani" },
+              { value: "25 Thn", label: "Garansi Performa Panel" },
+              { value: "1.3–20.8", label: "Paket kWp Tersedia" },
+              { value: "2 Wilayah", label: "Sumatera & Jawa Barat" },
+              { value: "Gratis", label: "Survei & Konsultasi" },
             ].map((stat) => (
               <div
                 key={stat.label}
                 className="text-center p-3 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10"
               >
                 <p className="text-2xl sm:text-3xl font-extrabold text-solar-light">
-                  <AnimatedCounter end={stat.value} suffix={stat.suffix} />
+                  {stat.value}
                 </p>
                 <p className="text-xs sm:text-sm text-white/60 mt-1">{stat.label}</p>
               </div>

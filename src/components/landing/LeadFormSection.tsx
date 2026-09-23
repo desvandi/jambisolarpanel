@@ -1,14 +1,11 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Send, User, MapPin, Zap, Phone, Download } from "lucide-react";
 
 const WA_BASE = "https://wa.me/6281328190707";
 
 export function LeadFormSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [form, setForm] = useState({
     name: "",
     location: "",
@@ -25,14 +22,11 @@ export function LeadFormSection() {
   };
 
   return (
-    <section className="py-20 md:py-28 bg-background" ref={ref}>
+    <section className="py-20 md:py-28 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5 }}
+          <div
           >
             <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-solar bg-solar/10 rounded-full">
               Hubungi Kami
@@ -88,13 +82,10 @@ export function LeadFormSection() {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
           {/* Right Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.2 }}
+          <div
           >
             <div className="p-6 sm:p-8 rounded-2xl bg-card border border-border shadow-xl">
               <h3 className="text-xl font-bold text-navy dark:text-white mb-2">
@@ -239,7 +230,7 @@ export function LeadFormSection() {
                 </form>
               )}
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

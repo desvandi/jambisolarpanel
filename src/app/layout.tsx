@@ -3,6 +3,15 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { JsonLd } from "@/components/seo/JsonLd";
+import {
+  SITE_URL,
+  SITE_NAME,
+  BRAND_NAME,
+  DEFAULT_OG_IMAGE,
+  localBusinessJsonLd,
+  webSiteJsonLd,
+} from "@/lib/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,67 +23,53 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+/**
+ * Metadata root — hanya fallback. Setiap route indexable mendefinisikan
+ * metadata lengkapnya sendiri (title, description, canonical, OG) via
+ * buildMetadata() di src/lib/seo.ts.
+ *
+ * CANONICAL DOMAIN: https://jambisolarpanel.vercel.app
+ */
 export const metadata: Metadata = {
-  metadataBase: new URL("https://jayamandiri.co.id"),
-  title: "Jasa Instalasi Panel Surya Jambi | PT Jaya Mandiri Smart Energy",
+  metadataBase: new URL(SITE_URL),
+  title: "Jasa Pasang Panel Surya & PLTS Jambi | Jaya Mandiri Smart Energy",
   description:
-    "Spesialis instalasi panel surya rumah, bisnis, solar pump & off-grid di Jambi. Survey gratis, garansi resmi, hemat listrik hingga 90%. PT Jaya Mandiri Smart Energy.",
-  keywords: [
-    "panel surya Jambi",
-    "solar panel Jambi",
-    "PLTS off grid Jambi",
-    "PLTS hybrid Jambi",
-    "sistem energi mandiri",
-    "paket panel surya rumah",
-    "solar panel kebun",
-    "PJUTS Jambi",
-    "lampu jalan tenaga sura Jambi",
-    "solar pump Jambi",
-    "pompa air tenaga surya Jambi",
-    "EV charging solar Jambi",
-    "instalasi panel surya industri",
-    "PT. Jaya Mandiri Smart Energy",
-    "jasa pasang solar panel Jambi",
-    "jasa pasang solar panel Sumatera",
-    "hemat listrik solar panel",
-    "EPC panel surya",
-    "tender energi terbarukan Jambi",
-  ],
-  authors: [{ name: "PT. Jaya Mandiri Smart Energy" }],
+    "Jasa pasang panel surya & instalasi PLTS di Jambi untuk rumah, bisnis, kebun, dan infrastruktur. Survei & konsultasi gratis, garansi resmi, layanan purna jual. Melayani Sumatera & Jawa Bagian Barat.",
+  authors: [{ name: BRAND_NAME }],
   icons: {
     icon: "/logo-jmse.png",
     apple: "/logo-jmse.png",
   },
   openGraph: {
-    title: "Jasa Instalasi Panel Surya Jambi | PT Jaya Mandiri Smart Energy",
+    title: "Jasa Pasang Panel Surya & PLTS Jambi | Jaya Mandiri Smart Energy",
     description:
-      "Instalasi PLTS Off-Grid & Hybrid profesional untuk rumah, bisnis, kebun & infrastruktur. Hemat hingga 90%, backup 24 jam, garansi 25 tahun.",
-    url: "https://jayamandiri.co.id",
-    siteName: "Jambi Solar Panel — PT. Jaya Mandiri Smart Energy",
+      "Survei, desain, pengadaan, instalasi, dan maintenance sistem PLTS untuk rumah, bisnis, kebun, dan infrastruktur di Jambi, Sumatera & Jawa Barat.",
+    url: "/",
+    siteName: SITE_NAME,
     type: "website",
     locale: "id_ID",
     images: [
       {
-        url: "/hero-solar.jpg",
+        url: DEFAULT_OG_IMAGE,
         width: 1344,
         height: 768,
-        alt: "Instalasi Panel Surya PT. Jaya Mandiri Smart Energy",
+        alt: "Instalasi Panel Surya — Jambi Solar Panel by PT. Jaya Mandiri Smart Energy",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Solusi Energi Mandiri Off-Grid & Hybrid | Jambi Solar Panel",
+    title: "Jasa Pasang Panel Surya & PLTS Jambi",
     description:
-      "Instalasi PLTS profesional untuk rumah, bisnis, kebun & infrastruktur.",
-    images: ["/hero-solar.jpg"],
+      "Survei, desain, instalasi, dan maintenance PLTS untuk rumah, bisnis, kebun, dan infrastruktur di Jambi.",
+    images: [DEFAULT_OG_IMAGE],
   },
   robots: {
     index: true,
     follow: true,
   },
   alternates: {
-    canonical: "https://jayamandiri.co.id",
+    canonical: "/",
   },
 };
 
@@ -137,131 +132,10 @@ export default function RootLayout({
           </>
         )}
 
-        {/* Schema Markup - Local Business */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "LocalBusiness",
-              name: "Jambi Solar Panel",
-              legalName: "PT. Jaya Mandiri Smart Energy",
-              description:
-                "Provider solusi energi surya profesional — Sistem Mandiri Off-Grid & Hybrid untuk Rumah, Bisnis, Kebun, dan Infrastruktur. Coverage Sumatera & Jawa Bagian Barat.",
-              url: "https://jayamandiri.co.id",
-              telephone: "+6281328190707",
-              image: "/hero-solar.jpg",
-              logo: "/logo-jmse.png",
-              priceRange: "$$",
-              address: {
-                "@type": "PostalAddress",
-                addressCountry: "ID",
-                addressRegion: "Jambi",
-              },
-              geo: {
-                "@type": "GeoCoordinates",
-                latitude: -1.61,
-                longitude: 103.61,
-              },
-              openingHoursSpecification: {
-                "@type": "OpeningHoursSpecification",
-                dayOfWeek: [
-                  "Monday",
-                  "Tuesday",
-                  "Wednesday",
-                  "Thursday",
-                  "Friday",
-                  "Saturday",
-                ],
-                opens: "08:00",
-                closes: "17:00",
-              },
-              sameAs: [
-                "https://www.facebook.com/share/1EMi46VPVc/",
-                "https://www.instagram.com/desvandi101",
-              ],
-              aggregateRating: {
-                "@type": "AggregateRating",
-                ratingValue: "4.9",
-                reviewCount: "127",
-              },
-              areaServed: {
-                "@type": "Country",
-                name: "Indonesia",
-              },
-              serviceType: [
-                "Instalasi PLTS Off-Grid",
-                "Instalasi PLTS Hybrid",
-                "PJUTS - Penerangan Jalan Umum Tenaga Surya",
-                "Solar Water Pump",
-                "EV Charging Terintegrasi PLTS",
-                "Smart Monitoring & Solar CCTV",
-                "Tender & Procurement Energi Terbarukan",
-              ],
-            }),
-          }}
-        />
-
-        {/* Schema Markup - FAQ */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              mainEntity: [
-                {
-                  "@type": "Question",
-                  name: "Berapa biaya pasang panel surya?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Biaya instalasi PLTS Off-Grid & Hybrid bervariasi tergantung kapasitas dan kebutuhan. Untuk rumah tangga, paket mulai dari Paket 1.3 kWp (tanpa baterai) hingga Paket 5.2 kWp. Untuk bisnis dan industri, paket mulai dari Paket 7.15 kWp. Konsultasikan kebutuhan Anda secara GRATIS dengan tim kami.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Berapa lama balik modal?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Untuk rumah tangga (paket 2.6-5.2 kWp), ROI realistis tercapai dalam 8-9 tahun. Untuk bisnis dan industri (paket 7.15-20.8 kWp), ROI tercapai dalam 5-7 tahun. Perhitungan ini memperhitungkan kenaikan tarif PLN rata-rata 6% per tahun. Total keuntungan bersih dalam 25 tahun mencapai 5-7 kali lipat dari investasi awal.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Apakah bisa tanpa PLN?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Ya! Sistem PLTS Off-Grid dirancang khusus untuk area tanpa jangkauan PLN. Sistem ini dilengkapi baterai penyimpanan sehingga Anda bisa mendapatkan listrik 24 jam.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Bagaimana saat hujan?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Panel surya modern tetap menghasilkan energi meskipun saat mendung atau hujan, meskipun kapasitasnya berkurang. Sistem hybrid dan off-grid dilengkapi baterai untuk memastikan pasokan listrik tetap stabil.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Garansi berapa lama?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Kami memberikan garansi panel surya 25 tahun performa, garansi inverter 5-10 tahun, dan garansi instalasi serta baterai sesuai paket. Semua garansi didukung langsung oleh PT. Jaya Mandiri Smart Energy.",
-                  },
-                },
-                {
-                  "@type": "Question",
-                  name: "Bisa cicilan?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Ya, kami menyediakan opsi cicilan untuk memudahkan Anda. Hubungi tim kami untuk informasi lebih lanjut mengenai skema pembayaran dan cicilan yang tersedia.",
-                  },
-                },
-              ],
-            }),
-          }}
-        />
+        {/* Structured Data — LocalBusiness (NAP resmi, tanpa rating/review yang tidak terverifikasi) */}
+        <JsonLd data={localBusinessJsonLd()} />
+        {/* Structured Data — WebSite */}
+        <JsonLd data={webSiteJsonLd()} />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

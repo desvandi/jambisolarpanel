@@ -1,7 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import {
   Calculator,
   TrendingDown,
@@ -164,8 +163,6 @@ function computeWithPackages(
 }
 
 export function SavingsCalculator() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [bill, setBill] = useState(2000000);
   const [showAssumptions, setShowAssumptions] = useState(false);
 
@@ -258,7 +255,7 @@ export function SavingsCalculator() {
     <section
       id="kalkulator"
       className="py-20 md:py-28 solar-gradient relative overflow-hidden"
-      ref={ref}
+     
     >
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
@@ -268,10 +265,7 @@ export function SavingsCalculator() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
+        <div
           className="text-center max-w-3xl mx-auto mb-16"
         >
           <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 text-sm font-semibold text-white bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
@@ -286,12 +280,9 @@ export function SavingsCalculator() {
             Masukkan tagihan listrik bulanan Anda — kami akan menganalisis
             kebutuhan dan merekomendasikan paket yang paling sesuai.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
+        <div
           className="max-w-4xl mx-auto"
         >
           <div className="glass rounded-3xl p-6 sm:p-10">
@@ -493,9 +484,7 @@ export function SavingsCalculator() {
               )}
             </button>
             {showAssumptions && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
+              <div
                 className="mb-6 p-4 rounded-xl bg-muted/50 border border-border text-xs text-muted-foreground space-y-2 leading-relaxed"
               >
                 <p>
@@ -521,7 +510,7 @@ export function SavingsCalculator() {
                   (termasuk kenaikan tarif) vs harga investasi paket.
                   Angka bersifat estimasi dan dapat berbeda tergantung pola konsumsi aktual.
                 </p>
-              </motion.div>
+              </div>
             )}
 
             {/* CTA */}
@@ -541,7 +530,7 @@ export function SavingsCalculator() {
               </a>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -352,7 +352,6 @@ function RupiahInput({
   // Sync dari parent value HANYA saat tidak fokus (biar user bisa mengetik dengan tenang)
   useEffect(() => {
     if (!focusedRef.current) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentionally sync parent value while not focused
       setDisplay(formatRp(value));
     }
   }, [value]);
@@ -413,7 +412,6 @@ function PercentInput({
 
   useEffect(() => {
     if (!focusedRef.current) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentionally sync parent value while not focused
       setLocal(String(value));
     }
   }, [value]);
@@ -484,7 +482,6 @@ function NumberInput({
   // Sync dari parent HANYA saat tidak fokus
   useEffect(() => {
     if (!focusedRef.current) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentionally sync parent value while not focused
       setLocal(String(value));
     }
   }, [value]);
@@ -942,15 +939,13 @@ export default function KalibrasiHargaPage() {
                   Sync gagal
                 </Badge>
               )}
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => (window.location.href = "/")}
-                className="gap-1.5"
+              <a
+                href="/"
+                className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-colors border border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground h-8 px-3"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span className="hidden sm:inline">Landing Page</span>
-              </Button>
+              </a>
               <Button
                 variant="outline"
                 size="sm"
