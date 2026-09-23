@@ -1,11 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Send, User, MapPin, Zap, Phone, Download } from "lucide-react";
+import { Send, User, MapPin, Zap, Phone, Download, ClipboardList, Wand2 } from "lucide-react";
+import { ConsultationWizard } from "./ConsultationWizard";
 
 const WA_BASE = "https://wa.me/6281328190707";
 
+type LeadMode = "form" | "wizard";
+
 export function LeadFormSection() {
+  const [mode, setMode] = useState<LeadMode>("form");
   const [form, setForm] = useState({
     name: "",
     location: "",
@@ -84,16 +88,49 @@ export function LeadFormSection() {
             </div>
           </div>
 
-          {/* Right Form */}
-          <div
-          >
+          {/* Right Form / Wizard */}
+          <div>
             <div className="p-6 sm:p-8 rounded-2xl bg-card border border-border shadow-xl">
-              <h3 className="text-xl font-bold text-navy dark:text-white mb-2">
-                Konsultasi Gratis
-              </h3>
-              <p className="text-sm text-muted-foreground mb-6">
-                Isi data Anda dan tim kami akan menghubungi segera.
-              </p>
+              {/* Mode switcher */}
+              <div className="flex p-1 mb-6 rounded-xl bg-muted/60 border border-border" role="tablist" aria-label="Metode konsultasi">
+                <button
+                  role="tab"
+                  aria-selected={mode === "form"}
+                  onClick={() => setMode("form")}
+                  className={`flex-1 inline-flex items-center justify-center gap-2 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 ${
+                    mode === "form"
+                      ? "bg-white dark:bg-navy text-navy dark:text-white shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <ClipboardList className="w-4 h-4" />
+                  Form Singkat
+                </button>
+                <button
+                  role="tab"
+                  aria-selected={mode === "wizard"}
+                  onClick={() => setMode("wizard")}
+                  className={`flex-1 inline-flex items-center justify-center gap-2 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all duration-300 ${
+                    mode === "wizard"
+                      ? "bg-white dark:bg-navy text-navy dark:text-white shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Wand2 className="w-4 h-4" />
+                  Konsultasi Terpandu
+                </button>
+              </div>
+
+              {mode === "wizard" ? (
+                <ConsultationWizard />
+              ) : (
+                <>
+                  <h3 className="text-xl font-bold text-navy dark:text-white mb-2">
+                    Konsultasi Gratis
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-6">
+                    Isi data Anda dan tim kami akan menghubungi segera.
+                  </p>
 
               {submitted ? (
                 <div className="text-center py-8">
@@ -228,6 +265,8 @@ export function LeadFormSection() {
                     privasi Anda.
                   </p>
                 </form>
+              )}
+                </>
               )}
             </div>
           </div>

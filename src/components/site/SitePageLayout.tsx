@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Home, ChevronRight } from "lucide-react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
+import { FloatingButtons } from "@/components/landing/FloatingButtons";
 import type { ReactNode } from "react";
 
 interface SitePageLayoutProps {
@@ -73,6 +74,12 @@ export function SitePageLayout({
       </main>
 
       <Footer />
+
+      {/* Spacer agar mobile sticky CTA bar tidak menutupi footer */}
+      <div aria-hidden="true" className="h-16 md:hidden" />
+
+      {/* Floating CTA — konsisten dengan halaman lain */}
+      <FloatingButtons />
     </div>
   );
 }

@@ -32,7 +32,12 @@ const footerLinks: Record<string, { label: string; href?: string; msg?: string }
 
 export function Footer() {
   return (
-    <footer className="bg-navy dark:bg-navy-light text-white">
+    <footer className="relative bg-navy dark:bg-navy-light text-white">
+      {/* Top gradient accent line */}
+      <div
+        aria-hidden="true"
+        className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-solar/60 to-transparent"
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           {/* Brand */}
@@ -101,14 +106,17 @@ export function Footer() {
           {/* Links */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
-              <h4 className="text-sm font-bold text-white mb-4">{title}</h4>
+              <h4 className="flex items-center gap-2 text-sm font-bold text-white mb-4">
+                <span aria-hidden="true" className="w-1 h-4 rounded-full bg-solar" />
+                {title}
+              </h4>
               <ul className="space-y-2.5">
                 {links.map((link) => (
                   <li key={link.label}>
                     {link.href ? (
                       <Link
                         href={link.href}
-                        className="text-sm text-white/50 hover:text-solar-light transition-colors"
+                        className="footer-link inline-flex items-center gap-1.5 text-sm text-white/50 hover:text-solar-light transition-colors"
                       >
                         {link.label}
                       </Link>
@@ -117,7 +125,7 @@ export function Footer() {
                         href={wa(link.msg || "")}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-white/50 hover:text-solar-light transition-colors"
+                        className="footer-link inline-flex items-center gap-1.5 text-sm text-white/50 hover:text-solar-light transition-colors"
                       >
                         {link.label}
                       </a>
@@ -177,7 +185,7 @@ export function Footer() {
           <p className="text-xs text-white/30 uppercase tracking-wider font-semibold mb-3">Sub-Brands</p>
           <div className="flex flex-wrap gap-3">
             {["Jambi Solar Home", "Jambi Solar Commercial", "Jambi Solar Agro", "Jambi Solar EV", "Jambi Solar IoT", "Jambi Solar Infrastructure"].map(brand => (
-              <span key={brand} className="px-3 py-1 text-xs text-white/40 bg-white/5 rounded-full border border-white/5">
+              <span key={brand} className="px-3 py-1 text-xs text-white/50 bg-white/5 rounded-full border border-white/10 hover:text-solar-light hover:border-solar/30 transition-colors">
                 {brand}
               </span>
             ))}

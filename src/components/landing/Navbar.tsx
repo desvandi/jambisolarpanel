@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
+import { Menu, X, ChevronDown, Home, Building2, Sun, Droplets, Car, Cpu, Wrench, Briefcase, Check } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,6 +10,7 @@ import Link from "next/link";
 interface NavChild {
   label: string;
   href: string;
+  icon?: typeof Home;
 }
 
 interface NavItem {
@@ -23,14 +24,14 @@ const navItems: NavItem[] = [
   {
     label: "Layanan",
     children: [
-      { label: "Panel Surya Rumah", href: "/solar-home" },
-      { label: "Panel Surya Bisnis & Industri", href: "/solar-commercial" },
-      { label: "PJUTS — Lampu Jalan Surya", href: "/pjuts" },
-      { label: "Solar Pump — Pompa Air", href: "/solar-pump" },
-      { label: "EV Charging", href: "/ev-charging" },
-      { label: "Smart IoT & CCTV", href: "/smart-iot" },
-      { label: "Maintenance", href: "/maintenance" },
-      { label: "Tender & Pengadaan", href: "/tender-procurement" },
+      { label: "Panel Surya Rumah", href: "/solar-home", icon: Home },
+      { label: "Panel Surya Bisnis & Industri", href: "/solar-commercial", icon: Building2 },
+      { label: "PJUTS — Lampu Jalan Surya", href: "/pjuts", icon: Sun },
+      { label: "Solar Pump — Pompa Air", href: "/solar-pump", icon: Droplets },
+      { label: "EV Charging", href: "/ev-charging", icon: Car },
+      { label: "Smart IoT & CCTV", href: "/smart-iot", icon: Cpu },
+      { label: "Maintenance", href: "/maintenance", icon: Wrench },
+      { label: "Tender & Pengadaan", href: "/tender-procurement", icon: Briefcase },
     ],
   },
   { label: "Harga", href: "/harga-panel-surya-jambi" },
@@ -66,6 +67,7 @@ export function Navbar() {
   }, []);
 
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleNavClick = useCallback(
     (href: string) => {
@@ -142,16 +144,16 @@ export function Navbar() {
                     onMouseLeave={handleDropdownLeave}
                   >
                     <button
-                      className={`flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                      className={`relative flex items-center gap-1 px-3 py-2 text-sm rounded-lg transition-colors duration-200 ${
                         openDropdown === item.label
                           ? "text-solar dark:text-solar bg-solar/5"
                           : "text-navy dark:text-white/70 hover:text-solar dark:hover:text-solar hover:bg-solar/5"
-                      }`}
+                      } ${item.children?.some((c) => c.href === pathname) ? "font-semibold text-solar dark:text-solar" : "font-medium"}`}
                     >
                       {item.label}
                       <ChevronDown
                         className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                          openDropdown === item.label ? "rotate-180" : ""
+                          openDropdown === item.label ? "rotate-180 text-solar" : "text-muted-foreground"
                         }`}
                       />
                     </button>
@@ -164,15 +166,34 @@ export function Navbar() {
                             Layanan Jambi Solar Panel
                           </p>
                         </div>
-                        {item.children.map((child) => (
-                          <Link
-                            key={child.href}
-                            href={child.href}
-                            className="flex items-center px-3 py-2.5 text-sm text-navy dark:text-white/80 hover:text-solar dark:hover:text-solar hover:bg-solar/5 transition-colors mx-1 rounded-lg"
-                          >
-                            {child.label}
-                          </Link>
-                        ))}
+                        {item.children.map((child) => {
+                          const active = child.href === pathname;
+                          return (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              className={`group flex items-center gap-3 px-3 py-2.5 text-sm mx-1 rounded-lg transition-colors ${
+                                active
+                                  ? "text-solar bg-solar/5 font-semibold"
+                                  : "text-navy dark:text-white/80 hover:text-solar dark:hover:text-solar hover:bg-solar/5"
+                              }`}
+                            >
+                              {child.icon ? (
+                                <span
+                                  className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-200 group-hover:scale-110 ${
+                                    active ? "bg-solar/15" : "bg-solar/10"
+                                  }`}
+                                >
+                                  <child.icon className="w-4 h-4 text-solar" />
+                                </span>
+                              ) : null}
+                              <span className="flex-1">{child.label}</span>
+                              {active ? (
+                                <Check className="w-4 h-4 text-solar shrink-0" />
+                              ) : null}
+                            </Link>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
@@ -199,7 +220,12 @@ export function Navbar() {
                   key={item.label}
                   href={item.href!}
                   onClick={() => setOpenDropdown(null)}
-                  className="px-3 py-2 text-sm font-medium text-navy dark:text-white/70 hover:text-solar dark:hover:text-solar transition-colors duration-200 rounded-lg hover:bg-solar/5"
+                  data-active={pathname === item.href}
+                  className={`link-underline px-3 py-2 text-sm rounded-lg transition-colors duration-200 hover:bg-solar/5 ${
+                    pathname === item.href
+                      ? "font-semibold text-solar dark:text-solar"
+                      : "font-medium text-navy dark:text-white/70 hover:text-solar dark:hover:text-solar"
+                  }`}
                 >
                   {item.label}
                 </Link>

@@ -1,24 +1,36 @@
 import Link from "next/link";
 import { ArrowRight, Info } from "lucide-react";
 import type { ArticleBlock } from "@/content/articles/types";
+import { buildTocHeadings } from "@/lib/anchor";
 
 /**
  * Renderer blok konten artikel (server component, tanpa JS tambahan).
+ * Setiap h2 mendapat id anchor untuk Daftar Isi & deep-linking —
+ * id dihitung dengan logika yang sama dengan ToC halaman artikel.
  */
 export function ArticleBlocks({ blocks }: { blocks: ArticleBlock[] }) {
+  const headings = buildTocHeadings(
+    blocks.filter((b): b is Extract<ArticleBlock, { type: "h2" }> => b.type === "h2")
+      .map((b) => b.text)
+  );
+  let headingIndex = 0;
+
   return (
     <div className="space-y-6">
       {blocks.map((block, i) => {
         switch (block.type) {
-          case "h2":
+          case "h2": {
+            const heading = headings[headingIndex++];
             return (
               <h2
                 key={i}
-                className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white pt-4"
+                id={heading?.id}
+                className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white pt-4 scroll-mt-24"
               >
                 {block.text}
               </h2>
             );
+          }
           case "h3":
             return (
               <h3
