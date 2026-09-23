@@ -7,6 +7,7 @@ import { Footer } from "@/components/landing/Footer";
 import { FloatingButtons } from "@/components/landing/FloatingButtons";
 import { ConsultationForm } from "@/components/landing/ConsultationForm";
 import { RelatedServices } from "@/components/landing/RelatedServices";
+import { ProcessTimeline } from "@/components/landing/ProcessTimeline";
 import { Home, ChevronRight, CheckCircle, Zap, Shield } from "lucide-react";
 import { ReactNode } from "react";
 
@@ -185,6 +186,9 @@ export function ServicePageLayout({
 
         {/* Content */}
         {children}
+
+        {/* Proses instalasi — timeline + HowTo JSON-LD */}
+        <ProcessTimeline />
 
         {/* Internal linking — layanan terkait */}
         <RelatedServices />

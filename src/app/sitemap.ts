@@ -16,20 +16,21 @@ import { caseStudies } from "@/content/caseStudies";
 /** Tanggal pembaruan signifikan terakhir per route (ISO). */
 const LAST_MODIFIED = {
   home: "2026-09-23",
-  solarHome: "2026-09-23",
-  solarCommercial: "2026-09-23",
-  pjuts: "2026-09-23",
-  solarPump: "2026-09-23",
-  evCharging: "2026-09-23",
-  smartIot: "2026-09-23",
-  maintenance: "2026-09-23",
-  tenderProcurement: "2026-09-23",
-  sewaPlts: "2026-09-23",
+  solarHome: "2026-09-24",
+  solarCommercial: "2026-09-24",
+  pjuts: "2026-09-24",
+  solarPump: "2026-09-24",
+  evCharging: "2026-09-24",
+  smartIot: "2026-09-24",
+  maintenance: "2026-09-24",
+  tenderProcurement: "2026-09-24",
+  sewaPlts: "2026-09-24",
   tentangKami: "2026-09-23",
-  proyek: "2026-09-23",
+  proyek: "2026-09-24",
   hargaPanelSurya: "2026-09-23",
   artikelIndex: "2026-09-23",
   faq: "2026-09-24",
+  kalkulatorPlts: "2026-09-24",
 } as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -49,6 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/harga-panel-surya-jambi`, lastModified: LAST_MODIFIED.hargaPanelSurya },
     { url: `${SITE_URL}/artikel`, lastModified: LAST_MODIFIED.artikelIndex },
     { url: `${SITE_URL}/faq`, lastModified: LAST_MODIFIED.faq },
+    { url: `${SITE_URL}/kalkulator-plts`, lastModified: LAST_MODIFIED.kalkulatorPlts },
   ];
 
   const caseStudyPages: MetadataRoute.Sitemap = caseStudies.map((cs) => ({

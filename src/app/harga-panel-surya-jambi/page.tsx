@@ -191,7 +191,7 @@ export default function HargaPanelSuryaPage() {
                     </p>
                   </div>
                 </div>
-                <div className="overflow-x-auto rounded-xl border border-border">
+                <div className="overflow-x-auto rounded-xl border border-border table-hover-rows">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="bg-navy text-white text-left">

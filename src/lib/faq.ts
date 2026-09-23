@@ -25,7 +25,7 @@ const FAQ_BIAYA: FaqItem = {
   a: "Biaya instalasi panel surya bervariasi tergantung kapasitas sistem dan kebutuhan spesifik Anda. Untuk rumah tangga, paket mulai dari Paket 1.3 kWp (tanpa baterai) hingga Paket 5.2 kWp. Untuk bisnis dan industri, paket mulai dari Paket 7.15 kWp. Semua harga sudah termasuk PPN 11%, peralatan, instalasi, survei, desain, dan garansi resmi. Tersedia juga add-on Kanopi Carport dan Smart Monitoring untuk paket Bisnis & Industri. Kami menyediakan konsultasi dan survei gratis untuk memberikan estimasi biaya yang akurat sesuai kebutuhan Anda. Rincian harga per kapasitas dapat dilihat di halaman Harga Panel Surya Jambi.",
 };
 
-const FAQ_ROI: FaqItem = {
+export const FAQ_ROI: FaqItem = {
   q: "Berapa lama balik modal (ROI)?",
   a: "Masa balik modal (Return on Investment) bervariasi tergantung kapasitas sistem dan kebutuhan listrik Anda. Untuk rumah tangga (paket 2.6-5.2 kWp), ROI realistis tercapai dalam 8-9 tahun. Untuk bisnis dan industri (paket 7.15-20.8 kWp), ROI tercapai dalam 5-7 tahun karena skala ekonomi yang lebih besar. Perhitungan ini sudah memperhitungkan kenaikan tarif PLN rata-rata 6% per tahun. Yang lebih penting: dalam 25 tahun umur panel, total keuntungan bersih mencapai 5-7 kali lipat dari investasi awal — artinya investasi Rp 100 juta menghasilkan keuntungan bersih Rp 500-700 juta selama masa pakai sistem. Kami akan memberikan perhitungan ROI detail saat konsultasi.",
 };
@@ -73,7 +73,7 @@ export const homepageFaqs: FaqItem[] = [
 
 /* ---------- FAQ tambahan khusus halaman /faq ---------- */
 
-const FAQ_PRODUKSI: FaqItem = {
+export const FAQ_PRODUKSI: FaqItem = {
   q: "Berapa produksi listrik 1 kWp panel surya di Jambi?",
   a: "Di wilayah Jambi, potensi sinar matahari (PSH) rata-rata sekitar 3,75 jam per hari. Dengan efisiensi sistem sekitar 80%, setiap 1 kWp panel surya menghasilkan kira-kira 3 kWh listrik per hari, atau sekitar 90 kWh per bulan. Sebagai contoh, Paket 5.2 kWp menghasilkan sekitar 15 kWh per hari — cukup untuk kebutuhan rumah dengan AC 1 unit, kulkas, dan peralatan rumah tangga lainnya. Estimasi produksi untuk setiap paket tercantum di halaman Harga Panel Surya Jambi, dan tim kami akan memberikan perhitungan yang lebih akurat berdasarkan profil pemakaian Anda saat survei.",
 };

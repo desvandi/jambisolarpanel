@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Menu, X, ChevronDown, Home, Building2, Sun, Droplets, Car, Cpu, Wrench, Briefcase, Check } from "lucide-react";
+import { Menu, X, ChevronDown, Home, Building2, Sun, Droplets, Car, Cpu, Wrench, Briefcase, Check, Calculator } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import Image from "next/image";
 import Link from "next/link";
@@ -35,6 +35,7 @@ const navItems: NavItem[] = [
     ],
   },
   { label: "Harga", href: "/harga-panel-surya-jambi" },
+  { label: "Kalkulator", href: "/kalkulator-plts" },
   { label: "Sewa PLTS", href: "/sewa-plts" },
   { label: "Proyek", href: "/proyek" },
   { label: "Artikel", href: "/artikel" },
@@ -267,8 +268,8 @@ export function Navbar() {
 
         {/* Mobile Menu */}
         <div
-          className={`lg:hidden transition-all duration-300 overflow-hidden ${
-            mobileOpen ? "max-h-[600px] pb-6" : "max-h-0"
+          className={`lg:hidden transition-all duration-300 overflow-y-auto scroll-panel ${
+            mobileOpen ? "max-h-[calc(100vh-7rem)] pb-6" : "max-h-0"
           }`}
         >
           <div className="glass rounded-2xl p-4 space-y-1">

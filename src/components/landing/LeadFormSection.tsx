@@ -244,7 +244,7 @@ export function LeadFormSection() {
 
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2 py-4 bg-solar hover:bg-solar-dark text-white font-bold text-base rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-solar/30"
+                    className="w-full flex items-center justify-center gap-2 py-4 bg-solar hover:bg-solar-dark text-white font-bold text-base rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-solar/30 btn-shine"
                   >
                     <Send className="w-5 h-5" />
                     Kirim via WhatsApp

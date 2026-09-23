@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import {
   Calculator,
   TrendingDown,
@@ -91,48 +91,6 @@ function computeWithDefaults(billValue: number): AnalysisResult {
   };
 }
 
-/**
- * Run analysis using localStorage (custom pricing from kalibrasi-harga).
- * Falls back to defaults if anything fails.
- */
-function computeWithStorage(billValue: number): AnalysisResult {
-  try {
-    const allPkgs = calculatePackages(); // reads from localStorage
-    if (!allPkgs || allPkgs.length === 0) return computeWithDefaults(billValue);
-
-    let rec = recommendPackage(billValue, allPkgs);
-    if (!rec) {
-      rec = allPkgs.find((p) => p.kWp > 0 && isFinite(p.kWp)) || null;
-    }
-    if (!rec) return computeWithDefaults(billValue);
-
-    const monthlyKwh = billValue / PLN_TARIFF_DEFAULT;
-    const productionKwh = Math.round(rec.kWp * 3.75 * 0.80 * 30);
-    const coverage = Math.round((productionKwh / monthlyKwh) * 100);
-    const dailyKwh = rec.kWp * 3.75 * 0.80;
-    const roi = calculateROI(rec.price, dailyKwh);
-    const co2PerYear = (roi.annualSavingsBase / PLN_TARIFF_DEFAULT) * 0.8 / 1000;
-    const largestPkg = allPkgs[allPkgs.length - 1];
-    const largestProduction = largestPkg
-      ? Math.round(largestPkg.kWp * 3.75 * 0.80 * 30)
-      : 0;
-    const needsCustom = largestProduction < monthlyKwh * 0.5;
-
-    return {
-      recommended: rec,
-      monthlyKwh: Math.round(monthlyKwh),
-      productionKwh: Math.round(productionKwh),
-      coverage,
-      roi,
-      co2PerYear,
-      needsCustom,
-    };
-  } catch (err) {
-    console.error("[SavingsCalculator] computeWithStorage failed:", err);
-    return computeWithDefaults(billValue);
-  }
-}
-
 /** Build analysis result from given packages and recommended package */
 function computeWithPackages(
   billValue: number,
@@ -174,7 +132,13 @@ export function SavingsCalculator() {
   // Track where pricing data comes from (for UI badge)
   const [pricingSource, setPricingSource] = useState<"default" | "remote" | "local">("default");
 
-  // After mount: fetch remote pricing (Google Sheets), then localStorage as fallback
+  // Cache paket aktif agar perubahan bill (mis. drag slider) TIDAK
+  // memicu fetch ulang remote/localStorage — cukup rekomputasi lokal.
+  const packagesRef = useRef<ReturnType<typeof calculatePackages> | null>(null);
+  const billRef = useRef(bill);
+
+  // After mount: fetch remote pricing (Google Sheets) ONCE, then localStorage
+  // as fallback. Data disimpan ke packagesRef untuk rekomputasi berikutnya.
   useEffect(() => {
     let cancelled = false;
 
@@ -187,9 +151,10 @@ export function SavingsCalculator() {
         if (remote) {
           const pkgs = calculatePackages(remote.components, remote.inverters, remote.settings);
           if (pkgs && pkgs.length > 0) {
-            const rec = recommendPackage(bill, pkgs) || pkgs[0];
+            const rec = recommendPackage(billRef.current, pkgs) || pkgs[0];
             if (rec && isFinite(rec.kWp) && rec.kWp > 0) {
-              setAnalysis(computeWithPackages(bill, rec, pkgs));
+              packagesRef.current = pkgs;
+              setAnalysis(computeWithPackages(billRef.current, rec, pkgs));
               setPricingSource("remote");
               // Sync remote data to localStorage for offline use
               saveComponentPrices(remote.components);
@@ -205,12 +170,15 @@ export function SavingsCalculator() {
 
       // Priority 2: localStorage (kalibrasi-harga data on this device)
       try {
-        const result = computeWithStorage(bill);
-        if (cancelled) return;
-        if (result && isFinite(result.recommended.kWp) && result.recommended.kWp > 0) {
-          setAnalysis(result);
-          setPricingSource("local");
-          return;
+        const allPkgs = calculatePackages(); // reads from localStorage
+        if (!cancelled && allPkgs && allPkgs.length > 0) {
+          const rec = recommendPackage(billRef.current, allPkgs) || allPkgs[0];
+          if (rec && isFinite(rec.kWp) && rec.kWp > 0) {
+            packagesRef.current = allPkgs;
+            setAnalysis(computeWithPackages(billRef.current, rec, allPkgs));
+            setPricingSource("local");
+            return;
+          }
         }
       } catch {
         // Keep defaults
@@ -220,14 +188,30 @@ export function SavingsCalculator() {
     })();
 
     return () => { cancelled = true; };
+  }, []);
+
+  // Recompute when bill changes — cepat & lokal (tanpa network),
+  // aman untuk drag slider berulang.
+  useEffect(() => {
+    billRef.current = bill; // sinkronkan ref di dalam effect (bukan render)
+    const pkgs = packagesRef.current;
+    if (!pkgs) return; // cache belum siap — analysis default sudah benar
+    const rec = recommendPackage(bill, pkgs) || pkgs[0];
+    if (rec && isFinite(rec.kWp) && rec.kWp > 0) {
+      setAnalysis(computeWithPackages(bill, rec, pkgs));
+    }
   }, [bill]);
 
   // Recompute when pricing settings change (from kalibrasi-harga "Simpan")
   useEffect(() => {
     const handler = () => {
       try {
-        const result = computeWithStorage(bill);
-        setAnalysis(result);
+        const allPkgs = calculatePackages(); // reads from localStorage
+        if (!allPkgs || allPkgs.length === 0) return;
+        const rec = recommendPackage(billRef.current, allPkgs) || allPkgs[0];
+        if (!rec || !isFinite(rec.kWp) || rec.kWp <= 0) return;
+        packagesRef.current = allPkgs;
+        setAnalysis(computeWithPackages(billRef.current, rec, allPkgs));
         setPricingSource("local");
       } catch (err) {
         console.error("[SavingsCalculator] Pricing update failed:", err);
@@ -235,7 +219,7 @@ export function SavingsCalculator() {
     };
     window.addEventListener("jmse-pricing-updated", handler);
     return () => window.removeEventListener("jmse-pricing-updated", handler);
-  }, [bill]);
+  }, []);
 
   // Recompute when bill changes
   const handleBillChange = useCallback((value: number) => {
@@ -322,6 +306,32 @@ export function SavingsCalculator() {
                   </button>
                 ))}
               </div>
+
+              {/* Slider untuk nilai di antara preset */}
+              <div className="max-w-md mx-auto mb-2">
+                <label
+                  htmlFor="bill-slider"
+                  className="sr-only"
+                >
+                  Atur tagihan listrik bulanan
+                </label>
+                <input
+                  id="bill-slider"
+                  type="range"
+                  min={500000}
+                  max={10000000}
+                  step={250000}
+                  value={bill}
+                  onChange={(e) => handleBillChange(Number(e.target.value))}
+                  className="w-full h-2 rounded-full appearance-none cursor-pointer bg-white/20 accent-solar focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-solar focus-visible:ring-offset-2"
+                  aria-valuetext={`${formatRp(bill)} per bulan`}
+                />
+                <div className="flex justify-between text-[10px] text-white/50 mt-1.5 font-medium">
+                  <span>Rp 500rb</span>
+                  <span>Rp 10jt+</span>
+                </div>
+              </div>
+
               <div className="text-4xl sm:text-5xl font-extrabold text-solar">
                 {formatRp(bill)}
                 <span className="text-lg font-medium text-muted-foreground">/bulan</span>
@@ -523,7 +533,7 @@ export function SavingsCalculator() {
                 href={WA_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-solar hover:bg-solar-dark text-white font-bold rounded-full transition-all duration-300 hover:shadow-xl hover:shadow-solar/30 hover:scale-105"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-solar hover:bg-solar-dark text-white font-bold rounded-full transition-all duration-300 hover:shadow-xl hover:shadow-solar/30 hover:scale-105 btn-shine"
               >
                 <MessageCircle className="w-5 h-5" />
                 Konsultasi Gratis Sekarang

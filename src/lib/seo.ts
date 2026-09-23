@@ -284,6 +284,57 @@ export function faqJsonLd(faqs: { q: string; a: string }[]) {
   };
 }
 
+/** HowTo schema — proses instalasi (data dari src/lib/process.ts). */
+export function howToJsonLd(steps: { name: string; text: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "Proses Instalasi PLTS — Jambi Solar Panel",
+    description:
+      "Tahapan pengerjaan instalasi panel surya & PLTS oleh PT. Jaya Mandiri Smart Energy: survei gratis, desain sistem, instalasi, commissioning, hingga monitoring dan dukungan garansi.",
+    totalTime: "P3D",
+    step: steps.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.name,
+      text: s.text,
+    })),
+  };
+}
+
+/** SoftwareApplication schema untuk kalkulator web (gratis). */
+export function softwareAppJsonLd({
+  name,
+  description,
+  path,
+}: {
+  name: string;
+  description: string;
+  path: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name,
+    description,
+    url: `${SITE_URL}${path}`,
+    applicationCategory: "FinanceApplication",
+    operatingSystem: "Web",
+    browserRequirements: "Requires JavaScript",
+    inLanguage: "id-ID",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "IDR",
+    },
+    publisher: {
+      "@type": "Organization",
+      "@id": `${SITE_URL}/#organization`,
+      name: BRAND_NAME,
+    },
+  };
+}
+
 /** WebSite schema untuk homepage. */
 export function webSiteJsonLd() {
   return {

@@ -1207,7 +1207,7 @@ export default function KalibrasiHargaPage() {
                   </p>
                 </div>
 
-                <div className="space-y-3 max-h-[600px] overflow-y-auto pr-1">
+                <div className="space-y-3 max-h-[600px] overflow-y-auto pr-1 scroll-panel">
                   {(Object.keys(inverterMeta) as (keyof InverterPrices)[]).map((key) => (
                     <InverterRow
                       key={key}

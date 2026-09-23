@@ -24,6 +24,7 @@ const footerLinks: Record<string, { label: string; href?: string; msg?: string }
     { label: "Tentang Kami", href: "/tentang-kami" },
     { label: "Proyek & Studi Kasus", href: "/proyek" },
     { label: "Harga Panel Surya Jambi", href: "/harga-panel-surya-jambi" },
+    { label: "Kalkulator PLTS", href: "/kalkulator-plts" },
     { label: "Artikel & Panduan", href: "/artikel" },
     { label: "Testimoni", href: "/#testimoni" },
     { label: "FAQ", href: "/faq" },
