@@ -25,7 +25,7 @@ const LAST_MODIFIED = {
   maintenance: "2026-09-24",
   tenderProcurement: "2026-09-24",
   sewaPlts: "2026-09-24",
-  tentangKami: "2026-09-23",
+  tentangKami: "2026-09-24",
   proyek: "2026-09-24",
   hargaPanelSurya: "2026-09-23",
   artikelIndex: "2026-09-23",

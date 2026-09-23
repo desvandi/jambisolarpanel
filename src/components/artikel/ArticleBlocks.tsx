@@ -1,19 +1,80 @@
 import Link from "next/link";
-import { ArrowRight, Info } from "lucide-react";
+import { ArrowRight, Info, BookMarked } from "lucide-react";
 import type { ArticleBlock } from "@/content/articles/types";
 import { buildTocHeadings } from "@/lib/anchor";
+import {
+  autoLinkSegments,
+  createAutoLinkState,
+  termLabel,
+  usedTerms,
+  type AutoLinkSegment,
+  type AutoLinkState,
+} from "@/lib/glossary-autolink";
 
 /**
  * Renderer blok konten artikel (server component, tanpa JS tambahan).
- * Setiap h2 mendapat id anchor untuk Daftar Isi & deep-linking —
- * id dihitung dengan logika yang sama dengan ToC halaman artikel.
+ * - Setiap h2 mendapat id anchor untuk Daftar Isi & deep-linking —
+ *   id dihitung dengan logika yang sama dengan ToC halaman artikel.
+ * - Badan teks (p/ul/ol/note) otomatis menautkan kemunculan pertama
+ *   istilah kamus ke /istilah-plts#<id> (lihat lib/glossary-autolink).
  */
+
+/** Render segmen auto-link menjadi React nodes. */
+function Segments({
+  segments,
+  state,
+}: {
+  segments: AutoLinkSegment[];
+  state: AutoLinkState;
+}) {
+  return (
+    <>
+      {segments.map((seg, i) =>
+        seg.kind === "text" ? (
+          <span key={`${i}-t`}>{seg.text}</span>
+        ) : (
+          <Link
+            key={`${state.linkCount}-${i}-${seg.id}`}
+            href={`/istilah-plts#${seg.id}`}
+            title={`Lihat definisi: ${termLabel(seg.id) ?? seg.id}`}
+            className="glossary-link"
+          >
+            {seg.text}
+          </Link>
+        )
+      )}
+    </>
+  );
+}
+
 export function ArticleBlocks({ blocks }: { blocks: ArticleBlock[] }) {
   const headings = buildTocHeadings(
     blocks.filter((b): b is Extract<ArticleBlock, { type: "h2" }> => b.type === "h2")
       .map((b) => b.text)
   );
   let headingIndex = 0;
+
+  // ---- Pre-pass: hitung segmen auto-link untuk semua teks badan,
+  // dalam urutan dokumen (p → ul/ol items → note.text per blok).
+  // Dua fase agar urutan konsisten antara pre-compute dan render.
+  const autolinkState = createAutoLinkState();
+  const segmentsByPiece: AutoLinkSegment[][] = [];
+  for (const block of blocks) {
+    const texts: string[] = [];
+    if (block.type === "p" || block.type === "note") {
+      texts.push(block.text);
+    } else if (block.type === "ul" || block.type === "ol") {
+      texts.push(...block.items);
+    }
+    for (const t of texts) {
+      segmentsByPiece.push(autoLinkSegments(t, autolinkState));
+    }
+  }
+  let pieceIndex = 0;
+  const nextSegments = (): AutoLinkSegment[] =>
+    segmentsByPiece[pieceIndex++] ?? [{ kind: "text", text: "" }];
+
+  const linkedTerms = usedTerms(autolinkState);
 
   return (
     <div className="space-y-6">
@@ -43,7 +104,7 @@ export function ArticleBlocks({ blocks }: { blocks: ArticleBlock[] }) {
           case "p":
             return (
               <p key={i} className="text-base text-foreground/90 leading-relaxed">
-                {block.text}
+                <Segments segments={nextSegments()} state={autolinkState} />
               </p>
             );
           case "ul":
@@ -52,7 +113,9 @@ export function ArticleBlocks({ blocks }: { blocks: ArticleBlock[] }) {
                 {block.items.map((item, j) => (
                   <li key={j} className="flex gap-3 text-foreground/90 leading-relaxed">
                     <span className="mt-2.5 w-1.5 h-1.5 rounded-full bg-solar flex-shrink-0" />
-                    <span>{item}</span>
+                    <span>
+                      <Segments segments={nextSegments()} state={autolinkState} />
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -62,7 +125,7 @@ export function ArticleBlocks({ blocks }: { blocks: ArticleBlock[] }) {
               <ol key={i} className="space-y-2.5 list-decimal pl-5 marker:text-solar marker:font-bold">
                 {block.items.map((item, j) => (
                   <li key={j} className="text-foreground/90 leading-relaxed pl-1">
-                    {item}
+                    <Segments segments={nextSegments()} state={autolinkState} />
                   </li>
                 ))}
               </ol>
@@ -112,7 +175,9 @@ export function ArticleBlocks({ blocks }: { blocks: ArticleBlock[] }) {
                   {block.title ? (
                     <p className="font-bold text-navy dark:text-white mb-1">{block.title}</p>
                   ) : null}
-                  <p className="text-sm text-foreground/90 leading-relaxed">{block.text}</p>
+                  <p className="text-sm text-foreground/90 leading-relaxed">
+                    <Segments segments={nextSegments()} state={autolinkState} />
+                  </p>
                 </div>
               </div>
             );
@@ -162,6 +227,28 @@ export function ArticleBlocks({ blocks }: { blocks: ArticleBlock[] }) {
             return null;
         }
       })}
+
+      {/* Chip istilah yang ditautkan dalam artikel ini — hub-and-spoke */}
+      {linkedTerms.length > 0 ? (
+        <div className="pt-6 border-t border-border">
+          <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+            <BookMarked className="w-3.5 h-3.5 text-solar" />
+            Istilah dalam artikel ini
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {linkedTerms.map((t) => (
+              <Link
+                key={t.id}
+                href={`/istilah-plts#${t.id}`}
+                className="term-chip"
+                title={`Lihat definisi: ${t.term}`}
+              >
+                {t.term}
+              </Link>
+            ))}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

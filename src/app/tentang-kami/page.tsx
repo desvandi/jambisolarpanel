@@ -14,6 +14,10 @@ import {
   Zap,
   Award,
   HardHat,
+  BadgeCheck,
+  PenTool,
+  Gauge,
+  MessagesSquare,
 } from "lucide-react";
 import { SitePageLayout } from "@/components/site/SitePageLayout";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -119,6 +123,44 @@ const services = [
   { label: "Tender & Procurement", href: "/tender-procurement" },
 ];
 
+const teamCompetencies = [
+  {
+    icon: PenTool,
+    title: "Desain Sistem oleh Insinyur",
+    desc: "Survei lokasi, audit beban listrik, dan perhitungan kapasitas panel–inverter–baterai dikerjakan sebagai satu sistem terpadu, bukan paket template.",
+  },
+  {
+    icon: Wrench,
+    title: "Instalasi & Commissioning",
+    desc: "Pemasangan oleh teknisi berpengalaman dengan testing menyeluruh sebelum serah terima — sistem terbukti berproduksi sesuai desain.",
+  },
+  {
+    icon: Gauge,
+    title: "Monitoring & Maintenance",
+    desc: "Dukungan purna jual selama masa garansi, opsi smart monitoring, dan layanan maintenance berkala untuk menjaga performa.",
+  },
+  {
+    icon: MessagesSquare,
+    title: "Edukasi & Konsultasi",
+    desc: "Klien dibekali pemahaman lewat pelatihan penggunaan, panduan perawatan, serta Knowledge Center, kalkulator, dan kamus istilah di situs ini.",
+  },
+];
+
+const ownerSupervisedPoints = [
+  {
+    title: "Kendali Mutu Langsung",
+    desc: "Keputusan teknis final diambil oleh pihak yang sama yang menanggung garansi tertulis — bukan oleh subkontraktor yang tidak berkepentingan jangka panjang.",
+  },
+  {
+    title: "Satu Pintu Tanggung Jawab",
+    desc: "Ada kebutuhan purna jual? Anda berbicara langsung dengan perusahaan yang memasang sistem Anda — tanpa perantara.",
+  },
+  {
+    title: "Tenaga Terlatih",
+    desc: "Seluruh pemasangan dikerjakan teknisi berpengalaman di bawah supervisi langsung owner, dengan dokumentasi commissioning.",
+  },
+];
+
 export default function TentangKamiPage() {
   return (
     <SitePageLayout
@@ -185,6 +227,126 @@ export default function TentangKamiPage() {
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
           </div>
+        </div>
+      </section>
+
+      {/* Tim & Kompetensi — E-E-A-T deep-dive */}
+      <section id="tim-kompetensi" className="py-14 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <p className="section-badge">Tim &amp; Kompetensi</p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mt-3">
+              Dibalik Setiap Sistem: Tim yang Bertanggung Jawab
+            </h2>
+          </div>
+
+          {/* Owner spotlight */}
+          <div className="owner-card p-6 sm:p-8 rounded-3xl mb-10">
+            <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-6 md:gap-8 items-center">
+              <div className="relative aspect-square md:aspect-[4/5] rounded-2xl overflow-hidden border-2 border-solar/30 mx-auto w-full max-w-[240px]">
+                <Image
+                  src="/team-owner.jpg"
+                  alt="Owner PT. Jaya Mandiri Smart Energy mengawasi pemasangan panel surya di lokasi proyek"
+                  fill
+                  sizes="(max-width: 768px) 240px, 240px"
+                  className="object-cover"
+                />
+              </div>
+              <div>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-solar/10 border border-solar/25 text-xs font-bold text-solar mb-4">
+                  <BadgeCheck className="w-3.5 h-3.5" />
+                  Owner Supervised
+                </span>
+                <h3 className="text-xl sm:text-2xl font-extrabold text-navy dark:text-white mb-3">
+                  Pendiri &amp; Pemilik — PT. Jaya Mandiri Smart Energy
+                </h3>
+                <div className="space-y-3 text-sm text-foreground/90 leading-relaxed">
+                  <p>
+                    Perusahaan ini berdiri sebagai badan usaha resmi — PT dengan
+                    NIB, SK Kemenkumham, dan izin usaha lengkap — dan setiap
+                    proyeknya diawasi langsung oleh pemiliknya. Kami tidak
+                    membeli proyek lalu mengalihkannya ke pihak lain.
+                  </p>
+                  <p>
+                    Bagi Anda, itu berarti satu hal praktis: orang yang menandatangani
+                    garansi tertulis Anda adalah orang yang sama yang memastikan
+                    sistem dipasang benar sejak hari pertama.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-5">
+                  {[
+                    "Legalitas PT lengkap",
+                    "Supervisi langsung ke lokasi",
+                    "Garansi tertulis resmi",
+                  ].map((chip) => (
+                    <span
+                      key={chip}
+                      className="px-3 py-1.5 rounded-full bg-card border border-border text-xs font-semibold text-foreground/80"
+                    >
+                      {chip}
+                    </span>
+                  ))}
+                </div>
+                <a
+                  href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy%2C%20saya%20ingin%20bicara%20dengan%20tim%20tentang%20proyek%20PLTS%20saya"
+                  className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-solar hover:bg-solar-dark text-white font-semibold text-sm rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-solar/30"
+                >
+                  Bicara Langsung dengan Tim Kami
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Mengapa Owner Supervised */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            {ownerSupervisedPoints.map((p, i) => (
+              <div key={p.title} className="relative p-6 rounded-2xl bg-card border border-border hover:border-solar/30 hover-lift transition-all duration-300">
+                <span className="absolute -top-3 left-5 w-7 h-7 rounded-full bg-solar text-white text-xs font-extrabold flex items-center justify-center shadow-md shadow-solar/40">
+                  {i + 1}
+                </span>
+                <h4 className="font-bold text-navy dark:text-white mb-2 pt-1">
+                  {p.title}
+                </h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {p.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Kompetensi tim */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {teamCompetencies.map((c) => (
+              <div
+                key={c.title}
+                className="p-6 rounded-2xl bg-card border border-border hover:border-solar/30 hover-lift transition-all duration-300 group"
+              >
+                <div className="w-12 h-12 rounded-xl bg-solar/10 flex items-center justify-center mb-4 group-hover:bg-solar group-hover:text-white transition-colors">
+                  <c.icon className="w-6 h-6 text-solar group-hover:text-white transition-colors" />
+                </div>
+                <h3 className="text-base font-bold text-navy dark:text-white mb-2">
+                  {c.title}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {c.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Link silang ke knowledge center */}
+          <p className="mt-8 text-center text-sm text-muted-foreground">
+            Ingin menilai sendiri cara kami bekerja?{" "}
+            <Link href="/artikel" className="link-underline font-semibold text-solar">
+              Baca Knowledge Center kami
+            </Link>{" "}
+            — 13+ panduan teknis yang kami tulis sendiri, atau{" "}
+            <Link href="/proyek" className="link-underline font-semibold text-solar">
+              lihat proyek yang telah dikerjakan
+            </Link>
+            .
+          </p>
         </div>
       </section>
 
