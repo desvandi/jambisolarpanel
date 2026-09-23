@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { ServicePageLayout } from "@/components/landing/ServicePageLayout";
+import { PjutsConfigurator } from "./sections/PjutsConfigurator";
 import { pjutsPackages } from "@/lib/pricing-pjuts";
 import { formatRp } from "@/lib/pricing";
 import { MessageCircle, Sun, Shield, Clock, MapPin, Wrench, CheckCircle } from "lucide-react";
@@ -117,8 +118,11 @@ export default function PJUTSPage() {
         </div>
       </section>
 
+      {/* Pemilih paket cepat — mini-configurator */}
+      <PjutsConfigurator />
+
       {/* Pricing */}
-      <section className="py-16 md:py-20 bg-muted/30">
+      <section id="harga" className="py-16 md:py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="text-center mb-12">
             <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-emerald-600 bg-emerald-600/10 rounded-full">

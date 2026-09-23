@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { ServicePageLayout } from "@/components/landing/ServicePageLayout";
+import { SolarPumpConfigurator } from "./sections/SolarPumpConfigurator";
 import { solarPumpPackages } from "@/lib/pricing-solarpump";
 import { formatRp } from "@/lib/pricing";
 import { MessageCircle, Droplets, Shield, Sun, CheckCircle, TreePine, Factory } from "lucide-react";
@@ -101,8 +102,11 @@ export default function SolarPumpPage() {
         </div>
       </section>
 
+      {/* Pemilih pompa cepat — mini-configurator */}
+      <SolarPumpConfigurator />
+
       {/* Pricing */}
-      <section className="py-16 md:py-20">
+      <section id="harga" className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="text-center mb-12">
             <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-blue-600 bg-blue-600/10 rounded-full">
