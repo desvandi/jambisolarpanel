@@ -41,6 +41,7 @@ export default function SolarHomePage() {
   return (
     <ServicePageLayout
       subBrand="Jambi Solar Home"
+      termIds={["plts", "kwp", "kwh", "hybrid", "off-grid", "baterai-lifepo4", "dod", "roi", "tarif-pln", "daya-pln", "paket-kwp", "panel-monokristalin"]}
       title="PLTS Rumah Tangga — Energi Mandiri untuk Keluarga Anda"
       tagline="Hemat tagihan listrik, backup saat PLN padam, investasi jangka panjang."
       description="Sistem Pembangkit Listrik Tenaga Surya (PLTS) hybrid untuk rumah tangga dengan kapasitas 1 kWp hingga 5 kWp + baterai. Cocok untuk kebutuhan rumah tangga kecil hingga keluarga besar dengan AC, kulkas, dan peralatan modern lainnya."

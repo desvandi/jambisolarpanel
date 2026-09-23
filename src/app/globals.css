@@ -798,6 +798,117 @@
   transform: translateY(-2px);
 }
 
+/* ============================================
+   Simulasi Beli vs Sewa — kartu hasil
+   ============================================ */
+.compare-card {
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.compare-card:hover {
+  box-shadow: 0 12px 32px -14px rgba(22, 163, 74, 0.25);
+  transform: translateY(-2px);
+}
+
+.compare-card-verdict {
+  position: relative;
+  overflow: hidden;
+}
+
+.compare-card-verdict::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top right,
+    rgba(22, 163, 74, 0.12),
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+/* Slider rentang horizon — styling native range (scoped: .range-styled,
+   agar tidak bentrok dengan slider kalkulator yang memakai track element) */
+input[type="range"].range-styled {
+  height: 1.5rem;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+}
+
+input[type="range"].range-styled::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #16a34a 0%, #86efac 100%);
+  opacity: 0.9;
+}
+
+.dark input[type="range"].range-styled::-webkit-slider-runnable-track {
+  background: linear-gradient(90deg, #15803d 0%, #4ade80 100%);
+}
+
+input[type="range"].range-styled::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  margin-top: -7px;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 3px solid #16a34a;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.35);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+input[type="range"].range-styled::-webkit-slider-thumb:hover {
+  transform: scale(1.12);
+}
+
+.dark input[type="range"].range-styled::-webkit-slider-thumb {
+  background: #0f172a;
+  border-color: #4ade80;
+}
+
+input[type="range"].range-styled::-moz-range-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #16a34a 0%, #86efac 100%);
+}
+
+input[type="range"].range-styled::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 3px solid #16a34a;
+  cursor: pointer;
+}
+
+/* ============================================
+   Navigasi prev/next artikel
+   ============================================ */
+.prevnext-card {
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.prevnext-card:hover {
+  border-color: rgba(22, 163, 74, 0.4);
+  box-shadow: 0 10px 28px -14px rgba(22, 163, 74, 0.3);
+  transform: translateY(-2px);
+}
+
+.prevnext-card:focus-visible {
+  outline: 2px solid rgba(22, 163, 74, 0.7);
+  outline-offset: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-sun-glow {
     animation: none;
@@ -805,7 +916,9 @@
   .term-card:hover,
   .glossary-related-link:hover,
   .owner-card:hover,
-  .term-chip:hover {
+  .term-chip:hover,
+  .compare-card:hover,
+  .prevnext-card:hover {
     transform: none;
   }
 }

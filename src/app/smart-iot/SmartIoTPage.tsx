@@ -14,6 +14,7 @@ export default function SmartIoTPage() {
   return (
     <ServicePageLayout
       subBrand="Jambi Solar IoT"
+      termIds={["smart-monitoring", "plts", "commissioning", "maintenance-plts", "kwp"]}
       title="Smart IoT Monitoring & Solar CCTV"
       tagline="Monitoring real-time performa PLTS + CCTV tenaga surya untuk keamanan 24/7."
       description="Dua layanan IoT dalam satu mitra: Smart Monitoring untuk pantau performa PLTS secara real-time, dan Solar CCTV untuk keamanan area tanpa kabel listrik PLN."

@@ -8,6 +8,7 @@ import { Footer } from "@/components/landing/Footer";
 import { FloatingButtons } from "@/components/landing/FloatingButtons";
 import { ConsultationForm } from "@/components/landing/ConsultationForm";
 import { RelatedServices } from "@/components/landing/RelatedServices";
+import { ServiceTermChips } from "@/components/landing/ServiceTermChips";
 import { SewaPltsHero } from "./sections/SewaPltsHero";
 import { SewaPltsDualMode } from "./sections/SewaPltsDualMode";
 import { SewaPltsBenefits } from "./sections/SewaPltsBenefits";
@@ -15,6 +16,7 @@ import { SewaPltsComparisonTable } from "./sections/SewaPltsComparisonTable";
 import { SewaPltsPackages } from "./sections/SewaPltsPackages";
 import { SewaPltsIncluded } from "./sections/SewaPltsIncluded";
 import { SewaPltsComparison } from "./sections/SewaPltsComparison";
+import { SewaPltsCostSimulator } from "./sections/SewaPltsCostSimulator";
 import { SewaPltsCalculator } from "./sections/SewaPltsCalculator";
 import { SewaPltsFaq } from "./sections/SewaPltsFaq";
 import { SewaPltsFinalCta } from "./sections/SewaPltsFinalCta";
@@ -29,10 +31,11 @@ import { SewaPltsFinalCta } from "./sections/SewaPltsFinalCta";
  *   4. Tabel Komparasi (ringkasan 10 paket)
  *   5. Daftar Paket (dengan filter kategori) — benefit-oriented + badge "Tanpa investasi"
  *   6. Sudah Termasuk (rasa aman) — NEW
- *   7. Perbandingan Beli vs Sewa
- *   8. Kalkulator
- *   9. FAQ
- *   10. CTA WhatsApp (Final)
+ *   7. Perbandingan Beli vs Sewa (kualitatif)
+ *   8. Simulasi Biaya Beli vs Sewa (interaktif)
+ *   9. Kalkulator
+ *   10. FAQ
+ *   11. CTA WhatsApp (Final)
  *
  * Seluruh konten (paket, harga, FAQ, CTA) diambil dari src/lib/rentalPackages.ts
  * sehingga owner cukup mengubah satu file untuk update harga.
@@ -66,6 +69,7 @@ export default function SewaPltsPage() {
           <SewaPltsPackages />
           <SewaPltsIncluded />
           <SewaPltsComparison />
+          <SewaPltsCostSimulator />
           <SewaPltsCalculator />
           <SewaPltsFaq />
           <SewaPltsFinalCta />
@@ -73,6 +77,9 @@ export default function SewaPltsPage() {
 
         {/* Internal linking — layanan terkait */}
         <RelatedServices />
+
+        {/* Istilah penting → Kamus Istilah (internal linking) */}
+        <ServiceTermChips ids={["sewa-plts", "plts", "kwp", "hybrid", "off-grid", "baterai-lifepo4", "maintenance-plts", "roi"]} />
 
         {/* Consultation CTA Section — mengikuti pola service page lainnya */}
         <section className="py-16 md:py-24 bg-muted/30">

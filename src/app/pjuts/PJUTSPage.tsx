@@ -23,6 +23,7 @@ export default function PJUTSPage() {
   return (
     <ServicePageLayout
       subBrand="Jambi Solar Agro — PJUTS"
+      termIds={["pjuts", "plts", "psh", "baterai-lifepo4", "siklus-baterai", "bos"]}
       title="Penerangan Jalan Umum Tenaga Surya (PJUTS)"
       tagline="Cahaya untuk jalan desa, perkebunan, kawasan industri — tanpa kabel PLN."
       description="Solusi penerangan jalan mandiri tanpa koneksi PLN. Menggunakan panel surya monokristalin, baterai LiFePO4, dan LED SMD berkualitas tinggi dalam tiang all-in-one. Cocok untuk jalan desa, akses perkebunan sawit, kawasan industri, dan area publik."

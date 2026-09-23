@@ -29,6 +29,7 @@ export default function TenderProcurementPage() {
   return (
     <ServicePageLayout
       subBrand="Jambi Solar Infrastructure"
+      termIds={["tender-pengadaan", "plts", "commissioning", "bos", "kwp", "garansi-plts"]}
       title="Pengadaan Barang & Jasa Energi Terbarukan"
       tagline="Siap melayani proyek pengadaan energi terbarukan untuk pemerintah, BUMN, dan korporasi."
       description="JMSE menyediakan layanan EPC dan pengadaan barang & jasa energi terbarukan secara profesional. Kami siap mendukung proyek pemerintah daerah, BUMN, korporasi, dan institusi dalam mewujudkan transisi energi bersih."

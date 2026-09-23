@@ -21,6 +21,7 @@ import {
   getRelatedArticles,
   formatDateId,
 } from "@/content/articles";
+import { ArrowLeft, ArrowRight, LayoutGrid } from "lucide-react";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -61,6 +62,14 @@ export default async function ArticleDetailPage({ params }: Props) {
       .filter((b): b is Extract<typeof b, { type: "h2" }> => b.type === "h2")
       .map((b) => b.text)
   );
+
+  // Navigasi prev/next — urutan katalog artikel
+  const currentIndex = articles.findIndex((a) => a.slug === article.slug);
+  const prevArticle = currentIndex > 0 ? articles[currentIndex - 1] : null;
+  const nextArticle =
+    currentIndex >= 0 && currentIndex < articles.length - 1
+      ? articles[currentIndex + 1]
+      : null;
 
   return (
     <SitePageLayout
@@ -152,6 +161,62 @@ export default async function ArticleDetailPage({ params }: Props) {
 
             {/* Author box — E-E-A-T */}
             <ArticleAuthorBox />
+
+            {/* Navigasi prev/next artikel */}
+            {(prevArticle || nextArticle) && (
+              <nav
+                aria-label="Navigasi artikel"
+                className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4"
+              >
+                {prevArticle ? (
+                  <Link
+                    href={`/artikel/${prevArticle.slug}`}
+                    rel="prev"
+                    className="prevnext-card group p-5 rounded-2xl bg-card border border-border text-left"
+                  >
+                    <span className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground mb-2">
+                      <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+                      Artikel Sebelumnya
+                    </span>
+                    <span className="block font-bold text-navy dark:text-white leading-snug group-hover:text-solar transition-colors">
+                      {prevArticle.title}
+                    </span>
+                    <span className="block text-xs text-muted-foreground mt-1.5">
+                      {prevArticle.readingMinutes} menit baca
+                    </span>
+                  </Link>
+                ) : (
+                  <span className="hidden sm:block" aria-hidden="true" />
+                )}
+                {nextArticle ? (
+                  <Link
+                    href={`/artikel/${nextArticle.slug}`}
+                    rel="next"
+                    className="prevnext-card group p-5 rounded-2xl bg-card border border-border text-left sm:text-right"
+                  >
+                    <span className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground mb-2 sm:justify-end">
+                      Artikel Selanjutnya
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                    <span className="block font-bold text-navy dark:text-white leading-snug group-hover:text-solar transition-colors">
+                      {nextArticle.title}
+                    </span>
+                    <span className="block text-xs text-muted-foreground mt-1.5">
+                      {nextArticle.readingMinutes} menit baca
+                    </span>
+                  </Link>
+                ) : null}
+              </nav>
+            )}
+
+            {/* Kembali ke indeks */}
+            <Link
+              href="/artikel"
+              className="group mt-4 inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-solar transition-colors"
+            >
+              <LayoutGrid className="w-4 h-4" />
+              Lihat semua artikel
+            </Link>
           </div>
 
           {/* Desktop sticky ToC */}

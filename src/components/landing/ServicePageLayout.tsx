@@ -8,6 +8,7 @@ import { FloatingButtons } from "@/components/landing/FloatingButtons";
 import { ConsultationForm } from "@/components/landing/ConsultationForm";
 import { RelatedServices } from "@/components/landing/RelatedServices";
 import { ProcessTimeline } from "@/components/landing/ProcessTimeline";
+import { ServiceTermChips } from "@/components/landing/ServiceTermChips";
 import { Home, ChevronRight, CheckCircle, Zap, Shield } from "lucide-react";
 import { ReactNode } from "react";
 
@@ -29,6 +30,8 @@ interface ServicePageLayoutProps {
   roiStatement?: string;
   /** Optional: Price range hint */
   priceHint?: string;
+  /** Optional: glossary term ids untuk chips "Istilah Penting" (hub-and-spoke ke /istilah-plts) */
+  termIds?: string[];
 }
 
 export function ServicePageLayout({
@@ -44,6 +47,7 @@ export function ServicePageLayout({
   keyBenefits,
   roiStatement,
   priceHint,
+  termIds,
 }: ServicePageLayoutProps) {
   const defaultWaText = waText || `Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan layanan ${subBrand}. Mohon informasi lebih lanjut.`;
 
@@ -189,6 +193,9 @@ export function ServicePageLayout({
 
         {/* Proses instalasi — timeline + HowTo JSON-LD */}
         <ProcessTimeline />
+
+        {/* Istilah penting → Kamus Istilah (internal linking) */}
+        <ServiceTermChips ids={termIds ?? []} />
 
         {/* Internal linking — layanan terkait */}
         <RelatedServices />

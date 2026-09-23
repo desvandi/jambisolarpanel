@@ -23,6 +23,7 @@ export default function EVChargingPage() {
   return (
     <ServicePageLayout
       subBrand="Jambi Solar EV"
+      termIds={["ev-charging", "plts", "on-grid", "kwh", "hybrid", "tarif-pln"]}
       title="EV Charging Terintegrasi PLTS"
       tagline="Isi daya kendaraan listrik Anda dengan energi surya — hemat & mandiri."
       description="Solusi EV Charging terintegrasi dengan PLTS. Charger AC 7.2kW yang kompatibel dengan semua kendaraan listrik di Indonesia. Pilih charger standalone atau paket terintegrasi dengan PLTS untuk penghematan maksimal."

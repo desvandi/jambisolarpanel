@@ -23,6 +23,7 @@ export default function SolarPumpPage() {
   return (
     <ServicePageLayout
       subBrand="Jambi Solar Agro — Solar Pump"
+      termIds={["solar-pump", "plts", "kwp", "psh", "mppt", "baterai-lifepo4", "bos"]}
       title="Solar Water Pump — Pompa Air Tenaga Surya"
       tagline="Irigasi kebun sawit, pertanian, peternakan tanpa listrik PLN."
       description="Pompa air submersible bertenaga surya untuk irigasi perkebunan sawit, pertanian, dan peternakan. Menggunakan komponen berkualitas tinggi dengan garansi resmi dan MPPT controller untuk efisiensi maksimal."
