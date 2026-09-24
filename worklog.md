@@ -297,4 +297,4 @@ Stage Summary:
 - GSC verification meta tag LIVE di production (semua halaman, karena di root layout)
 - Owner tinggal klik "Verifikasi" di Google Search Console — domain https://jambisolarpanel.vercel.app akan ter-verify
 - Ini langkah pertama dari PANDUAN-SEO-OWNER.md section 1 (GSC) — owner-side checklist week 1 dimulai
-- Commit: b3c6418 (HEAD, pushed)
+- Commit: b3c6418 (pushed; HEAD saat itu — worklog update ini sendiri = 708021c)

@@ -1,4 +1,38 @@
 import type { Metadata } from "next";
+import {
+  calculatePackages,
+  defaultComponentPrices,
+  defaultInverterPrices,
+  defaultSettings,
+} from "./pricing";
+import { rentalPackages } from "./rentalPackages";
+
+/**
+ * Rentang harga bisnis untuk LocalBusiness.priceRange (saran optional dari
+ * Google Rich Results Test). Dihitung dari sumber data yang SAMA dengan
+ * yang ditampilkan situs — bukan angka statis yang bisa basi:
+ * - Paket instalasi: calculatePackages() dengan harga default (halaman /harga)
+ * - Paket sewa: rentalPackages termurah (halaman /sewa-plts)
+ */
+function businessPriceRange(): string {
+  const installs = calculatePackages(
+    defaultComponentPrices,
+    defaultInverterPrices,
+    defaultSettings
+  )
+    .map((p) => p.price)
+    .filter((p) => p > 0)
+    .sort((a, b) => a - b);
+  const rentalMin = Math.min(
+    ...rentalPackages.map((r) => r.monthlyPrice).filter((p) => p > 0)
+  );
+  if (installs.length === 0 || !isFinite(rentalMin)) return "Rp31jt–Rp288jt";
+  const fmtJt = (v: number) =>
+    `${(v / 1e6).toFixed(1).replace(".", ",").replace(",0", "")}jt`;
+  return `Rp${fmtJt(installs[0])}–Rp${fmtJt(
+    installs[installs.length - 1]
+  )} (paket instalasi); sewa mulai Rp${Math.round(rentalMin / 1000)}rb/bln`;
+}
 
 /**
  * Single source of truth untuk konfigurasi SEO situs.
@@ -139,6 +173,7 @@ export function localBusinessJsonLd() {
       "Jasa pasang panel surya & instalasi PLTS (pembangkit listrik tenaga surya) untuk rumah, bisnis, kebun, dan infrastruktur di Jambi, Sumatera, dan Jawa Bagian Barat. Layanan: PLTS off-grid & hybrid, PJUTS, solar pump, EV charging, smart monitoring, dan maintenance.",
     url: `${SITE_URL}/`,
     telephone: BUSINESS_NAP.telephone,
+    priceRange: businessPriceRange(),
     image: `${SITE_URL}/hero-solar.jpg`,
     logo: `${SITE_URL}/logo-jmse.png`,
     address: {
@@ -329,9 +364,10 @@ export function softwareAppJsonLd({
       priceCurrency: "IDR",
     },
     publisher: {
+      // Reference-only — hindari "Duplicate field name" saat merge @id
+      // (pola sama dengan webSiteJsonLd, Rich Results Test 2026-09-24).
       "@type": "Organization",
       "@id": `${SITE_URL}/#organization`,
-      name: BRAND_NAME,
     },
   };
 }
@@ -372,9 +408,13 @@ export function webSiteJsonLd() {
     url: `${SITE_URL}/`,
     inLanguage: "id-ID",
     publisher: {
+      // Reference-only (@id menunjuk entitas LocalBusiness #organization di
+      // root layout). JANGAN menaruh `name` di sini — name publisher yang
+      // berbeda dari LocalBusiness memicu warning "Duplicate field name"
+      // saat Google me-merge entitas berdasarkan @id (Rich Results Test
+      // 2026-09-24).
       "@type": "Organization",
       "@id": `${SITE_URL}/#organization`,
-      name: BRAND_NAME,
     },
   };
 }

@@ -6,7 +6,7 @@
  * 1 kWp ±3 kWh/hari; panel monokristalin 650 Wp; baterai LiFePO4
  * 48V 100Ah (4,8 kWh/unit, DoD 80–90%, siklus 3.000–6.000);
  * paket rumah 1,3–5,2 kWp; bisnis 7,15–10,4 kWp; industri 11,7–20,8 kWp;
- * ROI rumah 8–9 thn, bisnis 5–7 thn; garansi panel 25 thn performa,
+ * ROI rumah 9–11 thn, bisnis 8–9 thn; garansi panel 25 thn performa,
  * inverter 5–10 thn, baterai 5–10 thn, instalasi 2 thn; PPN 11%;
  * sewa PLTS mulai Rp875rb/bln; PJUTS 30–150 W; solar pump 1–3 HP;
  * EV charger AC 7,2 kW; tarif PLN acuan Rp1.352–1.444,70/kWh.
