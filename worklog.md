@@ -298,3 +298,30 @@ Stage Summary:
 - Owner tinggal klik "Verifikasi" di Google Search Console — domain https://jambisolarpanel.vercel.app akan ter-verify
 - Ini langkah pertama dari PANDUAN-SEO-OWNER.md section 1 (GSC) — owner-side checklist week 1 dimulai
 - Commit: b3c6418 (pushed; HEAD saat itu — worklog update ini sendiri = 708021c)
+
+---
+Task ID: 31
+Agent: main (Z.ai Code)
+Task: Round 8 CLOSED — tutup 2 item P2 housekeeping auditor + bersihkan 2 warning optional dari Rich Results Test yang dibagikan auditor
+
+Work Log:
+- Auditor berikan verdict resmi: ROUND 8 = CLOSED / PASS (commit chain 5bdb935..708021c semua diterima, EV/Rental/Solar Pump/ROI/CWV/GSC/canonical/structured data semua PASS)
+- P2 #1: src/lib/glossary.ts header comment ROI lama "rumah 8–9 thn, bisnis 5–7 thn" → "rumah 9–11 thn, bisnis 8–9 thn" (selaras konten aktual baris 265)
+- P2 #2: worklog.md Task 30 referensi HEAD stale "b3c6418 (HEAD)" → diperjulas (b3c6418 = commit kode; 708021c = commit worklog)
+- Review 2 link Rich Results Test auditor via agent-browser:
+  * /faq → 3 valid items (Breadcrumbs, LocalBusiness, Organization), crawled successfully
+  * /harga-panel-surya-jambi → 3 valid items, pola sama
+  * 2 warning optional teridentifikasi: (a) LocalBusiness missing priceRange, (b) Organization duplicate field "name"
+- Akar masalah (b): webSiteJsonLd publisher {@id #organization, name "PT. Jaya Mandiri Smart Energy"} konflik dengan LocalBusiness {@id #organization, name "Jambi Solar Panel"} saat Google merge by @id
+- Fix (b): publisher webSiteJsonLd + softwareAppJsonLd (pola identik, latent) → reference-only {@type, @id} tanpa name; komentar penjelas ditambahkan agar tidak diulang
+- Fix (a): tambah priceRange di localBusinessJsonLd() — dihitung DINAMIS dari sumber yang sama dengan halaman situs: calculatePackages(default) → Rp31,3jt–Rp287,6jt + rentalPackages min → sewa Rp875rb/bln. Bukan angka statis (tidak akan basi)
+- Tidak menambah schema type / fitur SEO baru (patuh directive auditor: fase = measurement)
+- QA: lint 0, tsc src 0, 5 route utama 200, JSON-LD verified lokal + production
+- Commit 77bd943 + push → Vercel deploy success → verified production: priceRange + publisher reference-only live di https://jambisolarpanel.vercel.app/
+
+Stage Summary:
+- ROUND 8 RESMI CLOSED (auditor verdict) — semua dev-side housekeeping selesai
+- Kedua warning optional Rich Results Test dibersihkan di production; retest Google selanjutnya diharapkan 0 non-critical issues (kecuali FAQPage yang memang sudah deprecated utk mayoritas situs — bukan error)
+- Sisa pekerjaan = owner-side: (1) klik Verify di GSC, (2) submit sitemap.xml + URL inspection 5 halaman prioritas, (3) GBP setup, (4) bukti proyek nyata, (5) tunggu data impression/click 2–4 minggu
+- Catatan auditor diadopsi: bagian custom domain di PANDUAN-SEO-OWNER.md dibaca sebagai analisis opsi masa depan, BUKAN task wajib — official URL tetap jambisolarpanel.vercel.app
+- Commit: 77bd943 (HEAD, pushed, Vercel success)
