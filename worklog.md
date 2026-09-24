@@ -208,3 +208,22 @@ Stage Summary:
 - Commit sweep ini menutup celah konsistensi terakhir yang diketahui: seluruh halaman layanan kini mengikuti prinsip R8 (klaim faktual/terderivasi, label simulasi/estimasi, akuntansi biaya jujur, disclaimer).
 - Pelajaran untuk agent berikutnya: grep klaim harus berbasis POLA (kelas klaim), bukan frasa persis — varian kata ("gratis matahari" vs "gratis dari matahari") lolos dari pencocokan literal.
 - Tersisa owner-side (tidak berubah): GSC indexing + GBP NAP + ADMIN_PASSWORD + foto proyek nyata.
+
+---
+
+Task ID: 27
+Agent: Z.ai (main orchestrator)
+Task: Permintaan owner: "Buatkan panduan apa saja yang harus dilakukan owner project agar target SEO halaman 1 urutan atas tercapai" — dokumen panduan aksi owner untuk target ranking halaman 1 atas.
+
+Work Log:
+- Verifikasi status repo sebelum menulis: HEAD = 63d840b = origin/main (semua fix R8 [5bdb935, 1a5d36a, 473ffdb] ter-push, working tree bersih) — Round 8 dev-side TERTUTUP PENUH; sisa pekerjaan memang owner-side.
+- Sanity teknis: dev server 200 di route utama; sitemap 33 URL terkonfirmasi via curl localhost; `/api/pricing` 503 = BY DESIGN (menunggu env var GOOGLE_SCRIPT_URL/GOOGLE_SCRIPT_API_KEY — endpoint internal kalibrasi, noindex, bukan bug) → dimasukkan sebagai item tugas owner (Tahap 8 panduan).
+- Ekstrak data akurat untuk panduan: BUSINESS_NAP lengkap dari seo.ts (nama, alamat Tangkit Baru, telp +62 813-2819-0707, jam Senin–Sabtu 08–17), 33 URL sitemap + urutan prioritas indexing, SERVICE_AREAS, kategori GBP yang relevan.
+- Tulis `PANDUAN-SEO-OWNER.md` (root repo, bahasa Indonesia, untuk non-teknis): 13 section — ringkasan eksekutif (3 kunci sukses + timeline indikatif berlabel "bukan jaminan"), fondasi teknis yang sudah selesai, GSC step-by-step (verifikasi HTML tag → kirim kode ke dev → sitemap → request indexing 33 URL bertahap ±10/hari → rutinitas mingguan 5 menit), GBP step-by-step (NAP WAJIB identik, kategori, foto 10–15, layanan, Q&A, rutinitas mingguan), ulasan Google (cara benar vs pelanggaran kebijakan), bukti proyek nyata/E-E-A-T (checklist foto per proyek + data studi kasus + dokumen kredibilitas, semua butuh izin pelanggan), keputusan custom domain minggu 1–2 SEBELUM backlink (opsi A/B + konsekuensi migrasi), konten rutin (tabel trigger owner→dev), backlink lokal (direktori, media lokal Jambi, kemitraan, KADIN — plus blacklist PBN), setup env vars Vercel, pemantauan KPI per bulan (tabel indikatif), larangan keras (termasuk: jangan pernah pakai jayamandiri.co.id, jangan ubah angka tanpa developer), checklist minggu pertama (10 item), tabel pembagian tugas owner vs developer.
+- Disiplin audit dipertahankan: semua target angka berlabel "indikatif, bukan jaminan"; tidak ada janji posisi; jalan pintas black-hat masuk larangan; panduan SESUAI arahan auditor (fokus GSC + GBP + bukti nyata, bukan fitur SEO baru — dokumen ini hanya dokumentasi owner-side, nol perubahan kode).
+
+Stage Summary:
+- Artefak: `PANDUAN-SEO-OWNER.md` di root repo (di-commit & ter-push) — panduan operasional lengkap owner untuk mencapai halaman 1: GSC (minggu 1), GBP + ulasan (minggu 1–3), bukti proyek nyata (bulan 1–2), keputusan domain (minggu 1–2), backlink lokal (bulan 2+), KPI monitoring (bulanan).
+- Nol perubahan kode sisi aplikasi — sesuai arahan auditor R8 bahwa prioritas berikutnya ada di sisi owner, bukan penambahan fitur SEO.
+- Status teknis saat penulisan: lint/tsc tidak berubah (tidak ada perubahan src/), dev server sehat (route utama 200), sitemap 33 URL, /api/pricing 503 by-design terdokumentasi.
+- Owner kini punya satu dokumen rujukan: langkah, urutan, waktu estimasi, checklist, dan pembagian tugas — target realistis halaman 1 niche lokal Jambi: long-tail bulan 3–6, keyword utama bulan 6–12 (indikatif, dengan syarat ulasan + bukti proyek + konsistensi).
