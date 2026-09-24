@@ -203,6 +203,7 @@ Work Log:
 - QA: lint 0, tsc src 0, 33/33 sitemap URL 200, curl /solar-pump (0 semua klaim lama; ≥1 semua label baru), agent-browser (0 page error, 0 console error, VLM PASS tabel & ROI section, mobile 390px no overflow), repo-wide grep final = 0 semua pola klaim.
 
 Stage Summary:
+- Commit: **473ffdb** — ter-push ke origin/main & terverifikasi LIVE di https://jambisolarpanel.vercel.app (produksi /solar-pump: 0 "gratis matahari" / 0 "air gratis" / 0 "100% tenaga surya" / 0 "Rp 200-600" / 0 "Biaya Solar Pump/Bulan"; label baru hadir semua [tanpa BBM & listrik / Minim (perawatan saja) / Estimasi Balik Modal / ratusan juta hingga miliaran / bergaransi performa hingga 25 tahun]; canonical benar, robots 200, sitemap 33 URL, home/ev-charging/sewa-plts 200).
 - Pekerjaan Task 25 terkonfirmasi akurat 100% (commit ada, file sesuai, klaim verifikasi valid) — TAPI ditemukan & diperbaiki residual claim kelas P1 di SolarPumpPage.tsx yang terlewat karena cakupan grep Task 25 terlalu sempit (frasa persis saja).
 - Commit sweep ini menutup celah konsistensi terakhir yang diketahui: seluruh halaman layanan kini mengikuti prinsip R8 (klaim faktual/terderivasi, label simulasi/estimasi, akuntansi biaya jujur, disclaimer).
 - Pelajaran untuk agent berikutnya: grep klaim harus berbasis POLA (kelas klaim), bukan frasa persis — varian kata ("gratis matahari" vs "gratis dari matahari") lolos dari pencocokan literal.
