@@ -71,6 +71,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  // Google Search Console ownership verification (GSC → token dari owner)
+  verification: {
+    google: "OuKj48eHx136L1UAirY4aIAMxONSHyE0ML-LGt1hpIk",
+  },
 };
 
 export default function RootLayout({
