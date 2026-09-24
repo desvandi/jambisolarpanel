@@ -109,7 +109,7 @@ Work Log:
 - worklog.md disanitasi (token → [REDACTED]) + dihapus dari .gitignore → di-commit ke repo (temuan auditor R7 #11).
 
 Stage Summary:
-- Commit: <isi hash setelah commit> — LIVE di https://jambisolarpanel.vercel.app setelah push (verifikasi produksi menyusul di bawah).
+- Commit: 5bdb935 — LIVE & terverifikasi di https://jambisolarpanel.vercel.app (27 pemeriksaan produksi LOLOS: 0 deposito/0 tanpa risiko/0 klaim historis lama, JSON-LD FAQ model baru, selector profil live, ROI 9–11/8–9 konsisten, sitemap 33 URL + lastmod, robots ok).
 - 4 temuan merah auditor R7 DITUTUP: label 6% skenario, model self-consumption + selector profil, deposito dihapus, PSH parameter desain.
 - 4 temuan oranye DITUTUP: single executable source, glossary 5–7x, 50–90% skenario + live, 25+ tahun gratis → garansi.
 - Angka ROI resmi baru (rumah 9–11 thn campuran / bisnis 8–9 thn siang) konsisten di UI, FAQ, glossary, artikel, worklog.
