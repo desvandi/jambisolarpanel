@@ -535,6 +535,15 @@ export function SewaPltsPackages() {
             tim kami via WhatsApp untuk penawaran terbaru.
           </p>
           <p className="text-xs text-muted-foreground">
+            <strong className="text-navy dark:text-white">Simulasi hemat</strong>{" "}
+            pada tiap paket dihitung dari model desain kami (produksi PLTS ×
+            pemanfaatan energi 80% × tarif PLN Rp 1.444,7/kWh — parameter{" "}
+            <em>methodology</em> di halaman kalkulator) dan merupakan contoh
+            skenario, bukan hasil hitung tagihan Anda. Untuk angka personal
+            berdasarkan pemakaian &amp; budget, gunakan kalkulator penghematan
+            di bawah.
+          </p>
+          <p className="text-xs text-muted-foreground">
             <strong className="text-navy dark:text-white">Biaya instalasi</strong>{" "}
             ditentukan per tier: 1-3 kWp = Rp 2jt, 4-7 kWp = Rp 5jt, 8-10 kWp = Rp 8jt.
             Dibayar sekali di awal kontrak, dapat dicicil maksimal 2 bulan, dan

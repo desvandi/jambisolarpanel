@@ -199,7 +199,12 @@ export interface RentalPackage {
   canPower: string[];
   /** Estimasi pemakaian yang cocok (kWh/bulan). */
   estimatedMonthlyKwh: string;
-  /** Estimasi penghematan tagihan listrik. */
+  /**
+   * Simulasi penghematan tagihan per bulan — DIHITUNG dari model pusat
+   * (produksi paket × pemanfaatan default × tarif DESIGN_PARAMS, lihat
+   * `simulatePackageSavings`), bukan angka statis. Label "Simulasi"
+   * wajib agar tidak terbaca sebagai hasil hitung personal pelanggan.
+   */
   savingsRange: string;
   /** Fitur unggulan paket. */
   features: string[];
@@ -247,6 +252,33 @@ export const packageCategories: {
 ];
 
 /**
+ * Simulasi penghematan bulanan sebuah paket — dihitung dari model pusat
+ * (audit Round 8: semua angka penghematan harus dapat direproduksi dari
+ * methodology.ts, bukan angka statis di copy).
+ *
+ * Produksi bulanan paket (kWp × 90 kWh) selalu berada di bawah batas atas
+ * rentang pemakaian targetnya (`estimatedMonthlyKwh`), sehingga model
+ * penghematan situs min(produksi, pemakaian) × pemanfaatan × tarif
+ * tereduksi menjadi: produksi × pemanfaatan default (80%, profil
+ * campuran + baterai — sistem sewa selalu termasuk baterai) × tarif.
+ *
+ * Gunakan kalkulator sewa (computePackageSavings) untuk angka personal
+ * berdasarkan pemakaian & budget pelanggan.
+ */
+function simulatePackageSavings(kWp: number): string {
+  const monthlyProduction = estimateMonthlyProduction(kWp); // hoisted di bawah
+  // Dibulatkan ke ribuan terdekat agar mudah dibaca (angka ± simulasi)
+  const simulated =
+    Math.round(
+      (monthlyProduction *
+        DESIGN_PARAMS.selfConsumptionDefault *
+        DESIGN_PARAMS.plnTariffPerKwh) /
+        1000
+    ) * 1000;
+  return `Simulasi hemat ±${formatRentalRpShort(simulated)}/bln`;
+}
+
+/**
  * Daftar paket sewa PLTS (1 kWp – 10 kWp).
  *
  * Harga sewa bulanan sudah disesuaikan agar kompetitif vs harga beli.
@@ -260,6 +292,7 @@ export const packageCategories: {
  *   - targetUser: siapa pengguna ideal paket ini
  *   - canPower: daftar peralatan/aplikasi yang bisa dinyalakan
  *   - description: fokus ke outcome, bukan angka teknis
+ *   - savingsRange: label simulasi otomatis dari `simulatePackageSavings`
  *
  * Cara mengubah harga:
  *   - Harga sewa: ubah `monthlyPrice` (annualPrice otomatis dihitung jika pakai helper)
@@ -292,7 +325,7 @@ export const rentalPackages: RentalPackage[] = [
     description:
       "Paket awal untuk rumah kecil, studio, atau apartemen. Cocok untuk beban ringan harian — lampu, kulkas, TV, dan kipas tetap menyala tanpa tagihan PLN yang membengkak.",
     estimatedMonthlyKwh: "90 – 120 kWh",
-    savingsRange: "Hemat hingga Rp 200rb/bulan",
+    savingsRange: simulatePackageSavings(1),
     features: [
       "1 kWp Panel Surya Monokristalin",
       "Baterai LiFePO4 5.12 kWh",
@@ -325,7 +358,7 @@ export const rentalPackages: RentalPackage[] = [
     description:
       "Paket terpopuler untuk rumah keluarga. Mendukung AC 1 PK, kulkas, TV, mesin cuci, dan pompa air — semuanya berjalan lancar tanpa khawatir tagihan PLN meledak.",
     estimatedMonthlyKwh: "180 – 240 kWh",
-    savingsRange: "Hemat hingga Rp 450rb/bulan",
+    savingsRange: simulatePackageSavings(2),
     features: [
       "2 kWp Panel Surya Monokristalin",
       "Baterai LiFePO4 10.24 kWh",
@@ -361,7 +394,7 @@ export const rentalPackages: RentalPackage[] = [
     description:
       "Untuk keluarga besar dengan 2 AC, kulkas besar, water heater, dan peralatan rumah tangga modern. Tagihan PLN turun drastis, rumah tetap nyaman.",
     estimatedMonthlyKwh: "270 – 360 kWh",
-    savingsRange: "Hemat hingga Rp 700rb/bulan",
+    savingsRange: simulatePackageSavings(3),
     features: [
       "3 kWp Panel Surya Monokristalin",
       "Baterai LiFePO4 15.36 kWh",
@@ -397,7 +430,7 @@ export const rentalPackages: RentalPackage[] = [
     description:
       "Untuk rumah besar dengan 3-4 AC, peralatan smart home, dan kebutuhan listrik tinggi sepanjang hari. Ideal untuk keluarga modern yang aktif.",
     estimatedMonthlyKwh: "360 – 480 kWh",
-    savingsRange: "Hemat hingga Rp 950rb/bulan",
+    savingsRange: simulatePackageSavings(4),
     features: [
       "4 kWp Panel Surya Monokristalin",
       "Baterai LiFePO4 20.48 kWh",
@@ -433,7 +466,7 @@ export const rentalPackages: RentalPackage[] = [
     description:
       "Untuk rumah besar, kos-kosan, atau bisnis kecil. Mendukung beban komersial seperti AC 5 PK dan peralatan kantor — tagihan operasional jadi terprediksi.",
     estimatedMonthlyKwh: "450 – 600 kWh",
-    savingsRange: "Hemat hingga Rp 1.2jt/bulan",
+    savingsRange: simulatePackageSavings(5),
     features: [
       "5 kWp Panel Surya Monokristalin",
       "Baterai LiFePO4 25.6 kWh",
@@ -471,7 +504,7 @@ export const rentalPackages: RentalPackage[] = [
     description:
       "Untuk rumah mewah, villa, atau guest house dengan banyak AC dan peralatan premium berjalan serentak. Listrik mewah tanpa tagihan yang mewah.",
     estimatedMonthlyKwh: "540 – 720 kWh",
-    savingsRange: "Hemat hingga Rp 1.6jt/bulan",
+    savingsRange: simulatePackageSavings(6),
     features: [
       "6 kWp Panel Surya Monokristalin",
       "Baterai LiFePO4 30.72 kWh",
@@ -509,7 +542,7 @@ export const rentalPackages: RentalPackage[] = [
     description:
       "Untuk villa, homestay, atau properti komersial menengah dengan tingkat okupansi tinggi dan beban listrik besar. Optimalkan margin usaha dengan biaya listrik yang stabil.",
     estimatedMonthlyKwh: "630 – 840 kWh",
-    savingsRange: "Hemat hingga Rp 1.8jt/bulan",
+    savingsRange: simulatePackageSavings(7),
     features: [
       "7 kWp Panel Surya Monokristalin",
       "Baterai LiFePO4 35.84 kWh",
@@ -548,7 +581,7 @@ export const rentalPackages: RentalPackage[] = [
     description:
       "Untuk ruko, restoran, atau kantor kecil dengan operasional 12 jam/hari dan kebutuhan listrik komersial. Tagihan operasional jadi transparan dan terkontrol.",
     estimatedMonthlyKwh: "720 – 960 kWh",
-    savingsRange: "Hemat hingga Rp 2jt/bulan",
+    savingsRange: simulatePackageSavings(8),
     features: [
       "8 kWp Panel Surya Monokristalin",
       "Baterai LiFePO4 40.96 kWh",
@@ -587,7 +620,7 @@ export const rentalPackages: RentalPackage[] = [
     description:
       "Untuk bengkel, workshop, atau pabrik kecil dengan motor listrik, mesin produksi, dan beban industri ringan. Optimalkan biaya produksi dengan energi surya.",
     estimatedMonthlyKwh: "810 – 1.080 kWh",
-    savingsRange: "Hemat hingga Rp 2.3jt/bulan",
+    savingsRange: simulatePackageSavings(9),
     features: [
       "9 kWp Panel Surya Monokristalin",
       "Baterai LiFePO4 46.08 kWh",
@@ -627,7 +660,7 @@ export const rentalPackages: RentalPackage[] = [
     description:
       "Untuk pabrik menengah, hotel, atau fasilitas besar dengan beban listrik 24/7 dan kebutuhan redundansi tinggi. Energi terbarukan untuk operasional tanpa henti.",
     estimatedMonthlyKwh: "900 – 1.200 kWh",
-    savingsRange: "Hemat hingga Rp 2.6jt/bulan",
+    savingsRange: simulatePackageSavings(10),
     features: [
       "10 kWp Panel Surya Monokristalin",
       "Baterai LiFePO4 51.2 kWh",
@@ -904,8 +937,11 @@ export const rentalCalculatorConfig = {
     { label: "Rp 5.1jt", value: 5100000 },
     { label: "Rp 5.75jt", value: 5750000 },
   ],
-  /** Tarif PLN default (Rupiah/kWh) — R-1 1300VA+ non-subsidi. */
-  plnTariffPerKwh: 1444,
+  /**
+   * Tarif PLN default (Rupiah/kWh) — R-1 1300VA+ non-subsidi.
+   * Single source: DESIGN_PARAMS.plnTariffPerKwh (methodology.ts).
+   */
+  plnTariffPerKwh: DESIGN_PARAMS.plnTariffPerKwh,
   /** Batas minimum & maksimum input manual pemakaian (kWh). */
   usageMin: 50,
   usageMax: 5000,

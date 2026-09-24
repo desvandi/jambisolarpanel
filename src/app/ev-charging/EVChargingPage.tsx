@@ -2,17 +2,45 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { evPackages, evAssumptions, getEVRoiData } from "@/lib/pricing-ev";
-import { formatRp } from "@/lib/pricing";
-import { MessageCircle, Car, Battery, Leaf, Zap, Shield, CheckCircle, ArrowRight } from "lucide-react";
+import { evPackages, evAssumptions, formatTariffLabel } from "@/lib/pricing-ev";
+import { formatRp, formatRpShort } from "@/lib/pricing";
+import { MessageCircle, Car, Battery, Leaf, Zap, Shield, CheckCircle } from "lucide-react";
 
+/**
+ * Benefit cards — bebas klaim "100% surya"/"gratis"/"tanpa risiko" (audit R8).
+ * Angka penghematan diambil dari model simulasi khusus EV (pricing-ev.ts).
+ */
 const benefits = [
-  { icon: Leaf, title: "100% Energi Surya", desc: "Isi daya kendaraan listrik Anda dari matahari — gratis dan ramah lingkungan" },
-  { icon: Zap, title: "Hemat Jutaan per Tahun", desc: "2x charging harian dari PLTS bisa hemat hingga Rp 5-7 juta per tahun vs tarif PLN" },
-  { icon: Car, title: "Charger AC 7.2kW", desc: "Charger AC 7.2kW (1-fase) kompatibel dengan semua kendaraan listrik di Indonesia" },
-  { icon: Battery, title: "Energi Surplus untuk Rumah", desc: "Energi surplus dari PLTS otomatis menutupi kebutuhan listrik rumah tangga lainnya" },
-  { icon: Shield, title: "Garansi Resmi", desc: "Panel 25 tahun, inverter 5 tahun, charger 2 tahun, instalasi termasuk" },
-  { icon: CheckCircle, title: "Plug & Play", desc: "Instalasi charger standalone yang mudah, atau terintegrasi dengan PLTS rumah Anda" },
+  {
+    icon: Leaf,
+    title: "Energi Bersih untuk Mobilitas",
+    desc: "Produksi PLTS Anda mengisi daya EV di siang hari — energi terbarukan tanpa biaya bahan bakar",
+  },
+  {
+    icon: Zap,
+    title: "Turunkan Biaya Charging",
+    desc: `Simulasi model EV: hemat ±${formatRpShort(evAssumptions.annualSolarSavings)}/tahun vs charging full dari PLN (asumsi 2x charge/hari, pemanfaatan 70%)`,
+  },
+  {
+    icon: Car,
+    title: "Charger AC 7.2kW",
+    desc: "Charger AC 7.2kW (1-fase) kompatibel dengan semua kendaraan listrik di Indonesia",
+  },
+  {
+    icon: Battery,
+    title: "Energi Surplus untuk Rumah",
+    desc: "Sisa produksi di luar jam charging EV dapat dimanfaatkan untuk kebutuhan listrik rumah tangga lainnya",
+  },
+  {
+    icon: Shield,
+    title: "Garansi Resmi",
+    desc: "Panel 25 tahun, inverter 5 tahun, charger 2 tahun, instalasi termasuk",
+  },
+  {
+    icon: CheckCircle,
+    title: "Plug & Play",
+    desc: "Instalasi charger standalone yang mudah, atau terintegrasi dengan PLTS rumah Anda",
+  },
 ];
 
 export default function EVChargingPage() {
@@ -29,19 +57,20 @@ export default function EVChargingPage() {
               Perbandingan Biaya Charging
             </h2>
             <p className="text-sm text-muted-foreground text-center mb-6">
-              Asumsi: EV 7.2 kWh, charge 2x/hari, tarif PLN Rp 1.500/kWh
+              Simulasi model khusus EV: baterai 7,2 kWh, charge 2x/hari, tarif PLN{" "}
+              {formatTariffLabel()}/kWh (R-1 non-subsidi), pemanfaatan charging 70%
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {/* PLN Charging */}
               <div className="p-5 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800/30">
                 <div className="flex items-center gap-2 mb-4">
                   <Zap className="w-5 h-5 text-red-500" />
-                  <h3 className="font-bold text-red-600 dark:text-red-400">Charging dari PLN</h3>
+                  <h3 className="font-bold text-red-600 dark:text-red-400">Charging full dari PLN</h3>
                 </div>
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Tarif listrik</span>
-                    <span className="font-semibold text-navy dark:text-white">{formatRp(evAssumptions.plnTariffPerKwh)}/kWh</span>
+                    <span className="font-semibold text-navy dark:text-white">{formatTariffLabel()}/kWh</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Charge per hari</span>
@@ -72,33 +101,35 @@ export default function EVChargingPage() {
               <div className="p-5 rounded-xl bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-200 dark:border-emerald-800/30">
                 <div className="flex items-center gap-2 mb-4">
                   <SunIcon className="w-5 h-5 text-emerald-500" />
-                  <h3 className="font-bold text-emerald-600 dark:text-emerald-400">Charging dari PLTS</h3>
+                  <h3 className="font-bold text-emerald-600 dark:text-emerald-400">Charging dibantu PLTS</h3>
                 </div>
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Energi surya</span>
-                    <span className="font-semibold text-navy dark:text-white">Gratis dari matahari</span>
+                    <span className="text-muted-foreground">Biaya energi surya</span>
+                    <span className="font-semibold text-navy dark:text-white">Rp 0/kWh (saat produksi tersedia)</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Solar offset</span>
-                    <span className="font-semibold text-navy dark:text-white">~{evAssumptions.solarOffsetPct}% siang hari</span>
+                    <span className="text-muted-foreground">Pemanfaatan charging</span>
+                    <span className="font-semibold text-navy dark:text-white">~{evAssumptions.solarOffsetPct}% (asumsi model EV)</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Biaya operasional</span>
-                    <span className="font-semibold text-navy dark:text-white">Rp 0</span>
+                    <span className="text-muted-foreground">Sisa charging dari PLN</span>
+                    <span className="font-semibold text-navy dark:text-white">
+                      ±{Math.round(evAssumptions.monthlyChargingKwh * (1 - evAssumptions.evSelfConsumption))} kWh/bulan
+                    </span>
                   </div>
                   <div className="pt-3 border-t border-emerald-200 dark:border-emerald-800/30">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Biaya per bulan</span>
+                      <span className="text-sm text-muted-foreground">Sisa biaya PLN per bulan</span>
                       <span className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400">
-                        Rp 0 (dari surya)
+                        {formatRp(evAssumptions.monthlyRemainingPlnCost)}
                       </span>
                     </div>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Biaya per tahun</span>
+                    <span className="text-sm text-muted-foreground">Sisa biaya PLN per tahun</span>
                     <span className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
-                      Rp 0 (dari surya)
+                      {formatRp(evAssumptions.annualRemainingPlnCost)}
                     </span>
                   </div>
                 </div>
@@ -111,7 +142,7 @@ export default function EVChargingPage() {
                   <p className="text-2xl font-extrabold text-solar">
                     {formatRp(evAssumptions.monthlySolarSavings)}
                   </p>
-                  <p className="text-xs text-muted-foreground mt-0.5">({evAssumptions.solarOffsetPct}% offset dari PLN)</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">(±{evAssumptions.solarOffsetPct}% dari biaya charging)</p>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground mb-1">Penghematan Per Tahun</p>
@@ -120,13 +151,18 @@ export default function EVChargingPage() {
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground mb-1">Total Biaya PLN/Tahun</p>
+                  <p className="text-xs text-muted-foreground mb-1">Biaya PLN Penuh per Tahun</p>
                   <p className="text-2xl font-extrabold text-red-500">
                     {formatRp(evAssumptions.annualPlnCost)}
                   </p>
                   <p className="text-xs text-muted-foreground mt-0.5">tanpa PLTS</p>
                 </div>
               </div>
+              <p className="text-xs text-muted-foreground mt-4 text-center max-w-2xl mx-auto">
+                Simulasi model khusus EV: penghematan = kebutuhan charging × pemanfaatan 70% × tarif
+                PLN. Hasil aktual bergantung profil pemakaian, kapasitas PLTS, dan cuaca — silakan
+                konsultasi untuk simulasi spesifik properti Anda.
+              </p>
             </div>
           </motion.div>
         </div>
@@ -185,12 +221,13 @@ export default function EVChargingPage() {
                       { label: "Panel Surya", value: pkg.panel },
                       { label: "Inverter", value: pkg.inverter },
                       { label: "Charger", value: pkg.charger },
-                      { label: "Hemat/Bulan", value: pkg.monthlySavings },
-                      { label: "ROI", value: `~${pkg.roiYears} tahun` },
+                      { label: "Hemat charging EV/bln*", value: pkg.monthlySavings },
+                      { label: "ROI (charging EV)*", value: `~${pkg.roiYears} tahun` },
+                      { label: "Sisa produksi*", value: `±${pkg.surplusKwh} kWh/bln untuk beban lain` },
                     ].map(spec => (
-                      <div key={spec.label} className={`flex items-center justify-between text-xs ${pkg.solarKwp === 5.2 ? "text-white/70" : "text-muted-foreground"}`}>
+                      <div key={spec.label} className={`flex items-center justify-between gap-2 text-xs ${pkg.solarKwp === 5.2 ? "text-white/70" : "text-muted-foreground"}`}>
                         <span>{spec.label}</span>
-                        <span className={`font-medium ${pkg.solarKwp === 5.2 ? "text-white" : "text-navy dark:text-white"}`}>{spec.value}</span>
+                        <span className={`font-medium text-right ${pkg.solarKwp === 5.2 ? "text-white" : "text-navy dark:text-white"}`}>{spec.value}</span>
                       </div>
                     ))}
                   </div>
@@ -219,6 +256,14 @@ export default function EVChargingPage() {
               </motion.div>
             ))}
           </div>
+
+          <p className="mt-8 max-w-3xl mx-auto text-xs text-muted-foreground text-center leading-relaxed">
+            *Simulasi model khusus EV (bukan model finansial global situs): penghematan charging ={" "}
+            <strong className="font-semibold">min(produksi PLTS, kebutuhan charging {evAssumptions.monthlyChargingKwh} kWh/bln) × pemanfaatan 70% × tarif {formatTariffLabel()}/kWh</strong>,
+            dengan skenario kenaikan tarif 6%/tahun (asumsi simulasi — bukan prediksi). ROI hanya
+            dari penghematan charging EV dan belum termasuk nilai surplus produksi untuk beban
+            rumah/bisnis. Hasil aktual dapat berbeda.
+          </p>
         </div>
       </section>
     </>

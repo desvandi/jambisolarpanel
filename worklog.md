@@ -7,7 +7,7 @@
 
 ---
 
-## 1. STATUS PROYEK SAAT INI (per 2026-09-24, Round 8 selesai)
+## 1. STATUS PROYEK SAAT INI (per 2026-09-24, Round 8 lanjutan / konsistensi P1 selesai)
 
 **Situs:** https://jambisolarpanel.vercel.app (canonical FINAL — JANGAN PERNAH diganti ke jayamandiri.co.id)
 **Repo:** github.com/desvandi/jambisolarpanel, branch `main`, deploy otomatis via Vercel.
@@ -33,6 +33,7 @@ Angka ROI resmi hasil model: **rumah 2,6–5,2 kWp ± 9–11 thn (campuran+bater
 - R6 (5e55740, f251fd7): Tim & Kompetensi + term chips; kalkulator proyeksi 25 tahun.
 - R7 (1fbd70a): response audit — HowTo dihapus, MethodologyNote, studi kasus diperdalam, E-E-A-T/NAP, server-ifikasi layout, lastmod discipline.
 - **R8 (commit ini):** lihat §2 — perbaikan akurasi model finansial (4 temuan merah auditor).
+- **R8-lanjutan (re-audit, commit ini juga):** lihat §2a — 3 isu konsistensi P1 + 1 P2 dari re-audit auditor (EV residual claims, tarif rental single-source, model EV 70%/Rp1.500, savingsRange statis rental).
 
 ---
 
@@ -63,6 +64,29 @@ Kesimpulan auditor R7: "ROUND 7 = PARTIAL PASS. Bottleneck-nya bukan lagi kurang
 
 ---
 
+## 2a. ROUND 8-LANJUTAN (Task ID 25) — RESPONS RE-AUDIT: 3 × P1 KONSISTENSI + 1 × P2 (selesai)
+
+Re-audit auditor atas 5bdb935/825da27: verdict **ROUND 8 = PASS WITH CONDITIONS / NOT CLOSED YET**. 4 temuan merah utama PASS, tetapi tersisa 3 isu konsistensi P1 + 1 P2. Semua dibereskan pada commit ini:
+
+| Temuan re-audit | Tindakan | Status |
+|---|---|---|
+| 🔴 P1 Residual claim EV: "100% Energi Surya", "Isi daya … gratis", "Gratis dari matahari", "Rp 0 (dari surya)", "Hemat hingga Rp 5–7 juta/tahun", "otomatis menutupi" (EVChargingPage.tsx + pricing-ev.ts copy) | Semua dihapus/ditulis ulang: benefits → "Energi Bersih untuk Mobilitas" (tanpa biaya bahan bakar) + "Turunkan Biaya Charging" (±Rp 5,3jt/thn dari model, berlabel simulasi); kartu "Charging dari PLTS" → "Charging dibantu PLTS" dengan akuntansi jujur (sisa biaya PLN Rp 187.233/bln + Rp 2.278.003/thn, bukan Rp 0); features/desc paket bebas "gratis"; surplus diberi label "dapat dimanfaatkan" (bukan "otomatis"). Verifikasi HTML+DOM: 0 kemunculan semua klaim lama. | ✅ |
+| 🔴 P1 Model EV 70%/Rp1.500 tidak mengikuti model pusat | **Pilihan B (model khusus EV, eksplisit):** tarif disatukan ke `DESIGN_PARAMS.plnTariffPerKwh` (Rp 1.444,7 — Rp1.500 dihapus); PSH/efisiensi/eskalasi tetap dari DESIGN_PARAMS; `evSelfConsumption 0,70` kini parameter TERSIMPAN eksplisit dengan justifikasi (charging 2x/hari termasuk sesi malam, hybrid tanpa baterai khusus EV → < default 80%) + header doc "MODEL SIMULASI KHUSUS EV — bukan bagian dari model finansial global"; rumus ditambah cap: `min(produksi, kebutuhan charging 432 kWh/bln) × 70% × tarif` sehingga penghematan tidak pernah melebihi biaya charging PLN; ROI baru jujur 17/20/23 thn (dari penghematan charging EV saja, berlabel); `surplusKwh` (36/270/504 kWh/bln) ditampilkan sebagai diferensiator + footnote model di bawah grid paket. | ✅ |
+| 🟠 P1 Tarif rental `1444` ≠ DESIGN_PARAMS `1444.7` | `rentalCalculatorConfig.plnTariffPerKwh` kini = `DESIGN_PARAMS.plnTariffPerKwh` — satu-satunya sumber tarif untuk `computePackageSavings`/`computeAllPackageSavings`/kalkulator sewa. | ✅ |
+| 🟡 P2 `savingsRange` statis rental ("Hemat hingga Rp 200rb…2,6jt") tidak dapat direproduksi dari model | Diganti terhitung: `simulatePackageSavings(kWp)` = produksi × pemanfaatan default 80% × tarif DESIGN_PARAMS (produksi selalu < batas atas rentang pemakaian target → reduksi sah dari rumus min()). Label baru "Simulasi hemat ±Rp 104rb…1,04jt/bln" (10 paket) + footnote di SewaPltsPackages (model + "contoh skenario, bukan hasil hitung tagihan Anda" + arahkan ke kalkulator). | ✅ |
+| Konsistensi prinsip (bonus, di luar scope EV) | SolutionCards "pompa irigasi gratis dari matahari" → "tanpa BBM"; artikel kebun-sawit "energi gratis dari matahari" → "energi surya tanpa biaya bahan bakar" + `updated: 2026-09-24` (lastmod). Repo-wide grep "gratis dari matahari" = 0. | ✅ |
+
+**Angka model EV baru (deterministik, `getEVRoiData`):** hemat charging Rp 436.877/bln (≡ 70% × Rp 624.110) untuk semua paket surya (capped oleh kebutuhan charging 432 kWh/bln) · ROI 17 thn (5,2 kWp Rp135jt) / 20 thn (7,8 kWp Rp185jt) / 23 thn (10,4 kWp Rp240jt) · surplus 36/270/504 kWh/bln · biaya PLN full Rp 624.110/bln & Rp 7.593.343/thn.
+
+### Verifikasi Round 8-lanjutan
+- lint 0 · tsc src 0 · **33/33 sitemap URL 200**.
+- curl HTML /ev-charging: 0 "100% Energi Surya" / 0 "gratis" (klaim energi) / 0 "Rp 0 (dari surya)" / 0 "5-7 juta" / 0 "Rp 1.500/kWh"; ≥1 "Simulasi model khusus EV", "Rp 1.444,7", "min(produksi PLTS", "Sisa biaya PLN per bulan", "~Rp 437rb/bulan".
+- curl HTML /sewa-plts: 0 label "Hemat hingga Rp …" lama; 10 label "Simulasi hemat ±Rp …/bln" + footnote model hadir.
+- agent-browser: 0 page error, 0 console error/warn (ev-charging, sewa-plts, home); DOM spec-row 3 kartu paket EV tepat (437rb/17thn/±36 · 437rb/20thn/±270 · 437rb/23thn/±504); VLM: summary strip (Rp 436.877 / Rp 5.315.340 / Rp 7.593.343, "±70% dari biaya charging") + kartu BEST VALUE + footnote formulasi terverifikasi visual; mobile 390px ev-charging: no horizontal overflow, 0 elemen keluar viewport.
+- Sanity kalkulator sewa (computePackageSavings 2 kWp, 300 kWh, budget 2jt): plnSaving 208.037 = min(180,300)×0,8×1.444,7 ✓ status "affordable".
+
+---
+
 ## 3. MASALAH TERBUKA / RISIKO & PRIORITAS BERIKUTNYA
 
 ### 🔴 Prioritas #1 — tetap di luar kode: INDEXING (tugas owner/webmaster)
@@ -78,7 +102,7 @@ Auditor R7: "domain tidak ditemukan di hasil pencarian saya". Owner HARUS di Goo
 1. **Foto dokumentasi proyek nyata** untuk 3 studi kasus (ganti ilustrasi AI) + data monitoring/tagihan sebelum-sesudah — E-E-A-T terkuat, menunggu materi dari owner. RED LINE: jangan fabrikasi.
 2. SewaPltsHero + FAQSection/configurators masih framer-motion — lanjutkan server-ifikasi bila ingin CWV optimal; ukur Lighthouse dulu.
 3. `sameAs` kosong — bila owner punya Facebook bisnis/GBP resmi, isi `BUSINESS_NAP.sameAs` (URL profil, bukan share link).
-4. Artikel/fitur SEO baru — JANGAN dulu (pesan auditor R7: selesaikan indexing dulu; R8 menutup 4 temuan merah, tunggu re-audit).
+4. Artikel/fitur SEO baru — JANGAN dulu (pesan auditor: setelah P1 beres, fokus pindah ke GSC indexing + pengukuran Search/Analytics + bukti proyek nyata, BUKAN menambah fitur SEO).
 
 ### Red lines (WAJIB dijaga semua agent berikutnya)
 - Canonical/OG/sitemap/JSON-LD HANYA `https://jambisolarpanel.vercel.app`. Token: GitHub `[REDACTED:github_token]`, Vercel `[REDACTED:vercel_token]`.
@@ -114,3 +138,23 @@ Stage Summary:
 - 4 temuan oranye DITUTUP: single executable source, glossary 5–7x, 50–90% skenario + live, 25+ tahun gratis → garansi.
 - Angka ROI resmi baru (rumah 9–11 thn campuran / bisnis 8–9 thn siang) konsisten di UI, FAQ, glossary, artikel, worklog.
 - Tersisa owner: GSC indexing + GBP NAP + ADMIN_PASSWORD + foto proyek nyata.
+
+---
+
+Task ID: 25
+Agent: Z.ai (main orchestrator)
+Task: Respons re-audit Round 8 (verdict "PASS WITH CONDITIONS / NOT CLOSED YET") — 3 isu konsistensi P1 + 1 P2: (P1) bersihkan seluruh residual claim EV "100% energi surya / gratis / Rp 5–7 juta / Rp 0 dari surya", (P1) tarif rental 1444 → DESIGN_PARAMS.plnTariffPerKwh, (P1) model EV 70%/Rp1.500 disatukan tarifnya ke model pusat + dilabeli eksplisit sebagai model simulasi khusus EV dengan cap min(produksi, kebutuhan charging), (P2) savingsRange statis rental diganti hitungan dari model + label simulasi.
+
+Work Log:
+- `src/lib/pricing-ev.ts` ditulis ulang: header doc "MODEL SIMULASI KHUSUS EV" (parameter pusat vs parameter khusus EV dipisah eksplisit); tarif = DESIGN_PARAMS.plnTariffPerKwh (Rp1.500 dihapus); `evSelfConsumption 0,70` berjustifikasi (profil charging 2x/hari + sesi malam, tanpa baterai khusus EV); `calculateEVSavings` memakai cap `min(produksi, 432 kWh/bln) × 0,70 × tarif`; getter baru `monthlyRemainingPlnCost`/`annualRemainingPlnCost`; `formatTariffLabel()` ("Rp 1.444,7"); interface + `surplusKwh`; semua copy features/desc paket dibersihkan dari "gratis"/"Rp 5–7 juta" dan diganti kualitatif + surplus.
+- `src/app/ev-charging/EVChargingPage.tsx`: benefits ditulis ulang (angka dari model, berlabel simulasi); section perbandingan di-redesign — kartu kanan "Charging dibantu PLTS" menampilkan sisa biaya PLN (bukan Rp 0) + baris energi (302 kWh surya / 130 kWh PLN) + asumsi "tarif PLN Rp 1.444,7/kWh … pemanfaatan 70%"; grid paket: spec row baru "Sisa produksi*", relabel "Hemat charging EV/bln*" & "ROI (charging EV)*"; footnote model lengkap (rumus + batasan + "hasil aktual dapat berbeda").
+- `src/lib/rentalPackages.ts`: `rentalCalculatorConfig.plnTariffPerKwh = DESIGN_PARAMS.plnTariffPerKwh`; fungsi baru `simulatePackageSavings(kWp)` (produksi × 0,8 × tarif, dibulatkan ke ribuan) menggantikan 10 string statis "Hemat hingga Rp …"; doc comment interface + array diperbarui.
+- `src/app/sewa-plts/sections/SewaPltsPackages.tsx`: footnote baru menjelaskan label "Simulasi hemat" = contoh skenario dari model desain (bukan hasil hitung personal) + arahan ke kalkulator.
+- Konsistensi prinsip: `SolutionCards.tsx` ("pompa irigasi gratis dari matahari" → "tanpa BBM"), artikel `plts-untuk-kebun-sawit.ts` ("energi gratis dari matahari" → "energi surya tanpa biaya bahan bakar" + `updated: 2026-09-24`).
+- `src/app/sitemap.ts`: komentar lastmod ev-charging & sewa-plts didokumentasikan (tanggal tetap 2026-09-24 — perubahan terjadi di hari yang sama; artikel sawit lastmod berubah via field `updated`).
+- QA: lint 0, tsc src 0, 33/33 sitemap URL 200, curl claims check (semua klaim lama = 0), agent-browser (DOM spec-row 3 paket EV, 10 label simulasi sewa, VLM visual summary strip + BEST VALUE card + footnote, mobile 390px no overflow), sanity computePackageSavings (min×0,8×1.444,7 = 208.037 ✓).
+
+Stage Summary:
+- Semua 3 P1 + 1 P2 re-audit DITUTUP: EV residual claims = 0 di seluruh public source (grep "gratis dari matahari" repo-wide = 0), tarif rental single-source DESIGN_PARAMS, model EV = model khusus berlabel eksplisit dengan tarif terpusat + cap min(), savingsRange rental terhitung dari model.
+- Angka EV baru (jujur & reproducible): hemat charging Rp 436.877/bln (70% dari Rp 624.110) — capped kebutuhan charging, ROI 17/20/23 thn per paket, surplus 36/270/504 kWh/bln, semua berlabel "Simulasi model khusus EV".
+- Sesuai arahan auditor: setelah ini fokus = GSC indexing + pengukuran Search/Analytics + bukti proyek nyata (owner-side), BUKAN menambah artikel/fitur SEO baru.

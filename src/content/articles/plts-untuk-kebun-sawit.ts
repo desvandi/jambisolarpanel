@@ -7,6 +7,9 @@ export const article: Article = {
     "PLTS off-grid menghadirkan listrik mandiri untuk kebun sawit tanpa jangkauan PLN — bandingkan biaya genset vs panel surya beserta panduan kapasitasnya.",
   category: "Kebun & Perkebunan",
   date: "2026-09-23",
+  // 2026-09-24: klaim "energi gratis" pada tabel perbandingan dirapikan
+  // (akurasi klaim audit R8 — energi surya tanpa biaya bahan bakar).
+  updated: "2026-09-24",
   readingMinutes: 8,
   keyTakeaways: [
     "Areal kebun sawit yang jauh dari jaringan PLN umumnya bergantung pada genset BBM — dengan biaya operasional yang terus berjalan setiap hari.",
@@ -52,7 +55,7 @@ export const article: Article = {
       caption: "Perbandingan genset BBM dan PLTS off-grid untuk kebun",
       headers: ["Aspek", "Genset BBM", "PLTS Off-Grid"],
       rows: [
-        ["Biaya operasional harian", "BBM dan oli setiap jam operasi", "Praktis nol — energi gratis dari matahari"],
+        ["Biaya operasional harian", "BBM dan oli setiap jam operasi", "Praktis nol — energi surya tanpa biaya bahan bakar"],
         ["Kebutuhan logistik", "Angkutan BBM rutin ke lokasi", "Tidak ada"],
         ["Perawatan rutin", "Servis mesin, ganti oli dan filter", "Pembersihan panel secara berkala"],
         ["Kebisingan dan emisi", "Bising dan berasap", "Senyap dan tanpa emisi operasional"],

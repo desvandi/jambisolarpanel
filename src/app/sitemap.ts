@@ -30,11 +30,16 @@ const LAST_MODIFIED = {
   // 2026-09-24: penghapusan HowTo JSON-LD (perubahan structured data).
   pjuts: "2026-09-24",
   solarPump: "2026-09-24",
+  // 2026-09-24 (audit R8 lanjutan): model simulasi khusus EV ditulis ulang —
+  // klaim "100% energi surya"/"gratis"/"Rp 5-7 jt" dihapus, tarif disatukan
+  // ke DESIGN_PARAMS, penghematan charging = min(produksi, kebutuhan) × 70% × tarif.
   evCharging: "2026-09-24",
   smartIot: "2026-09-24",
   maintenance: "2026-09-24",
   tenderProcurement: "2026-09-24",
   // 2026-09-24: stat hero & klaim "hingga 90%" ditulis ulang + catatan kaki.
+  // 2026-09-24 (audit R8 lanjutan): label paket "Hemat hingga Rp X" diganti
+  // simulasi terhitung dari model pusat (simulatePackageSavings) + footnote.
   sewaPlts: "2026-09-24",
   // 2026-09-24: blok verifikasi legalitas ditambahkan.
   tentangKami: "2026-09-24",

@@ -32,7 +32,7 @@ const solutions = [
     icon: Sprout,
     subBrand: "Jambi Solar Agro",
     title: "PJUTS & Solar Pump untuk Kebun",
-    description: "Lampu jalan mandiri tanpa kabel PLN, pompa irigasi gratis dari matahari. Solusi utama perkebunan sawit, karet, pertanian.",
+    description: "Lampu jalan mandiri tanpa kabel PLN, pompa irigasi tanpa BBM. Solusi utama perkebunan sawit, karet, pertanian.",
     href: "/pjuts",
     color: "bg-emerald-600",
   },
