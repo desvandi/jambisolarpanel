@@ -227,3 +227,27 @@ Stage Summary:
 - Nol perubahan kode sisi aplikasi — sesuai arahan auditor R8 bahwa prioritas berikutnya ada di sisi owner, bukan penambahan fitur SEO.
 - Status teknis saat penulisan: lint/tsc tidak berubah (tidak ada perubahan src/), dev server sehat (route utama 200), sitemap 33 URL, /api/pricing 503 by-design terdokumentasi.
 - Owner kini punya satu dokumen rujukan: langkah, urutan, waktu estimasi, checklist, dan pembagian tugas — target realistis halaman 1 niche lokal Jambi: long-tail bulan 3–6, keyword utama bulan 6–12 (indikatif, dengan syarat ulasan + bukti proyek + konsistensi).
+
+---
+
+Task ID: 28
+Agent: Z.ai (main orchestrator)
+Task: Saat auditor tidak dapat dihubungi: (1) pemeriksaan ulang menyeluruh pekerjaan Round 8 + sweep pola klaim berbasis kelas, (2) cari & kerjakan perbaikan yang selaras arahan auditor (CWV/server-ifikasi — BUKAN fitur SEO baru).
+
+Work Log:
+- **Self-audit produksi:** HEAD = d3676e8 = origin/main (bersih); live: home 200, robots 200, sitemap 33 URL; dev server sehat.
+- **Sweep kelas klaim (pola, bukan frasa — pelajaran Task 26):** "gratis" (semua sisa = penawaran layanan, diizinkan), "100%" (mandiri/Hijau = faktual), "Rp 0" (off-grid murni & footnote maintenance = keputusan audit R7/R8 berlaku; SavingsProjection Rp 0 = label sumbu grafik), risiko/deposito/pasti (0), merek kompetitor (0), angka model hardcode (1444/1500/3,75/0,8 — semua dari DESIGN_PARAMS atau berlabel parameter desain), klaim angka lama (0), "dari matahari" (deskripsi mekanis faktual, bukan klaim penghematan). **Testimoni SocialProofSection** diverifikasi: klaim agregat rating sudah dihapus sejak R1, "Rp 0 listrik mandiri" = konteks off-grid, selamat dari pendalaman E-E-A-T R7 → tidak diubah (tidak ada bukti baru). `/api/pricing` 503 = by design (menunggu env var owner, sudah didokumentasikan di panduan).
+- **Ukur dulu (arahan worklog):** /sewa-plts = halaman terberat (HTML 394KB dev, **31 script tags** vs ±230KB/24 di halaman lain) — dikonfirmasi sebagai kandidat kerja #2 worklog ("SewaPltsHero + FAQSection/configurators masih framer-motion"). FAQSection dicek: ternyata SUDAH tanpa framer-motion (68 baris, dioptimasi round sebelumnya).
+- **Server-ifikasi /sewa-plts (pola R7 yang diterima auditor, 13 file):**
+  - `SewaPltsPage.tsx` → server component (hapus "use client" + handleSelectPackage; prop tabel dihapus).
+  - 8 seksi → server murni: Hero (CTA scroll JS → anchor murni; scroll-behavior smooth sudah global), DualMode, Benefits, Included, Comparison, Faq (Accordion shadcn = client island bawaan), FinalCta (anchor), — semua animasi entrance framer-motion → CSS `.stagger-item`/`.fade-in-item` + inline animation-delay.
+  - 4 seksi tetap client island (interaktif) tapi TANPA framer-motion: ComparisonTable (scroll internal ke #paket menggantikan prop callback), Packages (AnimatePresence → re-mount key + `.fade-in-quick`; kartu `.fade-in-item` karena hover-lift), CostSimulator, Calculator (toggle asumsi motion height → conditional render + `.fade-in-quick`).
+  - `globals.css` +2 utilitas: `.fade-in-item` (opacity-only entrance — DIPERLUKAN karena `.stagger-item` menganimasikan transform dengan fill forwards yang meng-override hover:-translate-y-* pada kartu; didokumentasikan di komentar CSS) & `.fade-in-quick` (0,25s, pengganti AnimatePresence). Reduced-motion aman (aturan global 0,01ms + fill forwards → konten tetap terlihat).
+- **QA:** lint 0 · tsc src 0 (error hanya di folder skills/ luar src, pre-existing) · **33/33 sitemap URL 200** · script tags /sewa-plts **31 → 25** (framer-motion hilang dari graph halaman; konten kini HTML+RSC flight terkompresi, tradeoff standar server component yang sama dengan 10 halaman R7) · agent-browser: 0 page error, 0 console error; interaksi SEMUA PASS — akordeon FAQ (data-state=open), filter paket Bisnis→3 kartu, simulator chip Family→Rp 79,4jt live, kalkulator preset 700kWh→rekomendasi Paket Home, toggle asumsi (.fade-in-quick tampil), klik baris tabel→scroll y=0→4640 ke #paket; mobile 390px: 0 elemen keluar viewport, tabel overflow-x auto; 66/66 elemen animasi mencapai opacity 1 (1 pengecualian = tabel desktop display:none di mobile — benar); VLM mobile PASS + desktop PASS (screenshot awal "FAIL" terbukti artefak mid-HMR — fresh capture bersih, dikonfirmasi perbandingan homepage).
+
+Stage Summary:
+- Commit: lihat git log (fix perbaikan di bawah) — /sewa-plts kini mengikuti pola arsitektur R7: shell server + pulau klien interaktif, NOL framer-motion (dari 12 pemakai → 0), script chunks 31→25.
+- Sweep klaim kelas-luas: 0 temuan baru — status klaim konsisten dengan keputusan audit R7/R8.
+- Disiplin dipertahankan: bukan fitur SEO baru (auditor: fokus pengukuran/indexing/bukti nyata); ini optimasi CWV = faktor ranking teknis + kandidat pengembangan #2 yang TERCATAT di worklog sejak R8.
+- Kandidat lanjutan (bila diperlukan round berikutnya): server-ifikasi halaman layanan lain yang masih 'use client' penuh (EVChargingPage, SolarHomePage, SolarCommercialPage, SolarPumpPage, PJUTSPage, SmartIoTPage, MaintenancePage, TenderProcurementPage + 2 configurator) — semua ±230KB/24 script tags, dampak lebih kecil dari sewa-plts, sebaiknya setelah ukur Lighthouse produksi.
+- Owner-side tetap tidak berubah: GSC + GBP + ADMIN_PASSWORD + foto proyek nyata.

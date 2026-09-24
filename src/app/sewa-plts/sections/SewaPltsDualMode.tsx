@@ -1,7 +1,3 @@
-"use client";
-
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
 import { Zap, ShieldCheck, ArrowRight } from "lucide-react";
 import { buildWhatsAppUrl } from "@/lib/rentalPackages";
 
@@ -16,23 +12,20 @@ import { buildWhatsAppUrl } from "@/lib/rentalPackages";
  * Penjelasan teknis (timer + relay kontaktor, C-NO/NC) sengaja TIDAK
  * ditampilkan. Yang ditonjolkan adalah OUTCOME dari skema tersebut:
  * "otomatis switch", "tagihan turun".
+ *
+ * SERVER COMPONENT (optimasi CWV): animasi entrance via CSS .stagger-item.
  */
 export function SewaPltsDualMode() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section className="py-16 md:py-24 relative overflow-hidden" ref={ref}>
+    <section className="py-16 md:py-24 relative overflow-hidden">
       {/* Subtle background */}
       <div className="absolute inset-0 bg-gradient-to-br from-solar/5 via-transparent to-gold/5" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-14 max-w-3xl mx-auto"
+        <div
+          className="stagger-item text-center mb-14 max-w-3xl mx-auto"
+          style={{ animationDelay: "0s" }}
         >
           <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-solar bg-solar/10 rounded-full">
             Satu Sistem, Dua Manfaat
@@ -47,16 +40,14 @@ export function SewaPltsDualMode() {
             padam. Dua manfaat yang biasanya harus dibeli terpisah, kini dalam satu
             paket sewa.
           </p>
-        </motion.div>
+        </div>
 
         {/* Two-mode cards */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-12">
           {/* Mode 1: Backup */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="relative p-8 rounded-3xl bg-gradient-to-br from-navy to-navy-light text-white overflow-hidden group"
+          <div
+            className="stagger-item relative p-8 rounded-3xl bg-gradient-to-br from-navy to-navy-light text-white overflow-hidden group"
+            style={{ animationDelay: "0.2s" }}
           >
             {/* Decoration */}
             <div className="absolute top-0 right-0 w-40 h-40 bg-solar/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700" />
@@ -89,27 +80,23 @@ export function SewaPltsDualMode() {
                   "Baterai LiFePO4 tahan berjam-jam",
                   "Cocok untuk WFH, kulkas obat, pompa air",
                 ].map((point, i) => (
-                  <motion.li
+                  <li
                     key={i}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={isInView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ duration: 0.3, delay: 0.4 + i * 0.1 }}
-                    className="flex items-start gap-2 text-sm text-white/85"
+                    className="fade-in-item flex items-start gap-2 text-sm text-white/85"
+                    style={{ animationDelay: `${0.4 + i * 0.1}s` }}
                   >
                     <ArrowRight className="w-4 h-4 text-solar-light flex-shrink-0 mt-0.5" />
                     <span>{point}</span>
-                  </motion.li>
+                  </li>
                 ))}
               </ul>
             </div>
-          </motion.div>
+          </div>
 
           {/* Mode 2: Save */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="relative p-8 rounded-3xl bg-gradient-to-br from-solar to-solar-dark text-white overflow-hidden group"
+          <div
+            className="stagger-item relative p-8 rounded-3xl bg-gradient-to-br from-solar to-solar-dark text-white overflow-hidden group"
+            style={{ animationDelay: "0.3s" }}
           >
             {/* Decoration */}
             <div className="absolute top-0 right-0 w-40 h-40 bg-gold/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700" />
@@ -143,28 +130,24 @@ export function SewaPltsDualMode() {
                   "Jadwal switching dikonfigurasi tim ahli",
                   "Cocok untuk rumah dengan AC & peralatan modern",
                 ].map((point, i) => (
-                  <motion.li
+                  <li
                     key={i}
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={isInView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ duration: 0.3, delay: 0.4 + i * 0.1 }}
-                    className="flex items-start gap-2 text-sm text-white/95"
+                    className="fade-in-item flex items-start gap-2 text-sm text-white/95"
+                    style={{ animationDelay: `${0.4 + i * 0.1}s` }}
                   >
                     <ArrowRight className="w-4 h-4 text-gold-light flex-shrink-0 mt-0.5" />
                     <span>{point}</span>
-                  </motion.li>
+                  </li>
                 ))}
               </ul>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* How it works (high-level, no jargon) */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="p-6 sm:p-8 rounded-2xl bg-card border border-border max-w-4xl mx-auto"
+        <div
+          className="stagger-item p-6 sm:p-8 rounded-2xl bg-card border border-border max-w-4xl mx-auto"
+          style={{ animationDelay: "0.5s" }}
         >
           <h3 className="text-lg font-bold text-navy dark:text-white mb-4 text-center">
             Bagaimana Cara Kerjanya?
@@ -232,7 +215,7 @@ export function SewaPltsDualMode() {
               Tanya Detail Cara Kerja
             </a>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

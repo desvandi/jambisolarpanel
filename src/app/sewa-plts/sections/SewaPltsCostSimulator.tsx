@@ -1,7 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
   Scale,
   ShoppingBag,
@@ -32,6 +31,9 @@ import {
  *                   atau annualPrice × tahun + bulanan sisa + biaya instalasi (mode tahunan)
  *   totalBeli     = buyPrice (instalasi & survei sudah termasuk)
  *   breakeven     = (buyPrice − biaya instalasi) / harga per bulan
+ *
+ * CLIENT COMPONENT (island) — slider/toggle interaktif. Tanpa framer-motion
+ * (optimasi CWV): animasi entrance via CSS .stagger-item.
  */
 const HORIZON_MIN = 12;
 const HORIZON_MAX = 120;
@@ -48,9 +50,6 @@ function pluralBulan(n: number): string {
 }
 
 export function SewaPltsCostSimulator() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   const packages = rentalPackages.filter((p) => p.active);
   const [pkgId, setPkgId] = useState<string>(
     packages.find((p) => p.popular)?.id ?? packages[0]?.id ?? ""
@@ -82,13 +81,11 @@ export function SewaPltsCostSimulator() {
 
   return (
     <section className="py-16 md:py-24" id="simulasi-beli-sewa">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" ref={ref}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-12 max-w-3xl mx-auto"
+        <div
+          className="stagger-item text-center mb-12 max-w-3xl mx-auto"
+          style={{ animationDelay: "0s" }}
         >
           <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 text-sm font-semibold text-solar bg-solar/10 rounded-full">
             <CalcIcon className="w-4 h-4" />
@@ -102,14 +99,12 @@ export function SewaPltsCostSimulator() {
             Pilih paket dan periode pemakaian — simulasi ini menghitung total
             biaya dua skema dari harga resmi paket, tanpa angka tersembunyi.
           </p>
-        </motion.div>
+        </div>
 
         {/* Controls */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className="p-5 sm:p-7 rounded-2xl bg-card border border-border mb-8"
+        <div
+          className="stagger-item p-5 sm:p-7 rounded-2xl bg-card border border-border mb-8"
+          style={{ animationDelay: "0.15s" }}
         >
           {/* Package chips */}
           <p className="text-xs font-bold text-solar uppercase tracking-wider mb-3">
@@ -192,15 +187,13 @@ export function SewaPltsCostSimulator() {
             <span>5 tahun</span>
             <span>10 tahun</span>
           </div>
-        </motion.div>
+        </div>
 
         {/* Results */}
         {pkg ? (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.25 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          <div
+            className="stagger-item grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            style={{ animationDelay: "0.25s" }}
           >
             {/* Sewa */}
             <div className="compare-card p-6 rounded-2xl bg-card border border-solar/25">
@@ -343,15 +336,13 @@ export function SewaPltsCostSimulator() {
                 campuran + baterai).
               </p>
             </div>
-          </motion.div>
+          </div>
         ) : null}
 
         {/* CTA + disclaimer */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.35 }}
-          className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-5 p-5 rounded-2xl bg-muted/40 border border-border"
+        <div
+          className="stagger-item mt-8 flex flex-col sm:flex-row items-center justify-between gap-5 p-5 rounded-2xl bg-muted/40 border border-border"
+          style={{ animationDelay: "0.35s" }}
         >
           <p className="text-xs text-muted-foreground leading-relaxed flex items-start gap-2 max-w-2xl">
             <Scale className="w-4 h-4 text-solar flex-shrink-0 mt-0.5" />
@@ -369,7 +360,7 @@ export function SewaPltsCostSimulator() {
             Diskusikan Skema Terbaik
             <ArrowRight className="w-4 h-4" />
           </a>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

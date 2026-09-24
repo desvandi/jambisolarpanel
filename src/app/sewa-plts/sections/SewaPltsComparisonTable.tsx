@@ -1,7 +1,5 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
 import { Zap, Battery, TrendingUp, Wallet, Calendar, Wrench, Check } from "lucide-react";
 import {
   getActiveRentalPackages,
@@ -10,7 +8,6 @@ import {
   estimateMonthlyProduction,
   getInstallationFee,
   type PackageCategory,
-  type RentalPackage,
 } from "@/lib/rentalPackages";
 
 /**
@@ -20,15 +17,18 @@ import {
  * Tabel responsif:
  *   - Desktop: tabel penuh dengan semua kolom
  *   - Mobile: card-stack dengan info penting
+ *
+ * CLIENT COMPONENT (island) — hanya karena baris/kartu bisa diklik untuk
+ * scroll ke daftar paket. Tanpa framer-motion (optimasi CWV): animasi
+ * entrance via CSS .stagger-item / .fade-in-item.
  */
-export function SewaPltsComparisonTable({
-  onSelectPackage,
-}: {
-  onSelectPackage?: (pkg: RentalPackage) => void;
-}) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+export function SewaPltsComparisonTable() {
   const packages = getActiveRentalPackages();
+
+  /** Scroll ke section daftar paket (id="paket" di SewaPltsPackages). */
+  const scrollToPackages = () => {
+    document.getElementById("paket")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   /** Warna badge per kategori. */
   const categoryBadge = (cat: PackageCategory) => {
@@ -54,14 +54,12 @@ export function SewaPltsComparisonTable({
   };
 
   return (
-    <section className="py-12 md:py-16" ref={ref}>
+    <section className="py-12 md:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.4 }}
-          className="text-center mb-10 max-w-3xl mx-auto"
+        <div
+          className="stagger-item text-center mb-10 max-w-3xl mx-auto"
+          style={{ animationDelay: "0s" }}
         >
           <span className="inline-block px-4 py-1.5 mb-3 text-sm font-semibold text-solar bg-solar/10 rounded-full">
             Ringkasan Semua Paket
@@ -75,14 +73,12 @@ export function SewaPltsComparisonTable({
             mobile untuk melihat semua kolom. Klik baris untuk detail paket di
             bawah.
           </p>
-        </motion.div>
+        </div>
 
         {/* Desktop table (md and up) */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="hidden md:block rounded-2xl border border-border bg-card overflow-hidden shadow-sm"
+        <div
+          className="stagger-item hidden md:block rounded-2xl border border-border bg-card overflow-hidden shadow-sm"
+          style={{ animationDelay: "0.1s" }}
         >
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -119,16 +115,13 @@ export function SewaPltsComparisonTable({
                 </tr>
               </thead>
               <tbody>
-                {packages.map((pkg, i) => {
+                {packages.map((pkg) => {
                   const production = estimateMonthlyProduction(pkg.kWp);
                   const installation = getInstallationFee(pkg.kWp);
                   return (
-                    <motion.tr
+                    <tr
                       key={pkg.id}
-                      initial={{ opacity: 0 }}
-                      animate={isInView ? { opacity: 1 } : {}}
-                      transition={{ duration: 0.3, delay: 0.1 + i * 0.03 }}
-                      onClick={() => onSelectPackage?.(pkg)}
+                      onClick={scrollToPackages}
                       className={`border-t border-border cursor-pointer transition-colors hover:bg-solar/5 ${
                         pkg.popular ? "bg-solar/5" : ""
                       }`}
@@ -173,31 +166,26 @@ export function SewaPltsComparisonTable({
                           {categoryLabel(pkg.category)}
                         </span>
                       </td>
-                    </motion.tr>
+                    </tr>
                   );
                 })}
               </tbody>
             </table>
           </div>
-        </motion.div>
+        </div>
 
         {/* Mobile card-stack */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="md:hidden space-y-3"
+        <div
+          className="stagger-item md:hidden space-y-3"
+          style={{ animationDelay: "0.1s" }}
         >
-          {packages.map((pkg, i) => {
+          {packages.map((pkg) => {
             const production = estimateMonthlyProduction(pkg.kWp);
             const installation = getInstallationFee(pkg.kWp);
             return (
-              <motion.div
+              <div
                 key={pkg.id}
-                initial={{ opacity: 0, x: -10 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.3, delay: 0.1 + i * 0.03 }}
-                onClick={() => onSelectPackage?.(pkg)}
+                onClick={scrollToPackages}
                 className={`p-4 rounded-xl border transition-colors cursor-pointer ${
                   pkg.popular
                     ? "border-solar/40 bg-solar/5"
@@ -256,22 +244,20 @@ export function SewaPltsComparisonTable({
                     </p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
-        </motion.div>
+        </div>
 
         {/* Legend / hint */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.4, delay: 0.4 }}
-          className="text-center text-xs text-muted-foreground mt-4"
+        <p
+          className="stagger-item text-center text-xs text-muted-foreground mt-4"
+          style={{ animationDelay: "0.4s" }}
         >
           <Check className="w-3 h-3 inline mr-1 text-solar" />
           Harga sudah termasuk PPN. Biaya instalasi bisa dicicil maksimal 2
           bulan. ⭐ = paket paling populer.
-        </motion.p>
+        </p>
       </div>
     </section>
   );

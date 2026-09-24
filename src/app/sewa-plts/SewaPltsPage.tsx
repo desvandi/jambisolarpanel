@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
@@ -35,16 +33,15 @@ import { SewaPltsFinalCta } from "./sections/SewaPltsFinalCta";
  *   10. FAQ
  *   11. CTA WhatsApp (Final)
  *
- * Seluruh konten (paket, harga, FAQ, CTA) diambil dari src/lib/rentalPackages.ts
- * sehingga owner cukup mengubah satu file untuk update harga.
+ * SERVER COMPONENT (optimasi CWV 2026-09-24, pola R7): seluruh konten (paket,
+ * harga, FAQ, CTA) diambil dari src/lib/rentalPackages.ts sehingga owner cukup
+ * mengubah satu file untuk update harga. Animasi entrance via CSS
+ * (.stagger-item / .fade-in-item — lihat globals.css). Client islands:
+ * Navbar, ConsultationForm, FloatingButtons, SewaPltsComparisonTable
+ * (klik baris), SewaPltsPackages (filter), SewaPltsCostSimulator &
+ * SewaPltsCalculator (input) — semuanya kini tanpa framer-motion.
  */
 export default function SewaPltsPage() {
-  /** Scroll ke section paket & aktifkan filter sesuai paket yang dipilih di tabel. */
-  const handleSelectPackage = () => {
-    const el = document.getElementById("paket");
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <Navbar />
@@ -55,7 +52,7 @@ export default function SewaPltsPage() {
         <div>
           <SewaPltsDualMode />
           <SewaPltsBenefits />
-          <SewaPltsComparisonTable onSelectPackage={handleSelectPackage} />
+          <SewaPltsComparisonTable />
           <SewaPltsPackages />
           <SewaPltsIncluded />
           <SewaPltsComparison />

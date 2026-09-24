@@ -1,7 +1,3 @@
-"use client";
-
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
 import {
   ShieldCheck,
   Wrench,
@@ -17,11 +13,10 @@ import {
  *
  * Ditempatkan setelah Daftar Paket agar user melihat nilai paket
  * sebelum melihat apa saja yang sudah termasuk.
+ *
+ * SERVER COMPONENT (optimasi CWV): animasi entrance via CSS.
  */
 export function SewaPltsIncluded() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   const included = [
     {
       icon: Wrench,
@@ -56,13 +51,11 @@ export function SewaPltsIncluded() {
   ];
 
   return (
-    <section className="py-12 md:py-16" ref={ref}>
+    <section className="py-12 md:py-16">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border-2 border-emerald-300 dark:border-emerald-700/50 p-6 sm:p-8"
+        <div
+          className="stagger-item rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border-2 border-emerald-300 dark:border-emerald-700/50 p-6 sm:p-8"
+          style={{ animationDelay: "0s" }}
         >
           {/* Header */}
           <div className="text-center mb-8">
@@ -82,12 +75,10 @@ export function SewaPltsIncluded() {
           {/* Grid layanan */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {included.map((item, i) => (
-              <motion.div
+              <div
                 key={item.title}
-                initial={{ opacity: 0, y: 15 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.3, delay: 0.1 + i * 0.08 }}
-                className="flex items-start gap-3 p-4 rounded-xl bg-white/60 dark:bg-white/5 backdrop-blur-sm border border-emerald-200/50 dark:border-emerald-800/30"
+                className="fade-in-item flex items-start gap-3 p-4 rounded-xl bg-white/60 dark:bg-white/5 backdrop-blur-sm border border-emerald-200/50 dark:border-emerald-800/30"
+                style={{ animationDelay: `${0.1 + i * 0.08}s` }}
               >
                 <div className="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center flex-shrink-0">
                   <item.icon className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
@@ -101,7 +92,7 @@ export function SewaPltsIncluded() {
                     {item.desc}
                   </p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
 
@@ -114,7 +105,7 @@ export function SewaPltsIncluded() {
               Menggunakan komponen berkualitas: panel surya monokristalin, inverter hybrid, baterai LiFePO4
             </p>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

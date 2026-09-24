@@ -1,7 +1,6 @@
 "use client";
 
-import { motion, useInView, AnimatePresence } from "framer-motion";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
   Check,
   MessageCircle,
@@ -67,10 +66,12 @@ function formatBuyPriceShort(value: number): string {
  *   - Biaya Survey & Instalasi Awal (cicil 2 bulan)
  *   - Fitur paket
  *   - CTA WhatsApp
+ *
+ * CLIENT COMPONENT (island) — filter kategori interaktif. Tanpa framer-motion
+ * (optimasi CWV): entrance via CSS (.stagger-item / .fade-in-item); pergantian
+ * kategori memakai re-mount key + .fade-in-quick (pengganti AnimatePresence).
  */
 export function SewaPltsPackages() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [activeCategory, setActiveCategory] = useState<PackageCategory | "all">("all");
 
   const allPackages = getActiveRentalPackages();
@@ -103,14 +104,12 @@ export function SewaPltsPackages() {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-muted/30" id="paket" ref={ref}>
+    <section className="py-16 md:py-24 bg-muted/30" id="paket">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-14 max-w-3xl mx-auto"
+        <div
+          className="stagger-item text-center mb-14 max-w-3xl mx-auto"
+          style={{ animationDelay: "0s" }}
         >
           <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-solar bg-solar/10 rounded-full">
             Pilihan Paket Sewa (1 – 10 kWp)
@@ -125,14 +124,12 @@ export function SewaPltsPackages() {
             dicicil 2 bulan) dan sudah mencakup bongkar saat kontrak selesai.
             Gunakan filter di bawah untuk memilih kategori yang sesuai.
           </p>
-        </motion.div>
+        </div>
 
         {/* Category filter */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.4, delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10"
+        <div
+          className="stagger-item flex flex-wrap justify-center gap-2 sm:gap-3 mb-10"
+          style={{ animationDelay: "0.2s" }}
         >
           {packageCategories.map((cat) => {
             const Icon = iconMap[cat.icon] ?? LayoutGrid;
@@ -166,30 +163,22 @@ export function SewaPltsPackages() {
               </button>
             );
           })}
-        </motion.div>
+        </div>
 
         {/* Active category description */}
-        <motion.p
+        <p
           key={activeCategory}
-          initial={{ opacity: 0, y: 5 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.2 }}
-          className="text-center text-xs text-muted-foreground mb-8"
+          className="fade-in-quick text-center text-xs text-muted-foreground mb-8"
         >
           {packageCategories.find((c) => c.id === activeCategory)?.description}
           {" • "}
           Menampilkan <strong className="text-navy dark:text-white">{packages.length}</strong> paket
-        </motion.p>
+        </p>
 
         {/* Grid packages */}
-        <AnimatePresence mode="popLayout">
-        <motion.div
-          key={activeCategory}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        <div
+          key={`${activeCategory}-grid`}
+          className="fade-in-quick grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {packages.map((pkg, i) => {
             const monthlyProduction = estimateMonthlyProduction(pkg.kWp);
@@ -208,16 +197,14 @@ export function SewaPltsPackages() {
                 `Mohon informasi lebih lanjut dan jadwal survei.\n\nTerima kasih.`;
 
             return (
-              <motion.div
+              <div
                 key={pkg.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
-                className={`relative p-6 rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col ${
+                className={`fade-in-item relative p-6 rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col ${
                   pkg.popular
                     ? "bg-gradient-to-br from-solar to-solar-dark text-white border-solar shadow-lg shadow-solar/20 lg:scale-105"
                     : "bg-card border-border hover:border-solar/30"
                 }`}
+                style={{ animationDelay: `${Math.min(i * 0.05, 0.4)}s` }}
               >
                 {pkg.popular && (
                   <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-gold text-navy text-xs font-bold rounded-full shadow-md whitespace-nowrap">
@@ -507,11 +494,10 @@ export function SewaPltsPackages() {
                   <MessageCircle className="w-4 h-4" />
                   {pkg.ctaLabel}
                 </a>
-              </motion.div>
+              </div>
             );
           })}
-        </motion.div>
-        </AnimatePresence>
+        </div>
 
         {/* Empty state (just in case) */}
         {packages.length === 0 && (
@@ -523,11 +509,9 @@ export function SewaPltsPackages() {
         )}
 
         {/* Bottom note */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.4, delay: 0.4 }}
-          className="mt-8 max-w-2xl mx-auto space-y-2 text-center"
+        <div
+          className="stagger-item mt-8 max-w-2xl mx-auto space-y-2 text-center"
+          style={{ animationDelay: "0.4s" }}
         >
           <p className="text-xs text-muted-foreground">
             Harga sewa bulanan sudah dibulatkan ke atas ke puluhan ribu terdekat.
@@ -549,7 +533,7 @@ export function SewaPltsPackages() {
             Dibayar sekali di awal kontrak, dapat dicicil maksimal 2 bulan, dan
             sudah mencakup pembongkaran equipment saat kontrak berakhir.
           </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

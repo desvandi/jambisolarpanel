@@ -1,27 +1,20 @@
-"use client";
-
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
 import { Check, X, Minus, ShoppingBag, Repeat } from "lucide-react";
 import { rentalComparison, buildWhatsAppUrl } from "@/lib/rentalPackages";
 
 /**
  * Section "Perbandingan" — tabel modern yang membandingkan
  * Beli PLTS vs Sewa PLTS pada berbagai aspek.
+ *
+ * SERVER COMPONENT (optimasi CWV): animasi entrance via CSS .stagger-item.
  */
 export function SewaPltsComparison() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
     <section className="py-16 md:py-24">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" ref={ref}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-14 max-w-3xl mx-auto"
+        <div
+          className="stagger-item text-center mb-14 max-w-3xl mx-auto"
+          style={{ animationDelay: "0s" }}
         >
           <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-solar bg-solar/10 rounded-full">
             Beli vs Sewa
@@ -35,14 +28,12 @@ export function SewaPltsComparison() {
             Lihat bagaimana skema sewa bisa menjadi pintu masuk cerdas untuk
             menikmati energi surya.
           </p>
-        </motion.div>
+        </div>
 
         {/* Comparison cards (mobile-friendly: stacked, then table-like on desktop) */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="rounded-2xl border border-border bg-card overflow-hidden shadow-sm"
+        <div
+          className="stagger-item rounded-2xl border border-border bg-card overflow-hidden shadow-sm"
+          style={{ animationDelay: "0.2s" }}
         >
           {/* Header row */}
           <div className="grid grid-cols-3 gap-0 bg-navy dark:bg-navy-light text-white">
@@ -123,14 +114,12 @@ export function SewaPltsComparison() {
               </div>
             </div>
           ))}
-        </motion.div>
+        </div>
 
         {/* Summary insight */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-10 p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-solar/5 via-solar/10 to-gold/10 border border-solar/20"
+        <div
+          className="stagger-item mt-10 p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-solar/5 via-solar/10 to-gold/10 border border-solar/20"
+          style={{ animationDelay: "0.4s" }}
         >
           <h3 className="text-xl font-bold text-navy dark:text-white mb-3 text-center">
             Mengapa Menyewa Lebih Menguntungkan daripada Menunggu?
@@ -157,7 +146,7 @@ export function SewaPltsComparison() {
               Konsultasi Gratis — Pilih Skema Terbaik
             </a>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

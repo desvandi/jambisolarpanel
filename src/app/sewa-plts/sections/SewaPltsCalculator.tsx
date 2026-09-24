@@ -1,7 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
   Calculator,
   Zap,
@@ -38,11 +37,12 @@ import {
  * Output:
  *   1. Rekomendasi paket yang terjangkau sesuai budget + net saving terbaik
  *   2. Tabel komparasi pengurangan tagihan untuk SEMUA paket
+ *
+ * CLIENT COMPONENT (island) — input interaktif. Tanpa framer-motion
+ * (optimasi CWV): animasi entrance via CSS; toggle asumsi memakai
+ * conditional render + .fade-in-quick.
  */
 export function SewaPltsCalculator() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   const [usage, setUsage] = useState<number>(400); // kWh/bulan
   const [budget, setBudget] = useState<number>(1550000); // Rp/bulan (paket Home)
   const [showAssumptions, setShowAssumptions] = useState(false);
@@ -83,7 +83,6 @@ export function SewaPltsCalculator() {
     <section
       id="kalkulator-sewa"
       className="py-20 md:py-28 solar-gradient relative overflow-hidden"
-      ref={ref}
     >
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
@@ -93,11 +92,9 @@ export function SewaPltsCalculator() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center max-w-3xl mx-auto mb-14"
+        <div
+          className="stagger-item text-center max-w-3xl mx-auto mb-14"
+          style={{ animationDelay: "0s" }}
         >
           <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 text-sm font-semibold text-white bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
             <Calculator className="w-4 h-4" />
@@ -111,13 +108,11 @@ export function SewaPltsCalculator() {
             Masukkan pemakaian listrik bulanan dan budget Anda — kami
             merekomendasikan paket sewa yang paling sesuai.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="max-w-4xl mx-auto"
+        <div
+          className="stagger-item max-w-4xl mx-auto"
+          style={{ animationDelay: "0.2s" }}
         >
           <div className="glass rounded-3xl p-6 sm:p-10">
             {/* Step 1: Usage input */}
@@ -551,11 +546,7 @@ export function SewaPltsCalculator() {
               )}
             </button>
             {showAssumptions && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                className="mb-6 p-4 rounded-xl bg-muted/50 border border-border text-xs text-muted-foreground space-y-2 leading-relaxed"
-              >
+              <div className="fade-in-quick mb-6 p-4 rounded-xl bg-muted/50 border border-border text-xs text-muted-foreground space-y-2 leading-relaxed">
                 <p>
                   <strong>Tarif PLN:</strong> Rp{" "}
                   {rentalCalculatorConfig.plnTariffPerKwh.toLocaleString("id-ID")}/kWh
@@ -602,7 +593,7 @@ export function SewaPltsCalculator() {
                   & survei gratis diperlukan untuk perhitungan akurat sesuai
                   kondisi atap, arah hadap, dan pola konsumsi aktual.
                 </p>
-              </motion.div>
+              </div>
             )}
 
             {/* CTA */}
@@ -622,7 +613,7 @@ export function SewaPltsCalculator() {
               </a>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

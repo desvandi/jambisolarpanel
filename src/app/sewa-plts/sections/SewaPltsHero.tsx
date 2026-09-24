@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { Home, ChevronRight, Sun, Battery, Zap, Shield } from "lucide-react";
 import {
@@ -17,6 +14,10 @@ import {
  * Mengikuti pola visual ServicePageLayout (gradient navy + solar)
  * namun dipisahkan sebagai komponen sendiri agar dapat menampilkan
  * ilustrasi rumah + panel surya di sisi kanan.
+ *
+ * SERVER COMPONENT (optimasi CWV): animasi entrance via CSS .stagger-item
+ * + inline animation-delay; CTA memakai anchor murni (scroll-behavior:
+ * smooth sudah global di html) — tanpa JS sama sekali.
  */
 export function SewaPltsHero() {
   const cheapest = getCheapestRentalPackage();
@@ -33,11 +34,9 @@ export function SewaPltsHero() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumbs */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="flex items-center gap-2 text-sm text-white/60 mb-6"
+        <div
+          className="stagger-item flex items-center gap-2 text-sm text-white/60 mb-6"
+          style={{ animationDelay: "0s" }}
         >
           <Link
             href="/"
@@ -47,74 +46,58 @@ export function SewaPltsHero() {
           </Link>
           <ChevronRight className="w-3 h-3" />
           <span className="text-solar-light">{rentalHero.badge}</span>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           {/* Left: Text content */}
           <div className="lg:col-span-7">
             {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 mb-5 rounded-full bg-solar/20 border border-solar/30 text-solar-light text-sm font-semibold"
+            <div
+              className="stagger-item inline-flex items-center gap-2 px-4 py-1.5 mb-5 rounded-full bg-solar/20 border border-solar/30 text-solar-light text-sm font-semibold"
+              style={{ animationDelay: "0.05s" }}
             >
               <span className="w-2 h-2 rounded-full bg-solar-light animate-pulse" />
               {rentalHero.badge}
-            </motion.div>
+            </div>
 
             {/* Title */}
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-white mb-5 leading-tight"
+            <h1
+              className="stagger-item text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-white mb-5 leading-tight"
+              style={{ animationDelay: "0.1s" }}
             >
               {rentalHero.title.split(".")[0]}.
               <br />
               <span className="gradient-text">
                 {rentalHero.title.split(".").slice(1).join(".").trim()}
               </span>
-            </motion.h1>
+            </h1>
 
             {/* Subtitle */}
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.15 }}
-              className="text-lg sm:text-xl text-white/75 max-w-2xl leading-relaxed mb-4"
+            <p
+              className="stagger-item text-lg sm:text-xl text-white/75 max-w-2xl leading-relaxed mb-4"
+              style={{ animationDelay: "0.15s" }}
             >
               {rentalHero.subtitle}
-            </motion.p>
+            </p>
 
             {cheapest && (
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.2 }}
-                className="text-base text-gold-light font-semibold mb-8"
+              <p
+                className="stagger-item text-base text-gold-light font-semibold mb-8"
+                style={{ animationDelay: "0.2s" }}
               >
                 Paket {cheapest.name}: {cheapest.kWp} kWp + baterai{" "}
                 {cheapest.storageKwh} kWh — {formatRentalRp(cheapest.monthlyPrice)}
                 /bulan
-              </motion.p>
+              </p>
             )}
 
             {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.25 }}
-              className="flex flex-col sm:flex-row gap-4 mb-10"
+            <div
+              className="stagger-item flex flex-col sm:flex-row gap-4 mb-10"
+              style={{ animationDelay: "0.25s" }}
             >
               <a
                 href="#kalkulator-sewa"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document
-                    .getElementById("kalkulator-sewa")
-                    ?.scrollIntoView({ behavior: "smooth" });
-                }}
                 className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-solar hover:bg-solar-dark text-white font-bold rounded-full transition-all duration-300 hover:shadow-xl hover:shadow-solar/30 hover:scale-105"
               >
                 <Zap className="w-5 h-5" />
@@ -131,14 +114,12 @@ export function SewaPltsHero() {
                 </svg>
                 {rentalHero.secondaryCta}
               </a>
-            </motion.div>
+            </div>
 
             {/* Stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl"
+            <div
+              className="stagger-item grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl"
+              style={{ animationDelay: "0.3s" }}
             >
               {rentalHero.stats.map((stat) => (
                 <div
@@ -156,28 +137,24 @@ export function SewaPltsHero() {
                   </p>
                 </div>
               ))}
-            </motion.div>
+            </div>
 
             {/* Catatan kaki stat ber-* — klaim jujur & dapat direproduksi */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="mt-3 max-w-2xl text-[11px] leading-relaxed text-white/40"
+            <p
+              className="stagger-item mt-3 max-w-2xl text-[11px] leading-relaxed text-white/40"
+              style={{ animationDelay: "0.4s" }}
             >
               {rentalHero.statsNote}
-            </motion.p>
+            </p>
           </div>
 
           {/* Right: Illustration — House with solar panel */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="lg:col-span-5 flex justify-center"
+          <div
+            className="stagger-item lg:col-span-5 flex justify-center"
+            style={{ animationDelay: "0.3s" }}
           >
             <HouseWithSolarIllustration />
-          </motion.div>
+          </div>
         </div>
       </div>
 

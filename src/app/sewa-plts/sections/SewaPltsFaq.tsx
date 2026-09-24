@@ -1,7 +1,3 @@
-"use client";
-
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -15,20 +11,19 @@ import { rentalFaqs, buildWhatsAppUrl } from "@/lib/rentalPackages";
  * agar konsisten dengan FAQ section halaman utama.
  *
  * Daftar FAQ diambil dari rentalFaqs di rentalPackages.ts.
+ *
+ * SERVER COMPONENT (optimasi CWV): Accordion shadcn adalah client island
+ * (interaktivitas toggle ada di komponen itu); pembungkus section ini
+ * server murni — animasi entrance via CSS .stagger-item.
  */
 export function SewaPltsFaq() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section id="faq-sewa" className="py-16 md:py-24 bg-muted/30" ref={ref}>
+    <section id="faq-sewa" className="py-16 md:py-24 bg-muted/30">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-14"
+        <div
+          className="stagger-item text-center mb-14"
+          style={{ animationDelay: "0s" }}
         >
           <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-solar bg-solar/10 rounded-full">
             FAQ — Sewa PLTS
@@ -41,13 +36,12 @@ export function SewaPltsFaq() {
             Hal-hal yang perlu Anda ketahui sebelum menyewa PLTS dari Jambi
             Solar Panel. Tidak menemukan jawabannya? Hubungi kami via WhatsApp.
           </p>
-        </motion.div>
+        </div>
 
         {/* Accordion */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
+        <div
+          className="stagger-item"
+          style={{ animationDelay: "0.2s" }}
         >
           <Accordion type="single" collapsible className="space-y-3">
             {rentalFaqs.map((faq, i) => (
@@ -65,14 +59,12 @@ export function SewaPltsFaq() {
               </AccordionItem>
             ))}
           </Accordion>
-        </motion.div>
+        </div>
 
         {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-12 text-center"
+        <div
+          className="stagger-item mt-12 text-center"
+          style={{ animationDelay: "0.4s" }}
         >
           <p className="text-sm text-muted-foreground mb-4">
             Masih punya pertanyaan lain? Tim kami siap membantu.
@@ -88,7 +80,7 @@ export function SewaPltsFaq() {
             </svg>
             Tanya via WhatsApp
           </a>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -1,7 +1,3 @@
-"use client";
-
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
 import { Sun, Zap, Shield, TrendingUp } from "lucide-react";
 import {
   buildWhatsAppUrl,
@@ -13,14 +9,15 @@ import {
 /**
  * Section "Final CTA" — penutup yang kuat untuk mendorong
  * conversion ke WhatsApp. Mengulang nilai jual utama Solar as a Service.
+ *
+ * SERVER COMPONENT (optimasi CWV): animasi entrance via CSS .stagger-item;
+ * tombol sekunder memakai anchor murni (scroll-behavior: smooth global).
  */
 export function SewaPltsFinalCta() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const cheapest = getCheapestRentalPackage();
 
   return (
-    <section className="py-16 md:py-24 relative overflow-hidden" ref={ref}>
+    <section className="py-16 md:py-24 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-navy via-navy/95 to-solar-dark" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-solar/20 via-transparent to-transparent" />
@@ -30,11 +27,7 @@ export function SewaPltsFinalCta() {
       <div className="absolute bottom-10 left-10 w-48 h-48 bg-solar/20 rounded-full blur-3xl" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-        >
+        <div className="stagger-item" style={{ animationDelay: "0s" }}>
           <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full bg-solar/20 border border-solar/30 text-solar-light text-sm font-semibold">
             <Sun className="w-4 h-4" />
             Gunakan Energi Matahari Mulai Hari Ini
@@ -105,12 +98,6 @@ export function SewaPltsFinalCta() {
             </a>
             <a
               href="#paket"
-              onClick={(e) => {
-                e.preventDefault();
-                document
-                  .getElementById("paket")
-                  ?.scrollIntoView({ behavior: "smooth" });
-              }}
               className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-full border border-white/20 transition-all duration-300"
             >
               Lihat Paket Lainnya
@@ -122,7 +109,7 @@ export function SewaPltsFinalCta() {
             Konsultasi 100% gratis — tanpa kewajiban. Tim kami akan membantu
             memilih paket yang paling sesuai dengan kebutuhan dan budget Anda.
           </p>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

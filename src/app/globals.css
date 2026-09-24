@@ -414,6 +414,23 @@ html {
   animation: fade-up-soft 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+/* Entrance fade (opacity SAJA) untuk kartu yang punya efek hover-transform
+   (hover:-translate-y-*). Tidak memakai .stagger-item karena keyframes
+   fade-up-soft menganimasikan transform dengan fill forwards — nilai akhir
+   transform dari animasi akan meng-override transform hover (cascade:
+   animation origin > author normal), sehingga lift hover mati.
+   Dipasangkan dengan inline animation-delay. */
+.fade-in-item {
+  opacity: 0;
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+/* Transisi ringan untuk panel toggle / hasil filter — pengganti
+   AnimatePresence framer-motion (re-mount via key + kelas ini). */
+.fade-in-quick {
+  animation: fade-in 0.25s ease-out;
+}
+
 /* Primary CTA shine sweep on hover */
 .btn-shine {
   position: relative;
