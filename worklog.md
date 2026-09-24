@@ -32,9 +32,9 @@ Angka ROI resmi hasil model: **rumah 2,6–5,2 kWp ± 9–11 thn (campuran+bater
 - R4–R5 (b82c787…d2c3bdc): FAQ page, timeline proses, kalkulator, glossary hub, owner spotlight, auto-link, konfigurator PJUTS/SolarPump.
 - R6 (5e55740, f251fd7): Tim & Kompetensi + term chips; kalkulator proyeksi 25 tahun.
 - R7 (1fbd70a): response audit — HowTo dihapus, MethodologyNote, studi kasus diperdalam, E-E-A-T/NAP, server-ifikasi layout, lastmod discipline.
-- **R8 (commit ini):** lihat §2 — perbaikan akurasi model finansial (4 temuan merah auditor).
+- **R8 (5bdb935):** lihat §2 — perbaikan akurasi model finansial (4 temuan merah auditor).
 - **R8-lanjutan (re-audit, commit 1a5d36a):** lihat §2a — 3 isu konsistensi P1 + 1 P2 dari re-audit auditor (EV residual claims, tarif rental single-source, model EV 70%/Rp1.500, savingsRange statis rental).
-- **R8-sweep (self-audit, commit berikut):** lihat §2b — residual claim kelas sama ditemukan & dibersihkan di SolarPumpPage.tsx (terlewat oleh grep Task 25 yang hanya mencari frasa persis "gratis dari matahari").
+- **R8-sweep (self-audit, 473ffdb):** lihat §2b — residual claim kelas sama ditemukan & dibersihkan di SolarPumpPage.tsx (terlewat oleh grep Task 25 yang hanya mencari frasa persis "gratis dari matahari").
 
 ---
 
