@@ -13,6 +13,10 @@ import {
   TrendingDown,
   Quote,
   Calendar,
+  ClipboardList,
+  Ruler,
+  Info,
+  CheckCircle2,
 } from "lucide-react";
 import { SitePageLayout } from "@/components/site/SitePageLayout";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -73,7 +77,7 @@ export default async function CaseStudyPage({ params }: Props) {
       <article className="py-12 md:py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Foto proyek */}
-          <div className="relative aspect-[16/9] rounded-2xl overflow-hidden border border-border mb-10">
+          <figure className="relative aspect-[16/9] rounded-2xl overflow-hidden border border-border mb-10">
             <Image
               src={cs.image}
               alt={cs.imageAlt}
@@ -85,7 +89,10 @@ export default async function CaseStudyPage({ params }: Props) {
             <span className="absolute top-4 left-4 px-3 py-1 bg-solar text-white text-xs font-semibold rounded-full">
               {cs.segment}
             </span>
-          </div>
+            <figcaption className="absolute bottom-0 left-0 right-0 px-4 py-2 bg-gradient-to-t from-black/70 to-transparent text-[11px] text-white/85">
+              {cs.imageCaption}
+            </figcaption>
+          </figure>
 
           {/* Ringkasan proyek */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12">
@@ -153,6 +160,63 @@ export default async function CaseStudyPage({ params }: Props) {
               ) : null}
             </section>
 
+            {/* Spesifikasi sistem */}
+            <section>
+              <h2 className="text-2xl font-extrabold text-navy dark:text-white mb-4 flex items-center gap-2">
+                <Ruler className="w-6 h-6 text-solar" />
+                Spesifikasi Sistem
+              </h2>
+              <dl className="rounded-2xl border border-border overflow-hidden">
+                {cs.spesifikasi.map((spec, i) => (
+                  <div
+                    key={spec.label}
+                    className={`grid grid-cols-1 sm:grid-cols-[200px_1fr] gap-1 sm:gap-4 px-5 py-3.5 ${
+                      i % 2 === 0 ? "bg-card" : "bg-muted/40"
+                    }`}
+                  >
+                    <dt className="text-sm font-semibold text-muted-foreground">
+                      {spec.label}
+                    </dt>
+                    <dd className="text-sm text-foreground/90 leading-relaxed">
+                      {spec.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+
+            {/* Catatan desain (engineering rationale) */}
+            <section>
+              <h2 className="text-2xl font-extrabold text-navy dark:text-white mb-4 flex items-center gap-2">
+                <ClipboardList className="w-6 h-6 text-solar" />
+                Mengapa Desain Ini Dipilih
+              </h2>
+              <ul className="space-y-3">
+                {cs.catatanDesain.map((c) => (
+                  <li key={c} className="flex gap-3 text-foreground/90 leading-relaxed">
+                    <CheckCircle2 className="w-5 h-5 text-solar flex-shrink-0 mt-0.5" />
+                    <span>{c}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            {/* Batasan sistem */}
+            <section>
+              <h2 className="text-2xl font-extrabold text-navy dark:text-white mb-4 flex items-center gap-2">
+                <Info className="w-6 h-6 text-gold" />
+                Batasan yang Perlu Anda Tahu
+              </h2>
+              <ul className="space-y-3">
+                {cs.batasan.map((b) => (
+                  <li key={b} className="flex gap-3 text-foreground/90 leading-relaxed">
+                    <AlertTriangle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
             {/* Hasil */}
             <section>
               <h2 className="text-2xl font-extrabold text-navy dark:text-white mb-6 flex items-center gap-2">
@@ -174,6 +238,28 @@ export default async function CaseStudyPage({ params }: Props) {
                   </div>
                 ))}
               </div>
+            </section>
+
+            {/* Metode data & verifikasi */}
+            <section className="p-6 sm:p-7 rounded-2xl bg-muted/40 border border-border">
+              <h2 className="text-lg font-extrabold text-navy dark:text-white mb-4 flex items-center gap-2">
+                <Info className="w-5 h-5 text-solar" />
+                Metode Data &amp; Verifikasi
+              </h2>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+                Transparansi untuk Anda nilai sendiri — inilah asal setiap angka di halaman ini:
+              </p>
+              <ul className="space-y-2.5">
+                {cs.metodeData.map((m) => (
+                  <li key={m} className="flex gap-3 text-sm text-foreground/90 leading-relaxed">
+                    <span
+                      aria-hidden="true"
+                      className="mt-2 w-1.5 h-1.5 rounded-full bg-solar flex-shrink-0"
+                    />
+                    {m}
+                  </li>
+                ))}
+              </ul>
             </section>
 
             {/* Testimoni */}

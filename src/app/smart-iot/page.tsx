@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import SmartIoTPage from "./SmartIoTPage";
+import { ServicePageLayout } from "@/components/landing/ServicePageLayout";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildMetadata, serviceJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
@@ -29,7 +30,18 @@ export default function Page() {
           { name: "Smart IoT & CCTV", path: "/smart-iot" },
         ])}
       />
-      <SmartIoTPage />
+      <ServicePageLayout
+      subBrand="Jambi Solar IoT"
+      currentPath="/smart-iot"
+      termIds={["smart-monitoring", "plts", "commissioning", "maintenance-plts", "kwp"]}
+      title="Smart IoT Monitoring & Solar CCTV"
+      tagline="Monitoring real-time performa PLTS + CCTV tenaga surya untuk keamanan 24/7."
+      description="Dua layanan IoT dalam satu mitra: Smart Monitoring untuk pantau performa PLTS secara real-time, dan Solar CCTV untuk keamanan area tanpa kabel listrik PLN."
+      breadcrumbs={[{ label: "Solusi", href: "/" }, { label: "Smart IoT" }]}
+      waText="Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan Smart IoT Monitoring atau Solar CCTV. Mohon informasi lebih lanjut."
+      >
+        <SmartIoTPage />
+      </ServicePageLayout>
     </>
   );
 }

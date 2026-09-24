@@ -863,8 +863,11 @@ export const rentalHero = {
     { label: "Sewa mulai dari", value: "Rp 875rb", suffix: "/bulan" },
     { label: "Tanpa investasi", value: "Rp 25jt+", suffix: "" },
     { label: "Backup PLN padam", value: "Otomatis", suffix: "" },
-    { label: "Potensi hemat tagihan", value: "Hingga 90%", suffix: "" },
+    { label: "Potensi hemat tagihan*", value: "50–90%", suffix: "" },
   ],
+  /** Catatan kaki untuk stat ber-tanda * — kejujuran klaim (audit SEO). */
+  statsNote:
+    "*Estimasi simulasi dengan asumsi desain standar (PSH Jambi 3,75 jam, efisiensi 80%, tarif R-1 non-subsidi) — hasil aktual bergantung profil beban, arah atap, dan cuaca. Detail metodologi ada di bagian FAQ & kalkulator sewa di bawah.",
 } as const;
 
 /** Konfigurasi kalkulator sewa. */

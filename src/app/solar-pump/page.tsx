@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import SolarPumpPage from "./SolarPumpPage";
+import { ServicePageLayout } from "@/components/landing/ServicePageLayout";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildMetadata, serviceJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
@@ -29,7 +30,18 @@ export default function Page() {
           { name: "Solar Pump", path: "/solar-pump" },
         ])}
       />
-      <SolarPumpPage />
+      <ServicePageLayout
+      subBrand="Jambi Solar Agro — Solar Pump"
+      currentPath="/solar-pump"
+      termIds={["solar-pump", "plts", "kwp", "psh", "mppt", "baterai-lifepo4", "bos"]}
+      title="Solar Water Pump — Pompa Air Tenaga Surya"
+      tagline="Irigasi kebun sawit, pertanian, peternakan tanpa listrik PLN."
+      description="Pompa air submersible bertenaga surya untuk irigasi perkebunan sawit, pertanian, dan peternakan. Menggunakan komponen berkualitas tinggi dengan garansi resmi dan MPPT controller untuk efisiensi maksimal."
+      breadcrumbs={[{ label: "Solusi", href: "/" }, { label: "Solar Pump" }]}
+      waText="Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan Solar Water Pump. Mohon informasi lebih lanjut mengenai harga dan spesifikasi."
+      >
+        <SolarPumpPage />
+      </ServicePageLayout>
     </>
   );
 }

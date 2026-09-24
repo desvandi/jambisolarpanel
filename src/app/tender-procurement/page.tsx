@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import TenderProcurementPage from "./TenderProcurementPage";
+import { ServicePageLayout } from "@/components/landing/ServicePageLayout";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildMetadata, serviceJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
@@ -29,7 +30,18 @@ export default function Page() {
           { name: "Tender & Pengadaan", path: "/tender-procurement" },
         ])}
       />
-      <TenderProcurementPage />
+      <ServicePageLayout
+      subBrand="Jambi Solar Infrastructure"
+      currentPath="/tender-procurement"
+      termIds={["tender-pengadaan", "plts", "commissioning", "bos", "kwp", "garansi-plts"]}
+      title="Pengadaan Barang & Jasa Energi Terbarukan"
+      tagline="Siap melayani proyek pengadaan energi terbarukan untuk pemerintah, BUMN, dan korporasi."
+      description="JMSE menyediakan layanan EPC dan pengadaan barang & jasa energi terbarukan secara profesional. Kami siap mendukung proyek pemerintah daerah, BUMN, korporasi, dan institusi dalam mewujudkan transisi energi bersih."
+      breadcrumbs={[{ label: "Solusi", href: "/" }, { label: "Tender & Procurement" }]}
+      waText="Halo PT. Jaya Mandiri Smart Energy, saya ingin konsultasi mengenai pengadaan/tender energi terbarukan. Mohon informasi lebih lanjut."
+      >
+        <TenderProcurementPage />
+      </ServicePageLayout>
     </>
   );
 }

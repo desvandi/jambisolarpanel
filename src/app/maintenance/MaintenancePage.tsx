@@ -2,7 +2,6 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { ServicePageLayout } from "@/components/landing/ServicePageLayout";
 import { formatRp } from "@/lib/pricing";
 import { MessageCircle, Wrench, Shield, Clock, Search, Settings, CheckCircle, MapPin, Zap } from "lucide-react";
 
@@ -59,15 +58,7 @@ export default function MaintenancePage() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <ServicePageLayout
-      subBrand="Jambi Solar Maintenance"
-      termIds={["maintenance-plts", "plts", "commissioning", "siklus-baterai", "efisiensi-sistem", "inverter-hybrid", "string"]}
-      title="Operation & Maintenance PLTS"
-      tagline="Jaga performa sistem PLTS Anda tetap optimal dengan layanan maintenance profesional."
-      description="Layanan pemeliharaan berkala dan perbaikan untuk sistem PLTS Anda. Tim teknisi berpengalaman kami siap menjaga performa dan umur panjang investasi energi surya Anda."
-      breadcrumbs={[{ label: "Solusi", href: "/" }, { label: "Maintenance" }]}
-      waText="Halo PT. Jaya Mandiri Smart Energy, saya ingin mengetahui layanan maintenance PLTS. Mohon informasi lebih lanjut."
-    >
+    <>
       {/* Coverage */}
       <section className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -231,6 +222,6 @@ export default function MaintenancePage() {
           </div>
         </div>
       </section>
-    </ServicePageLayout>
+    </>
   );
 }

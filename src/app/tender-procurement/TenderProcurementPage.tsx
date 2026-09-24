@@ -2,7 +2,6 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { ServicePageLayout } from "@/components/landing/ServicePageLayout";
 import { MessageCircle, ClipboardList, FileText, Search, Package, Wrench, ArrowRight, CheckCircle, Building, Landmark } from "lucide-react";
 
 const services = [
@@ -27,15 +26,7 @@ export default function TenderProcurementPage() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <ServicePageLayout
-      subBrand="Jambi Solar Infrastructure"
-      termIds={["tender-pengadaan", "plts", "commissioning", "bos", "kwp", "garansi-plts"]}
-      title="Pengadaan Barang & Jasa Energi Terbarukan"
-      tagline="Siap melayani proyek pengadaan energi terbarukan untuk pemerintah, BUMN, dan korporasi."
-      description="JMSE menyediakan layanan EPC dan pengadaan barang & jasa energi terbarukan secara profesional. Kami siap mendukung proyek pemerintah daerah, BUMN, korporasi, dan institusi dalam mewujudkan transisi energi bersih."
-      breadcrumbs={[{ label: "Solusi", href: "/" }, { label: "Tender & Procurement" }]}
-      waText="Halo PT. Jaya Mandiri Smart Energy, saya ingin konsultasi mengenai pengadaan/tender energi terbarukan. Mohon informasi lebih lanjut."
-    >
+    <>
       {/* Target Clients */}
       <section className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -203,6 +194,6 @@ export default function TenderProcurementPage() {
           </motion.div>
         </div>
       </section>
-    </ServicePageLayout>
+    </>
   );
 }

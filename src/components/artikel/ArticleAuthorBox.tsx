@@ -50,6 +50,17 @@ export function ArticleAuthorBox() {
             oleh pemilik perusahaan.
           </p>
 
+          {/* Proses editorial — sinyal E-E-A-T */}
+          <p className="mt-3 flex items-start gap-2 text-xs text-muted-foreground leading-relaxed">
+            <PenLine className="w-3.5 h-3.5 text-solar flex-shrink-0 mt-0.5" />
+            <span>
+              Proses editorial: artikel ditinjau ulang oleh tim teknis untuk
+              memastikan akurasi teknis sebelum dipublikasikan. Angka estimasi
+              memakai parameter desain standar kami (PSH Jambi 3,75 jam,
+              efisiensi sistem 80%) dan diberi label estimasi/simulasi.
+            </span>
+          </p>
+
           {/* Kredensial ringkas */}
           <ul className="flex flex-wrap justify-center sm:justify-start gap-x-5 gap-y-2 mt-4">
             <li className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">

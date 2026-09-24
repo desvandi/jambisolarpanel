@@ -1,7 +1,5 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
 import {
   Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
@@ -41,9 +39,6 @@ import { SewaPltsFinalCta } from "./sections/SewaPltsFinalCta";
  * sehingga owner cukup mengubah satu file untuk update harga.
  */
 export default function SewaPltsPage() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   /** Scroll ke section paket & aktifkan filter sesuai paket yang dipilih di tabel. */
   const handleSelectPackage = () => {
     const el = document.getElementById("paket");
@@ -57,12 +52,7 @@ export default function SewaPltsPage() {
       <main className="flex-1">
         <SewaPltsHero />
 
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.4 }}
-        >
+        <div>
           <SewaPltsDualMode />
           <SewaPltsBenefits />
           <SewaPltsComparisonTable onSelectPackage={handleSelectPackage} />
@@ -73,10 +63,10 @@ export default function SewaPltsPage() {
           <SewaPltsCalculator />
           <SewaPltsFaq />
           <SewaPltsFinalCta />
-        </motion.div>
+        </div>
 
         {/* Internal linking — layanan terkait */}
-        <RelatedServices />
+        <RelatedServices currentPath="/sewa-plts" />
 
         {/* Istilah penting → Kamus Istilah (internal linking) */}
         <ServiceTermChips ids={["sewa-plts", "plts", "kwp", "hybrid", "off-grid", "baterai-lifepo4", "maintenance-plts", "roi"]} />

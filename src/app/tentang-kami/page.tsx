@@ -287,6 +287,15 @@ export default function TentangKamiPage() {
                     </span>
                   ))}
                 </div>
+                <p className="mt-5 flex items-start gap-2.5 text-xs text-muted-foreground leading-relaxed p-4 rounded-xl bg-muted/50 border border-border">
+                  <FileCheck className="w-4 h-4 text-solar flex-shrink-0 mt-0.5" />
+                  <span>
+                    <strong className="text-foreground/90">Verifikasi legalitas:</strong>{" "}
+                    dokumen asli (NIB, SK Kemenkumham, dan izin usaha) dapat Anda periksa
+                    langsung saat kunjungan ke kantor kami di Muaro Jambi atau diminta
+                    sebagai kelengkapan dokumen proses tender/pengadaan.
+                  </span>
+                </p>
                 <a
                   href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy%2C%20saya%20ingin%20bicara%20dengan%20tim%20tentang%20proyek%20PLTS%20saya"
                   className="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-solar hover:bg-solar-dark text-white font-semibold text-sm rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-solar/30"

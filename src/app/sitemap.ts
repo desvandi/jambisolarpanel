@@ -13,22 +13,36 @@ import { caseStudies } from "@/content/caseStudies";
  * Halaman admin/internal (/kalibrasi-harga, /api) TIDAK dimasukkan.
  */
 
-/** Tanggal pembaruan signifikan terakhir per route (ISO). */
+/**
+ * Tanggal pembaruan signifikan terakhir per route (ISO).
+ *
+ * DISIPLIN LASTMOD (audit SEO 2026-09-24): tanggal HANYA dibump bila
+ * perubahan konten/konten terstruktur yang bermakna terjadi di route
+ * tersebut — bukan setiap kali repository tersentuh (mis. refactor
+ * internal, penyesuaian link kecil, perubahan komponen bersama).
+ */
 const LAST_MODIFIED = {
-  home: "2026-09-23",
+  // 2026-09-24: copy TrustSection (klaim legalitas) — perubahan konten nyata.
+  home: "2026-09-24",
+  // 2026-09-24: panel metodologi + penulisan ulang klaim penghematan/ROI.
   solarHome: "2026-09-24",
   solarCommercial: "2026-09-24",
+  // 2026-09-24: penghapusan HowTo JSON-LD (perubahan structured data).
   pjuts: "2026-09-24",
   solarPump: "2026-09-24",
   evCharging: "2026-09-24",
   smartIot: "2026-09-24",
   maintenance: "2026-09-24",
   tenderProcurement: "2026-09-24",
+  // 2026-09-24: stat hero & klaim "hingga 90%" ditulis ulang + catatan kaki.
   sewaPlts: "2026-09-24",
+  // 2026-09-24: blok verifikasi legalitas ditambahkan.
   tentangKami: "2026-09-24",
+  // 2026-09-24: studi kasus diperdalam (spesifikasi, metode data, batasan).
   proyek: "2026-09-24",
   hargaPanelSurya: "2026-09-23",
   artikelIndex: "2026-09-23",
+  // 2026-09-24: jawaban ROI & performa hujan ditulis ulang (metodologi).
   faq: "2026-09-24",
   kalkulatorPlts: "2026-09-24",
   istilahPlts: "2026-09-24",

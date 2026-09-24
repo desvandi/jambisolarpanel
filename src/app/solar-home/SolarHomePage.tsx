@@ -2,7 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { ServicePageLayout } from "@/components/landing/ServicePageLayout";
+import { MethodologyNote } from "@/components/landing/MethodologyNote";
 import {
   calculatePackages,
   hasCustomPricing,
@@ -12,10 +12,18 @@ import {
 import { MessageCircle, Battery, Zap, Shield, Clock, Wrench } from "lucide-react";
 
 const benefits = [
-  { icon: Zap, title: "Hemat Tagihan PLN", desc: "Potensi penghematan 50-90% dari tagihan listrik bulanan Anda" },
+  {
+    icon: Zap,
+    title: "Hemat Tagihan PLN",
+    desc: "Potensi hemat sebagian besar tagihan — rentangnya bergantung profil beban rumah Anda (lihat metodologi di bawah)",
+  },
   { icon: Battery, title: "Backup saat PLN Padam", desc: "Dengan opsi baterai LiFePO4, rumah tetap menyala 24 jam" },
   { icon: Shield, title: "Garansi Resmi", desc: "Panel surya 25 tahun performa, inverter 5 tahun, baterai sesuai paket" },
-  { icon: Clock, title: "ROI 8-9 Tahun", desc: "Balik modal dalam 8-9 tahun dengan kenaikan tarif PLN 6%/tahun" },
+  {
+    icon: Clock,
+    title: "ROI ± 8–9 Tahun (simulasi)",
+    desc: "Estimasi simulasi dengan asumsi tarif & kenaikan PLN 6%/tahun — detail di panel metodologi",
+  },
   { icon: Wrench, title: "Gratis Instalasi", desc: "Survei, desain, instalasi, dan commissioning sudah termasuk dalam harga" },
 ];
 
@@ -39,14 +47,7 @@ export default function SolarHomePage() {
   }, []);
 
   return (
-    <ServicePageLayout
-      subBrand="Jambi Solar Home"
-      termIds={["plts", "kwp", "kwh", "hybrid", "off-grid", "baterai-lifepo4", "dod", "roi", "tarif-pln", "daya-pln", "paket-kwp", "panel-monokristalin"]}
-      title="PLTS Rumah Tangga — Energi Mandiri untuk Keluarga Anda"
-      tagline="Hemat tagihan listrik, backup saat PLN padam, investasi jangka panjang."
-      description="Sistem Pembangkit Listrik Tenaga Surya (PLTS) hybrid untuk rumah tangga dengan kapasitas 1 kWp hingga 5 kWp + baterai. Cocok untuk kebutuhan rumah tangga kecil hingga keluarga besar dengan AC, kulkas, dan peralatan modern lainnya."
-      breadcrumbs={[{ label: "Solusi", href: "/" }, { label: "Home Solar" }]}
-    >
+    <>
       {/* Benefits Section */}
       <section className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -93,7 +94,8 @@ export default function SolarHomePage() {
             {[
               {
                 problem: "Tagihan PLN terus naik setiap tahun",
-                solution: "PLTS Hybrid menghasilkan listrik gratis dari matahari. Potensi hemat 50-90% tagihan bulanan tergantung kapasitas sistem dan profil beban, dan penghematan terus bertambah seiring kenaikan tarif PLN.",
+                solution:
+                  "PLTS Hybrid menghasilkan listrik dari matahari sehingga Anda membeli lebih sedikit listrik dari PLN. Berapa persen tagihan yang bisa dipangkas bergantung pada profil beban rumah Anda — panel metodologi di bawah menjelaskan kapan potensi tertinggi tercapai dan bagaimana angkanya dihitung.",
                 icon: "💸",
               },
               {
@@ -125,6 +127,12 @@ export default function SolarHomePage() {
               </motion.div>
             ))}
           </div>
+
+          {/* Metodologi klaim angka — transparansi E-E-A-T */}
+          <div className="mt-10">
+            <MethodologyNote variant="residential" id="metodologi" />
+          </div>
+
           <div className="mt-8 text-center">
             <a
               href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20ingin%20konsultasi%20PLTS%20untuk%20rumah%20tangga"
@@ -244,6 +252,6 @@ export default function SolarHomePage() {
           </div>
         </div>
       </section>
-    </ServicePageLayout>
+    </>
   );
 }

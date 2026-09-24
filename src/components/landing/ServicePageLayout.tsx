@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
@@ -18,6 +15,10 @@ interface ServicePageLayoutProps {
   tagline: string;
   description: string;
   waText?: string;
+  /** Path halaman ini (mis. "/solar-home") — dipakai RelatedServices
+   *  memfilter tautan halaman sendiri TANPA usePathname, sehingga
+   *  layout tetap bisa menjadi server component. */
+  currentPath: string;
   children: ReactNode;
   breadcrumbs?: { label: string; href?: string }[];
   /** Optional: Problem statement for Problem-Solution funnel */
@@ -34,12 +35,22 @@ interface ServicePageLayoutProps {
   termIds?: string[];
 }
 
+/**
+ * Layout halaman layanan (9 halaman: solar-home, solar-commercial, pjuts,
+ * solar-pump, ev-charging, smart-iot, maintenance, tender-procurement, sewa-plts*).
+ *
+ * SERVER COMPONENT (audit performance 2026-09-24): sebelumnya seluruh layout
+ * berupa client component dengan framer-motion, sehingga semua halaman layanan
+ * membawa runtime animasi. Kini animasi entrance memakai CSS (.stagger-item)
+ * dan satu-satunya client islands adalah ConsultationForm & Navbar/FloatingButtons.
+ */
 export function ServicePageLayout({
   subBrand,
   title,
   tagline,
   description,
   waText,
+  currentPath,
   children,
   breadcrumbs = [],
   problem,
@@ -64,14 +75,14 @@ export function ServicePageLayout({
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Breadcrumbs */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className="flex items-center gap-2 text-sm text-white/60 mb-6"
+            <nav
+              aria-label="Breadcrumb"
+              className="stagger-item flex items-center gap-2 text-sm text-white/60 mb-6"
+              style={{ animationDelay: "0s" }}
             >
               <Link href="/" className="hover:text-solar-light transition-colors flex items-center gap-1">
                 <Home className="w-3.5 h-3.5" />
+                <span className="sr-only">Home</span>
               </Link>
               {breadcrumbs.map((bc, i) => (
                 <span key={i} className="flex items-center gap-2">
@@ -86,56 +97,48 @@ export function ServicePageLayout({
                 </span>
               ))}
               <ChevronRight className="w-3 h-3" />
-              <span className="text-solar-light">{subBrand}</span>
-            </motion.div>
+              <span className="text-solar-light" aria-current="page">
+                {subBrand}
+              </span>
+            </nav>
 
             {/* Sub-brand Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 rounded-full bg-solar/20 border border-solar/30 text-solar-light text-sm font-semibold"
+            <div
+              className="stagger-item inline-flex items-center gap-2 px-4 py-1.5 mb-4 rounded-full bg-solar/20 border border-solar/30 text-solar-light text-sm font-semibold"
+              style={{ animationDelay: "0.05s" }}
             >
               <span className="w-2 h-2 rounded-full bg-solar-light animate-pulse" />
               {subBrand} — Jambi Solar Panel
-            </motion.div>
+            </div>
 
             {/* Title */}
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 max-w-4xl"
+            <h1
+              className="stagger-item text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 max-w-4xl"
+              style={{ animationDelay: "0.1s" }}
             >
               {title}
-            </motion.h1>
+            </h1>
 
             {/* Tagline */}
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.15 }}
-              className="text-lg sm:text-xl text-solar-light font-semibold mb-4"
+            <p
+              className="stagger-item text-lg sm:text-xl text-solar-light font-semibold mb-4"
+              style={{ animationDelay: "0.15s" }}
             >
               {tagline}
-            </motion.p>
+            </p>
 
             {/* Description */}
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-base sm:text-lg text-white/70 max-w-3xl leading-relaxed mb-8"
+            <p
+              className="stagger-item text-base sm:text-lg text-white/70 max-w-3xl leading-relaxed mb-8"
+              style={{ animationDelay: "0.2s" }}
             >
               {description}
-            </motion.p>
+            </p>
 
             {/* Key Trust Indicators */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.22 }}
-              className="flex flex-wrap gap-3 mb-8"
+            <div
+              className="stagger-item flex flex-wrap gap-3 mb-8"
+              style={{ animationDelay: "0.25s" }}
             >
               {[
                 { icon: Shield, text: "Garansi Resmi" },
@@ -155,14 +158,12 @@ export function ServicePageLayout({
                   {priceHint}
                 </span>
               )}
-            </motion.div>
+            </div>
 
             {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.25 }}
-              className="flex flex-col sm:flex-row gap-4"
+            <div
+              className="stagger-item flex flex-col sm:flex-row gap-4"
+              style={{ animationDelay: "0.3s" }}
             >
               <a
                 href={`https://wa.me/6281328190707?text=${encodeURIComponent(defaultWaText)}`}
@@ -181,7 +182,7 @@ export function ServicePageLayout({
               >
                 Kembali ke Home
               </Link>
-            </motion.div>
+            </div>
           </div>
 
           {/* Bottom fade */}
@@ -191,14 +192,14 @@ export function ServicePageLayout({
         {/* Content */}
         {children}
 
-        {/* Proses instalasi — timeline + HowTo JSON-LD */}
+        {/* Proses instalasi — timeline visible (HowTo JSON-LD dihapus; lihat ProcessTimeline) */}
         <ProcessTimeline />
 
         {/* Istilah penting → Kamus Istilah (internal linking) */}
         <ServiceTermChips ids={termIds ?? []} />
 
         {/* Internal linking — layanan terkait */}
-        <RelatedServices />
+        <RelatedServices currentPath={currentPath} />
 
         {/* Consultation CTA Section */}
         <section className="py-16 md:py-24 bg-muted/30">

@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import {
   Home,
   Building2,
@@ -21,6 +18,9 @@ import {
  * Internal linking antar halaman layanan.
  * Muncul di semua service page — membantu Google memahami relasi
  * antar halaman dan menyebar authority internal.
+ *
+ * Server component: halaman sendiri difilter lewat prop `currentPath`
+ * (bukan usePathname) agar tidak perlu client boundary.
  */
 const allLinks = [
   { label: "Panel Surya Rumah", href: "/solar-home", icon: Home },
@@ -36,9 +36,8 @@ const allLinks = [
   { label: "Proyek & Studi Kasus", href: "/proyek", icon: FolderKanban },
 ];
 
-export function RelatedServices() {
-  const pathname = usePathname();
-  const links = allLinks.filter((l) => l.href !== pathname).slice(0, 8);
+export function RelatedServices({ currentPath }: { currentPath: string }) {
+  const links = allLinks.filter((l) => l.href !== currentPath).slice(0, 8);
 
   return (
     <section className="py-14 md:py-16 border-t border-border">

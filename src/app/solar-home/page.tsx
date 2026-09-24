@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import SolarHomePage from "./SolarHomePage";
+import { ServicePageLayout } from "@/components/landing/ServicePageLayout";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildMetadata, serviceJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
@@ -29,7 +30,17 @@ export default function Page() {
           { name: "Panel Surya Rumah", path: "/solar-home" },
         ])}
       />
-      <SolarHomePage />
+      <ServicePageLayout
+      subBrand="Jambi Solar Home"
+      currentPath="/solar-home"
+      termIds={["plts", "kwp", "kwh", "hybrid", "off-grid", "baterai-lifepo4", "dod", "roi", "tarif-pln", "daya-pln", "paket-kwp", "panel-monokristalin"]}
+      title="PLTS Rumah Tangga — Energi Mandiri untuk Keluarga Anda"
+      tagline="Hemat tagihan listrik, backup saat PLN padam, investasi jangka panjang."
+      description="Sistem Pembangkit Listrik Tenaga Surya (PLTS) hybrid untuk rumah tangga dengan kapasitas 1 kWp hingga 5 kWp + baterai. Cocok untuk kebutuhan rumah tangga kecil hingga keluarga besar dengan AC, kulkas, dan peralatan modern lainnya."
+      breadcrumbs={[{ label: "Solusi", href: "/" }, { label: "Home Solar" }]}
+      >
+        <SolarHomePage />
+      </ServicePageLayout>
     </>
   );
 }

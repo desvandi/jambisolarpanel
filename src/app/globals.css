@@ -1,6 +1,12 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Anchor navigation tanpa JS (mis. tombol hero "#solusi").
+   Dimatikan otomatis oleh media prefers-reduced-motion di bawah. */
+html {
+  scroll-behavior: smooth;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -734,6 +740,36 @@
   outline: 2px solid rgba(22, 163, 74, 0.7);
   outline-offset: 2px;
   border-radius: 3px;
+}
+
+/* ============================================
+   Panel metodologi klaim angka (MethodologyNote)
+   Native <details> — tanpa JavaScript.
+   ============================================ */
+.methodology-note summary::-webkit-details-marker {
+  display: none;
+}
+
+.methodology-note summary:focus-visible {
+  outline: 2px solid rgba(22, 163, 74, 0.7);
+  outline-offset: 3px;
+  border-radius: 1rem;
+}
+
+.methodology-note[open] summary {
+  border-bottom: 1px solid var(--border);
+}
+
+/* Print: panel metodologi dibuka penuh agar klaim tetap berkonteks */
+@media print {
+  .methodology-note {
+    border-color: #d4d4d8;
+    background: transparent;
+  }
+
+  .methodology-note > div {
+    display: block !important;
+  }
 }
 
 /* Chip istilah — footer artikel ("Istilah dalam artikel ini") */

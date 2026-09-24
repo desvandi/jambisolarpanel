@@ -58,7 +58,7 @@ export function SewaPltsFinalCta() {
           <div className="flex flex-wrap justify-center gap-3 mb-10">
             {[
               { icon: Shield, text: "Backup otomatis saat PLN padam" },
-              { icon: Zap, text: "Potensi tagihan turun hingga 90%" },
+              { icon: Zap, text: "Potensi tagihan turun signifikan*" },
               { icon: Sun, text: "Tanpa investasi awal" },
               { icon: TrendingUp, text: "Maintenance termasuk" },
               { icon: Shield, text: "Bisa upgrade kapasitas" },
@@ -72,6 +72,9 @@ export function SewaPltsFinalCta() {
               </span>
             ))}
           </div>
+          <p className="-mt-6 mb-10 text-center text-[11px] text-white/40">
+            *Estimasi simulasi — asumsi &amp; metodologi di bagian kalkulator dan FAQ halaman ini.
+          </p>
 
           {/* Price reminder */}
           {cheapest && (

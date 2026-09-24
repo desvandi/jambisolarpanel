@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PJUTSPage from "./PJUTSPage";
+import { ServicePageLayout } from "@/components/landing/ServicePageLayout";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildMetadata, serviceJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
@@ -29,7 +30,18 @@ export default function Page() {
           { name: "PJUTS", path: "/pjuts" },
         ])}
       />
-      <PJUTSPage />
+      <ServicePageLayout
+      subBrand="Jambi Solar Agro — PJUTS"
+      currentPath="/pjuts"
+      termIds={["pjuts", "plts", "psh", "baterai-lifepo4", "siklus-baterai", "bos"]}
+      title="Penerangan Jalan Umum Tenaga Surya (PJUTS)"
+      tagline="Cahaya untuk jalan desa, perkebunan, kawasan industri — tanpa kabel PLN."
+      description="Solusi penerangan jalan mandiri tanpa koneksi PLN. Menggunakan panel surya monokristalin, baterai LiFePO4, dan LED SMD berkualitas tinggi dalam tiang all-in-one. Cocok untuk jalan desa, akses perkebunan sawit, kawasan industri, dan area publik."
+      breadcrumbs={[{ label: "Solusi", href: "/" }, { label: "PJUTS" }]}
+      waText="Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan paket PJUTS. Mohon informasi lebih lanjut mengenai harga dan spesifikasi."
+      >
+        <PJUTSPage />
+      </ServicePageLayout>
     </>
   );
 }

@@ -2,7 +2,6 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { ServicePageLayout } from "@/components/landing/ServicePageLayout";
 import { SolarPumpConfigurator } from "./sections/SolarPumpConfigurator";
 import { solarPumpPackages } from "@/lib/pricing-solarpump";
 import { formatRp } from "@/lib/pricing";
@@ -22,15 +21,7 @@ export default function SolarPumpPage() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <ServicePageLayout
-      subBrand="Jambi Solar Agro — Solar Pump"
-      termIds={["solar-pump", "plts", "kwp", "psh", "mppt", "baterai-lifepo4", "bos"]}
-      title="Solar Water Pump — Pompa Air Tenaga Surya"
-      tagline="Irigasi kebun sawit, pertanian, peternakan tanpa listrik PLN."
-      description="Pompa air submersible bertenaga surya untuk irigasi perkebunan sawit, pertanian, dan peternakan. Menggunakan komponen berkualitas tinggi dengan garansi resmi dan MPPT controller untuk efisiensi maksimal."
-      breadcrumbs={[{ label: "Solusi", href: "/" }, { label: "Solar Pump" }]}
-      waText="Halo PT. Jaya Mandiri Smart Energy, saya tertarik dengan Solar Water Pump. Mohon informasi lebih lanjut mengenai harga dan spesifikasi."
-    >
+    <>
       {/* Benefits */}
       <section className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -208,6 +199,6 @@ export default function SolarPumpPage() {
           </motion.div>
         </div>
       </section>
-    </ServicePageLayout>
+    </>
   );
 }

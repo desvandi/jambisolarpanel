@@ -89,7 +89,7 @@ const portfolioItems = [
   {
     title: "Villa Premium Jambi",
     desc: "Instalasi 5 kWp Hybrid untuk villa eksklusif dengan pool dan garden lighting.",
-    image: "/portfolio-residential.jpg",
+    image: "/studi-kasus-villa.jpg",
     tag: "Residential",
     result: "Tagihan Rp 4jt → Rp 500rb",
     caseStudy: "/studi-kasus/villa-jambi-5-kwp-hybrid",
@@ -97,7 +97,7 @@ const portfolioItems = [
   {
     title: "Gudang Industri Palembang",
     desc: "Sistem 50 kWp Hybrid untuk pergudangan modern dengan efisiensi maksimal. Paket custom di luar katalog standar.",
-    image: "/portfolio-industrial.jpg",
+    image: "/studi-kasus-gudang.jpg",
     tag: "Industrial (Custom)",
     result: "Hemat 60% biaya operasional",
     caseStudy: "/studi-kasus/gudang-palembang-50-kwp-hybrid",
@@ -105,7 +105,7 @@ const portfolioItems = [
   {
     title: "Kebun Sawit Riau",
     desc: "Sistem Off-Grid 10 kWp untuk pompa air, CCTV, dan pondok kebun.",
-    image: "/portfolio-plantation.jpg",
+    image: "/studi-kasus-sawit.jpg",
     tag: "Agriculture",
     result: "Listrik mandiri 24 jam",
     caseStudy: "/studi-kasus/kebun-sawit-riau-10-kwp-off-grid",

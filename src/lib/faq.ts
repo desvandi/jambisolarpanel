@@ -10,7 +10,8 @@
  * paket rumah 1,3–5,2 kWp; bisnis 7,15–10,4 kWp; industri 11,7–20,8 kWp;
  * baterai LiFePO4 48V 100Ah (4,8 kWh/unit); garansi panel 25 thn performa,
  * inverter 5–10 thn, baterai 5–10 thn, instalasi 2 thn;
- * ROI rumah 8–9 thn, bisnis 5–7 thn; PPN 11%.
+ * estimasi ROI rumah 8–9 thn, bisnis 5–7 thn (SIMULASI — asumsi di
+ * src/lib/methodology.ts); PPN 11%.
  */
 
 export interface FaqItem {
@@ -27,7 +28,7 @@ const FAQ_BIAYA: FaqItem = {
 
 export const FAQ_ROI: FaqItem = {
   q: "Berapa lama balik modal (ROI)?",
-  a: "Masa balik modal (Return on Investment) bervariasi tergantung kapasitas sistem dan kebutuhan listrik Anda. Untuk rumah tangga (paket 2.6-5.2 kWp), ROI realistis tercapai dalam 8-9 tahun. Untuk bisnis dan industri (paket 7.15-20.8 kWp), ROI tercapai dalam 5-7 tahun karena skala ekonomi yang lebih besar. Perhitungan ini sudah memperhitungkan kenaikan tarif PLN rata-rata 6% per tahun. Yang lebih penting: dalam 25 tahun umur panel, total keuntungan bersih mencapai 5-7 kali lipat dari investasi awal — artinya investasi Rp 100 juta menghasilkan keuntungan bersih Rp 500-700 juta selama masa pakai sistem. Kami akan memberikan perhitungan ROI detail saat konsultasi.",
+  a: "Angka ROI kami adalah estimasi simulasi internal — bukan janji hasil aktual. Cara hitungnya: penghematan tahunan (produksi surya terpakai × tarif listrik) diakumulasi dengan asumsi kenaikan tarif PLN 6% per tahun (rata-rata historis 2017–2024), lalu dibandingkan dengan harga paket. Dengan asumsi tersebut, simulasi paket rumah 2,6–5,2 kWp mencapai balik modal sekitar 8–9 tahun, dan paket bisnis/industri 7,15–20,8 kWp sekitar 5–7 tahun karena biaya per kWp yang lebih ekonomis di kapasitas besar. Contoh reproduksinya: sistem 3 kWp menghasilkan ± 9 kWh/hari → ± 270 kWh/bulan × Rp 1.444,7 ≈ Rp 390 ribu penghematan bulanan di tahun pertama. Selama umur pakai panel 25 tahun, akumulasi penghematan (dengan kenaikan tarif) dalam simulasi kami mencapai beberapa kali lipat investasi awal — berapa persisnya sangat bergantung profil beban dan tarif Anda. Perhitungan lengkap bisa Anda coba sendiri di Kalkulator PLTS kami, dan simulasi spesifik properti Anda kami susun saat survei gratis.",
 };
 
 const FAQ_OFFGRID: FaqItem = {
@@ -37,7 +38,7 @@ const FAQ_OFFGRID: FaqItem = {
 
 const FAQ_HUJAN: FaqItem = {
   q: "Bagaimana performa panel surya saat hujan atau mendung?",
-  a: "Panel surya modern tetap menghasilkan energi listrik meskipun saat mendung atau hujan, meskipun kapasitasnya berkurang sekitar 10-25% dibandingkan cuaca cerah. Indonesia yang beriklim tropis justru merupakan lokasi ideal untuk panel surya karena intensitas matahari yang tinggi sepanjang tahun. Untuk sistem Hybrid dan Off-Grid, baterai penyimpanan akan memastikan pasokan listrik tetap stabil. Anda juga tetap bisa menggunakan listrik PLN sebagai backup pada sistem Hybrid.",
+  a: "Panel surya tetap menghasilkan listrik saat mendung atau hujan, namun produksinya berkurang — sebagai patokan umum performa PV, penurunan tipikalnya berada di kisaran 10–25% saat mendung dan bisa lebih besar saat hujan lebat/mendung pekat, tergantung ketebalan awan. Angka ini adalah kisaran umum kondisi cuaca, bukan pengukuran spesifik lokasi Anda. Indonesia yang beriklim tropis justru cocok untuk PLTS karena iradiasi matahari tinggi sepanjang tahun — di Jambi rata-rata 3,75 jam sinar matahari penuh (PSH) per hari. Untuk sistem Hybrid dan Off-Grid, baterai menjaga pasokan tetap stabil saat produksi menurun, dan sistem Hybrid tetap bisa mengambil dari PLN sebagai cadangan. Kami memperhitungkan faktor cuaca ini dalam perhitungan produksi (efisiensi sistem 80%) sejak tahap desain.",
 };
 
 const FAQ_GARANSI: FaqItem = {
@@ -95,7 +96,7 @@ const FAQ_UMUR: FaqItem = {
 
 const FAQ_AREA: FaqItem = {
   q: "Area layanan mana saja yang terjangkau?",
-  a: "Kami berbasis di Muaro Jambi, Provinsi Jambi, dan melayani wilayah Jambi serta Sumatera dan Jawa Bagian Barat — termasuk Riau, Palembang (Sumsel), Padang (Sumbar), Lampung, dan Bangka. Untuk proyek di luar area tersebut, silakan hubungi kami via WhatsApp untuk konsultasi kelayakan. Survei lokasi gratis tersedia untuk area tertentu — tim kami akan mengonfirmasi cakupan survei gratis saat penjadwalan.",
+  a: "Kami berbasis di Muaro Jambi, Provinsi Jambi. Area layanan resmi kami mencakup delapan wilayah: Jambi, Riau, Sumatera Selatan (Palembang), Sumatera Barat (Padang), Lampung, Kepulauan Bangka Belitung, Jakarta, dan Jawa Barat — atau ringkasnya Sumatera & Jawa Bagian Barat. Untuk proyek di luar area tersebut, silakan hubungi kami via WhatsApp untuk konsultasi kelayakan. Survei lokasi gratis tersedia untuk area tertentu — tim kami akan mengonfirmasi cakupan survei gratis saat penjadwalan.",
 };
 
 const FAQ_SURVEI: FaqItem = {

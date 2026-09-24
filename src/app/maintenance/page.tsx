@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import MaintenancePage from "./MaintenancePage";
+import { ServicePageLayout } from "@/components/landing/ServicePageLayout";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildMetadata, serviceJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
@@ -29,7 +30,18 @@ export default function Page() {
           { name: "Maintenance", path: "/maintenance" },
         ])}
       />
-      <MaintenancePage />
+      <ServicePageLayout
+      subBrand="Jambi Solar Maintenance"
+      currentPath="/maintenance"
+      termIds={["maintenance-plts", "plts", "commissioning", "siklus-baterai", "efisiensi-sistem", "inverter-hybrid", "string"]}
+      title="Operation & Maintenance PLTS"
+      tagline="Jaga performa sistem PLTS Anda tetap optimal dengan layanan maintenance profesional."
+      description="Layanan pemeliharaan berkala dan perbaikan untuk sistem PLTS Anda. Tim teknisi berpengalaman kami siap menjaga performa dan umur panjang investasi energi surya Anda."
+      breadcrumbs={[{ label: "Solusi", href: "/" }, { label: "Maintenance" }]}
+      waText="Halo PT. Jaya Mandiri Smart Energy, saya ingin mengetahui layanan maintenance PLTS. Mohon informasi lebih lanjut."
+      >
+        <MaintenancePage />
+      </ServicePageLayout>
     </>
   );
 }

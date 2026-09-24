@@ -24,7 +24,7 @@ const solutions = [
     icon: Building2,
     subBrand: "Jambi Solar Commercial",
     title: "Panel Surya Bisnis & Industri",
-    description: "Efisiensi operasional maksimal dengan ROI 5-7 tahun. Solusi untuk kantor, gudang, restoran, hotel, cold storage, dan pabrik.",
+    description: "Pangkas biaya energi operasional — simulasi ROI tersedia per profil beban. Solusi untuk kantor, gudang, restoran, hotel, cold storage, dan pabrik.",
     href: "/solar-commercial",
     color: "bg-blue-600",
   },

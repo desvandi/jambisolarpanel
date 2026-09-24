@@ -1,7 +1,4 @@
-"use client";
-
 import Image from "next/image";
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { Home, Building2, Sprout, Sun, Car, Cpu, MapPin } from "lucide-react";
 
@@ -71,52 +68,42 @@ export function HeroSection() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-40">
         <div className="max-w-3xl">
           {/* Brand Trust Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.05 }}
-            className="inline-flex items-center gap-2 px-4 py-2 mb-4 rounded-full bg-solar/20 border border-solar/30 text-solar-light text-sm font-bold"
+          <div
+            className="stagger-item inline-flex items-center gap-2 px-4 py-2 mb-4 rounded-full bg-solar/20 border border-solar/30 text-solar-light text-sm font-bold"
+            style={{ animationDelay: "0.05s" }}
           >
             <span className="text-base">&#9728;&#65039;</span>
             <span>Jambi Solar Panel &mdash; by PT. Jaya Mandiri Smart Energy</span>
-          </motion.div>
+          </div>
 
           {/* Trust badge — fakta layanan, bukan klaim angka tanpa sumber */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-sm"
+          <div
+            className="stagger-item inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-sm"
+            style={{ animationDelay: "0.1s" }}
           >
             <MapPin className="w-4 h-4 text-solar-light flex-shrink-0" />
             <span>Melayani Jambi, Sumatera &amp; Jawa Bagian Barat</span>
-          </motion.div>
+          </div>
 
           {/* Headline — satu intent utama: jasa pasang panel surya / PLTS Jambi */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6"
+          <h1
+            className="stagger-item text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6"
+            style={{ animationDelay: "0.15s" }}
           >
             Jasa Pasang Panel Surya &amp;{" "}
             <span className="gradient-text">PLTS di Jambi</span>
-          </motion.h1>
+          </h1>
 
           {/* Subheadline */}
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg sm:text-xl text-solar-light font-semibold mb-2 max-w-2xl"
+          <p
+            className="stagger-item text-lg sm:text-xl text-solar-light font-semibold mb-2 max-w-2xl"
+            style={{ animationDelay: "0.2s" }}
           >
             Survey, desain, pengadaan, instalasi, dan maintenance sistem PLTS
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.22 }}
-            className="text-sm text-white/50 mb-8 max-w-2xl"
+          </p>
+          <p
+            className="stagger-item text-sm text-white/50 mb-8 max-w-2xl"
+            style={{ animationDelay: "0.25s" }}
           >
             Untuk rumah, bisnis, kebun, dan industri di Jambi. Hemat tagihan
             listrik, tetap nyala saat PLN padam &mdash; lihat{" "}
@@ -134,14 +121,12 @@ export function HeroSection() {
               sewa PLTS bayar bulanan
             </Link>
             .
-          </motion.p>
+          </p>
 
           {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 mb-10"
+          <div
+            className="stagger-item flex flex-col sm:flex-row gap-4 mb-10"
+            style={{ animationDelay: "0.3s" }}
           >
             <a
               href={WA_HERO}
@@ -154,24 +139,16 @@ export function HeroSection() {
               </svg>
               Konsultasi Gratis via WhatsApp
             </a>
-            <button
-              onClick={() => {
-                const el = document.querySelector("#solusi");
-                if (el) el.scrollIntoView({ behavior: "smooth" });
-              }}
+            <a
+              href="#solusi"
               className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-semibold text-lg rounded-full border-2 border-white/25 hover:border-white/50 transition-all duration-300 hover:scale-105"
             >
               Lihat Solusi Kami
-            </button>
-          </motion.div>
+            </a>
+          </div>
 
           {/* Funnel Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="mb-10"
-          >
+          <div className="stagger-item mb-10" style={{ animationDelay: "0.35s" }}>
             <p className="text-xs text-white/50 uppercase tracking-wider font-semibold mb-3">
               Pilih Kebutuhan Anda
             </p>
@@ -187,14 +164,12 @@ export function HeroSection() {
                 </Link>
               ))}
             </div>
-          </motion.div>
+          </div>
 
           {/* Facts — hanya klaim yang dapat diverifikasi */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10"
+          <div
+            className="stagger-item grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10"
+            style={{ animationDelay: "0.4s" }}
           >
             {[
               { value: "25 Thn", label: "Garansi Performa Panel" },
@@ -212,14 +187,12 @@ export function HeroSection() {
                 <p className="text-xs sm:text-sm text-white/60 mt-1">{stat.label}</p>
               </div>
             ))}
-          </motion.div>
+          </div>
 
           {/* Features */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="grid grid-cols-2 sm:grid-cols-4 gap-3"
+          <div
+            className="stagger-item grid grid-cols-2 sm:grid-cols-4 gap-3"
+            style={{ animationDelay: "0.5s" }}
           >
             {features.map((f) => (
               <div
@@ -230,7 +203,7 @@ export function HeroSection() {
                 <span className="font-medium">{f.text}</span>
               </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
 

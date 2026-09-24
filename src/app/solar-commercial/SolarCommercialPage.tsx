@@ -2,7 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { ServicePageLayout } from "@/components/landing/ServicePageLayout";
+import { MethodologyNote } from "@/components/landing/MethodologyNote";
 import {
   calculatePackages,
   formatRp,
@@ -11,7 +11,11 @@ import {
 import { MessageCircle, Battery, Zap, Shield, TrendingUp, Car, Monitor, BarChart3 } from "lucide-react";
 
 const benefits = [
-  { icon: TrendingUp, title: "ROI Lebih Cepat", desc: "Bisnis & industri ROI 5-7 tahun — jauh lebih cepat dari rumah tangga" },
+  {
+    icon: TrendingUp,
+    title: "ROI ± 5–7 Tahun (simulasi)",
+    desc: "Estimasi simulasi untuk paket bisnis — lebih cepat dari rumah tangga karena skala ekonomi; lihat panel metodologi",
+  },
   { icon: Zap, title: "Efisiensi Operasional", desc: "Kurangi biaya energi tetap per bulan, tingkatkan profit margin" },
   { icon: Car, title: "Carport Solar", desc: "Tambahkan kanopi carport solar sebagai nilai tambah properti bisnis Anda" },
   { icon: Monitor, title: "Smart Monitoring", desc: "Pantau performa sistem secara real-time via dashboard & mobile app" },
@@ -39,14 +43,7 @@ export default function SolarCommercialPage() {
   }, []);
 
   return (
-    <ServicePageLayout
-      subBrand="Jambi Solar Commercial"
-      termIds={["plts", "kwp", "kwh", "on-grid", "hybrid", "roi", "tarif-pln", "bos", "smart-monitoring", "panel-monokristalin"]}
-      title="PLTS Bisnis & Industri — Efisiensi Energi untuk Profit Maksimal"
-      tagline="ROI 5-7 tahun dengan penghematan operasional signifikan."
-      description="Sistem PLTS skala besar untuk kantor, gudang, pabrik, hotel, dan fasilitas bisnis lainnya. Kapasitas 6.5 kWp hingga 20 kWp + baterai dengan opsi smart monitoring dan carport solar."
-      breadcrumbs={[{ label: "Solusi", href: "/" }, { label: "Commercial Solar" }]}
-    >
+    <>
       {/* Benefits */}
       <section className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -88,7 +85,8 @@ export default function SolarCommercialPage() {
             {[
               {
                 problem: "Biaya listrik operasional semakin besar setiap bulan",
-                solution: "PLTS Hybrid berpotensi mengurangi biaya listrik bisnis Anda 70-90%, tergantung kapasitas sistem dan profil beban. Setiap rupiah yang dihemat langsung meningkatkan profit margin.",
+                solution:
+                  "Beban bisnis umumnya berjalan di jam kerja siang — tepat ketika produksi surya paling tinggi — sehingga sebagian besar energi surya langsung menggantikan pembelian dari PLN. Seberapa besar persentase penghematannya bergantung profil beban dan shift operasional Anda; panel metodologi di bawah menunjukkan asumsi, rumus, dan contoh perhitungannya.",
                 icon: "📊",
               },
               {
@@ -120,6 +118,12 @@ export default function SolarCommercialPage() {
               </motion.div>
             ))}
           </div>
+
+          {/* Metodologi klaim angka — transparansi E-E-A-T */}
+          <div className="mt-10">
+            <MethodologyNote variant="commercial" id="metodologi" />
+          </div>
+
           <div className="mt-8 text-center">
             <a
               href="https://wa.me/6281328190707?text=Halo%20PT.%20Jaya%20Mandiri%20Smart%20Energy,%20saya%20ingin%20konsultasi%20PLTS%20untuk%20bisnis"
@@ -269,6 +273,6 @@ export default function SolarCommercialPage() {
           </div>
         </div>
       </section>
-    </ServicePageLayout>
+    </>
   );
 }

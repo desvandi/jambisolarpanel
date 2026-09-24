@@ -6,7 +6,9 @@
  * garansi resmi, monitoring Smart IoT, layanan maintenance). Tidak ada
  * klaim angka baru yang tidak bersumber.
  *
- * Dipakai oleh: ProcessTimeline (UI) + howToJsonLd (structured data).
+ * Dipakai oleh: ProcessTimeline (UI visible — konten semantik).
+ * HowTo JSON-LD dihapus 2026-09-24 (rich result HowTo sudah dihentikan
+ * Google; lihat catatan di ProcessTimeline.tsx).
  */
 
 export interface ProcessStep {

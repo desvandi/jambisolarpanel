@@ -32,13 +32,19 @@ export const BUSINESS_NAP = {
     opens: "08:00",
     closes: "17:00",
   },
-  sameAs: [
-    "https://www.facebook.com/share/1EMi46VPVc/",
-    "https://www.instagram.com/desvandi101",
-  ],
+  /**
+   * sameAs sengaja dikosongkan (audit entity 2026-09-24):
+   * URL facebook.com/share/... adalah link share, bukan profil bisnis,
+   * dan akun Instagram belum terverifikasi sebagai profil bisnis resmi.
+   * Isi kembali HANYA dengan URL profil bisnis resmi yang terverifikasi
+   * (mis. halaman Facebook bisnis, Google Business Profile) agar entity
+   * konsisten — jangan memakai link share/akun pribadi.
+   */
+  sameAs: [] as readonly string[],
 } as const;
 
-/** Wilayah layanan — konsisten dengan copy situs (Sumatera & Jawa Bagian Barat). */
+/** Wilayah layanan resmi — satu-satunya daftar kanonik; copy publik
+ *  (footer, FAQ, TrustSection, halaman layanan) harus konsisten dengannya. */
 export const SERVICE_AREAS = [
   "Jambi",
   "Riau",
@@ -149,7 +155,11 @@ export function localBusinessJsonLd() {
       opens: BUSINESS_NAP.openingHours.opens,
       closes: BUSINESS_NAP.openingHours.closes,
     },
-    sameAs: [...BUSINESS_NAP.sameAs],
+    // sameAs hanya disertakan bila berisi URL profil bisnis resmi
+    // yang terverifikasi (lihat catatan pada BUSINESS_NAP.sameAs).
+    ...(BUSINESS_NAP.sameAs.length > 0
+      ? { sameAs: [...BUSINESS_NAP.sameAs] }
+      : {}),
     areaServed: SERVICE_AREAS.map((area) => ({
       "@type": "AdministrativeArea",
       name: area,
@@ -284,23 +294,14 @@ export function faqJsonLd(faqs: { q: string; a: string }[]) {
   };
 }
 
-/** HowTo schema — proses instalasi (data dari src/lib/process.ts). */
-export function howToJsonLd(steps: { name: string; text: string }[]) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    name: "Proses Instalasi PLTS — Jambi Solar Panel",
-    description:
-      "Tahapan pengerjaan instalasi panel surya & PLTS oleh PT. Jaya Mandiri Smart Energy: survei gratis, desain sistem, instalasi, commissioning, hingga monitoring dan dukungan garansi.",
-    totalTime: "P3D",
-    step: steps.map((s, i) => ({
-      "@type": "HowToStep",
-      position: i + 1,
-      name: s.name,
-      text: s.text,
-    })),
-  };
-}
+/**
+ * HowTo JSON-LD dihapus (audit SEO 2026-09-24):
+ * Google sudah menghentikan HowTo & FAQ rich result dari Search, sehingga
+ * markup ini tidak lagi memberi manfaat SERP. totalTime global ("P3D") juga
+ * tidak akurat untuk semua segmen (bisnis/industri 1–2 minggu).
+ * Timeline proses TETAP dipertahankan sebagai konten visible (UX & konten
+ * semantik) di ProcessTimeline — tanpa structured data.
+ */
 
 /** SoftwareApplication schema untuk kalkulator web (gratis). */
 export function softwareAppJsonLd({

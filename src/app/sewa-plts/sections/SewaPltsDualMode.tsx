@@ -138,7 +138,7 @@ export function SewaPltsDualMode() {
 
               <ul className="space-y-2.5">
                 {[
-                  "Potensi penghematan tagihan hingga 90% (tergantung profil beban)",
+                  "Potensi penghematan tagihan signifikan — rentangnya bergantung profil beban (metodologi di bagian FAQ sewa)",
                   "Biaya sewa tetap, dapat diprediksi",
                   "Jadwal switching dikonfigurasi tim ahli",
                   "Cocok untuk rumah dengan AC & peralatan modern",

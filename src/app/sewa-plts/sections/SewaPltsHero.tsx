@@ -157,6 +157,16 @@ export function SewaPltsHero() {
                 </div>
               ))}
             </motion.div>
+
+            {/* Catatan kaki stat ber-* — klaim jujur & dapat direproduksi */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="mt-3 max-w-2xl text-[11px] leading-relaxed text-white/40"
+            >
+              {rentalHero.statsNote}
+            </motion.p>
           </div>
 
           {/* Right: Illustration — House with solar panel */}

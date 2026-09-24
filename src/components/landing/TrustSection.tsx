@@ -17,7 +17,7 @@ const trustItems = [
   {
     icon: FileCheck,
     title: "Legalitas PT Resmi",
-    desc: "Terdaftar sebagai badan usaha resmi PT. Jaya Mandiri Smart Energy dengan NIB, SK Kemenkumham, dan izin usaha lengkap yang transparan dan dapat diverifikasi.",
+    desc: "Terdaftar sebagai badan usaha resmi PT. Jaya Mandiri Smart Energy dengan NIB, SK Kemenkumham, dan izin usaha lengkap — dokumen asli dapat diperiksa saat kunjungan kantor atau proses tender.",
   },
   {
     icon: Users,
@@ -54,7 +54,7 @@ const trustItems = [
   {
     icon: Wrench,
     title: "Desain Custom oleh Insinyur",
-    desc: "Setiap sistem dirancang secara custom oleh insinyur berlisensi berdasarkan survei lokasi, kebutuhan beban, dan kondisi iradiasi matahari spesifik area Anda.",
+    desc: "Setiap sistem dirancang secara custom oleh tim insinyur berpengalaman berdasarkan survei lokasi, kebutuhan beban, dan kondisi iradiasi matahari spesifik area Anda.",
   },
   {
     icon: Clock,
@@ -64,15 +64,15 @@ const trustItems = [
   {
     icon: MapPin,
     title: "Coverage Sumatera & Jawa Barat",
-    desc: "Melayani instalasi di seluruh Sumatera (Jambi, Riau, Palembang, Padang, Lampung) dan Jawa Bagian Barat (Jakarta, Bandung). Tim teknisi siap ke lokasi Anda.",
+    desc: "Melayani instalasi di delapan wilayah resmi: Jambi, Riau, Sumatera Selatan, Sumatera Barat, Lampung, Kep. Bangka Belitung, Jakarta, dan Jawa Barat. Tim teknisi siap ke lokasi Anda.",
   },
 ];
 
 const certifications = [
   "PT Resmi (NIB)",
   "SK Kemenkumham",
-  "Sertifikat Standar",
-  "SIUP Teregistrasi",
+  "Legalitas Dapat Diperiksa",
+  "Garansi Tertulis",
 ];
 
 export function TrustSection() {

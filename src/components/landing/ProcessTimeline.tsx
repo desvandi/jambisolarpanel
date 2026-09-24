@@ -1,5 +1,3 @@
-"use client";
-
 import {
   SearchCheck,
   DraftingCompass,
@@ -9,7 +7,6 @@ import {
   MonitorSmartphone,
 } from "lucide-react";
 import { installationSteps } from "@/lib/process";
-import { howToJsonLd } from "@/lib/seo";
 
 const iconMap = {
   search: SearchCheck,
@@ -22,8 +19,12 @@ const iconMap = {
 
 /**
  * Timeline proses instalasi — dirender di semua halaman layanan
- * (via ServicePageLayout). Client component TAPI tetap di-prerender
- * server-side, sehingga HowTo JSON-LD hadir di HTML awal (SEO-safe).
+ * (via ServicePageLayout). Server component murni: tanpa hooks & tanpa JS
+ * tambahan; animasi via CSS (.stagger-item).
+ *
+ * CATATAN AUDIT (2026-09-24): HowTo JSON-LD sengaja DIHAPUS — Google
+ * sudah menghentikan HowTo rich result dari Search. Timeline visible
+ * ini tetap dipertahankan karena bernilai untuk pembaca & UX.
  */
 export function ProcessTimeline() {
   return (
@@ -32,17 +33,6 @@ export function ProcessTimeline() {
       aria-labelledby="proses-instalasi-heading"
       className="py-16 md:py-24 bg-muted/30 border-y border-border/60"
     >
-      {/* HowTo structured data — prerendered dalam HTML awal */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
-            howToJsonLd(
-              installationSteps.map((s) => ({ name: s.name, text: s.text }))
-            )
-          ),
-        }}
-      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}

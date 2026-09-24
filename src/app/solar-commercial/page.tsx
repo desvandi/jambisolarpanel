@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import SolarCommercialPage from "./SolarCommercialPage";
+import { ServicePageLayout } from "@/components/landing/ServicePageLayout";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildMetadata, serviceJsonLd, breadcrumbJsonLd } from "@/lib/seo";
 
@@ -29,7 +30,17 @@ export default function Page() {
           { name: "PLTS Bisnis & Industri", path: "/solar-commercial" },
         ])}
       />
-      <SolarCommercialPage />
+      <ServicePageLayout
+      subBrand="Jambi Solar Commercial"
+      currentPath="/solar-commercial"
+      termIds={["plts", "kwp", "kwh", "on-grid", "hybrid", "roi", "tarif-pln", "bos", "smart-monitoring", "panel-monokristalin"]}
+      title="PLTS Bisnis & Industri — Efisiensi Energi untuk Profit Maksimal"
+      tagline="Pangkas biaya listrik operasional dengan energi surya — simulasi ROI tersedia."
+      description="Sistem PLTS skala besar untuk kantor, gudang, pabrik, hotel, dan fasilitas bisnis lainnya. Kapasitas 6.5 kWp hingga 20 kWp + baterai dengan opsi smart monitoring dan carport solar."
+      breadcrumbs={[{ label: "Solusi", href: "/" }, { label: "Commercial Solar" }]}
+      >
+        <SolarCommercialPage />
+      </ServicePageLayout>
     </>
   );
 }
