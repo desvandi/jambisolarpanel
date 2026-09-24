@@ -1,16 +1,24 @@
-"use client";
-
-import { motion, useInView } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
 import { MethodologyNote } from "@/components/landing/MethodologyNote";
 import { DESIGN_PARAMS } from "@/lib/methodology";
 import {
   calculatePackages,
-  hasCustomPricing,
-  formatRp,
+  defaultComponentPrices,
+  defaultInverterPrices,
+  defaultSettings,
   calculateROI,
 } from "@/lib/pricing";
 import { MessageCircle, Battery, Zap, Shield, Clock, Wrench } from "lucide-react";
+
+/**
+ * Konten /solar-home — SERVER COMPONENT (optimasi CWV, pola R7/R8).
+ *
+ * Paket harga dihitung di server dari harga terbit default
+ * (calculatePackages(defaultComponentPrices, defaultInverterPrices,
+ * defaultSettings) — pola yang sama dengan /harga-panel-surya-jambi).
+ * Animasi entrance via CSS (.stagger-item / .fade-in-item — lihat
+ * globals.css); kartu harga memakai .fade-in-item (opacity-only) agar
+ * efek hover:-translate-y-1 tetap berfungsi.
+ */
 
 const benefits = [
   {
@@ -28,35 +36,22 @@ const benefits = [
   { icon: Wrench, title: "Gratis Instalasi", desc: "Survei, desain, instalasi, dan commissioning sudah termasuk dalam harga" },
 ];
 
+/** Paket Silver — harga terbit default, dihitung sekali di server. */
+const packages = calculatePackages(
+  defaultComponentPrices,
+  defaultInverterPrices,
+  defaultSettings
+).filter((p) => p.tier === "silver");
+
 export default function SolarHomePage() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [packages, setPackages] = useState(() =>
-    calculatePackages().filter((p) => p.tier === "silver")
-  );
-
-  useEffect(() => {
-    const handler = () => {
-      setPackages(calculatePackages().filter((p) => p.tier === "silver"));
-    };
-    window.addEventListener("storage", handler);
-    window.addEventListener("jmse-pricing-updated", handler);
-    return () => {
-      window.removeEventListener("storage", handler);
-      window.removeEventListener("jmse-pricing-updated", handler);
-    };
-  }, []);
-
   return (
     <>
       {/* Benefits Section */}
       <section className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12"
+          <div
+            className="stagger-item text-center mb-12"
+            style={{ animationDelay: "0s" }}
           >
             <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-4">
               Mengapa PLTS Rumah Tangga?
@@ -64,22 +59,20 @@ export default function SolarHomePage() {
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Investasi cerdas untuk keluarga — hemat jangka panjang, ramah lingkungan, dan kemandirian energi.
             </p>
-          </motion.div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" ref={ref}>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {benefits.map((b, i) => (
-              <motion.div
+              <div
                 key={b.title}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="p-5 rounded-xl border border-border bg-card hover:border-solar/30 transition-all hover:shadow-md"
+                className="stagger-item p-5 rounded-xl border border-border bg-card hover:border-solar/30 transition-all hover:shadow-md"
+                style={{ animationDelay: `${i * 0.1}s` }}
               >
                 <div className="w-10 h-10 rounded-lg bg-solar/10 flex items-center justify-center mb-3">
                   <b.icon className="w-5 h-5 text-solar" />
                 </div>
                 <h3 className="font-bold text-navy dark:text-white mb-1">{b.title}</h3>
                 <p className="text-sm text-muted-foreground">{b.desc}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -110,13 +103,10 @@ export default function SolarHomePage() {
                 icon: "🔋",
               },
             ].map((item, i) => (
-              <motion.div
+              <div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="p-5 rounded-xl border border-border bg-card"
+                className="stagger-item p-5 rounded-xl border border-border bg-card"
+                style={{ animationDelay: `${i * 0.1}s` }}
               >
                 <div className="flex items-start gap-3 mb-2">
                   <span className="text-xl flex-shrink-0">{item.icon}</span>
@@ -125,7 +115,7 @@ export default function SolarHomePage() {
                     <p className="text-sm text-muted-foreground leading-relaxed">{item.solution}</p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
 
@@ -149,13 +139,11 @@ export default function SolarHomePage() {
       </section>
 
       {/* Pricing Section */}
-      <section className="py-16 md:py-20 bg-muted/30" ref={ref}>
+      <section className="py-16 md:py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12"
+          <div
+            className="stagger-item text-center mb-12"
+            style={{ animationDelay: "0s" }}
           >
             <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-solar bg-solar/10 rounded-full">
               Paket Silver — Rumah Tangga
@@ -166,20 +154,21 @@ export default function SolarHomePage() {
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Semua harga sudah termasuk PPN 11%, instalasi, survei, desain, dan garansi resmi. Produksi dihitung dari parameter desain internal kami: PSH 3,75 jam × efisiensi 80%.
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {packages.map((pkg) => {
+            {packages.map((pkg, i) => {
               const dailyKwh = pkg.kWp * DESIGN_PARAMS.kWhPerKwpPerDay;
               const roi = calculateROI(pkg.price, dailyKwh);
               return (
                 <div
                   key={pkg.name}
-                  className={`relative p-6 rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
+                  className={`fade-in-item relative p-6 rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
                     pkg.popular
                       ? "bg-gradient-to-br from-solar to-solar-dark text-white border-solar shadow-lg shadow-solar/20"
                       : "bg-card border-border hover:border-solar/30"
                   }`}
+                  style={{ animationDelay: `${i * 0.1}s` }}
                 >
                   {pkg.popular && (
                     <span className="absolute -top-3 left-6 px-3 py-1 bg-gold text-navy text-xs font-bold rounded-full shadow-md">

@@ -252,3 +252,29 @@ Stage Summary:
 - Disiplin dipertahankan: bukan fitur SEO baru (auditor: fokus pengukuran/indexing/bukti nyata); ini optimasi CWV = faktor ranking teknis + kandidat pengembangan #2 yang TERCATAT di worklog sejak R8.
 - Kandidat lanjutan (bila diperlukan round berikutnya): server-ifikasi halaman layanan lain yang masih 'use client' penuh (EVChargingPage, SolarHomePage, SolarCommercialPage, SolarPumpPage, PJUTSPage, SmartIoTPage, MaintenancePage, TenderProcurementPage + 2 configurator) — semua ±230KB/24 script tags, dampak lebih kecil dari sewa-plts, sebaiknya setelah ukur Lighthouse produksi.
 - Owner-side tetap tidak berubah: GSC + GBP + ADMIN_PASSWORD + foto proyek nyata.
+
+---
+
+Task ID: 29
+Agent: Z.ai (main orchestrator)
+Task: Server-ifikasi 8 halaman layanan lainnya (permintaan eksplisit user) — lanjutan pola R7/R8 yang diterima auditor: shell server + client island interaktif, NOL framer-motion.
+
+Work Log:
+- **Audit pra-kerja:** 8 halaman target dikonfirmasi masih 'use client' penuh + framer-motion (SolarHomePage, SolarCommercialPage, SolarPumpPage, EVChargingPage, SmartIoTPage, MaintenancePage, TenderProcurementPage, PJUTSPage + 2 configurator). ServicePageLayout & MethodologyNote sudah server (R7). `calculatePackages()` server-safe (guard typeof window → fallback default). Preseden server-pricing: /harga-panel-surya-jambi memakai `calculatePackages(defaultComponentPrices, defaultInverterPrices, defaultSettings)` — diikuti. Kalibrasi-harga punya preview live sendiri (baris 691) → live-repriced di halaman publik tidak diperlukan (konsisten dengan halaman daftar harga).
+- **Konversi 8 shell → server component (10 file, +282/−347, neto −65 baris):**
+  - Semua "use client" + import framer-motion/useRef/useState/useEffect dihapus; motion.div → div + CSS entrance (.stagger-item untuk elemen tanpa hover-transform; .fade-in-item opacity-only untuk kartu harga/layanan ber-hover:-translate-y-1 — alasan transform fill-forwards terdokumentasi di globals.css) + inline animationDelay (pola delay framer asli dipertahankan: i*0.08 / i*0.1).
+  - solar-home & solar-commercial: harga paket kini dihitung DI SERVER dari harga terbit default (module-level const; pola /harga-panel-surya-jambi); event-listener localStorage 'jmse-pricing-updated' dihapus (admin preview = kalibrasi-harga; pengunjung publik selalu lihat harga terbit). SolarCommercial: IIFE calculatePackages() no-arg → const goldExample module-level.
+  - ev-charging / smart-iot / maintenance / tender-procurement: halaman statis murni → server penuh tanpa island baru.
+  - solar-pump & pjuts: shell server; configurator tetap CLIENT ISLAND (interaktif) tapi di-de-framer: entrance .stagger-item (0s/0.15s), panel hasil & panel headBlocked .fade-in-quick (perilaku identik initial/animate framer — animasi saat pertama muncul, tidak re-animasi saat konten berubah), link bawah .fade-in-item 0.3s.
+  - Perbaikan kecil tanpa sengaja: bug lama ref ganda di SolarHomePage (benefits grid + pricing section share satu ref) hilang bersama useRef.
+- **Disiplin konten:** NOL perubahan copy/klaim/angka/harga — diff murni mekanika rendering (verifikasi: harga Silver solar-home = Rp 31,3jt/43,9jt/50,2jt/76,6jt = identik /harga-panel-surya-jambi).
+- **QA:** lint 0 · tsc src 0 · **33/33 sitemap URL 200** · 8/8 route layanan 200 · 0 referensi framer di HTML yang disajikan · konten (paket/harga/heading) hadir di HTML awal (bukti server-render) · interaksi PASS: configurator solar-pump (Lahan 2–4 ha + 31–45 m → Solar Pump 2 HP Rp 32jt) & pjuts (Jalan desa + 200–500 m → PJUTS 60W Rp 7,5jt/titik, estimasi Rp 60–112,5jt) · animasi 27–34 elemen/halaman SEMUA mencapai opacity 1 (0 pending) · console 0 error (fresh; temuan awal "SewaPltsComparison parse error" terbukti artefak log HMR basi — file bersih di git, tsc 0, fresh load 0 error) · mobile 390px: 0 page-level overflow di 8 halaman (tabel komparasi solar-pump = scroll internal overflow-x-auto, by design sama dengan sewa-plts) · VLM PASS: pjuts mobile + solar-pump mobile + solar-home desktop.
+- **Cron webDevReview:** job 409081 (15 menit) terverifikasi masih aktip — tidak dibuat duplikat.
+
+Stage Summary:
+- Commit: lihat git log (HEAD setelah Task 29) — 10 file, +282/−347.
+- Seluruh 9 halaman layanan kini mengikuti arsitektur R7/R8 penuh: server shell + pulau klien interaktif, framer-motion HABUS dari graph seluruh halaman layanan (sebelumnya 12 pemakai → kini 0 di seluruh src/app).
+- Script tags dev per halaman tetap ~24 (angka dev didominasi runtime Next dev-mode; bukti efektif = framer hilang dari payload + konten server-render — tradeoff ukuran terlihat di build produksi seperti sewa-plts 31→23).
+- Red line dijaga: bukan fitur SEO baru (ini CWV/arsitektur, kandidat #2 worklog R8); tidak ada perubahan klaim/angka; canonical tetap jambisolarpanel.vercel.app.
+- Menunggu auditor: konfirmasi Round 8 (5bdb935/1a5d36a/473ffdb) + Task 28 (9138619) + Task 29 ini.
+- Owner-side tidak berubah (PANDUAN-SEO-OWNER.md): GSC, GBP, ulasan nyata, foto proyek, env vars Vercel.

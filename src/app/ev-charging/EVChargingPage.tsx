@@ -1,10 +1,14 @@
-"use client";
-
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
 import { evPackages, evAssumptions, formatTariffLabel } from "@/lib/pricing-ev";
 import { formatRp, formatRpShort } from "@/lib/pricing";
 import { MessageCircle, Car, Battery, Leaf, Zap, Shield, CheckCircle } from "lucide-react";
+
+/**
+ * Konten /ev-charging — SERVER COMPONENT (optimasi CWV, pola R7/R8).
+ * Seluruh angka simulasi dari pricing-ev.ts (modul murni, server-safe).
+ * Animasi entrance via CSS (.stagger-item / .fade-in-item — lihat
+ * globals.css); kartu paket memakai .fade-in-item (opacity-only) agar
+ * efek hover:-translate-y-1 tetap berfungsi.
+ */
 
 /**
  * Benefit cards — bebas klaim "100% surya"/"gratis"/"tanpa risiko" (audit R8).
@@ -44,15 +48,12 @@ const benefits = [
 ];
 
 export default function EVChargingPage() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
     <>
       {/* Cost Comparison */}
       <section className="py-16 md:py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass rounded-2xl p-6 sm:p-8">
+          <div className="stagger-item glass rounded-2xl p-6 sm:p-8" style={{ animationDelay: "0s" }}>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-2 text-center">
               Perbandingan Biaya Charging
             </h2>
@@ -164,25 +165,25 @@ export default function EVChargingPage() {
                 konsultasi untuk simulasi spesifik properti Anda.
               </p>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Benefits */}
       <section className="py-16 md:py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="text-center mb-12">
+          <div className="stagger-item text-center mb-12" style={{ animationDelay: "0s" }}>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-4">Keunggulan EV Solar JMSE</h2>
-          </motion.div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" ref={ref}>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {benefits.map((b, i) => (
-              <motion.div key={b.title} initial={{ opacity: 0, y: 30 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.4, delay: i * 0.08 }} className="p-5 rounded-xl border border-border bg-card hover:border-solar/30 transition-all hover:shadow-md">
+              <div key={b.title} className="stagger-item p-5 rounded-xl border border-border bg-card hover:border-solar/30 transition-all hover:shadow-md" style={{ animationDelay: `${i * 0.08}s` }}>
                 <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center mb-3">
                   <b.icon className="w-5 h-5 text-amber-600" />
                 </div>
                 <h3 className="font-bold text-navy dark:text-white mb-1">{b.title}</h3>
                 <p className="text-sm text-muted-foreground">{b.desc}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -191,24 +192,21 @@ export default function EVChargingPage() {
       {/* Packages */}
       <section className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="text-center mb-12">
+          <div className="stagger-item text-center mb-12" style={{ animationDelay: "0s" }}>
             <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-amber-600 bg-amber-600/10 rounded-full">Paket EV Charging</span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-4">Pilih Paket EV Charging Anda</h2>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {evPackages.map((pkg, i) => (
-              <motion.div
+              <div
                 key={pkg.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                className={`relative p-6 rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
+                className={`fade-in-item relative p-6 rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
                   pkg.solarKwp === 5.2
                     ? "bg-gradient-to-br from-amber-500 to-amber-600 text-white border-amber-500 shadow-lg shadow-amber-500/20"
                     : "bg-card border-border hover:border-amber-500/30"
                 }`}
+                style={{ animationDelay: `${i * 0.1}s` }}
               >
                 {pkg.solarKwp === 5.2 && <span className="absolute -top-3 left-6 px-3 py-1 bg-gold text-navy text-xs font-bold rounded-full shadow-md">BEST VALUE</span>}
 
@@ -253,7 +251,7 @@ export default function EVChargingPage() {
                   <MessageCircle className="w-4 h-4" />
                   Tanya Paket Ini
                 </a>
-              </motion.div>
+              </div>
             ))}
           </div>
 

@@ -1,15 +1,25 @@
-"use client";
-
-import { motion, useInView } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
 import { MethodologyNote } from "@/components/landing/MethodologyNote";
 import { DESIGN_PARAMS } from "@/lib/methodology";
 import {
   calculatePackages,
+  defaultComponentPrices,
+  defaultInverterPrices,
+  defaultSettings,
   formatRp,
   calculateROI,
 } from "@/lib/pricing";
 import { MessageCircle, Battery, Zap, Shield, TrendingUp, Car, Monitor, BarChart3 } from "lucide-react";
+
+/**
+ * Konten /solar-commercial — SERVER COMPONENT (optimasi CWV, pola R7/R8).
+ *
+ * Paket harga dihitung di server dari harga terbit default
+ * (calculatePackages(defaultComponentPrices, defaultInverterPrices,
+ * defaultSettings) — pola yang sama dengan /harga-panel-surya-jambi).
+ * Animasi entrance via CSS (.stagger-item / .fade-in-item — lihat
+ * globals.css); kartu harga memakai .fade-in-item (opacity-only) agar
+ * efek hover:-translate-y-1 tetap berfungsi.
+ */
 
 const benefits = [
   {
@@ -24,53 +34,43 @@ const benefits = [
   { icon: BarChart3, title: "Laporan Performa", desc: "Monitoring standard & industrial menyediakan laporan bulanan otomatis" },
 ];
 
+/** Paket Gold & Platinum — harga terbit default, dihitung sekali di server. */
+const packages = calculatePackages(
+  defaultComponentPrices,
+  defaultInverterPrices,
+  defaultSettings
+).filter((p) => p.tier === "gold" || p.tier === "platinum");
+
+/** Contoh paket Gold 10 kWp untuk simulasi ROI (harga terbit default). */
+const goldExample = packages.find((p) => p.name === "Gold 10 kWp") ?? null;
+
 export default function SolarCommercialPage() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [packages, setPackages] = useState(() =>
-    calculatePackages().filter((p) => p.tier === "gold" || p.tier === "platinum")
-  );
-
-  useEffect(() => {
-    const handler = () => {
-      setPackages(calculatePackages().filter((p) => p.tier === "gold" || p.tier === "platinum"));
-    };
-    window.addEventListener("storage", handler);
-    window.addEventListener("jmse-pricing-updated", handler);
-    return () => {
-      window.removeEventListener("storage", handler);
-      window.removeEventListener("jmse-pricing-updated", handler);
-    };
-  }, []);
-
   return (
     <>
       {/* Benefits */}
       <section className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }} className="text-center mb-12">
+          <div className="stagger-item text-center mb-12" style={{ animationDelay: "0s" }}>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-4">
               Keunggulan PLTS Komersial
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Investasi energi surya untuk bisnis bukan hanya penghematan — ini adalah strategi operasional jangka panjang.
             </p>
-          </motion.div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" ref={ref}>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {benefits.map((b, i) => (
-              <motion.div
+              <div
                 key={b.title}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-                className="p-5 rounded-xl border border-border bg-card hover:border-solar/30 transition-all hover:shadow-md"
+                className="stagger-item p-5 rounded-xl border border-border bg-card hover:border-solar/30 transition-all hover:shadow-md"
+                style={{ animationDelay: `${i * 0.08}s` }}
               >
                 <div className="w-10 h-10 rounded-lg bg-solar/10 flex items-center justify-center mb-3">
                   <b.icon className="w-5 h-5 text-solar" />
                 </div>
                 <h3 className="font-bold text-navy dark:text-white mb-1">{b.title}</h3>
                 <p className="text-sm text-muted-foreground">{b.desc}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -101,13 +101,10 @@ export default function SolarCommercialPage() {
                 icon: "📈",
               },
             ].map((item, i) => (
-              <motion.div
+              <div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="p-5 rounded-xl border border-border bg-card"
+                className="stagger-item p-5 rounded-xl border border-border bg-card"
+                style={{ animationDelay: `${i * 0.1}s` }}
               >
                 <div className="flex items-start gap-3 mb-2">
                   <span className="text-xl flex-shrink-0">{item.icon}</span>
@@ -116,7 +113,7 @@ export default function SolarCommercialPage() {
                     <p className="text-sm text-muted-foreground leading-relaxed">{item.solution}</p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
 
@@ -142,12 +139,12 @@ export default function SolarCommercialPage() {
       {/* ROI Calculator */}
       <section className="py-16 md:py-20 bg-muted/30">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass rounded-2xl p-6 sm:p-8 text-center">
+          <div className="stagger-item glass rounded-2xl p-6 sm:p-8 text-center" style={{ animationDelay: "0.1s" }}>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-4">Simulasi ROI Bisnis</h2>
-            <p className="text-muted-foreground mb-6">Contoh: Paket Gold 10 kWp — Rp {formatRp(calculatePackages().find(p => p.name === "Gold 10 kWp")?.price || 0)}</p>
+            <p className="text-muted-foreground mb-6">Contoh: Paket Gold 10 kWp — Rp {formatRp(goldExample?.price || 0)}</p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {(() => {
-                const pkg = calculatePackages().find(p => p.name === "Gold 10 kWp");
+                const pkg = goldExample;
                 if (!pkg) return null;
                 const dailyKwh = pkg.kWp * DESIGN_PARAMS.kWhPerKwpPerDay;
                 const roi = calculateROI(pkg.price, dailyKwh);
@@ -173,24 +170,24 @@ export default function SolarCommercialPage() {
               <MessageCircle className="w-4 h-4" />
               Simulasi Custom via WhatsApp
             </a>
-          </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Packages */}
       <section className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="text-center mb-12">
+          <div className="stagger-item text-center mb-12" style={{ animationDelay: "0s" }}>
             <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-solar bg-solar/10 rounded-full">
               Paket Gold & Platinum
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-4">
               Pilih Paket PLTS untuk Bisnis Anda
             </h2>
-          </motion.div>
+          </div>
 
           {/* Gold Packages */}
-          <div className="mb-12">
+          <div className="stagger-item mb-12">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
                 <Zap className="w-5 h-5 text-amber-500" />
@@ -201,11 +198,11 @@ export default function SolarCommercialPage() {
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {packages.filter(p => p.tier === "gold").map(pkg => {
+              {packages.filter(p => p.tier === "gold").map((pkg, i) => {
                 const dailyKwh = pkg.kWp * DESIGN_PARAMS.kWhPerKwpPerDay;
                 const roi = calculateROI(pkg.price, dailyKwh);
                 return (
-                  <div key={pkg.name} className={`relative p-6 rounded-2xl border transition-all hover:shadow-xl hover:-translate-y-1 ${pkg.popular ? "bg-gradient-to-br from-amber-500 to-amber-600 text-white border-amber-500 shadow-lg shadow-amber-500/20" : "bg-card border-border hover:border-amber-500/30"}`}>
+                  <div key={pkg.name} className={`fade-in-item relative p-6 rounded-2xl border transition-all hover:shadow-xl hover:-translate-y-1 ${pkg.popular ? "bg-gradient-to-br from-amber-500 to-amber-600 text-white border-amber-500 shadow-lg shadow-amber-500/20" : "bg-card border-border hover:border-amber-500/30"}`} style={{ animationDelay: `${i * 0.1}s` }}>
                     {pkg.popular && <span className="absolute -top-3 left-6 px-3 py-1 bg-gold text-navy text-xs font-bold rounded-full shadow-md">RECOMMENDED</span>}
                     <h4 className={`text-base font-bold mb-2 ${pkg.popular ? "text-white" : "text-navy dark:text-white"}`}>{pkg.name}</h4>
                     <p className={`text-sm mb-3 ${pkg.popular ? "text-white/80" : "text-muted-foreground"}`}>{pkg.desc}</p>
@@ -233,7 +230,7 @@ export default function SolarCommercialPage() {
 
           {/* Platinum Packages */}
           <div>
-            <div className="flex items-center gap-3 mb-6">
+            <div className="stagger-item flex items-center gap-3 mb-6" style={{ animationDelay: "0s" }}>
               <div className="w-10 h-10 rounded-xl bg-slate-500/10 flex items-center justify-center">
                 <Zap className="w-5 h-5 text-slate-500" />
               </div>
@@ -243,11 +240,11 @@ export default function SolarCommercialPage() {
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {packages.filter(p => p.tier === "platinum").map(pkg => {
+              {packages.filter(p => p.tier === "platinum").map((pkg, i) => {
                 const dailyKwh = pkg.kWp * DESIGN_PARAMS.kWhPerKwpPerDay;
                 const roi = calculateROI(pkg.price, dailyKwh);
                 return (
-                  <div key={pkg.name} className={`relative p-6 rounded-2xl border transition-all hover:shadow-xl hover:-translate-y-1 ${pkg.popular ? "bg-gradient-to-br from-slate-600 to-slate-700 text-white border-slate-600 shadow-lg shadow-slate-600/20" : "bg-card border-border hover:border-slate-500/30"}`}>
+                  <div key={pkg.name} className={`fade-in-item relative p-6 rounded-2xl border transition-all hover:shadow-xl hover:-translate-y-1 ${pkg.popular ? "bg-gradient-to-br from-slate-600 to-slate-700 text-white border-slate-600 shadow-lg shadow-slate-600/20" : "bg-card border-border hover:border-slate-500/30"}`} style={{ animationDelay: `${i * 0.1}s` }}>
                     {pkg.popular && <span className="absolute -top-3 left-6 px-3 py-1 bg-gold text-navy text-xs font-bold rounded-full shadow-md">RECOMMENDED</span>}
                     <h4 className={`text-base font-bold mb-2 ${pkg.popular ? "text-white" : "text-navy dark:text-white"}`}>{pkg.name}</h4>
                     <p className={`text-sm mb-3 ${pkg.popular ? "text-white/80" : "text-muted-foreground"}`}>{pkg.desc}</p>

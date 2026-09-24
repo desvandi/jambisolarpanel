@@ -1,7 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
   Droplets,
   MessageCircle,
@@ -14,6 +13,11 @@ import { solarPumpPackages, type SolarPumpPackage } from "@/lib/pricing-solarpum
 
 /**
  * "Pilih Solar Pump dalam 30 Detik" — mini-configurator.
+ *
+ * CLIENT ISLAND (interaktif) tapi TANPA framer-motion (pola R7/R8):
+ * animasi entrance via CSS (.stagger-item), panel hasil memakai
+ * .fade-in-quick yang berjalan saat elemen pertama kali muncul
+ * (perilaku sama dengan initial/animate framer sebelumnya).
  *
  * Dua pertanyaan (luas lahan + kedalaman sumber air) → rekomendasi
  * paket dari data resmi pricing-solarpump.ts. Mapping:
@@ -57,9 +61,6 @@ function formatRpShort(value: number): string {
 }
 
 export function SolarPumpConfigurator() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   const [lahanId, setLahanId] = useState<string | null>(null);
   const [kedalamanId, setKedalamanId] = useState<string | null>(null);
 
@@ -83,12 +84,10 @@ export function SolarPumpConfigurator() {
 
   return (
     <section className="py-14 md:py-20" id="pemilih-pompa">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8" ref={ref}>
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-10"
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          className="stagger-item text-center mb-10"
+          style={{ animationDelay: "0s" }}
         >
           <span className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 text-sm font-semibold text-sky-600 bg-sky-600/10 rounded-full">
             <Droplets className="w-4 h-4" />
@@ -101,13 +100,11 @@ export function SolarPumpConfigurator() {
             Jawab dua hal sederhana tentang lahan dan sumber air Anda — kami
             tunjukkan titik awal pompa yang paling sesuai dari daftar resmi.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.15 }}
-          className="p-6 sm:p-8 rounded-2xl bg-card border border-border space-y-8"
+        <div
+          className="stagger-item p-6 sm:p-8 rounded-2xl bg-card border border-border space-y-8"
+          style={{ animationDelay: "0.15s" }}
         >
           {/* Q1 — Lahan */}
           <fieldset>
@@ -176,11 +173,8 @@ export function SolarPumpConfigurator() {
 
           {/* Result */}
           {recommended ? (
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35 }}
-              className="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-sky-500/10 via-sky-500/5 to-transparent border border-sky-500/25"
+            <div
+              className="fade-in-quick p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-sky-500/10 via-sky-500/5 to-transparent border border-sky-500/25"
               aria-live="polite"
             >
               <p className="text-xs font-bold text-sky-600 uppercase tracking-wider mb-2">
@@ -217,13 +211,10 @@ export function SolarPumpConfigurator() {
                 Rekomendasi ini titik awal — debit aktual, kondisi pipa, dan
                 profil pemakaian diverifikasi tim saat survei gratis.
               </p>
-            </motion.div>
+            </div>
           ) : headBlocked ? (
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35 }}
-              className="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/30"
+            <div
+              className="fade-in-quick p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/30"
               aria-live="polite"
             >
               <p className="text-xs font-bold text-amber-600 uppercase tracking-wider mb-2">
@@ -247,27 +238,25 @@ export function SolarPumpConfigurator() {
                 <MessageCircle className="w-4 h-4" />
                 Minta Hitungan Custom
               </a>
-            </motion.div>
+            </div>
           ) : (
             <p className="text-sm text-muted-foreground text-center py-2" aria-live="polite">
               {lahanId ? "Pilih kedalaman sumber air untuk melihat rekomendasi." : "Jawab pertanyaan pertama untuk melihat rekomendasi."}
             </p>
           )}
-        </motion.div>
+        </div>
 
         {/* Link ke daftar lengkap */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="text-center text-sm text-muted-foreground mt-6"
+        <p
+          className="fade-in-item text-center text-sm text-muted-foreground mt-6"
+          style={{ animationDelay: "0.3s" }}
         >
           Ingin membandingkan semua spesifikasi?{" "}
           <a href="#harga" className="inline-flex items-center gap-1 font-semibold text-sky-600 hover:underline underline-offset-2">
             Lihat tabel 4 paket lengkap
             <ArrowRight className="w-3.5 h-3.5" />
           </a>
-        </motion.p>
+        </p>
       </div>
     </section>
   );

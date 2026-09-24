@@ -1,11 +1,15 @@
-"use client";
-
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
 import { SolarPumpConfigurator } from "./sections/SolarPumpConfigurator";
 import { solarPumpPackages } from "@/lib/pricing-solarpump";
 import { formatRp } from "@/lib/pricing";
 import { MessageCircle, Droplets, Shield, Sun, CheckCircle, TreePine, Factory } from "lucide-react";
+
+/**
+ * Konten /solar-pump — SERVER COMPONENT (optimasi CWV, pola R7/R8).
+ * Animasi entrance via CSS (.stagger-item / .fade-in-item — lihat
+ * globals.css). Client island: SolarPumpConfigurator (interaktif,
+ * file terpisah). Kartu harga memakai .fade-in-item (opacity-only)
+ * agar efek hover:-translate-y-1 tetap berfungsi.
+ */
 
 const benefits = [
   { icon: TreePine, title: "Irigasi Kebun Sawit", desc: "Solusi utama untuk irigasi perkebunan sawit, karet, dan pertanian skala besar" },
@@ -17,31 +21,28 @@ const benefits = [
 ];
 
 export default function SolarPumpPage() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
     <>
       {/* Benefits */}
       <section className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }} className="text-center mb-12">
+          <div className="stagger-item text-center mb-12" style={{ animationDelay: "0s" }}>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-4">
               Keunggulan Solar Pump JMSE
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Pompa air tenaga surya yang tangguh untuk segala kebutuhan irigasi dan supply air.
             </p>
-          </motion.div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" ref={ref}>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {benefits.map((b, i) => (
-              <motion.div key={b.title} initial={{ opacity: 0, y: 30 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.4, delay: i * 0.08 }} className="p-5 rounded-xl border border-border bg-card hover:border-solar/30 transition-all hover:shadow-md">
+              <div key={b.title} className="stagger-item p-5 rounded-xl border border-border bg-card hover:border-solar/30 transition-all hover:shadow-md" style={{ animationDelay: `${i * 0.08}s` }}>
                 <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center mb-3">
                   <b.icon className="w-5 h-5 text-blue-600" />
                 </div>
                 <h3 className="font-bold text-navy dark:text-white mb-1">{b.title}</h3>
                 <p className="text-sm text-muted-foreground">{b.desc}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -105,28 +106,25 @@ export default function SolarPumpPage() {
       {/* Pricing */}
       <section id="harga" className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="text-center mb-12">
+          <div className="stagger-item text-center mb-12" style={{ animationDelay: "0s" }}>
             <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-blue-600 bg-blue-600/10 rounded-full">
               Harga Paket Solar Pump
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-4">
               Pilih Kapasitas Sesuai Kebutuhan
             </h2>
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {solarPumpPackages.map((pkg, i) => (
-              <motion.div
+              <div
                 key={pkg.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                className={`relative p-6 rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
+                className={`fade-in-item relative p-6 rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
                   pkg.hp === 2
                     ? "bg-gradient-to-br from-blue-500 to-blue-600 text-white border-blue-500 shadow-lg shadow-blue-500/20"
                     : "bg-card border-border hover:border-blue-500/30"
                 }`}
+                style={{ animationDelay: `${i * 0.1}s` }}
               >
                 {pkg.hp === 2 && <span className="absolute -top-3 left-6 px-3 py-1 bg-gold text-navy text-xs font-bold rounded-full shadow-md">BEST SELLER</span>}
 
@@ -168,7 +166,7 @@ export default function SolarPumpPage() {
                   <MessageCircle className="w-4 h-4" />
                   Tanya Paket Ini
                 </a>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -177,7 +175,7 @@ export default function SolarPumpPage() {
       {/* ROI Analysis */}
       <section className="py-16 md:py-20 bg-muted/30">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass rounded-2xl p-6 sm:p-8 text-center">
+          <div className="stagger-item glass rounded-2xl p-6 sm:p-8 text-center" style={{ animationDelay: "0.1s" }}>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-4">
               Simulasi Penghematan Solar Pump
             </h2>
@@ -209,7 +207,7 @@ export default function SolarPumpPage() {
               Simulasi perbandingan berdasarkan estimasi kasar di atas — bukan hasil pengukuran
               lapangan. Simulasi spesifik lahan Anda disusun tim teknis saat survei lokasi (gratis).
             </p>
-          </motion.div>
+          </div>
         </div>
       </section>
     </>

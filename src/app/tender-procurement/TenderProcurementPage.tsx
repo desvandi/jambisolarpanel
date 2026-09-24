@@ -1,8 +1,10 @@
-"use client";
-
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
 import { MessageCircle, ClipboardList, FileText, Search, Package, Wrench, ArrowRight, CheckCircle, Building, Landmark } from "lucide-react";
+
+/**
+ * Konten /tender-procurement — SERVER COMPONENT (optimasi CWV, pola R7/R8).
+ * Halaman statis murni (tanpa interaksi) — animasi entrance via CSS
+ * (.stagger-item — lihat globals.css).
+ */
 
 const services = [
   { icon: ClipboardList, title: "EPC (Engineering, Procurement, Construction)", desc: "Layanan lengkap dari desain, pengadaan material, hingga konstruksi dan commissioning sistem energi terbarukan." },
@@ -22,35 +24,32 @@ const processSteps = [
 ];
 
 export default function TenderProcurementPage() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
     <>
       {/* Target Clients */}
       <section className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="text-center mb-12">
+          <div className="stagger-item text-center mb-12" style={{ animationDelay: "0s" }}>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-4">
               Siap Melayani
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Kami terbuka untuk kolaborasi dengan berbagai institusi dan organisasi.
             </p>
-          </motion.div>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
               { icon: Landmark, title: "Pemerintah Daerah", desc: "Pemkab, Pemkot, Dinas terkait, Bappeda untuk proyek infrastruktur energi terbarukan" },
               { icon: Building, title: "BUMN & Korporasi", desc: "Perusahaan negara dan swasta yang membutuhkan solusi energi terbarukan" },
               { icon: ClipboardList, title: "Institusi & Yayasan", desc: "Sekolah, kampus, rumah sakit, masjid, dan lembaga sosial lainnya" },
             ].map((c, i) => (
-              <motion.div key={c.title} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.1 }} className="p-6 rounded-xl border border-border bg-card hover:border-solar/30 transition-all hover:shadow-md text-center">
+              <div key={c.title} className="stagger-item p-6 rounded-xl border border-border bg-card hover:border-solar/30 transition-all hover:shadow-md text-center" style={{ animationDelay: `${i * 0.1}s` }}>
                 <div className="w-12 h-12 rounded-xl bg-slate-500/10 flex items-center justify-center mx-auto mb-4">
                   <c.icon className="w-6 h-6 text-slate-600" />
                 </div>
                 <h3 className="font-bold text-navy dark:text-white mb-2">{c.title}</h3>
                 <p className="text-sm text-muted-foreground">{c.desc}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -80,13 +79,10 @@ export default function TenderProcurementPage() {
                 icon: "✅",
               },
             ].map((item, i) => (
-              <motion.div
+              <div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="p-5 rounded-xl border border-border bg-card"
+                className="stagger-item p-5 rounded-xl border border-border bg-card"
+                style={{ animationDelay: `${i * 0.1}s` }}
               >
                 <div className="flex items-start gap-3 mb-2">
                   <span className="text-xl flex-shrink-0">{item.icon}</span>
@@ -95,7 +91,7 @@ export default function TenderProcurementPage() {
                     <p className="text-sm text-muted-foreground leading-relaxed">{item.solution}</p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
           <div className="mt-8 text-center">
@@ -115,20 +111,18 @@ export default function TenderProcurementPage() {
       {/* Services */}
       <section className="py-16 md:py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="text-center mb-12">
+          <div className="stagger-item text-center mb-12" style={{ animationDelay: "0s" }}>
             <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-slate-600 bg-slate-600/10 rounded-full">Layanan Pengadaan</span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-4">
               Cakupan Layanan Kami
             </h2>
-          </motion.div>
-          <div className="space-y-4 max-w-4xl mx-auto" ref={ref}>
+          </div>
+          <div className="space-y-4 max-w-4xl mx-auto">
             {services.map((s, i) => (
-              <motion.div
+              <div
                 key={s.title}
-                initial={{ opacity: 0, x: -20 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-                className="flex items-start gap-4 p-5 rounded-xl border border-border bg-card hover:border-solar/30 transition-all hover:shadow-md"
+                className="stagger-item flex items-start gap-4 p-5 rounded-xl border border-border bg-card hover:border-solar/30 transition-all hover:shadow-md"
+                style={{ animationDelay: `${i * 0.08}s` }}
               >
                 <div className="w-10 h-10 rounded-lg bg-solar/10 flex items-center justify-center flex-shrink-0">
                   <s.icon className="w-5 h-5 text-solar" />
@@ -137,7 +131,7 @@ export default function TenderProcurementPage() {
                   <h3 className="font-bold text-navy dark:text-white mb-1">{s.title}</h3>
                   <p className="text-sm text-muted-foreground">{s.desc}</p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -146,27 +140,24 @@ export default function TenderProcurementPage() {
       {/* Process */}
       <section className="py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="text-center mb-12">
+          <div className="stagger-item text-center mb-12" style={{ animationDelay: "0s" }}>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-4">
               Proses Kerja Sama
             </h2>
-          </motion.div>
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {processSteps.map((s, i) => (
-              <motion.div
+              <div
                 key={s.step}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-                className="text-center p-4 rounded-xl border border-border bg-card"
+                className="stagger-item text-center p-4 rounded-xl border border-border bg-card"
+                style={{ animationDelay: `${i * 0.08}s` }}
               >
                 <div className="w-10 h-10 rounded-full bg-solar text-white flex items-center justify-center mx-auto mb-3 text-lg font-bold">
                   {s.step}
                 </div>
                 <h3 className="font-bold text-navy dark:text-white text-sm mb-1">{s.title}</h3>
                 <p className="text-xs text-muted-foreground">{s.desc}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -175,7 +166,7 @@ export default function TenderProcurementPage() {
       {/* CTA */}
       <section className="py-16 md:py-20 bg-muted/30">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <div className="stagger-item" style={{ animationDelay: "0s" }}>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-white mb-4">
               Siap Berdiskusi untuk Proyek Anda
             </h2>
@@ -191,7 +182,7 @@ export default function TenderProcurementPage() {
               <MessageCircle className="w-5 h-5" />
               Konsultasi via WhatsApp
             </a>
-          </motion.div>
+          </div>
         </div>
       </section>
     </>
