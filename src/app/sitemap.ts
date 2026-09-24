@@ -29,6 +29,10 @@ const LAST_MODIFIED = {
   solarCommercial: "2026-09-24",
   // 2026-09-24: penghapusan HowTo JSON-LD (perubahan structured data).
   pjuts: "2026-09-24",
+  // 2026-09-24 (audit R8 lanjutan — sweep konsistensi): klaim residual
+  // "Rp 0 (gratis matahari)"/"air gratis 20+ tahun"/"100% tenaga surya"
+  // ditulis ulang jadi akuntansi jujur (tanpa BBM & listrik, perawatan
+  // tetap ada, garansi performa 25 thn) + footnote estimasi kasar.
   solarPump: "2026-09-24",
   // 2026-09-24 (audit R8 lanjutan): model simulasi khusus EV ditulis ulang —
   // klaim "100% energi surya"/"gratis"/"Rp 5-7 jt" dihapus, tarif disatukan

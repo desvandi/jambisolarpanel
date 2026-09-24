@@ -10,7 +10,7 @@ import { MessageCircle, Droplets, Shield, Sun, CheckCircle, TreePine, Factory } 
 const benefits = [
   { icon: TreePine, title: "Irigasi Kebun Sawit", desc: "Solusi utama untuk irigasi perkebunan sawit, karet, dan pertanian skala besar" },
   { icon: Sun, title: "Operasi Siang Hari", desc: "Pompa bekerja saat matahari bersinar — cukup untuk kebutuhan irigasi harian" },
-  { icon: Droplets, title: "Tanpa Listrik PLN", desc: "100% tenaga surya, ideal untuk area terpencil tanpa jaringan listrik" },
+  { icon: Droplets, title: "Tanpa Listrik PLN", desc: "Sistem off-grid 100% mandiri — tanpa tagihan listrik, ideal untuk area terpencil tanpa jaringan PLN" },
   { icon: Shield, title: "Auto-Dry Run Protection", desc: "Sensor otomatis mencegah kerusakan pompa saat air habis" },
   { icon: Factory, title: "Stainless Steel", desc: "Body pompa stainless steel tahan karat, cocok untuk air tanah & sungai" },
   { icon: CheckCircle, title: "Garansi Pompa 2 Tahun", desc: "Pompa submersible berkualitas tinggi dengan garansi resmi" },
@@ -66,10 +66,10 @@ export default function SolarPumpPage() {
               </thead>
               <tbody>
                 {[
-                  ["Biaya bahan bakar/listrik", "~Rp 2-5 jt/bulan", "~Rp 3-8 jt/bulan", "Rp 0 (gratis matahari)"],
-                  ["Biaya operasional/tahun", "Rp 24-60 jt", "Rp 36-96 jt", "Rp 0"],
+                  ["Biaya bahan bakar/listrik", "~Rp 2-5 jt/bulan", "~Rp 3-8 jt/bulan", "Rp 0 (tanpa BBM & listrik)"],
+                  ["Biaya operasional/tahun", "Rp 24-60 jt", "Rp 36-96 jt", "Minim (perawatan saja)"],
                   ["Investasi awal", "Rp 5-15 jt (kabel)", "Rp 10-30 jt", "Rp 18-45 jt"],
-                  ["Balik modal", "-", "-", "2-4 tahun"],
+                  ["Balik modal", "-", "-", "± 2-4 tahun"],
                   ["Emisi CO2", "Tergantung PLN", "Sangat tinggi", "Zero emission"],
                   ["Ketersediaan area terpencil", "Tidak bisa", "Perlu BBM", "100% mandiri"],
                   ["Perawatan", "Minim", "Rutin (oli, filter)", "Minim"],
@@ -85,9 +85,15 @@ export default function SolarPumpPage() {
               </tbody>
             </table>
           </div>
-          <div className="mt-6 p-4 rounded-xl bg-solar/5 border border-solar/10 text-center">
+          <p className="mt-4 text-xs text-muted-foreground text-center">
+            Angka perbandingan kasar untuk pompa irigasi skala kebun (estimasi, bukan hasil
+            pengukuran) — hasil aktual bervariasi tergantung jam operasi, kedalaman sumur, dan harga BBM.
+          </p>
+          <div className="mt-4 p-4 rounded-xl bg-solar/5 border border-solar/10 text-center">
             <p className="text-sm text-muted-foreground">
-              Dalam <strong className="text-solar">2-4 tahun</strong>, Solar Pump sudah balik modal. Setelah itu, air gratis selama 20+ tahun.
+              Estimasi kasar: balik modal <strong className="text-solar">± 2–4 tahun</strong> dari
+              penghematan biaya BBM/listrik. Setelah itu, biaya operasional tinggal perawatan
+              rutin — panel surya bergaransi performa hingga 25 tahun.
             </p>
           </div>
         </div>
@@ -178,11 +184,11 @@ export default function SolarPumpPage() {
             <p className="text-muted-foreground mb-6">
               Contoh: Solar Pump 2 HP — area sawit 2-4 hektar
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
               {[
-                { label: "Biaya Genset/Bulan", value: "Rp 3-8 jt", color: "text-red-500" },
-                { label: "Biaya Solar Pump/Bulan", value: "Rp 0", color: "text-solar" },
-                { label: "Balik Modal", value: "2-4 tahun", color: "text-gold" },
+                { label: "Biaya BBM Genset/Bulan", value: "Rp 3-8 jt", color: "text-red-500" },
+                { label: "Biaya BBM & Listrik Solar Pump", value: "Rp 0", color: "text-solar" },
+                { label: "Estimasi Balik Modal", value: "± 2-4 tahun", color: "text-gold" },
               ].map(item => (
                 <div key={item.label} className="p-3 rounded-xl bg-solar/5 border border-solar/10">
                   <p className="text-xs text-muted-foreground mb-1">{item.label}</p>
@@ -192,10 +198,17 @@ export default function SolarPumpPage() {
             </div>
             <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-800/30">
               <p className="text-sm text-emerald-700 dark:text-emerald-300 leading-relaxed">
-                Setelah <strong>2-4 tahun</strong>, Solar Pump sudah balik modal. Setelah itu, air gratis selama <strong>20+ tahun</strong>. 
-                Total penghematan dalam 25 tahun bisa mencapai <strong>Rp 200-600 juta</strong> dibanding genset.
+                Estimasi kasar: setelah <strong>± 2-4 tahun</strong> balik modal, tidak ada lagi biaya
+                bahan bakar — hanya perawatan rutin (pompa bergaransi 2 tahun, panel bergaransi
+                performa 25 tahun). Dibanding biaya BBM genset ± Rp 36–96 juta/tahun, penghematan
+                kumulatif 25 tahun berpotensi <strong>ratusan juta hingga miliaran rupiah</strong> —
+                tergantung jam operasi, harga BBM, dan biaya perawatan.
               </p>
             </div>
+            <p className="mt-4 text-xs text-muted-foreground text-center max-w-2xl mx-auto">
+              Simulasi perbandingan berdasarkan estimasi kasar di atas — bukan hasil pengukuran
+              lapangan. Simulasi spesifik lahan Anda disusun tim teknis saat survei lokasi (gratis).
+            </p>
           </motion.div>
         </div>
       </section>

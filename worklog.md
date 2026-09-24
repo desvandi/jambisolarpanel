@@ -7,7 +7,7 @@
 
 ---
 
-## 1. STATUS PROYEK SAAT INI (per 2026-09-24, Round 8 lanjutan / konsistensi P1 selesai)
+## 1. STATUS PROYEK SAAT INI (per 2026-09-24, Round 8 lanjutan / konsistensi P1 selesai + sweep solar-pump)
 
 **Situs:** https://jambisolarpanel.vercel.app (canonical FINAL — JANGAN PERNAH diganti ke jayamandiri.co.id)
 **Repo:** github.com/desvandi/jambisolarpanel, branch `main`, deploy otomatis via Vercel.
@@ -33,7 +33,8 @@ Angka ROI resmi hasil model: **rumah 2,6–5,2 kWp ± 9–11 thn (campuran+bater
 - R6 (5e55740, f251fd7): Tim & Kompetensi + term chips; kalkulator proyeksi 25 tahun.
 - R7 (1fbd70a): response audit — HowTo dihapus, MethodologyNote, studi kasus diperdalam, E-E-A-T/NAP, server-ifikasi layout, lastmod discipline.
 - **R8 (commit ini):** lihat §2 — perbaikan akurasi model finansial (4 temuan merah auditor).
-- **R8-lanjutan (re-audit, commit ini juga):** lihat §2a — 3 isu konsistensi P1 + 1 P2 dari re-audit auditor (EV residual claims, tarif rental single-source, model EV 70%/Rp1.500, savingsRange statis rental).
+- **R8-lanjutan (re-audit, commit 1a5d36a):** lihat §2a — 3 isu konsistensi P1 + 1 P2 dari re-audit auditor (EV residual claims, tarif rental single-source, model EV 70%/Rp1.500, savingsRange statis rental).
+- **R8-sweep (self-audit, commit berikut):** lihat §2b — residual claim kelas sama ditemukan & dibersihkan di SolarPumpPage.tsx (terlewat oleh grep Task 25 yang hanya mencari frasa persis "gratis dari matahari").
 
 ---
 
@@ -84,6 +85,31 @@ Re-audit auditor atas 5bdb935/825da27: verdict **ROUND 8 = PASS WITH CONDITIONS 
 - curl HTML /sewa-plts: 0 label "Hemat hingga Rp …" lama; 10 label "Simulasi hemat ±Rp …/bln" + footnote model hadir.
 - agent-browser: 0 page error, 0 console error/warn (ev-charging, sewa-plts, home); DOM spec-row 3 kartu paket EV tepat (437rb/17thn/±36 · 437rb/20thn/±270 · 437rb/23thn/±504); VLM: summary strip (Rp 436.877 / Rp 5.315.340 / Rp 7.593.343, "±70% dari biaya charging") + kartu BEST VALUE + footnote formulasi terverifikasi visual; mobile 390px ev-charging: no horizontal overflow, 0 elemen keluar viewport.
 - Sanity kalkulator sewa (computePackageSavings 2 kWp, 300 kWh, budget 2jt): plnSaving 208.037 = min(180,300)×0,8×1.444,7 ✓ status "affordable".
+
+---
+
+## 2b. ROUND 8-SWEEP (Task ID 26) — SELF-AUDIT: RESIDUAL CLAIM SOLAR PUMP (selesai)
+
+Saat auditor tidak hadir, dilakukan pemeriksaan ulang mandiri atas pekerjaan Task 25. Verifikasi menunjukkan semua klaim worklog Task 25 BENAR (commit 1a5d36a ada & ter-push ke origin/main, file sesuai klaim, 3 P1 + 1 P2 tertutup), TAPI grep ulang dengan pola lebih luas menemukan **residual claim kelas P1 yang terlewat** di `src/app/solar-pump/SolarPumpPage.tsx` — halaman ini memuat pola klaim identik dengan yang dihapus dari halaman EV, namun lolos dari cleanup Task 25 karena grep saat itu hanya mencari frasa persis "gratis dari matahari" (pola di solar-pump: "gratis matahari", "air gratis", "Rp 0" absolut):
+
+| Temuan self-audit | Tindakan | Status |
+|---|---|---|
+| 🔴 "Rp 0 (gratis matahari)" pada tabel perbandingan PLN/Genset/Solar Pump | → "Rp 0 (tanpa BBM & listrik)" — faktual, tanpa klaim "gratis" | ✅ |
+| 🔴 "Biaya operasional/tahun: Rp 0" (menyiratkan nol biaya total) | → "Minim (perawatan saja)" — konsisten dgn baris Perawatan "Minim" | ✅ |
+| 🔴 "air gratis selama 20+ tahun" (2 lokasi — kotak kesimpulan tabel & kotak hijau ROI) | → "biaya operasional tinggal perawatan rutin — panel bergaransi performa hingga 25 tahun" (pola sama dgn fix "25+ thn gratis" R8) | ✅ |
+| 🔴 "100% tenaga surya" (kartu benefit) | → "Sistem off-grid 100% mandiri — tanpa tagihan listrik" (align dgn frasa "100% mandiri" yang diterima auditor di ProblemSolutionSection; "100% mandiri" tetap di baris tabel ketersediaan area terpencil) | ✅ |
+| 🔴 "Total penghematan 25 tahun Rp 200-600 juta" (angka tak terderivasi) | → terderivasi dari angka tabel sendiri: "dibanding biaya BBM genset ± Rp 36–96 juta/tahun, penghematan kumulatif 25 tahun berpotensi ratusan juta hingga miliaran rupiah — tergantung jam operasi, harga BBM, dan biaya perawatan" | ✅ |
+| 🟡 Kartu "Biaya Solar Pump/Bulan: Rp 0" (menyiratkan biaya bulanan nol) | → label diperjelas: "Biaya BBM & Listrik Solar Pump: Rp 0" + "Biaya BBM Genset/Bulan" + "Estimasi Balik Modal ± 2-4 tahun" | ✅ |
+| 🟡 Tabel & simulasi tanpa disclaimer | → footnote bawah tabel ("Angka perbandingan kasar… estimasi, bukan hasil pengukuran") + footnote bawah section ROI ("Simulasi perbandingan berdasarkan estimasi kasar… simulasi spesifik lahan disusun saat survei") + label "±" pada balik modal | ✅ |
+
+**Yang sengaja TIDAK diubah** (diputuskan setelah analisis, bukan terlewat): klaim "Rp 0 — listrik mandiri" pada caseStudies & SocialProof (studi kasus/testimoni sistem off-grid MURNI tanpa koneksi PLN — faktual, lolos pendalaman audit R7); "Rp 0*" homepage (sudah punya footnote maintenance, lolos R8); "Rp 0/kWh (saat produksi tersedia)" EV (pernyataan biaya marginal berkualifikasi + kartu menampilkan sisa biaya PLN jujur); "gratis instalasi/survei" (penawaran layanan, bukan klaim energi); artikel solar-pump "Biaya bahan bakar: Nol" (spesifik BBM, faktual).
+
+### Verifikasi Round 8-sweep
+- lint 0 · tsc src 0 · 33/33 sitemap URL 200 · 0 page error · 0 console error/warn.
+- curl HTML /solar-pump: 0 "gratis matahari" / 0 "air gratis" / 0 "100% tenaga surya" / 0 "Rp 200-600 juta" / 0 "Biaya Solar Pump/Bulan"; ≥1 "tanpa BBM & listrik", "Minim (perawatan saja)", "Estimasi Balik Modal", "ratusan juta hingga miliaran", "100% mandiri", "bergaransi performa hingga 25 tahun", "bukan hasil pengukuran".
+- VLM visual PASS: tabel perbandingan (kolom Solar Pump jujur + disclaimer bawah tabel) & section simulasi (3 kartu label baru + kotak hijau dgn perawatan/garansi + footnote simulasi); layout bersih.
+- Mobile 390px: no horizontal overflow (docWidth 390 = viewport 390).
+- Repo-wide grep final: "gratis matahari" / "air gratis" / "100% tenaga surya" / "100% energi surya" / "gratis dari matahari" / "Rp 200-600" = 0 semua di src.
 
 ---
 
@@ -159,3 +185,25 @@ Stage Summary:
 - Semua 3 P1 + 1 P2 re-audit DITUTUP: EV residual claims = 0 di seluruh public source (grep "gratis dari matahari" repo-wide = 0), tarif rental single-source DESIGN_PARAMS, model EV = model khusus berlabel eksplisit dengan tarif terpusat + cap min(), savingsRange rental terhitung dari model.
 - Angka EV baru (jujur & reproducible): hemat charging Rp 436.877/bln (70% dari Rp 624.110) — capped kebutuhan charging, ROI 17/20/23 thn per paket, surplus 36/270/504 kWh/bln, semua berlabel "Simulasi model khusus EV".
 - Sesuai arahan auditor: setelah ini fokus = GSC indexing + pengukuran Search/Analytics + bukti proyek nyata (owner-side), BUKAN menambah artikel/fitur SEO baru.
+
+---
+
+Task ID: 26
+Agent: Z.ai (main orchestrator)
+Task: Pemeriksaan ulang mandiri pekerjaan Task 25 saat auditor tidak hadir ("Tolong periksa lagi pekerjaan anda"). Verifikasi independen seluruh klaim worklog Task 25 + grep ulang kelas klaim yang lebih luas di seluruh repo.
+
+Work Log:
+- Verifikasi git: commit 1a5d36a ADA & ter-push (HEAD lokal = origin/main = e6418be), working tree bersih — klaim worklog Task 25 akurat.
+- Verifikasi file (semua sesuai klaim): pricing-ev.ts (header "MODEL SIMULASI KHUSUS EV", tarif DESIGN_PARAMS 1444.7, evSelfConsumption 0.70 terdokumentasi + justifikasi, cap min(produksi, 432 kWh), tanpa "gratis"); EVChargingPage.tsx (0 klaim lama, kartu "Charging dibantu PLTS" menampilkan sisa biaya PLN jujur, footnote model lengkap); rentalPackages.ts (plnTariffPerKwh = DESIGN_PARAMS, simulatePackageSavings(kWp) menggantikan 10 string statis, selfConsumption/PSH/efisiensi dari DESIGN_PARAMS); SewaPltsPackages.tsx (footnote "contoh skenario, bukan hasil hitung tagihan Anda" hadir).
+- Grep "1444" repo-wide: hanya di methodology.ts (single source terkonfirmasi); semua assignment plnTariffPerKwh mengacu DESIGN_PARAMS.
+- **TEMUAN**: grep pola luas ("gratis", "Rp 0", "100%") menemukan residual claim kelas P1 di `SolarPumpPage.tsx` yang terlewat Task 25 (grep saat itu hanya frasa persis "gratis dari matahari"; solar-pump memakai varian "gratis matahari"/"air gratis"/"Rp 0" absolut).
+- Perbaiki 7 titik di SolarPumpPage.tsx (lihat tabel §2b): "Rp 0 (gratis matahari)" → "Rp 0 (tanpa BBM & listrik)"; biaya operasional "Rp 0" → "Minim (perawatan saja)"; "air gratis selama 20+ tahun" ×2 → perawatan rutin + garansi performa 25 thn; "100% tenaga surya" → "off-grid 100% mandiri"; "Rp 200-600 juta" tak terderivasi → terderivasi dari angka tabel sendiri (genset ±Rp 36–96 jt/thn); kartu "Biaya Solar Pump/Bulan Rp 0" → label BBM & listrik spesifik; + 2 footnote disclaimer (tabel & section ROI) + label "±" balik modal.
+- Analisis & keputusan TIDAK mengubah (diputuskan, bukan terlewat): caseStudies/SocialProof "Rp 0 — listrik mandiri" (off-grid murni, faktual, lolos R7); homepage "Rp 0*" (footnote maintenance, lolos R8); EV "Rp 0/kWh (saat produksi tersedia)" (marginal + jujur menampilkan sisa PLN); "gratis instalasi/survei" (layanan); artikel "Biaya bahan bakar: Nol" (spesifik BBM).
+- sitemap.ts: komentar dokumentasi lastmod solar-pump diperbarui (tanggal tetap 2026-09-24 — perubahan hari yang sama).
+- QA: lint 0, tsc src 0, 33/33 sitemap URL 200, curl /solar-pump (0 semua klaim lama; ≥1 semua label baru), agent-browser (0 page error, 0 console error, VLM PASS tabel & ROI section, mobile 390px no overflow), repo-wide grep final = 0 semua pola klaim.
+
+Stage Summary:
+- Pekerjaan Task 25 terkonfirmasi akurat 100% (commit ada, file sesuai, klaim verifikasi valid) — TAPI ditemukan & diperbaiki residual claim kelas P1 di SolarPumpPage.tsx yang terlewat karena cakupan grep Task 25 terlalu sempit (frasa persis saja).
+- Commit sweep ini menutup celah konsistensi terakhir yang diketahui: seluruh halaman layanan kini mengikuti prinsip R8 (klaim faktual/terderivasi, label simulasi/estimasi, akuntansi biaya jujur, disclaimer).
+- Pelajaran untuk agent berikutnya: grep klaim harus berbasis POLA (kelas klaim), bukan frasa persis — varian kata ("gratis matahari" vs "gratis dari matahari") lolos dari pencocokan literal.
+- Tersisa owner-side (tidak berubah): GSC indexing + GBP NAP + ADMIN_PASSWORD + foto proyek nyata.
