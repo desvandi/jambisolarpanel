@@ -6,12 +6,13 @@
  * agar structured data selalu identik dengan konten yang terlihat.
  *
  * ATURAN KONTEN: hanya data terverifikasi internal —
- * PSH Jambi 3,75 jam; efisiensi 80%; 1 kWp ±3 kWh/hari;
- * paket rumah 1,3–5,2 kWp; bisnis 7,15–10,4 kWp; industri 11,7–20,8 kWp;
- * baterai LiFePO4 48V 100Ah (4,8 kWh/unit); garansi panel 25 thn performa,
- * inverter 5–10 thn, baterai 5–10 thn, instalasi 2 thn;
- * estimasi ROI rumah 8–9 thn, bisnis 5–7 thn (SIMULASI — asumsi di
- * src/lib/methodology.ts); PPN 11%.
+ * PSH Jambi 3,75 jam (parameter desain internal); efisiensi 80%;
+ * 1 kWp ±3 kWh/hari; paket rumah 1,3–5,2 kWp; bisnis 7,15–10,4 kWp;
+ * industri 11,7–20,8 kWp; baterai LiFePO4 48V 100Ah (4,8 kWh/unit);
+ * garansi panel 25 thn performa, inverter 5–10 thn, baterai 5–10 thn,
+ * instalasi 2 thn; estimasi ROI rumah ± 9–11 thn (profil campuran +
+ * baterai), bisnis ± 8–9 thn (profil siang) — SIMULASI, asumsi di
+ * src/lib/methodology.ts; PPN 11%.
  */
 
 export interface FaqItem {
@@ -28,7 +29,7 @@ const FAQ_BIAYA: FaqItem = {
 
 export const FAQ_ROI: FaqItem = {
   q: "Berapa lama balik modal (ROI)?",
-  a: "Angka ROI kami adalah estimasi simulasi internal — bukan janji hasil aktual. Cara hitungnya: penghematan tahunan (produksi surya terpakai × tarif listrik) diakumulasi dengan asumsi kenaikan tarif PLN 6% per tahun (rata-rata historis 2017–2024), lalu dibandingkan dengan harga paket. Dengan asumsi tersebut, simulasi paket rumah 2,6–5,2 kWp mencapai balik modal sekitar 8–9 tahun, dan paket bisnis/industri 7,15–20,8 kWp sekitar 5–7 tahun karena biaya per kWp yang lebih ekonomis di kapasitas besar. Contoh reproduksinya: sistem 3 kWp menghasilkan ± 9 kWh/hari → ± 270 kWh/bulan × Rp 1.444,7 ≈ Rp 390 ribu penghematan bulanan di tahun pertama. Selama umur pakai panel 25 tahun, akumulasi penghematan (dengan kenaikan tarif) dalam simulasi kami mencapai beberapa kali lipat investasi awal — berapa persisnya sangat bergantung profil beban dan tarif Anda. Perhitungan lengkap bisa Anda coba sendiri di Kalkulator PLTS kami, dan simulasi spesifik properti Anda kami susun saat survei gratis.",
+  a: "Angka ROI kami adalah estimasi simulasi internal — bukan janji hasil aktual. Cara hitungnya: penghematan bulanan = min(produksi surya, pemakaian listrik Anda) × tingkat pemanfaatan energi (profil beban: 50–90%) × tarif listrik, lalu diakumulasi dengan asumsi skenario kenaikan tarif PLN 6% per tahun (asumsi simulasi — bukan rata-rata historis PLN dan bukan prediksi tarif). Dengan model tersebut, simulasi paket rumah 2,6–5,2 kWp mencapai balik modal sekitar 9–11 tahun pada profil campuran + baterai (lebih cepat bila beban dominan siang, lebih lama bila dominan malam tanpa baterai), dan paket bisnis/industri 7,15–20,8 kWp sekitar 8–9 tahun pada profil dominan siang karena biaya per kWp lebih ekonomis di kapasitas besar. Contoh reproduksinya: sistem 3 kWp menghasilkan ± 9 kWh/hari → ± 270 kWh/bulan; dengan pemanfaatan 80% (profil campuran + baterai) menjadi ± 216 kWh yang terpakai × Rp 1.444,7 ≈ Rp 310 ribu penghematan bulanan di tahun pertama. Selama masa garansi performa panel 25 tahun, akumulasi penghematan dalam simulasi kami mencapai beberapa kali lipat investasi awal — berapa persisnya sangat bergantung profil beban, pemanfaatan, dan tarif Anda. Perhitungan lengkap bisa Anda coba sendiri di Kalkulator PLTS kami, dan simulasi spesifik properti Anda kami susun saat survei gratis.",
 };
 
 const FAQ_OFFGRID: FaqItem = {
@@ -38,7 +39,7 @@ const FAQ_OFFGRID: FaqItem = {
 
 const FAQ_HUJAN: FaqItem = {
   q: "Bagaimana performa panel surya saat hujan atau mendung?",
-  a: "Panel surya tetap menghasilkan listrik saat mendung atau hujan, namun produksinya berkurang — sebagai patokan umum performa PV, penurunan tipikalnya berada di kisaran 10–25% saat mendung dan bisa lebih besar saat hujan lebat/mendung pekat, tergantung ketebalan awan. Angka ini adalah kisaran umum kondisi cuaca, bukan pengukuran spesifik lokasi Anda. Indonesia yang beriklim tropis justru cocok untuk PLTS karena iradiasi matahari tinggi sepanjang tahun — di Jambi rata-rata 3,75 jam sinar matahari penuh (PSH) per hari. Untuk sistem Hybrid dan Off-Grid, baterai menjaga pasokan tetap stabil saat produksi menurun, dan sistem Hybrid tetap bisa mengambil dari PLN sebagai cadangan. Kami memperhitungkan faktor cuaca ini dalam perhitungan produksi (efisiensi sistem 80%) sejak tahap desain.",
+  a: "Panel surya tetap menghasilkan listrik saat mendung atau hujan, namun produksinya berkurang — sebagai patokan umum performa PV, penurunan tipikalnya berada di kisaran 10–25% saat mendung dan bisa lebih besar saat hujan lebat/mendung pekat, tergantung ketebalan awan. Angka ini adalah kisaran umum kondisi cuaca, bukan pengukuran spesifik lokasi Anda. Indonesia yang beriklim tropis justru cocok untuk PLTS karena iradiasi matahari tinggi sepanjang tahun — parameter desain kami untuk Jambi memakai PSH 3,75 jam sinar matahari penuh per hari. Untuk sistem Hybrid dan Off-Grid, baterai menjaga pasokan tetap stabil saat produksi menurun, dan sistem Hybrid tetap bisa mengambil dari PLN sebagai cadangan. Kami memperhitungkan faktor cuaca ini dalam perhitungan produksi (efisiensi sistem 80%) sejak tahap desain.",
 };
 
 const FAQ_GARANSI: FaqItem = {
@@ -76,7 +77,7 @@ export const homepageFaqs: FaqItem[] = [
 
 export const FAQ_PRODUKSI: FaqItem = {
   q: "Berapa produksi listrik 1 kWp panel surya di Jambi?",
-  a: "Di wilayah Jambi, potensi sinar matahari (PSH) rata-rata sekitar 3,75 jam per hari. Dengan efisiensi sistem sekitar 80%, setiap 1 kWp panel surya menghasilkan kira-kira 3 kWh listrik per hari, atau sekitar 90 kWh per bulan. Sebagai contoh, Paket 5.2 kWp menghasilkan sekitar 15 kWh per hari — cukup untuk kebutuhan rumah dengan AC 1 unit, kulkas, dan peralatan rumah tangga lainnya. Estimasi produksi untuk setiap paket tercantum di halaman Harga Panel Surya Jambi, dan tim kami akan memberikan perhitungan yang lebih akurat berdasarkan profil pemakaian Anda saat survei.",
+  a: "Acuan desain kami untuk wilayah Jambi memakai PSH (potensi sinar matahari efektif) 3,75 jam per hari — parameter desain internal, bukan angka resmi terukur. Dengan efisiensi sistem sekitar 80%, setiap 1 kWp panel surya menghasilkan kira-kira 3 kWh listrik per hari, atau sekitar 90 kWh per bulan. Sebagai contoh, Paket 5.2 kWp menghasilkan sekitar 15 kWh per hari — cukup untuk kebutuhan rumah dengan AC 1 unit, kulkas, dan peralatan rumah tangga lainnya. Estimasi produksi untuk setiap paket tercantum di halaman Harga Panel Surya Jambi, dan tim kami akan memberikan perhitungan yang lebih akurat berdasarkan profil pemakaian Anda saat survei.",
 };
 
 const FAQ_HYBRID: FaqItem = {

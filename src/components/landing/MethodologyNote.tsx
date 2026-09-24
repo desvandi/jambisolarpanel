@@ -105,8 +105,8 @@ export function MethodologyNote({ variant, title, id }: MethodologyNoteProps) {
           </p>
           <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
             {isResidential
-              ? "Contoh: sistem 3 kWp menghasilkan ± 9 kWh/hari → ± 270 kWh/bulan × Rp 1.444,7 ≈ Rp 390 ribu/bulan yang tidak Anda bayar ke PLN — seberapa besar persentase dari tagihan Anda bergantung pada profil beban di atas."
-              : "Contoh: sistem 10 kWp menghasilkan ± 30 kWh/hari → ± 900 kWh/bulan × Rp 1.444,7 ≈ Rp 1,3 juta/bulan — bisnis dengan operasional siang menyerap sebagian besar produksi ini secara langsung."}
+              ? "Contoh: sistem 3 kWp menghasilkan ± 9 kWh/hari → ± 270 kWh/bulan. Yang benar-benar jadi penghematan hanya bagian yang terpakai: dengan profil campuran + baterai (pemanfaatan 80%) → ± 216 kWh × Rp 1.444,7 ≈ Rp 310 ribu/bulan — dan tetap dibatasi besar pemakaian listrik Anda."
+              : "Contoh: sistem 10 kWp menghasilkan ± 30 kWh/hari → ± 900 kWh/bulan. Dengan profil dominan siang (pemanfaatan 90%) → ± 810 kWh × Rp 1.444,7 ≈ Rp 1,17 juta/bulan — bisnis dengan operasional siang menyerap sebagian besar produksi ini secara langsung."}
           </p>
         </div>
 

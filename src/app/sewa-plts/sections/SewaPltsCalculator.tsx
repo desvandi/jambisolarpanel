@@ -562,18 +562,18 @@ export function SewaPltsCalculator() {
                   (tarif R-1 1300VA ke atas, non-subsidi).
                 </p>
                 <p>
-                  <strong>Produksi surya:</strong> kWp × PSH (3,75 jam) ×
-                  efisiensi (80%) × 30 hari. PSH Jambi = 3,75 jam/hari.
+                  <strong>Produksi surya:</strong> kWp × PSH (3,75 jam —
+                  parameter desain internal) × efisiensi (80%) × 30 hari.
                 </p>
                 <p>
                   <strong>Coverage:</strong> persentase pemakaian bulanan Anda
-                  yang dapat dipasok oleh produksi surya. Sistem hybrid
-                  memungkinkan seluruh energi surya dimanfaatkan.
+                  yang dapat dipasok oleh produksi surya (metrik sizing).
                 </p>
                 <p>
-                  <strong>Pengurangan tagihan PLN:</strong> jumlah Rupiah yang
-                  dihemat dari tagihan PLN berkat produksi surya yang menutupi
-                  sebagian pemakaian. Semakin besar paket, semakin besar
+                  <strong>Pengurangan tagihan PLN:</strong> dihitung dengan
+                  model min(produksi surya, pemakaian) × tingkat pemanfaatan
+                  energi 80% (profil campuran + baterai — sistem sewa selalu
+                  termasuk baterai) × tarif. Semakin besar paket, semakin besar
                   pengurangannya.
                 </p>
                 <p>

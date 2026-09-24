@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Home, Building2, Factory, Zap, MessageCircle, Battery, BatteryCharging, Info, ChevronDown, ChevronUp, Car, Monitor, Sparkles, TreePine } from "lucide-react";
+import { DESIGN_PARAMS } from "@/lib/methodology";
 import {
   type CalculatedPackage,
   calculatePackages,
@@ -208,8 +209,8 @@ export function ProductSection() {
             <span className="gradient-text">Sesuai Kebutuhan</span> Anda
           </h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Semua paket dihitung berdasarkan kondisi iradiasi matahari di Jambi
-            (PSH 3,75 jam). Harga sudah termasuk PPN 11%, instalasi, survei,
+            Semua paket dihitung berdasarkan parameter desain internal kami untuk
+            Jambi (PSH 3,75 jam). Harga sudah termasuk PPN 11%, instalasi, survei,
             desain, dan garansi resmi. Baterai tersedia sebagai add-on opsional.
           </p>
         </div>
@@ -263,8 +264,15 @@ export function ProductSection() {
               className="mt-3 text-xs text-blue-600 dark:text-blue-400 space-y-2 leading-relaxed"
             >
               <p>
-                <strong>Parameter Jambi:</strong> PSH (Peak Sun Hours) rata-rata 3,75 jam/hari.
+                <strong>Parameter desain internal:</strong> PSH (Peak Sun Hours)
+                3,75 jam/hari untuk Jambi — bukan angka resmi terukur.
                 Produksi harian = Kapasitas kWp x PSH x Efisiensi 80%.
+              </p>
+              <p>
+                <strong>Estimasi penghematan:</strong> memakai asumsi pemanfaatan
+                energi 80% (profil campuran + baterai) dan rentang tarif R-1
+                Rp1.352–1.444,70/kWh. Penghematan aktual = min(produksi surya,
+                pemakaian) × pemanfaatan × tarif.
               </p>
               <p>
                 <strong>Biaya per paket:</strong> Panel + Mounting + BOS + Inverter
@@ -383,7 +391,7 @@ export function ProductSection() {
 
                       {/* ROI & Savings */}
                       {(() => {
-                        const dailyKwh = product.kWp * 3.75 * 0.80;
+                        const dailyKwh = product.kWp * DESIGN_PARAMS.kWhPerKwpPerDay;
                         const roiData = calculateROI(product.price, dailyKwh);
                         return (
                           <div
@@ -423,7 +431,7 @@ export function ProductSection() {
                               <span className={`text-xs font-semibold ${
                                 product.popular ? "text-gold-light" : "text-gold"
                               }`}>
-                                Return 25thn {roiData.returnMultiplier}x
+                                Hemat 25thn {roiData.returnMultiplier}x
                               </span>
                             </div>
                           </div>
@@ -479,7 +487,7 @@ export function ProductSection() {
                             <p className={`text-xs leading-relaxed mb-2 ${
                               product.popular ? "text-white/50" : "text-muted-foreground"
                             }`}>
-                              Saat baterai penuh &amp; tidak ada pemadaman PLN, sinar matahari langsung supply beban via pengaturan SBU/SUB/Mix di inverter. Maks = {product.kWp % 1 === 0 ? product.kWp.toFixed(1) : product.kWp.toFixed(2)} kWp x 3,75 PSH = {product.batteryMaxKwh.toFixed(1)} kWh ({product.batteryMaxUnits} unit Baterai Penyimpanan)
+                              Saat baterai penuh &amp; tidak ada pemadaman PLN, sinar matahari langsung supply beban via pengaturan SBU/SUB/Mix di inverter. Maks = {product.kWp % 1 === 0 ? product.kWp.toFixed(1) : product.kWp.toFixed(2)} kWp × PSH 3,75 (parameter desain) = {product.batteryMaxKwh.toFixed(1)} kWh ({product.batteryMaxUnits} unit Baterai Penyimpanan)
                             </p>
                           )}
 

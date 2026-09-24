@@ -338,7 +338,9 @@ export function SewaPltsCostSimulator() {
               <p className="text-xs text-muted-foreground leading-relaxed mt-4 pt-3 border-t border-solar/20">
                 Sewa unggul di fleksibilitas &amp; beban maintenance; beli
                 unggul jangka panjang — ROI beli vs tagihan PLN untuk rumah
-                berkisar 8–9 tahun (asumsi kenaikan tarif 6%/tahun).
+                berkisar 9–11 tahun dalam simulasi kami (asumsi skenario
+                kenaikan tarif 6%/tahun dan pemanfaatan energi 80% pada profil
+                campuran + baterai).
               </p>
             </div>
           </motion.div>

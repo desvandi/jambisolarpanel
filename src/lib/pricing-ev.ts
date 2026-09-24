@@ -1,4 +1,5 @@
 import { formatRpShort } from "./pricing";
+import { DESIGN_PARAMS } from "./methodology";
 
 /* ============================================================
    EV CHARGING PRICING — PT. Jaya Mandiri Smart Energy
@@ -31,15 +32,17 @@ export interface EVPackage {
 }
 
 // Realistic EV charging assumptions
+// Single executable source: src/lib/methodology.ts (DESIGN_PARAMS)
 export const evAssumptions = {
   evBatteryKwh: 7.2,           // Kapasitas baterai EV kota tipikal
   chargesPerDay: 2,             // Morning + evening
   dailyChargingKwh: 14.4,       // 7.2 × 2
   monthlyChargingKwh: 432,      // 14.4 × 30
-  plnTariffPerKwh: 1500,        // Rp/kWh
-  pshHours: 3.75,               // Peak Sun Hours Jambi
-  efficiency: 0.80,             // System efficiency
-  plnIncreaseRate: 0.06,        // 6% per year PLN tariff increase
+  plnTariffPerKwh: 1500,        // Rp/kWh (asumsi tarif khusus konteks charging)
+  pshHours: DESIGN_PARAMS.pshJambi,               // Parameter desain internal — Jambi
+  efficiency: DESIGN_PARAMS.systemEfficiency,     // System efficiency
+  /** Asumsi skenario simulasi — bukan rata-rata historis PLN, bukan prediksi. */
+  plnIncreaseRate: DESIGN_PARAMS.plnIncreaseRatePerYear,
   get annualPlnCost() {
     return Math.round(this.dailyChargingKwh * 365 * this.plnTariffPerKwh);
   },

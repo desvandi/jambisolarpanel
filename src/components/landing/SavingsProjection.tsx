@@ -11,7 +11,7 @@ import { formatRpShort } from "@/lib/pricing";
  * Deret kumulatif memakai rumus yang SAMA dengan calculateROI() di
  * src/lib/pricing.ts — hemat tahun-y = base × (1+r)^(y-1) — sehingga:
  * - tahun garis balik modal = roi.roiYearsWithIncrease (kartu "Estimasi ROI")
- * - net di tahun ke-25       = roi.return25Year (kartu "Return 25 Tahun")
+ * - total hemat 25 thn       = roi.return25Year + price (kartu "Total Hemat 25 Thn")
  * Grafik dan kartu hasil tidak akan menampilkan dua angka berbeda.
  */
 
@@ -331,9 +331,9 @@ export function SavingsProjection({
       </figure>
 
       <p className="text-[11px] text-muted-foreground leading-relaxed mt-1 text-center">
-        Garis emas = titik balik modal (estimasi{" "}
-        {Math.round(increaseRate * 100)}%/thn kenaikan tarif PLN). Estimasi —
-        hasil akhir bergantung pola pemakaian aktual Anda.
+        Garis emas = titik balik modal (skenario kenaikan tarif{" "}
+        {Math.round(increaseRate * 100)}%/thn — asumsi simulasi, bukan
+        prediksi tarif PLN). Hasil aktual bergantung pola pemakaian Anda.
       </p>
     </div>
   );

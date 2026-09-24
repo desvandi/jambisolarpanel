@@ -25,13 +25,13 @@ export const metadata: Metadata = buildMetadata({
   ogImageAlt: "Kalkulator estimasi penghematan panel surya — Jambi Solar Panel",
 });
 
-/** Parameter perhitungan — identik dengan asumsi kalkulator (data terverifikasi internal). */
+/** Parameter perhitungan — identik dengan asumsi kalkulator (single source: methodology.ts). */
 const parameters = [
   {
     icon: Sun,
     label: "PSH Jambi",
     value: "3,75 jam/hari",
-    note: "Rata-rata iradiasi matahari wilayah Jambi",
+    note: "Parameter desain internal — bukan angka resmi terukur",
   },
   {
     icon: TrendingUp,
@@ -49,7 +49,7 @@ const parameters = [
     icon: Percent,
     label: "Kenaikan tarif",
     value: "6%/tahun",
-    note: "Rata-rata historis kenaikan tarif listrik",
+    note: "Asumsi skenario simulasi — bukan rata-rata historis PLN",
   },
 ];
 
@@ -147,9 +147,16 @@ export default function KalkulatorPltsPage() {
           <div className="flex items-start gap-3 p-4 rounded-xl bg-muted/50 border border-border text-sm text-muted-foreground leading-relaxed">
             <ListChecks className="w-5 h-5 text-solar flex-shrink-0 mt-0.5" />
             <p>
-              Hasil kalkulator bersifat estimasi awal. Perhitungan final selalu
-              dihitung ulang oleh tim insinyur kami berdasarkan audit beban dan
-              kondisi atap saat{" "}
+              Hasil kalkulator bersifat estimasi awal. Penghematan dihitung
+              dengan model{" "}
+              <strong className="text-foreground">
+                min(produksi surya, pemakaian listrik) × tingkat pemanfaatan
+                energi × tarif
+              </strong>{" "}
+              — tingkat pemanfaatan (50–90%) dipilih lewat profil beban di
+              kalkulator dan merupakan asumsi skenario, bukan hasil pengukuran.
+              Perhitungan final selalu dihitung ulang oleh tim insinyur kami
+              berdasarkan audit beban dan kondisi atap saat{" "}
               <Link
                 href="/faq#proses-layanan"
                 className="text-solar font-semibold hover:underline underline-offset-2"

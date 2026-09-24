@@ -17,6 +17,11 @@ import { useEffect } from "react";
 import { clearAllPricing } from "@/lib/pricing";
 import { SavingsProjection } from "@/components/landing/SavingsProjection";
 import {
+  SELF_CONSUMPTION_PROFILES,
+  DESIGN_PARAMS,
+  type SelfConsumptionProfileId,
+} from "@/lib/methodology";
+import {
   calculatePackages,
   calculateROI,
   recommendPackage,
@@ -24,7 +29,6 @@ import {
   formatRpShort,
   roundTo,
   PLN_TARIFF_DEFAULT,
-  SELF_CONSUMPTION_DEFAULT,
   PLN_INCREASE_RATE_DEFAULT,
   defaultComponentPrices,
   defaultInverterPrices,
@@ -56,79 +60,92 @@ interface AnalysisResult {
   roi: ReturnType<typeof calculateROI>;
   co2PerYear: number;
   needsCustom: boolean;
+  /** Persentase tagihan yang terpotong oleh surya (model pemanfaatan). */
+  savingsPct: number;
+}
+
+/** Profil pemanfaatan aktif dari daftar resmi methodology.ts. */
+function profileRate(id: SelfConsumptionProfileId): number {
+  return (
+    SELF_CONSUMPTION_PROFILES.find((p) => p.id === id)?.rate ??
+    DESIGN_PARAMS.selfConsumptionDefault
+  );
 }
 
 /**
  * Run analysis using EXPLICIT defaults (no localStorage).
  * This is 100% deterministic and always produces valid output.
+ *
+ * Model (audit Round 8):
+ *   penghematan = min(produksi surya, pemakaian PLN)
+ *                 × tingkat pemanfaatan profil × tarif
  */
-function computeWithDefaults(billValue: number): AnalysisResult {
+function computeWithDefaults(
+  billValue: number,
+  selfConsumption: number
+): AnalysisResult {
   const allPkgs = calculatePackages(
     defaultComponentPrices,
     defaultInverterPrices,
     defaultSettings
   );
-  const rec = recommendPackage(billValue, allPkgs) || allPkgs[0];
-  const monthlyKwh = billValue / PLN_TARIFF_DEFAULT;
-  const productionKwh = Math.round(rec.kWp * 3.75 * 0.80 * 30);
-  const coverage = Math.round((productionKwh / monthlyKwh) * 100);
-  const dailyKwh = rec.kWp * 3.75 * 0.80;
-  const roi = calculateROI(rec.price, dailyKwh);
-  const co2PerYear = (roi.annualSavingsBase / PLN_TARIFF_DEFAULT) * 0.8 / 1000;
-  const largestPkg = allPkgs[allPkgs.length - 1];
-  const largestProduction = largestPkg
-    ? Math.round(largestPkg.kWp * 3.75 * 0.80 * 30)
-    : 0;
-  const needsCustom = largestProduction < monthlyKwh * 0.5;
-
-  return {
-    recommended: rec,
-    monthlyKwh: Math.round(monthlyKwh),
-    productionKwh: Math.round(productionKwh),
-    coverage,
-    roi,
-    co2PerYear,
-    needsCustom,
-  };
+  return computeWithPackages(
+    billValue,
+    recommendPackage(billValue, allPkgs) || allPkgs[0],
+    allPkgs,
+    selfConsumption
+  );
 }
 
 /** Build analysis result from given packages and recommended package */
 function computeWithPackages(
   billValue: number,
   rec: ReturnType<typeof calculatePackages>[0],
-  allPkgs: ReturnType<typeof calculatePackages>
+  allPkgs: ReturnType<typeof calculatePackages>,
+  selfConsumption: number
 ): AnalysisResult {
   const monthlyKwh = billValue / PLN_TARIFF_DEFAULT;
-  const productionKwh = Math.round(rec.kWp * 3.75 * 0.80 * 30);
+  const dailyKwh = rec.kWp * DESIGN_PARAMS.kWhPerKwpPerDay;
+  const productionKwh = Math.round(dailyKwh * 30);
   const coverage = Math.round((productionKwh / monthlyKwh) * 100);
-  const dailyKwh = rec.kWp * 3.75 * 0.80;
-  const roi = calculateROI(rec.price, dailyKwh);
+  const roi = calculateROI(rec.price, dailyKwh, {
+    selfConsumption,
+    monthlyConsumptionKwh: monthlyKwh,
+  });
   const co2PerYear = (roi.annualSavingsBase / PLN_TARIFF_DEFAULT) * 0.8 / 1000;
   const largestPkg = allPkgs[allPkgs.length - 1];
   const largestProduction = largestPkg
-    ? Math.round(largestPkg.kWp * 3.75 * 0.80 * 30)
+    ? Math.round(largestPkg.kWp * DESIGN_PARAMS.kWhPerKwpPerDay * 30)
     : 0;
   const needsCustom = largestProduction < monthlyKwh * 0.5;
 
   return {
     recommended: rec,
     monthlyKwh: Math.round(monthlyKwh),
-    productionKwh: Math.round(productionKwh),
+    productionKwh,
     coverage,
     roi,
     co2PerYear,
     needsCustom,
+    savingsPct: Math.min(
+      100,
+      Math.round((roi.monthlySavingsBase / billValue) * 100)
+    ),
   };
 }
 
 export function SavingsCalculator() {
   const [bill, setBill] = useState(2000000);
+  const [profileId, setProfileId] = useState<SelfConsumptionProfileId>("campuran");
   const [showAssumptions, setShowAssumptions] = useState(false);
+
+  const selfRate = profileRate(profileId);
+  const selfRateRef = useRef(selfRate);
 
   // Initialize with DEFAULTS so the calculator ALWAYS renders with real content
   // on first paint — no empty skeleton, no dependency on network/localStorage.
   const [analysis, setAnalysis] = useState<AnalysisResult>(() =>
-    computeWithDefaults(2000000)
+    computeWithDefaults(2000000, profileRate("campuran"))
   );
   // Track where pricing data comes from (for UI badge)
   const [pricingSource, setPricingSource] = useState<"default" | "remote" | "local">("default");
@@ -155,7 +172,7 @@ export function SavingsCalculator() {
             const rec = recommendPackage(billRef.current, pkgs) || pkgs[0];
             if (rec && isFinite(rec.kWp) && rec.kWp > 0) {
               packagesRef.current = pkgs;
-              setAnalysis(computeWithPackages(billRef.current, rec, pkgs));
+              setAnalysis(computeWithPackages(billRef.current, rec, pkgs, selfRateRef.current));
               setPricingSource("remote");
               // Sync remote data to localStorage for offline use
               saveComponentPrices(remote.components);
@@ -176,7 +193,7 @@ export function SavingsCalculator() {
           const rec = recommendPackage(billRef.current, allPkgs) || allPkgs[0];
           if (rec && isFinite(rec.kWp) && rec.kWp > 0) {
             packagesRef.current = allPkgs;
-            setAnalysis(computeWithPackages(billRef.current, rec, allPkgs));
+            setAnalysis(computeWithPackages(billRef.current, rec, allPkgs, selfRateRef.current));
             setPricingSource("local");
             return;
           }
@@ -191,17 +208,22 @@ export function SavingsCalculator() {
     return () => { cancelled = true; };
   }, []);
 
-  // Recompute when bill changes — cepat & lokal (tanpa network),
-  // aman untuk drag slider berulang.
+  // Recompute when bill or utilization profile changes — cepat & lokal
+  // (tanpa network), aman untuk drag slider berulang.
   useEffect(() => {
     billRef.current = bill; // sinkronkan ref di dalam effect (bukan render)
+    selfRateRef.current = selfRate;
     const pkgs = packagesRef.current;
-    if (!pkgs) return; // cache belum siap — analysis default sudah benar
+    if (!pkgs) {
+      // cache belum siap — pakai default deterministic
+      setAnalysis(computeWithDefaults(bill, selfRate));
+      return;
+    }
     const rec = recommendPackage(bill, pkgs) || pkgs[0];
     if (rec && isFinite(rec.kWp) && rec.kWp > 0) {
-      setAnalysis(computeWithPackages(bill, rec, pkgs));
+      setAnalysis(computeWithPackages(bill, rec, pkgs, selfRate));
     }
-  }, [bill]);
+  }, [bill, selfRate]);
 
   // Recompute when pricing settings change (from kalibrasi-harga "Simpan")
   useEffect(() => {
@@ -212,7 +234,7 @@ export function SavingsCalculator() {
         const rec = recommendPackage(billRef.current, allPkgs) || allPkgs[0];
         if (!rec || !isFinite(rec.kWp) || rec.kWp <= 0) return;
         packagesRef.current = allPkgs;
-        setAnalysis(computeWithPackages(billRef.current, rec, allPkgs));
+        setAnalysis(computeWithPackages(billRef.current, rec, allPkgs, selfRateRef.current));
         setPricingSource("local");
       } catch (err) {
         console.error("[SavingsCalculator] Pricing update failed:", err);
@@ -235,14 +257,17 @@ export function SavingsCalculator() {
   const roi = analysis.roi;
   const co2PerYear = analysis.co2PerYear;
   const needsCustom = analysis.needsCustom;
+  const savingsPct = analysis.savingsPct;
+  const activeProfile = SELF_CONSUMPTION_PROFILES.find((p) => p.id === profileId)!;
 
   // Tautan WA membawa ringkasan hasil — lead terprakualifikasi.
   const waHref = `https://wa.me/6281328190707?text=${encodeURIComponent(
     `Halo PT. Jaya Mandiri Smart Energy, saya sudah mencoba kalkulator di website anda:\n` +
       `- Tagihan listrik: ${formatRp(bill)}/bulan\n` +
+      `- Profil pemakaian: ${activeProfile.label} (pemanfaatan ${Math.round(selfRate * 100)}%)\n` +
       `- Rekomendasi: ${rec.name} — ${rec.priceFormatted}\n` +
-      `- Estimasi hemat: ${formatRpShort(roi.monthlySavingsBase)}/bulan\n` +
-      `- Estimasi balik modal: ~${roi.roiYearsWithIncrease} tahun\n` +
+      `- Estimasi hemat (simulasi): ${formatRpShort(roi.monthlySavingsBase)}/bulan (~${savingsPct}% tagihan)\n` +
+      `- Estimasi balik modal (skenario 6%/thn): ~${roi.roiYearsWithIncrease} tahun\n` +
       `Mohon info lebih lanjut & jadwal survei gratis. Terima kasih.`
   )}`;
 
@@ -349,6 +374,52 @@ export function SavingsCalculator() {
               </div>
             </div>
 
+            {/* Step 1b: Utilization Profile — parameter eksplisit (audit Round 8) */}
+            <div className="mb-8">
+              <p className="text-sm font-medium text-navy/60 dark:text-white/60 mb-2 text-center">
+                Kapan listrik paling banyak terpakai di lokasi Anda?
+              </p>
+              <div
+                role="radiogroup"
+                aria-label="Profil pemakaian listrik"
+                className="grid grid-cols-1 sm:grid-cols-3 gap-2.5"
+              >
+                {SELF_CONSUMPTION_PROFILES.map((p) => (
+                  <button
+                    key={p.id}
+                    role="radio"
+                    aria-checked={profileId === p.id}
+                    onClick={() => setProfileId(p.id)}
+                    className={`p-3.5 rounded-xl text-left transition-all duration-200 border ${
+                      profileId === p.id
+                        ? "bg-solar/10 border-solar shadow-sm"
+                        : "bg-white/60 dark:bg-navy/40 border-border hover:border-solar/40"
+                    }`}
+                  >
+                    <span className="flex items-center justify-between gap-2 mb-1">
+                      <span className="text-sm font-bold text-navy dark:text-white">
+                        {p.label}
+                      </span>
+                      <span
+                        className={`text-xs font-bold ${
+                          profileId === p.id ? "text-solar" : "text-muted-foreground"
+                        }`}
+                      >
+                        {Math.round(p.rate * 100)}%
+                      </span>
+                    </span>
+                    <span className="block text-[11px] leading-snug text-muted-foreground">
+                      {p.desc}
+                    </span>
+                  </button>
+                ))}
+              </div>
+              <p className="mt-2 text-[11px] text-muted-foreground text-center leading-relaxed">
+                Persentase = asumsi tingkat pemanfaatan energi surya (berapa
+                bagian produksi yang benar-benar terpakai oleh beban Anda).
+              </p>
+            </div>
+
             {/* Step 2: Analysis */}
             <div className="p-5 rounded-2xl bg-gradient-to-br from-solar/5 to-gold/5 border border-solar/15 mb-8">
               <div className="flex items-center gap-2 mb-4">
@@ -394,7 +465,7 @@ export function SavingsCalculator() {
                       {productionKwh.toLocaleString("id-ID")} kWh/bulan
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Offset ~{Math.min(coverage, 100)}% tagihan Anda
+                      Mencakup ~{Math.min(coverage, 100)}% pemakaian Anda
                     </p>
                   </div>
                 </div>
@@ -433,12 +504,18 @@ export function SavingsCalculator() {
                 <p className="text-xl sm:text-2xl font-bold text-solar">
                   {formatRpShort(roi.monthlySavingsBase)}
                 </p>
+                <p className="text-[10px] text-muted-foreground">
+                  ≈{savingsPct}% tagihan
+                </p>
               </div>
               <div className="text-center p-4 rounded-2xl bg-solar/5 border border-solar/10">
                 <TrendingDown className="w-6 h-6 text-solar mx-auto mb-2" />
                 <p className="text-xs text-muted-foreground mb-1">Hemat / Tahun</p>
                 <p className="text-xl sm:text-2xl font-bold text-solar">
                   {formatRpShort(roi.annualSavingsBase)}
+                </p>
+                <p className="text-[10px] text-muted-foreground">
+                  {roi.monthlySolarUtilizedKwh.toLocaleString("id-ID")} kWh surya terpakai/bln
                 </p>
               </div>
               <div className="text-center p-4 rounded-2xl bg-gold/5 border border-gold/20">
@@ -450,19 +527,19 @@ export function SavingsCalculator() {
                   ~{roi.roiYearsWithIncrease} thn
                 </p>
                 <p className="text-[10px] text-muted-foreground">
-                  (+{Math.round(PLN_INCREASE_RATE_DEFAULT * 100)}%/thn tarif)
+                  (skenario tarif +{Math.round(PLN_INCREASE_RATE_DEFAULT * 100)}%/thn)
                 </p>
               </div>
               <div className="text-center p-4 rounded-2xl bg-gold/5 border border-gold/20">
                 <TrendingUp className="w-6 h-6 text-gold mx-auto mb-2" />
                 <p className="text-xs text-muted-foreground mb-1">
-                  Return 25 Tahun
+                  Total Hemat 25 Thn
                 </p>
                 <p className="text-xl sm:text-2xl font-bold text-gold">
-                  {roi.returnMultiplier}x
+                  {formatRpShort(roi.return25Year + rec.price)}
                 </p>
                 <p className="text-[10px] text-muted-foreground">
-                  Net: {formatRpShort(roi.return25Year)}
+                  ≈{roi.returnMultiplier}x investasi (kumulatif, bukan per tahun)
                 </p>
               </div>
             </div>
@@ -475,16 +552,15 @@ export function SavingsCalculator() {
               breakevenYear={roi.roiYearsWithIncrease}
             />
 
-            {/* Key insight box */}
+            {/* Key insight box — simulasi jujur (audit Round 8: tanpa perbandingan deposito) */}
             <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-800/30 mb-6">
               <p className="text-center text-sm text-emerald-700 dark:text-emerald-300 leading-relaxed">
-                Investasi <strong>{rec.priceFormatted}</strong> hari ini menghasilkan
-                total penghematan <strong>{formatRp(roi.return25Year + rec.price)}</strong> dalam 25 tahun
-                — keuntungan bersih <strong>{formatRp(roi.return25Year)}</strong> (ROI{" "}
-                <strong>{roi.returnMultiplier}x lipat</strong>). Ini setara{" "}
-                deposito yang memberikan return{" "}
-                {Math.round(((roi.returnMultiplier - 1) / 25) * 100)}% per tahun secara konsisten,
-                jauh di atas inflasi dan tanpa risiko pasar.
+                Hasil di atas adalah <strong>simulasi akumulasi penghematan selama 25 tahun</strong>{" "}
+                berdasarkan asumsi yang ditampilkan: profil{" "}
+                <strong>{activeProfile.label.toLowerCase()}</strong> (pemanfaatan{" "}
+                {Math.round(selfRate * 100)}%) dan skenario kenaikan tarif{" "}
+                {Math.round(PLN_INCREASE_RATE_DEFAULT * 100)}%/tahun. Hasil aktual dapat
+                berbeda — simulasi spesifik properti Anda kami susun saat survei gratis.
               </p>
             </div>
 
@@ -522,22 +598,34 @@ export function SavingsCalculator() {
                   tarif berbeda.
                 </p>
                 <p>
-                  <strong>Penghematan:</strong> 100% produksi solar dihitung sebagai penghematan
-                  (dailyKwh × 30 hari × tarif PLN). Sistem hybrid memungkinkan seluruh energi
-                  solar dimanfaatkan — baik langsung oleh beban maupun disimpan di baterai.
+                  <strong>Rumus penghematan:</strong> min(produksi surya, pemakaian listrik Anda)
+                  × tingkat pemanfaatan profil terpilih ({Math.round(selfRate * 100)}%) × tarif
+                  PLN. Produksi surya tidak bisa meng-offset lebih dari yang Anda pakai —
+                  pelanggan R-1 tidak mendapat kompensasi ekspor ke PLN.
                 </p>
                 <p>
-                  <strong>PSH Jambi:</strong> 3,75 jam/hari (rata-rata iradiasi matahari).
-                  Efisiensi sistem: 80% (losses dari kabel, suhu, konversi inverter).
+                  <strong>Pemanfaatan energi:</strong> persentase per profil (Dominan siang 90%,
+                  Campuran + baterai 80%, Dominan malam 50%) adalah{" "}
+                  <em>asumsi skenario</em> — bukan hasil pengukuran. Profil beban aktual Anda
+                  menentukan angka sebenarnya.
                 </p>
                 <p>
-                  <strong>Kenaikan tarif PLN:</strong> {Math.round(PLN_INCREASE_RATE_DEFAULT * 100)}%
-                  per tahun (berdasarkan rata-rata historis 2017-2024). Faktual bisa bervariasi.
+                  <strong>PSH:</strong> 3,75 jam/hari — parameter desain internal kami untuk
+                  Jambi (bukan angka resmi terukur). Efisiensi sistem: 80% (losses kabel, suhu,
+                  konversi inverter).
                 </p>
                 <p>
-                  <strong>ROI</strong> dihitung berdasarkan akumulasi penghematan tahunan
-                  (termasuk kenaikan tarif) vs harga investasi paket.
-                  Angka bersifat estimasi dan dapat berbeda tergantung pola konsumsi aktual.
+                  <strong>Kenaikan tarif {Math.round(PLN_INCREASE_RATE_DEFAULT * 100)}%/tahun:</strong>{" "}
+                  asumsi skenario untuk simulasi ROI — <em>bukan</em> rata-rata historis PLN
+                  (statistik tarif rumah tangga 2017–2024 naik ± 1–2%/tahun) dan bukan prediksi
+                  tarif. Faktual bisa berbeda.
+                </p>
+                <p>
+                  <strong>ROI &amp; total 25 tahun</strong> dihitung dari akumulasi penghematan
+                  tahunan (dengan skenario kenaikan tarif) vs harga investasi paket. Kelipatan
+                  investasi (mis. 4x) adalah <em>akumulasi 25 tahun</em>, bukan return per tahun.
+                  Angka bersifat estimasi simulasi dan dapat berbeda tergantung pola konsumsi
+                  aktual.
                 </p>
               </div>
             )}

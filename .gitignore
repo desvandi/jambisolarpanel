@@ -80,7 +80,7 @@ bun.lock
 /examples/
 /mini-services/
 Caddyfile
-worklog.md
+# worklog.md — R8: versi tersanitasi di-commit ke repo (token redacted)
 .zscripts/
 claude.md
 # Sandbox QA artifacts (not part of the project)

@@ -7,6 +7,8 @@ export const article: Article = {
     "Faktor penentu harga panel surya di Jambi: kapasitas kWp, jenis sistem, kualitas komponen, garansi, hingga kondisi atap rumah Anda.",
   category: "Biaya & Harga",
   date: "2026-09-23",
+  // 2026-09-24: label asumsi skenario tarif + pemanfaatan energi (audit Round 8).
+  updated: "2026-09-24",
   readingMinutes: 8,
   keyTakeaways: [
     "Harga PLTS ditentukan oleh kapasitas (kWp), konfigurasi hybrid atau off-grid, kualitas komponen, kondisi atap, dan PPN — bukan sekadar merek panel.",
@@ -64,7 +66,7 @@ export const article: Article = {
     { type: "h2", text: "Faktor 1: Kapasitas Sistem (kWp) — Penentu Utama Harga" },
     {
       type: "p",
-      text: "Kapasitas PLTS dinyatakan dalam kWp (kilowatt-peak). Di Jambi, Peak Sun Hours (PSH) rata-rata 3,75 jam per hari dan efisiensi sistem sekitar 80%, sehingga 1 kWp menghasilkan kira-kira 3 kWh listrik per hari. Artinya, rumah yang memakai 6 kWh per hari membutuhkan sekitar 2 kWp — dengan panel 650 Wp per unit, itu setara 4 panel, atau paket 2,6 kWp.",
+      text: "Kapasitas PLTS dinyatakan dalam kWp (kilowatt-peak). Acuan desain kami untuk Jambi memakai Peak Sun Hours (PSH) 3,75 jam per hari dan efisiensi sistem sekitar 80%, sehingga 1 kWp menghasilkan kira-kira 3 kWh listrik per hari. Artinya, rumah yang memakai 6 kWh per hari membutuhkan sekitar 2 kWp — dengan panel 650 Wp per unit, itu setara 4 panel, atau paket 2,6 kWp.",
     },
     {
       type: "p",
@@ -115,7 +117,7 @@ export const article: Article = {
     { type: "h2", text: "Cara Menilai Penawaran: Fokus pada Total Biaya Kepemilikan" },
     {
       type: "p",
-      text: "Cara paling sehat membandingkan harga bukan mencari angka termurah, melainkan membandingkan total biaya kepemilikan selama 20–25 tahun: harga awal ditambah biaya perawatan dan kemungkinan penggantian komponen, diukur terhadap penghematan listrik yang dihasilkan. Dengan tarif acuan PLN Rp1.352–1.444,70/kWh untuk pelanggan rumah tangga R-1, estimasi internal kami menunjukkan balik modal PLTS rumah tangga tercapai dalam 8–9 tahun dengan asumsi kenaikan tarif listrik rata-rata 6% per tahun. Sisanya — belasan tahun lagi — adalah masa pakai panel yang terus menghasilkan listrik nyaris tanpa biaya.",
+      text: "Cara paling sehat membandingkan harga bukan mencari angka termurah, melainkan membandingkan total biaya kepemilikan selama 20–25 tahun: harga awal ditambah biaya perawatan dan kemungkinan penggantian komponen, diukur terhadap penghematan listrik yang dihasilkan. Dengan tarif acuan PLN Rp1.352–1.444,70/kWh untuk pelanggan rumah tangga R-1, estimasi internal kami menunjukkan balik modal PLTS rumah tangga tercapai dalam 9–11 tahun dengan asumsi skenario kenaikan tarif listrik 6% per tahun (asumsi simulasi, bukan rata-rata historis PLN) dan pemanfaatan energi 80% (profil campuran + baterai). Sisanya — belasan tahun lagi — adalah masa garansi panel yang terus menghasilkan listrik dengan biaya operasional sangat rendah.",
     },
     {
       type: "cta",

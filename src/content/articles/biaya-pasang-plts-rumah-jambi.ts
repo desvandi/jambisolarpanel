@@ -7,12 +7,14 @@ export const article: Article = {
     "Rincian komponen biaya pasang PLTS rumah di Jambi — panel, inverter, baterai, instalasi — plus cara menghitung kebutuhan dan estimasi balik modalnya.",
   category: "Biaya & Harga",
   date: "2026-09-23",
+  // 2026-09-24: label asumsi skenario tarif + pemanfaatan energi (audit Round 8).
+  updated: "2026-09-24",
   readingMinutes: 8,
   keyTakeaways: [
     "Biaya pasang PLTS mencakup panel, inverter, baterai (opsional), mounting, kabel, proteksi, serta jasa survei dan instalasi — bukan hanya harga panel.",
     "Mulai dari audit beban: kalikan daya tiap perangkat dengan jam pemakaian untuk mendapat kebutuhan kWh per hari, lalu bagi 3 untuk mendapat kWp.",
     "Rumah dengan daya 900 VA umumnya cukup paket 1,3–3,25 kWp; daya 1300–2200 VA cocok dengan 3,25–5,2 kWp.",
-    "Estimasi balik modal PLTS rumah tangga 8–9 tahun (asumsi kenaikan tarif PLN ±6% per tahun), sementara panel bergaransi performa 25 tahun.",
+    "Estimasi simulasi balik modal PLTS rumah tangga 9–11 tahun (asumsi skenario kenaikan tarif PLN 6% per tahun dan pemanfaatan energi 80%), sementara panel bergaransi performa 25 tahun.",
   ],
   blocks: [
     {
@@ -103,7 +105,7 @@ export const article: Article = {
     { type: "h2", text: "Estimasi Penghematan dan Balik Modal" },
     {
       type: "p",
-      text: "Dengan tarif acuan PLN Rp1.352/kWh (R-1/900 VA) hingga Rp1.444,70/kWh (R-1/1300 VA ke atas), rumah contoh di atas yang mengalihkan 5,5 kWh per hari ke surya menghemat sekitar Rp7.400–8.000 per hari, atau kira-kira Rp223.000–238.000 per bulan. Estimasi internal kami — dengan asumsi kenaikan tarif listrik rata-rata 6% per tahun — menunjukkan balik modal PLTS rumah tangga tercapai dalam 8–9 tahun, sementara panelnya sendiri bergaransi performa 25 tahun. Artinya, lebih dari separuh masa pakai panel menghasilkan listrik nyaris tanpa biaya. Untuk usaha dengan beban siang hari besar, estimasi balik modalnya lebih cepat lagi: 5–7 tahun.",
+      text: "Dengan tarif acuan PLN Rp1.352/kWh (R-1/900 VA) hingga Rp1.444,70/kWh (R-1/1300 VA ke atas), rumah contoh di atas yang mengalihkan 5,5 kWh per hari ke surya menghemat sekitar Rp7.400–8.000 per hari, atau kira-kira Rp223.000–238.000 per bulan. Estimasi internal kami — dengan asumsi skenario kenaikan tarif listrik 6% per tahun (asumsi simulasi, bukan rata-rata historis PLN) dan pemanfaatan energi 80% (profil campuran + baterai) — menunjukkan balik modal PLTS rumah tangga tercapai dalam 9–11 tahun, sementara panelnya sendiri bergaransi performa 25 tahun. Artinya, lebih dari separuh masa garansi panel menghasilkan listrik dengan biaya operasional sangat rendah — perawatan berkala seperti pembersihan panel tetap perlu dianggarkan. Untuk usaha dengan beban siang hari besar (pemanfaatan hingga 90%), simulasi balik modalnya sekitar 8–9 tahun.",
     },
     {
       type: "note",

@@ -19,6 +19,8 @@
      via inverter SBU/SUB/Mix priority settings
    ============================================================ */
 
+import { DESIGN_PARAMS } from "./methodology";
+
 // --- Types ---
 
 export interface ComponentPrices {
@@ -154,8 +156,9 @@ export const defaultInverterPrices: InverterPrices = {
 export const defaultSettings: PricingSettings = {
   marginPct: 35,
   ppnPct: 11,
-  pshHours: 3.75,
-  efficiency: 0.80,
+  // Single executable source: src/lib/methodology.ts (DESIGN_PARAMS)
+  pshHours: DESIGN_PARAMS.pshJambi,
+  efficiency: DESIGN_PARAMS.systemEfficiency,
 };
 
 // --- Inverter Display Names ---
@@ -501,11 +504,16 @@ export function calculatePackages(
     // Daily production
     const dailyKwh = kWp * s.pshHours * s.efficiency;
 
-    // Savings estimation — range based on PLN tariff classes (no self-consumption reduction)
+    // Savings estimation — range based on PLN tariff classes, WITH default
+    // self-consumption (audit Round 8: tidak boleh 100% produksi = hemat).
     // Low: Rp1,352/kWh (R-1 900VA) | High: Rp1,444.7/kWh (R-1 1300VA+)
     const PLN_TARIFF_LOW = 1352;
-    const monthlySavingsLow = Math.round(dailyKwh * 30 * PLN_TARIFF_LOW);
-    const monthlySavingsHigh = Math.round(dailyKwh * 30 * PLN_TARIFF_DEFAULT);
+    const monthlySavingsLow = Math.round(
+      dailyKwh * 30 * PLN_TARIFF_LOW * SELF_CONSUMPTION_DEFAULT
+    );
+    const monthlySavingsHigh = Math.round(
+      dailyKwh * 30 * PLN_TARIFF_DEFAULT * SELF_CONSUMPTION_DEFAULT
+    );
 
     const formatSavings = (val: number) => {
       if (val >= 1_000_000) {
@@ -581,40 +589,94 @@ export function calculatePackages(
 }
 
 // --- ROI & Return Calculation ---
+// Single executable source: src/lib/methodology.ts (DESIGN_PARAMS).
+// Semua konstanta di bawah HANYA re-export dari DESIGN_PARAMS agar
+// kalkulator, FAQ, dan artikel tidak pernah berbeda angka.
 
-export const PLN_TARIFF_DEFAULT = 1444.7; // Rp/kWh (R-1 1300VA+, non-subsidi)
-export const SELF_CONSUMPTION_DEFAULT = 1.0; // 100% — full production counted as savings
-export const PLN_INCREASE_RATE_DEFAULT = 0.06; // 6% per tahun
+/** Tarif PLN acuan (R-1 1300VA+, non-subsidi) — Rp/kWh. */
+export const PLN_TARIFF_DEFAULT = DESIGN_PARAMS.plnTariffPerKwh;
+/**
+ * Tingkat pemanfaatan energi surya default (profil "campuran + baterai").
+ * Audit Round 8: penghematan TIDAK dihitung 100% dari produksi —
+ * energi surya dibatasi pemakaian PLN lalu dikali tingkat pemanfaatan.
+ */
+export const SELF_CONSUMPTION_DEFAULT = DESIGN_PARAMS.selfConsumptionDefault;
+/**
+ * Asumsi skenario kenaikan tarif PLN per tahun untuk simulasi ROI.
+ * BUKAN rata-rata historis PLN dan BUKAN prediksi — lihat methodology.ts.
+ */
+export const PLN_INCREASE_RATE_DEFAULT = DESIGN_PARAMS.plnIncreaseRatePerYear;
 
 export interface ROIResult {
-  roiYears: number;            // Simple ROI (flat tariff)
-  roiYearsWithIncrease: number; // ROI dengan kenaikan PLN 6%/thn
-  return25Year: number;         // Net profit 25 tahun (dengan kenaikan PLN)
-  returnMultiplier: number;     // Total return 25thn / investasi
-  annualSavingsBase: number;    // Hemat per tahun (tarif tetap)
-  monthlySavingsBase: number;   // Hemat per bulan (tarif tetap)
+  /** Simple ROI (tarif tetap). */
+  roiYears: number;
+  /** ROI dengan skenario kenaikan tarif 6%/thn. */
+  roiYearsWithIncrease: number;
+  /** Net profit 25 tahun (dengan skenario kenaikan tarif). */
+  return25Year: number;
+  /** Total hemat kumulatif 25 thn ÷ investasi (bukan return tahunan!). */
+  returnMultiplier: number;
+  /** Hemat per tahun (tarif tetap). */
+  annualSavingsBase: number;
+  /** Hemat per bulan (tarif tetap). */
+  monthlySavingsBase: number;
+  /** Energi surya yang terpakai per bulan (kWh) setelah cap & pemanfaatan. */
+  monthlySolarUtilizedKwh: number;
+  /** Pemanfaatan efektif: energi terpakai ÷ produksi (0–1). */
+  effectiveUtilization: number;
 }
 
+export interface ROIOptions {
+  /** Tarif PLN Rp/kWh (default R-1 1300VA+ non-subsidi). */
+  plnTariff?: number;
+  /** Tingkat pemanfaatan energi surya 0–1 (default 0,8 — profil campuran + baterai). */
+  selfConsumption?: number;
+  /** Skenario kenaikan tarif per tahun (default 6% — asumsi simulasi). */
+  plnIncreaseRate?: number;
+  /**
+   * Pemakaian listrik PLN bulanan (kWh). Bila diketahui, energi surya
+   * yang di-offset dibatasi maksimal sebesar pemakaian (tidak ada
+   * kompensasi ekspor untuk pelanggan R-1).
+   */
+  monthlyConsumptionKwh?: number;
+}
+
+/**
+ * Model ROI audit Round 8:
+ *   penghematan/bulan = min(produksi surya, pemakaian PLN)
+ *                       × tingkat pemanfaatan (self-consumption)
+ *                       × tarif PLN
+ *
+ * `dailyKwh` = produksi surya harian sistem (kWh/hari, dari kWp × PSH ×
+ * efisiensi). Bila `monthlyConsumptionKwh` tidak diberikan (kartu paket
+ * tanpa konteks tagihan), produksi tidak dibatasi pemakaian — pastikan
+ * UI memberi label asumsi pemanfaatan secara eksplisit.
+ */
 export function calculateROI(
   price: number,
   dailyKwh: number,
-  options?: {
-    plnTariff?: number;
-    selfConsumption?: number;
-    plnIncreaseRate?: number;
-  }
+  options?: ROIOptions
 ): ROIResult {
   const tariff = options?.plnTariff ?? PLN_TARIFF_DEFAULT;
   const selfCons = options?.selfConsumption ?? SELF_CONSUMPTION_DEFAULT;
   const increaseRate = options?.plnIncreaseRate ?? PLN_INCREASE_RATE_DEFAULT;
 
-  const annualSavingsBase = Math.round(dailyKwh * 365 * tariff * selfCons);
-  const monthlySavingsBase = Math.round(dailyKwh * 30 * tariff * selfCons);
+  const monthlyProduction = dailyKwh * 30;
+  // Cap oleh pemakaian PLN bila diketahui — energi surya tidak bisa
+  // meng-offset lebih dari yang benar-benar dipakai (tanpa kompensasi ekspor).
+  const matchedMonthly =
+    options?.monthlyConsumptionKwh != null && isFinite(options.monthlyConsumptionKwh)
+      ? Math.min(monthlyProduction, Math.max(options.monthlyConsumptionKwh, 0))
+      : monthlyProduction;
+  const monthlySolarUtilized = matchedMonthly * selfCons;
+
+  const monthlySavingsBase = Math.round(monthlySolarUtilized * tariff);
+  const annualSavingsBase = monthlySavingsBase * 12;
 
   // Simple ROI (tarif tetap)
   const roiYears = annualSavingsBase > 0 ? price / annualSavingsBase : 99;
 
-  // ROI dengan kenaikan PLN per tahun
+  // ROI dengan skenario kenaikan tarif per tahun
   let cumIncrease = 0;
   let roiYearsWithIncrease = 30;
   if (annualSavingsBase > 0) {
@@ -627,7 +689,7 @@ export function calculateROI(
     }
   }
 
-  // Total return 25 tahun (dengan kenaikan PLN)
+  // Total hemat kumulatif 25 tahun (dengan skenario kenaikan tarif)
   let cum25 = 0;
   if (annualSavingsBase > 0) {
     for (let y = 0; y < 25; y++) {
@@ -644,6 +706,9 @@ export function calculateROI(
     returnMultiplier: Math.round(returnMultiplier * 10) / 10,
     annualSavingsBase,
     monthlySavingsBase,
+    monthlySolarUtilizedKwh: Math.round(monthlySolarUtilized),
+    effectiveUtilization:
+      monthlyProduction > 0 ? monthlySolarUtilized / monthlyProduction : 0,
   };
 }
 

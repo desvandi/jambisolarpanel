@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { MethodologyNote } from "@/components/landing/MethodologyNote";
+import { DESIGN_PARAMS } from "@/lib/methodology";
 import {
   calculatePackages,
   hasCustomPricing,
@@ -21,8 +22,8 @@ const benefits = [
   { icon: Shield, title: "Garansi Resmi", desc: "Panel surya 25 tahun performa, inverter 5 tahun, baterai sesuai paket" },
   {
     icon: Clock,
-    title: "ROI ± 8–9 Tahun (simulasi)",
-    desc: "Estimasi simulasi dengan asumsi tarif & kenaikan PLN 6%/tahun — detail di panel metodologi",
+    title: "ROI ± 9–11 Tahun (simulasi)",
+    desc: "Simulasi profil campuran + baterai, skenario kenaikan tarif 6%/tahun — detail di panel metodologi",
   },
   { icon: Wrench, title: "Gratis Instalasi", desc: "Survei, desain, instalasi, dan commissioning sudah termasuk dalam harga" },
 ];
@@ -163,13 +164,13 @@ export default function SolarHomePage() {
               Pilih Paket PLTS untuk Rumah Anda
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Semua harga sudah termasuk PPN 11%, instalasi, survei, desain, dan garansi resmi. Dihitung berdasarkan PSH Jambi 3,75 jam.
+              Semua harga sudah termasuk PPN 11%, instalasi, survei, desain, dan garansi resmi. Produksi dihitung dari parameter desain internal kami: PSH 3,75 jam × efisiensi 80%.
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {packages.map((pkg) => {
-              const dailyKwh = pkg.kWp * 3.75 * 0.8;
+              const dailyKwh = pkg.kWp * DESIGN_PARAMS.kWhPerKwpPerDay;
               const roi = calculateROI(pkg.price, dailyKwh);
               return (
                 <div
@@ -221,7 +222,7 @@ export default function SolarHomePage() {
                         ROI ~{roi.roiYearsWithIncrease} thn
                       </span>
                       <span className={`text-xs font-semibold ${pkg.popular ? "text-gold-light" : "text-gold"}`}>
-                        Return 25thn {roi.returnMultiplier}x
+                        Hemat 25thn {roi.returnMultiplier}x
                       </span>
                     </div>
                   </div>
@@ -250,6 +251,12 @@ export default function SolarHomePage() {
               );
             })}
           </div>
+          <p className="mt-6 text-xs text-muted-foreground text-center leading-relaxed max-w-2xl mx-auto">
+            ROI &amp; kelipatan hemat dihitung dengan asumsi pemanfaatan energi 80%
+            (profil campuran + baterai) dan skenario kenaikan tarif 6%/tahun —
+            asumsi simulasi, bukan prediksi. Hitung profil beban Anda di{" "}
+            <a href="/kalkulator-plts" className="text-solar font-semibold hover:underline underline-offset-2">kalkulator PLTS</a>.
+          </p>
         </div>
       </section>
     </>

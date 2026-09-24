@@ -51,7 +51,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     term: "PLTS",
     category: "Konsep Dasar",
     definition:
-      "Pembangkit Listrik Tenaga Surya — sistem yang mengubah energi matahari menjadi listrik memakai panel surya, inverter, dan (opsional) baterai penyimpanan. PLTS dapat dipasang untuk rumah, bisnis, industri, hingga penerangan jalan. Di Jambi, potensi energi surya sangat baik karena iradiasi matahari tinggi sepanjang tahun (PSH 3,75 jam/hari).",
+      "Pembangkit Listrik Tenaga Surya — sistem yang mengubah energi matahari menjadi listrik memakai panel surya, inverter, dan (opsional) baterai penyimpanan. PLTS dapat dipasang untuk rumah, bisnis, industri, hingga penerangan jalan. Di Jambi, potensi energi surya sangat baik karena iradiasi matahari tinggi sepanjang tahun (parameter desain kami: PSH 3,75 jam/hari).",
     related: [
       { label: "Artikel: Potensi Energi Surya Jambi", href: "/artikel/potensi-energi-surya-jambi" },
       { label: "Layanan panel surya rumah", href: "/solar-home" },
@@ -85,7 +85,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     term: "PSH (Peak Sun Hours)",
     category: "Konsep Dasar",
     definition:
-      "Jumlah jam per hari ketika iradiasi matahari setara dengan kondisi puncak (1.000 W/m²). PSH menentukan seberapa banyak energi bisa dipanen per kWp panel. Nilai PSH untuk wilayah Jambi adalah 3,75 jam per hari — salah satu alasan Jambi dan Sumatera umumnya cocok untuk investasi PLTS.",
+      "Jumlah jam per hari ketika iradiasi matahari setara dengan kondisi puncak (1.000 W/m²). PSH menentukan seberapa banyak energi bisa dipanen per kWp panel. Parameter desain yang kami gunakan untuk wilayah Jambi adalah 3,75 jam per hari — salah satu alasan Jambi dan Sumatera umumnya cocok untuk investasi PLTS.",
     related: [
       { label: "Artikel: Potensi Energi Surya Jambi", href: "/artikel/potensi-energi-surya-jambi" },
       { label: "Artikel: Berapa Produksi 1 kWp?", href: "/artikel/berapa-produksi-1-kwp-panel-surya" },
@@ -262,7 +262,7 @@ export const glossaryTerms: GlossaryTerm[] = [
     term: "ROI (Return on Investment)",
     category: "Biaya & Investasi",
     definition:
-      "Waktu balik modal investasi PLTS. Untuk paket rumah tangga 2,6–5,2 kWp, ROI realistis 8–9 tahun; untuk bisnis dan industri 7,15–20,8 kWp, ROI 5–7 tahun berkat skala ekonomi. Perhitungan sudah memperhitungkan kenaikan tarif PLN rata-rata 6% per tahun. Dalam 25 tahun umur panel, total keuntungan bersih bisa mencapai 5–7 kali investasi awal.",
+      "Waktu balik modal investasi PLTS. Dalam simulasi kami (model: min(produksi surya, pemakaian) × pemanfaatan energi × tarif, dengan skenario kenaikan tarif 6%/tahun — asumsi simulasi, bukan prediksi), paket rumah tangga 2,6–5,2 kWp mencapai balik modal sekitar 9–11 tahun pada profil campuran + baterai, dan paket bisnis/industri 7,15–20,8 kWp sekitar 8–9 tahun pada profil dominan siang berkat skala ekonomi. Selama masa garansi performa panel 25 tahun, total penghematan kumulatif dalam simulasi bisa mencapai beberapa kali lipat investasi awal — angka pastinya bergantung profil beban dan pemanfaatan energi. Hitung sendiri di Kalkulator PLTS.",
     related: [
       { label: "Kalkulator PLTS", href: "/kalkulator-plts" },
       { label: "FAQ: berapa lama balik modal?", href: "/faq" },

@@ -84,9 +84,10 @@ export default function IstilahPltsPage() {
           {/* Catatan E-E-A-T */}
           <p className="mt-6 text-xs text-muted-foreground flex items-center gap-2">
             <BookMarked className="w-3.5 h-3.5 text-solar flex-shrink-0" />
-            Definisi disusun oleh Tim Teknis Jambi Solar Panel berdasarkan data
-            sistem nyata yang dipasang di wilayah Jambi — PSH 3,75 jam, efisiensi
-            sistem 80%, dan spesifikasi paket yang tercantum di halaman harga.
+            Definisi disusun oleh Tim Teknis Jambi Solar Panel berdasarkan
+            parameter desain internal kami untuk wilayah Jambi — PSH 3,75 jam,
+            efisiensi sistem 80%, dan spesifikasi paket yang tercantum di
+            halaman harga.
           </p>
         </div>
       </section>

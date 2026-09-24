@@ -232,9 +232,11 @@ export default function HargaPanelSuryaPage() {
 
           <p className="text-xs text-muted-foreground leading-relaxed">
             *Estimasi penghematan per bulan dihitung dari produksi harian sistem
-            (PSH Jambi 3,75 jam × efisiensi 80%) dikalikan 30 hari dan tarif listrik
-            PLN acuan Rp1.352–1.444,70/kWh (golongan R-1). Estimasi aktual bergantung
-            pada profil pemakaian Anda. Gunakan{" "}
+            (parameter desain internal: PSH Jambi 3,75 jam × efisiensi 80%)
+            dikalikan 30 hari, asumsi pemanfaatan energi 80% (profil campuran +
+            baterai), dan rentang tarif listrik PLN Rp1.352–1.444,70/kWh
+            (golongan R-1). Penghematan aktual = min(produksi surya, pemakaian
+            Anda) × pemanfaatan × tarif. Gunakan{" "}
             <Link href="/#kalkulator" className="text-solar font-semibold hover:underline underline-offset-2">
               kalkulator penghematan kami
             </Link>{" "}

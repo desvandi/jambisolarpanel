@@ -7,6 +7,8 @@ export const article: Article = {
     "Produksi 1 kWp panel surya di Jambi sekitar 3 kWh per hari. Pelajari konsep Peak Sun Hours, faktor cuaca, orientasi panel, dan cara memonitor produksi.",
   category: "Panduan Teknis",
   date: "2026-09-23",
+  // 2026-09-24: label asumsi skenario tarif + pemanfaatan energi (audit Round 8).
+  updated: "2026-09-24",
   readingMinutes: 7,
   keyTakeaways: [
     "Di Jambi, 1 kWp panel surya menghasilkan rata-rata ±3 kWh per hari: 3,75 Peak Sun Hours × efisiensi sistem 80%.",
@@ -33,7 +35,7 @@ export const article: Article = {
     { type: "h2", text: "Apa Itu Peak Sun Hours (PSH)?" },
     {
       type: "p",
-      text: "PSH bukan lamanya siang dari matahari terbit hingga terbenam. PSH adalah jumlah jam ketika iradiasi matahari mencapai intensitas penuh 1.000 W per meter persegi — standar pengujian yang dipakai pabrikan panel. Intensitas matahari di pagi dan sore hari jauh lebih rendah dari siang bolong, dan awan memotongnya lagi, sehingga 12 jam siang hanya setara beberapa jam sinar penuh. Untuk Jambi, nilai rata-ratanya 3,75 PSH per hari — angka yang konsisten kami pakai dalam kalkulasi kapasitas sistem.",
+      text: "PSH bukan lamanya siang dari matahari terbit hingga terbenam. PSH adalah jumlah jam ketika iradiasi matahari mencapai intensitas penuh 1.000 W per meter persegi — standar pengujian yang dipakai pabrikan panel. Intensitas matahari di pagi dan sore hari jauh lebih rendah dari siang bolong, dan awan memotongnya lagi, sehingga 12 jam siang hanya setara beberapa jam sinar penuh. Untuk Jambi, angka acuan desain kami adalah 3,75 PSH per hari — dipakai konsisten dalam kalkulasi kapasitas sistem.",
     },
     { type: "h2", text: "Faktor-Faktor yang Memengaruhi Produksi" },
     { type: "h3", text: "Cuaca dan musim" },

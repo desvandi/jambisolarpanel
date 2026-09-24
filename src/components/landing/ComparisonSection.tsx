@@ -14,7 +14,7 @@ const comparisons = [
   },
   {
     category: "Kenaikan Tarif",
-    pln: { icon: Plug, text: "Riwayat kenaikan rata-rata ±6% per tahun", value: "±6%/thn", color: "text-red-500" },
+    pln: { icon: Plug, text: "Tarif non-subsidi bisa naik dari waktu ke waktu — simulasi kami memakai asumsi 6%/tahun", value: "±6%/thn*", color: "text-red-500" },
     solar: { icon: Zap, text: "Tidak terpengaruh tarif PLN", value: "0%", color: "text-solar" },
   },
   {
@@ -30,7 +30,7 @@ const comparisons = [
   {
     category: "Masa Pakai Sistem",
     pln: { icon: Plug, text: "Terikat berlangganan tanpa batas", value: "Selamanya bayar", color: "text-red-500" },
-    solar: { icon: Battery, text: "25+ tahun masa pakai panel", value: "25+ tahun gratis", color: "text-solar" },
+    solar: { icon: Battery, text: "Panel bergaransi performa hingga 25 tahun; inverter & baterai punya masa garansi berbeda dan mungkin perlu penggantian", value: "Garansi 25 thn", color: "text-solar" },
   },
   {
     category: "Dampak Lingkungan",
@@ -132,8 +132,11 @@ export function ComparisonSection() {
         <div
           className="text-center mt-12"
         >
-          <p className="text-sm text-muted-foreground mb-2">
-            *Setelah masa ROI tercapai (estimasi 5-8 tahun, tergantung kapasitas sistem)
+          <p className="text-sm text-muted-foreground mb-2 leading-relaxed">
+            *Setelah masa balik modal (simulasi ± 9–11 tahun rumah tangga / 8–9
+            tahun bisnis, tergantung profil beban). Angka 6%/tahun adalah asumsi
+            skenario simulasi — bukan rata-rata historis PLN. Biaya maintenance
+            PLTS tetap ada setelah ROI.
           </p>
           <a
             href={WA_LINK}

@@ -16,7 +16,7 @@ const solutions = [
     icon: Home,
     subBrand: "Jambi Solar Home",
     title: "Panel Surya untuk Rumah",
-    description: "Kurangi tagihan listrik & tetap nyala saat PLN padam dengan sistem hybrid + baterai. Investasi sekali, manfaat 25+ tahun. Cocok untuk rumah, villa, guest house.",
+    description: "Kurangi tagihan listrik & tetap nyala saat PLN padam dengan sistem hybrid + baterai. Investasi sekali — panel bergaransi performa hingga 25 tahun. Cocok untuk rumah, villa, guest house.",
     href: "/solar-home",
     color: "bg-solar",
   },

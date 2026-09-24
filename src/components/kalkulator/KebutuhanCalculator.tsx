@@ -30,6 +30,7 @@ import {
   PLN_TARIFF_DEFAULT,
 } from "@/lib/pricing";
 import type { CalculatedPackage } from "@/lib/pricing";
+import { DESIGN_PARAMS } from "@/lib/methodology";
 
 /**
  * Kalkulator kebutuhan daya — dari daftar perangkat listrik.
@@ -40,8 +41,8 @@ import type { CalculatedPackage } from "@/lib/pricing";
  * — bukan angka karangan. Rentang watt = rentang pada tabel artikel.
  */
 
-const PSH_JAMBI = 3.75;
-const EFISIENSI = 0.8;
+const PSH_JAMBI = DESIGN_PARAMS.pshJambi;
+const EFISIENSI = DESIGN_PARAMS.systemEfficiency;
 
 interface ApplianceSpec {
   id: string;

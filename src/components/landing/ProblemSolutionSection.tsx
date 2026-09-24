@@ -24,9 +24,9 @@ const painPoints = [
   {
     icon: Receipt,
     problem: "Tagihan Listrik Semakin Mahal",
-    desc: "Tarif PLN naik rata-rata 6% setiap tahun. Tagihan bulanan yang semakin membengkak menggerus keuntungan bisnis dan pengeluaran rumah tangga Anda.",
+    desc: "Tarif listrik non-subsidi berpotensi naik dari waktu ke waktu (simulasi kami memakai asumsi 6%/tahun). Tagihan yang membengkak menggerus keuntungan bisnis dan pengeluaran rumah tangga Anda.",
     solution:
-      "Panel surya menghasilkan listrik dari matahari dan memangkas ketergantungan pada tarif PLN yang terus naik. Besaran penghematan tergantung kapasitas sistem dan profil pemakaian — ROI rumah tangga umumnya 8-9 tahun, bisnis 5-7 tahun, lalu listrik hampir gratis selama 25+ tahun. Hitung simulasi Anda di kalkulator kami.",
+      "Panel surya menghasilkan listrik dari matahari dan memangkas ketergantungan pada tarif PLN. Besaran penghematan tergantung kapasitas sistem, profil pemakaian, dan pemanfaatan energi — simulasi ROI rumah tangga ± 9–11 tahun, bisnis ± 8–9 tahun, lalu panel terus memproduksi listrik hingga akhir masa garansi performa 25 tahun (komponen lain seperti inverter/baterai mungkin perlu penggantian). Hitung simulasi Anda di kalkulator kami.",
     cta: "Hitung Penghematan Saya",
     ctaWa: "Halo PT. Jaya Mandiri Smart Energy, saya ingin menghitung potensi penghematan tagihan listrik dengan panel surya",
   },
@@ -53,7 +53,7 @@ const painPoints = [
     problem: "Pompa Air Listrik Mahal",
     desc: "Biaya operasional pompa air menggunakan listrik PLN atau genset sangat tinggi — bisa Rp 2-8 juta per bulan. Untuk irigasi kebun sawit skala besar, ini beban yang tidak efisien.",
     solution:
-      "Solar water pump menggerakkan pompa submersible langsung dari energi matahari — biaya operasional Rp 0. Balik modal dalam 2-4 tahun, lalu air gratis selama 20+ tahun.",
+      "Solar water pump menggerakkan pompa submersible langsung dari energi matahari — biaya operasional jauh lebih rendah dari genset. Simulasi balik modal umumnya 2–4 tahun, lalu pompa terus mengalirkan air dari matahari.",
     cta: "Hitung Kebutuhan Pompa Saya",
     ctaWa: "Halo PT. Jaya Mandiri Smart Energy, saya ingin konsultasi solar water pump untuk irigasi kebun saya",
   },

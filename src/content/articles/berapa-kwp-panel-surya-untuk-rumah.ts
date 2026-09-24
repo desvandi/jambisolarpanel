@@ -7,6 +7,8 @@ export const article: Article = {
     "Cara menghitung kebutuhan kWp panel surya untuk rumah: audit beban perangkat, rumus konversi kWh ke kWp, dan padanannya dengan paket PLTS yang tersedia.",
   category: "Panduan Teknis",
   date: "2026-09-23",
+  // 2026-09-24: label asumsi skenario tarif + pemanfaatan energi (audit Round 8).
+  updated: "2026-09-24",
   readingMinutes: 7,
   keyTakeaways: [
     "Kapasitas PLTS rumah ditentukan oleh konsumsi listrik harian (kWh), bukan oleh luas atap atau daya langganan semata.",
@@ -22,7 +24,7 @@ export const article: Article = {
     { type: "h2", text: "Beda kWp dan kWh: Pahami Dulu Ini" },
     {
       type: "p",
-      text: "kWp (kilowatt-peak) adalah kapasitas puncak pembangkit — jumlah panel yang Anda pasang. kWh (kilowatt-hour) adalah energi yang benar-benar dihasilkan atau terpakai. Di Jambi, Peak Sun Hours rata-rata 3,75 jam per hari dan efisiensi sistem sekitar 80%, sehingga tiap 1 kWp panel menghasilkan kira-kira 3 kWh per hari (3,75 × 0,8 ≈ 3). Dengan panel 650 Wp per unit: 2 panel = 1,3 kWp ≈ 3,9 kWh/hari, sedangkan 8 panel = 5,2 kWp ≈ 15,6 kWh/hari.",
+      text: "kWp (kilowatt-peak) adalah kapasitas puncak pembangkit — jumlah panel yang Anda pasang. kWh (kilowatt-hour) adalah energi yang benar-benar dihasilkan atau terpakai. Acuan desain kami untuk Jambi memakai Peak Sun Hours 3,75 jam per hari dan efisiensi sistem sekitar 80%, sehingga tiap 1 kWp panel menghasilkan kira-kira 3 kWh per hari (3,75 × 0,8 ≈ 3). Dengan panel 650 Wp per unit: 2 panel = 1,3 kWp ≈ 3,9 kWh/hari, sedangkan 8 panel = 5,2 kWp ≈ 15,6 kWh/hari.",
     },
     { type: "h2", text: "Langkah 1: Audit Beban — Daftar Semua Perangkat" },
     {

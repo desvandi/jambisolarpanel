@@ -11,6 +11,8 @@
    - Mengubah data perbandingan Beli vs Sewa
    ============================================================ */
 
+import { DESIGN_PARAMS } from "./methodology";
+
 /** Nomor WhatsApp tujuan (CS Jambi Solar Panel). */
 export const RENTAL_WA_NUMBER = "6281328190707";
 
@@ -36,10 +38,10 @@ export const rentalProgramConfig = {
   systemType: "PLTS Hybrid Off-Grid",
   /** Kontrak minimum (bulan). */
   minContractMonths: 12,
-  /** PSH Jambi (jam/hari). */
-  pshHours: 3.75,
+  /** PSH Jambi (jam/hari) — parameter desain internal dari methodology.ts. */
+  pshHours: DESIGN_PARAMS.pshJambi,
   /** Efisiensi sistem. */
-  systemEfficiency: 0.8,
+  systemEfficiency: DESIGN_PARAMS.systemEfficiency,
   /**
    * Konfigurasi cicilan biaya instalasi.
    *
@@ -867,7 +869,7 @@ export const rentalHero = {
   ],
   /** Catatan kaki untuk stat ber-tanda * — kejujuran klaim (audit SEO). */
   statsNote:
-    "*Estimasi simulasi dengan asumsi desain standar (PSH Jambi 3,75 jam, efisiensi 80%, tarif R-1 non-subsidi) — hasil aktual bergantung profil beban, arah atap, dan cuaca. Detail metodologi ada di bagian FAQ & kalkulator sewa di bawah.",
+    "*Kisaran skenario berdasarkan profil beban (asumsi pemanfaatan energi 50–90% — bukan hasil pengukuran), dengan parameter desain internal: PSH Jambi 3,75 jam, efisiensi 80%, tarif R-1 non-subsidi. Hasil aktual bergantung profil beban, arah atap, dan cuaca. Detail metodologi ada di bagian FAQ & kalkulator sewa di bawah.",
 } as const;
 
 /** Konfigurasi kalkulator sewa. */
@@ -949,8 +951,12 @@ export function getCheapestRentalPackage(): RentalPackage | undefined {
 export interface PackageSavingsResult {
   pkg: RentalPackage;
   monthlyProduction: number;
-  /** Persentase pemakaian user yang dipasok oleh surya (0-100). */
+  /** Persentase pemakaian user yang dapat dipasok produksi surya (0-100, metrik sizing). */
   coveragePercent: number;
+  /** Energi surya yang benar-benar terpakai per bulan (kWh) setelah pemanfaatan. */
+  solarUtilizedKwh: number;
+  /** Tingkat pemanfaatan energi yang dipakai dalam perhitungan (0-1). */
+  utilizationRate: number;
   /** Pengurangan tagihan PLN (Rupiah/bulan). */
   plnSaving: number;
   /** Sisa tagihan PLN setelah dipasok surya (Rupiah/bulan). */
@@ -968,30 +974,41 @@ export interface PackageSavingsResult {
 /**
  * Hitung savings untuk sebuah paket berdasarkan pemakaian listrik user.
  *
+ * Model (audit Round 8 — konsisten dengan pricing.ts):
+ *   penghematan = min(produksi surya, pemakaian PLN)
+ *                 × tingkat pemanfaatan energi × tarif
+ * Tingkat pemanfaatan default 80% (profil campuran + baterai — sistem sewa
+ * selalu termasuk baterai). Lihat src/lib/methodology.ts.
+ *
  * Asumsi:
  *   - Tarif PLN default dari rentalCalculatorConfig.plnTariffPerKwh
- *   - Produksi surya menutupi pemakaian PLN (tidak ada ekspor)
- *   - Jika produksi > pemakaian, kelebihan disimpan di baterai (coverage max 100%)
+ *   - Tidak ada kompensasi ekspor: produksi tidak bisa meng-offset
+ *     lebih dari pemakaian
  *
  * @param pkg - Paket sewa
  * @param monthlyKwh - Pemakaian listrik user (kWh/bulan)
  * @param monthlyBudget - Budget sewa user (Rupiah/bulan)
  * @param plnTariffPerKwh - Tarif PLN (Rupiah/kWh), default dari config
+ * @param selfConsumption - Tingkat pemanfaatan energi (0-1), default 0,8
  */
 export function computePackageSavings(
   pkg: RentalPackage,
   monthlyKwh: number,
   monthlyBudget: number,
-  plnTariffPerKwh: number = rentalCalculatorConfig.plnTariffPerKwh
+  plnTariffPerKwh: number = rentalCalculatorConfig.plnTariffPerKwh,
+  selfConsumption: number = DESIGN_PARAMS.selfConsumptionDefault
 ): PackageSavingsResult {
   const monthlyProduction = estimateMonthlyProduction(pkg.kWp);
-  // kWh yang dipasok surya (tidak bisa lebih dari pemakaian)
+  // kWh yang bisa dipasok surya (tidak bisa lebih dari pemakaian — tanpa ekspor)
   const solarCoveredKwh = Math.min(monthlyProduction, monthlyKwh);
+  // Metrik sizing: seberapa besar produksi menutupi pemakaian
   const coveragePercent = monthlyKwh > 0 ? Math.round((solarCoveredKwh / monthlyKwh) * 100) : 0;
+  // Energi yang BENAR-BENAR terpakai setelah faktor pemanfaatan (profil beban)
+  const solarUtilizedKwh = solarCoveredKwh * selfConsumption;
 
   const plnCostBefore = monthlyKwh * plnTariffPerKwh;
-  const plnSaving = solarCoveredKwh * plnTariffPerKwh;
-  const plnRemaining = Math.max(monthlyKwh - solarCoveredKwh, 0) * plnTariffPerKwh;
+  const plnSaving = solarUtilizedKwh * plnTariffPerKwh;
+  const plnRemaining = Math.max(monthlyKwh * plnTariffPerKwh - plnSaving, 0);
   const totalOutflow = plnRemaining + pkg.monthlyPrice;
   const netSaving = plnCostBefore - totalOutflow;
   const affordable = pkg.monthlyPrice <= monthlyBudget;
@@ -1012,6 +1029,8 @@ export function computePackageSavings(
     pkg,
     monthlyProduction,
     coveragePercent,
+    solarUtilizedKwh,
+    utilizationRate: selfConsumption,
     plnSaving,
     plnRemaining,
     totalOutflow,

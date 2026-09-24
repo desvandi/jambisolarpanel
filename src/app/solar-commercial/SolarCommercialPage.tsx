@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { MethodologyNote } from "@/components/landing/MethodologyNote";
+import { DESIGN_PARAMS } from "@/lib/methodology";
 import {
   calculatePackages,
   formatRp,
@@ -13,8 +14,8 @@ import { MessageCircle, Battery, Zap, Shield, TrendingUp, Car, Monitor, BarChart
 const benefits = [
   {
     icon: TrendingUp,
-    title: "ROI ± 5–7 Tahun (simulasi)",
-    desc: "Estimasi simulasi untuk paket bisnis — lebih cepat dari rumah tangga karena skala ekonomi; lihat panel metodologi",
+    title: "ROI ± 8–9 Tahun (simulasi)",
+    desc: "Simulasi profil dominan siang (khas bisnis) dengan skenario kenaikan tarif 6%/tahun — lebih cepat dari rumah tangga; lihat panel metodologi",
   },
   { icon: Zap, title: "Efisiensi Operasional", desc: "Kurangi biaya energi tetap per bulan, tingkatkan profit margin" },
   { icon: Car, title: "Carport Solar", desc: "Tambahkan kanopi carport solar sebagai nilai tambah properti bisnis Anda" },
@@ -148,13 +149,13 @@ export default function SolarCommercialPage() {
               {(() => {
                 const pkg = calculatePackages().find(p => p.name === "Gold 10 kWp");
                 if (!pkg) return null;
-                const dailyKwh = pkg.kWp * 3.75 * 0.8;
+                const dailyKwh = pkg.kWp * DESIGN_PARAMS.kWhPerKwpPerDay;
                 const roi = calculateROI(pkg.price, dailyKwh);
                 return [
                   { label: "Produksi Harian", value: `${dailyKwh.toFixed(1)} kWh` },
                   { label: "Hemat/Bulan", value: pkg.savingsRange },
-                  { label: "ROI", value: `~${roi.roiYearsWithIncrease} tahun` },
-                  { label: "Return 25thn", value: `${roi.returnMultiplier}x` },
+                  { label: "ROI (skenario 6%)", value: `~${roi.roiYearsWithIncrease} tahun` },
+                  { label: "Hemat 25thn", value: `${roi.returnMultiplier}x investasi` },
                 ].map(item => (
                   <div key={item.label} className="p-3 rounded-xl bg-solar/5 border border-solar/10">
                     <p className="text-xs text-muted-foreground mb-1">{item.label}</p>
@@ -201,7 +202,7 @@ export default function SolarCommercialPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {packages.filter(p => p.tier === "gold").map(pkg => {
-                const dailyKwh = pkg.kWp * 3.75 * 0.8;
+                const dailyKwh = pkg.kWp * DESIGN_PARAMS.kWhPerKwpPerDay;
                 const roi = calculateROI(pkg.price, dailyKwh);
                 return (
                   <div key={pkg.name} className={`relative p-6 rounded-2xl border transition-all hover:shadow-xl hover:-translate-y-1 ${pkg.popular ? "bg-gradient-to-br from-amber-500 to-amber-600 text-white border-amber-500 shadow-lg shadow-amber-500/20" : "bg-card border-border hover:border-amber-500/30"}`}>
@@ -215,7 +216,7 @@ export default function SolarCommercialPage() {
                       <p className={`text-sm font-bold ${pkg.popular ? "text-gold-light" : "text-solar"}`}>Hemat: {pkg.savingsRange}</p>
                       <div className={`flex items-center justify-between mt-2 pt-2 border-t ${pkg.popular ? "border-white/10" : "border-solar/10"}`}>
                         <span className={`text-xs ${pkg.popular ? "text-white/60" : "text-muted-foreground"}`}>ROI ~{roi.roiYearsWithIncrease} thn</span>
-                        <span className={`text-xs font-semibold ${pkg.popular ? "text-gold-light" : "text-gold"}`}>Return 25thn {roi.returnMultiplier}x</span>
+                        <span className={`text-xs font-semibold ${pkg.popular ? "text-gold-light" : "text-gold"}`}>Hemat 25thn {roi.returnMultiplier}x</span>
                       </div>
                     </div>
                     <p className={`text-lg font-extrabold mb-1 ${pkg.popular ? "text-white" : "text-navy dark:text-white"}`}>{pkg.priceFormatted}</p>
@@ -243,7 +244,7 @@ export default function SolarCommercialPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {packages.filter(p => p.tier === "platinum").map(pkg => {
-                const dailyKwh = pkg.kWp * 3.75 * 0.8;
+                const dailyKwh = pkg.kWp * DESIGN_PARAMS.kWhPerKwpPerDay;
                 const roi = calculateROI(pkg.price, dailyKwh);
                 return (
                   <div key={pkg.name} className={`relative p-6 rounded-2xl border transition-all hover:shadow-xl hover:-translate-y-1 ${pkg.popular ? "bg-gradient-to-br from-slate-600 to-slate-700 text-white border-slate-600 shadow-lg shadow-slate-600/20" : "bg-card border-border hover:border-slate-500/30"}`}>
@@ -257,7 +258,7 @@ export default function SolarCommercialPage() {
                       <p className={`text-sm font-bold ${pkg.popular ? "text-gold-light" : "text-solar"}`}>Hemat: {pkg.savingsRange}</p>
                       <div className={`flex items-center justify-between mt-2 pt-2 border-t ${pkg.popular ? "border-white/10" : "border-solar/10"}`}>
                         <span className={`text-xs ${pkg.popular ? "text-white/60" : "text-muted-foreground"}`}>ROI ~{roi.roiYearsWithIncrease} thn</span>
-                        <span className={`text-xs font-semibold ${pkg.popular ? "text-gold-light" : "text-gold"}`}>Return 25thn {roi.returnMultiplier}x</span>
+                        <span className={`text-xs font-semibold ${pkg.popular ? "text-gold-light" : "text-gold"}`}>Hemat 25thn {roi.returnMultiplier}x</span>
                       </div>
                     </div>
                     <p className={`text-lg font-extrabold mb-1 ${pkg.popular ? "text-white" : "text-navy dark:text-white"}`}>{pkg.priceFormatted}</p>
@@ -270,6 +271,13 @@ export default function SolarCommercialPage() {
                 );
               })}
             </div>
+            <p className="mt-6 text-xs text-muted-foreground text-center leading-relaxed max-w-2xl mx-auto">
+              ROI &amp; kelipatan hemat dihitung dengan asumsi pemanfaatan energi 80%
+              (profil campuran + baterai; beban bisnis siang hari bisa lebih tinggi)
+              dan skenario kenaikan tarif 6%/tahun — asumsi simulasi, bukan
+              prediksi. Hitung profil Anda di{" "}
+              <a href="/kalkulator-plts" className="text-solar font-semibold hover:underline underline-offset-2">kalkulator PLTS</a>.
+            </p>
           </div>
         </div>
       </section>

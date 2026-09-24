@@ -100,7 +100,7 @@ export const caseStudies: CaseStudy[] = [
     ],
     metodeData: [
       "Angka tagihan sebelum/sesudah adalah data yang dilaporkan pemilik villa dari tagihan PLN mereka — bukan hasil pembacaan meter oleh tim kami.",
-      "Estimasi produksi (± 15 kWh/hari) adalah perhitungan desain dengan parameter standar situs: 5 kWp × PSH Jambi 3,75 × efisiensi 80%.",
+      "Estimasi produksi (± 15 kWh/hari) adalah perhitungan desain dengan parameter desain internal kami: 5 kWp × PSH Jambi 3,75 × efisiensi 80%.",
       "Angka penghematan aktual per bulan dapat berbeda mengikuti cuaca, okupansi villa, dan pola penggunaan pompa.",
     ],
     estimasiProduksiHarian: "± 15 kWh/hari (estimasi desain: 5 kWp × 3,75 PSH × 80% efisiensi)",

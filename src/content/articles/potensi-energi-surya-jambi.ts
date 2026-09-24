@@ -4,13 +4,15 @@ export const article: Article = {
   slug: "potensi-energi-surya-jambi",
   title: "Potensi Energi Surya di Jambi: Mengapa Jambi Cocok untuk PLTS",
   description:
-    "Potensi energi surya di Jambi sangat menjanjikan: PSH 3,75 jam per hari dan iradiasi stabil sepanjang tahun. Pelajari mengapa Jambi ideal untuk PLTS.",
+    "Potensi energi surya di Jambi sangat menjanjikan: parameter desain kami memakai PSH 3,75 jam per hari dengan iradiasi stabil sepanjang tahun. Pelajari mengapa Jambi ideal untuk PLTS.",
   category: "Energi Surya Jambi",
   date: "2026-09-23",
+  // 2026-09-24: label asumsi skenario tarif + pemanfaatan energi (audit Round 8).
+  updated: "2026-09-24",
   readingMinutes: 7,
   keyTakeaways: [
     "Jambi berada dekat garis khatulistiwa sehingga iradiasi mataharinya tinggi dan relatif stabil sepanjang tahun.",
-    "Peak Sun Hours (PSH) Jambi rata-rata 3,75 jam per hari — dengan efisiensi sistem sekitar 80%, setiap 1 kWp menghasilkan sekitar 3 kWh listrik per hari.",
+    "Peak Sun Hours (PSH) — acuan desain kami untuk Jambi: 3,75 jam per hari; dengan efisiensi sistem sekitar 80%, setiap 1 kWp menghasilkan sekitar 3 kWh listrik per hari.",
     "Wilayah perkebunan seperti Muaro Jambi, Batanghari, Sarolangun, Tebo, dan Bungo banyak yang belum terjangkau jaringan PLN, sehingga PLTS off-grid sangat relevan.",
     "Musim hujan menurunkan produksi sementara, tetapi desain baterai dan sistem hybrid menjaga pasokan listrik tetap andal.",
   ],
@@ -27,7 +29,7 @@ export const article: Article = {
     {
       type: "ul",
       items: [
-        "PSH (Peak Sun Hours) Jambi rata-rata 3,75 jam per hari — setara dengan standar perencanaan PLTS di banyak kawasan tropis.",
+        "PSH (Peak Sun Hours) — acuan desain kami untuk Jambi 3,75 jam per hari, setara dengan standar perencanaan PLTS di banyak kawasan tropis.",
         "Durasi siang yang stabil membuat pola produksi harian mudah diprediksi saat desain sistem.",
         "Suhu udara yang konsisten sepanjang tahun memudahkan estimasi derating panel sejak tahap perencanaan.",
         "Iradiasi tersebar merata di seluruh kabupaten, bukan terkonsentrasi di satu wilayah saja.",
@@ -36,7 +38,7 @@ export const article: Article = {
     { type: "h2", text: "Berapa Listrik yang Dihasilkan 1 kWp di Jambi?" },
     {
       type: "p",
-      text: "Perhitungan praktisnya sederhana. PSH 3,75 jam dikalikan efisiensi sistem sekitar 80% — sudah memperhitungkan rugi-rugi pada kabel, inverter, dan pengaruh suhu panel — menghasilkan sekitar 3 kWh per hari untuk setiap 1 kWp kapasitas terpasang. Dengan panel monokristalin 650Wp, satu unit panel saja menghasilkan hampir 2 kWh per hari. Tabel berikut memberikan gambaran kapasitas terhadap produksi:",
+      text: "Perhitungan praktisnya sederhana. Parameter desain kami memakai PSH 3,75 jam dikalikan efisiensi sistem sekitar 80% — sudah memperhitungkan rugi-rugi pada kabel, inverter, dan pengaruh suhu panel — menghasilkan sekitar 3 kWh per hari untuk setiap 1 kWp kapasitas terpasang. Dengan panel monokristalin 650Wp, satu unit panel saja menghasilkan hampir 2 kWh per hari. Tabel berikut memberikan gambaran kapasitas terhadap produksi:",
     },
     {
       type: "table",

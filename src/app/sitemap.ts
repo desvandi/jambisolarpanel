@@ -40,7 +40,8 @@ const LAST_MODIFIED = {
   tentangKami: "2026-09-24",
   // 2026-09-24: studi kasus diperdalam (spesifikasi, metode data, batasan).
   proyek: "2026-09-24",
-  hargaPanelSurya: "2026-09-23",
+  // 2026-09-24 (R8): footnote estimasi hemat memakai model pemanfaatan energi.
+  hargaPanelSurya: "2026-09-24",
   artikelIndex: "2026-09-23",
   // 2026-09-24: jawaban ROI & performa hujan ditulis ulang (metodologi).
   faq: "2026-09-24",

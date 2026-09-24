@@ -68,7 +68,7 @@ export default function PJUTSPage() {
               },
               {
                 problem: "Biaya tarik kabel PLN ke lokasi terpencil sangat mahal",
-                solution: "PJUTS tidak membutuhkan koneksi PLN sama sekali. Biaya sekali pasang, listrik gratis selama 25+ tahun dari matahari.",
+                solution: "PJUTS tidak membutuhkan koneksi PLN sama sekali. Biaya sekali pasang — panel menghasilkan listrik dari matahari dengan garansi performa hingga 25 tahun.",
                 icon: "🔌",
               },
               {
