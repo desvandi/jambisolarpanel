@@ -353,3 +353,29 @@ Stage Summary:
 - Yang TIDAK dikerjakan dev (sesuai directive auditor "jangan tambah fitur SEO sebelum evidence/indexing/consistency/measurement kuat"): author identity framework, legal/cert evidence layer, testimonial evidence, security headers (CSP/CORS), distributed rate limiting, artikel baru
 - Prioritas berikutnya: owner-side (GSC verify + sitemap + GBP + bukti proyek), lalu Audit 2 (on-page) setelah Audit 1 ditutup auditor
 - Commit: 92bfded (HEAD, pushed, Vercel READY & terverifikasi)
+
+---
+Task ID: 33
+Agent: main (Z.ai Code)
+Task: Audit 1 re-check verdict CONDITIONAL PASS — tutup P1 residual konsistensi kWp (content sweep seluruh content graph)
+
+Work Log:
+- Auditor re-check Audit 1 (baseline 2efe97c): P2-1 robots CLOSED, WARRANTY_CONFIG ACCEPTED, 13+ CLOSED, LocalBusiness CLOSED, sitemap lastmod ACCEPTED, framer-motion CLOSED, P1-1 GitHub→Vercel strong evidence (production belum bisa di-verify auditor — koneksi Vercel auditor tidak melihat project), P1-2 GSC tetap owner-side OPEN
+- SATU BLOCKER tersisa: residual "5 kWp"/"10 kWp" yang merujuk studi kasus Villa/Sawit di 6 lokasi (metadata, SocialProof, 4 artikel)
+- Verifikasi data kanonik caseStudies.ts: villa 5,2 kWp (8×650 Wp), sawit 10,4 kWp (16×650 Wp), estimasi 15,6/31,2 kWh/hari
+- Sweep residual #1 /proyek metadata: description "villa Jambi 5,2 kWp hybrid, kebun sawit Riau 10,4 kWp off-grid" (sumber snippet pencarian)
+- Sweep residual #2 SocialProofSection: tag Hendra "5,2 kWp Hybrid", tag Darmawan "10,4 kWp Off-Grid", desc portofolio villa "±5,2 kWp" + sawit "±10,4 kWp"; KANTOR DESA Lampung "5 kWp" SENGAJA dipertahankan (proyek BERBEDA dari villa — testimoni Bapak Agus, bukan Hendra) + komentar pencegah kebingungan audit berikutnya
+- Sweep residual #3-6 artikel: potensi-energi-surya-jambi (narasi kini selaras tabelnya sendiri), plts-hybrid-vs-off-grid (narasi + 2 label tautan), plts-untuk-kebun-sawit (key takeaway + narasi + "10,4 kWp setara 16 panel" — matematis eksak + label), solar-pump-untuk-perkebunan (label tautan)
+- Sweep tambahan di luar temuan auditor: PANDUAN-SEO-OWNER.md template respond GBP "5,2 kWp" (kini cocok dengan nama Paket 5.2 kWp katalog)
+- YANG SENGAJA TIDAK DIUBAH (anti over-fix, sesuai instruksi auditor): slug /studi-kasus/villa-jambi-5-kwp-hybrid & kebun-sawit-riau-10-kwp-off-grid (stabilitas URL); label paket Silver 5 kWp/Gold 10 kWp (pricing.ts — nama katalog, bukan studi kasus); tier sewa 1-10 kWp; contoh rumus generik MethodologyNote/FAQ "sistem 10 kWp ±30 kWh" (ilustrasi matematika tanpa referensi studi kasus, paralel dengan contoh 3 kWp residensial)
+- Disiplin lastmod: bump home & proyek → 2026-09-25 + komentar (SAH: 92bfded mengubah caseStudies.ts pada 25 Sep 18:46 UTC — koreksi kapasitas = perubahan konten nyata utk 3 URL /studi-kasus/* juga; SocialProof & meta desc berubah hari ini); 4 artikel dapat field updated "2026-09-25" + komentar perubahan
+- QA: eslint 0, tsc src 0, agent-browser visual verify (DOM check: chip 5,2/10,4 kWp + Kantor Desa 5 kWp + 2 desc portofolio; artikel stale=0; screenshot tersimpan; console bersih), curl HTML lokal: / + /proyek + 4 artikel + sitemap.xml semua 0 stale
+- Catatan dev.log: /api/pricing 503 lokal = BY DESIGN (GOOGLE_SCRIPT_URL tidak diset di sandbox — fallback harga default; production Vercel terkonfigurasi) — bukan regresi
+- Commit 58a93c7 + push → Vercel deploy ~40 detik → verifikasi production LENGKAP: homepage 4 nilai baru live, 4 artikel new≥1/stale=0, sitemap 9 URL lastmod 2026-09-25, /proyek meta description baru live, 0 stale di seluruh route yang diperiksa
+
+Stage Summary:
+- AUDIT 1 ACCEPTANCE CRITERIA DEV-SIDE TERPENUHI: kapasitas studi kasus villa 5,2 kWp / sawit 10,4 kWp kini konsisten di visible content + metadata + related-card + artikel + SocialProof, slug lama dipertahankan
+- Commit chain: 2efe97c (baseline auditor) → 58a93c7 (HEAD, pushed, Vercel deployed & terverifikasi via curl production)
+- Bukti production utk auditor (reproducible): curl https://jambisolarpanel.vercel.app/proyek | grep "5,2 kWp" → meta description baru; curl /sitemap.xml | grep 2026-09-25 → 9 URL; server: Vercel
+- Sisa penutupan Audit 1 = OWNER-SIDE ONLY: (1) verify property GSC https://jambisolarpanel.vercel.app/ (token meta sudah live sejak b3c6418), (2) submit sitemap.xml, (3) URL Inspection 5 halaman prioritas
+- Next: Audit 2 (on-page) setelah auditor close Audit 1
