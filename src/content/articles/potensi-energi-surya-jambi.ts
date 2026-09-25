@@ -8,7 +8,10 @@ export const article: Article = {
   category: "Energi Surya Jambi",
   date: "2026-09-23",
   // 2026-09-24: label asumsi skenario tarif + pemanfaatan energi (audit Round 8).
-  updated: "2026-09-24",
+  // 2026-09-25: sweep konsistensi kapasitas studi kasus (audit ulang total) —
+  // villa 5 kWp → 5,2 kWp, sawit 10 kWp → 10,4 kWp (selaras caseStudies.ts
+  // dan tabel kapasitas di artikel ini).
+  updated: "2026-09-25",
   readingMinutes: 7,
   keyTakeaways: [
     "Jambi berada dekat garis khatulistiwa sehingga iradiasi mataharinya tinggi dan relatif stabil sepanjang tahun.",
@@ -99,7 +102,7 @@ export const article: Article = {
     },
     {
       type: "p",
-      text: "Salah satu contoh terdokumentasi: villa di Jambi dengan sistem hybrid 5 kWp yang menekan tagihan listriknya dari Rp 4 juta menjadi sekitar Rp 500 ribu per bulan. Di sektor perkebunan, kebun sawit di Riau yang semula membayar Rp 12 juta per bulan untuk genset kini memasok pompa air, CCTV, dan pondok secara mandiri dengan sistem off-grid 10 kWp.",
+      text: "Salah satu contoh terdokumentasi: villa di Jambi dengan sistem hybrid 5,2 kWp yang menekan tagihan listriknya dari Rp 4 juta menjadi sekitar Rp 500 ribu per bulan. Di sektor perkebunan, kebun sawit di Riau yang semula membayar Rp 12 juta per bulan untuk genset kini memasok pompa air, CCTV, dan pondok secara mandiri dengan sistem off-grid 10,4 kWp.",
     },
     {
       type: "cta",

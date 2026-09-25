@@ -23,7 +23,9 @@ import { caseStudies } from "@/content/caseStudies";
  */
 const LAST_MODIFIED = {
   // 2026-09-24: copy TrustSection (klaim legalitas) — perubahan konten nyata.
-  home: "2026-09-24",
+  // 2026-09-25: sinkronisasi kapasitas portofolio SocialProofSection dengan
+  // caseStudies.ts (villa 5,2 kWp, sawit 10,4 kWp) — audit ulang total.
+  home: "2026-09-25",
   // 2026-09-24: panel metodologi + penulisan ulang klaim penghematan/ROI.
   solarHome: "2026-09-24",
   solarCommercial: "2026-09-24",
@@ -54,7 +56,10 @@ const LAST_MODIFIED = {
   // 2026-09-24: blok verifikasi legalitas ditambahkan.
   tentangKami: "2026-09-24",
   // 2026-09-24: studi kasus diperdalam (spesifikasi, metode data, batasan).
-  proyek: "2026-09-24",
+  // 2026-09-25: koreksi kapasitas terpasang studi kasus (92bfded: villa 5,2
+  // kWp, sawit 10,4 kWp — berlaku juga utk 3 URL /studi-kasus/* yang memakai
+  // tanggal ini) + sinkronisasi meta description /proyek (sweep audit).
+  proyek: "2026-09-25",
   // 2026-09-24 (R8): footnote estimasi hemat memakai model pemanfaatan energi.
   hargaPanelSurya: "2026-09-24",
   artikelIndex: "2026-09-23",

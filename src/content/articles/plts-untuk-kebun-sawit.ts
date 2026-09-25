@@ -9,12 +9,15 @@ export const article: Article = {
   date: "2026-09-23",
   // 2026-09-24: klaim "energi gratis" pada tabel perbandingan dirapikan
   // (akurasi klaim audit R8 — energi surya tanpa biaya bahan bakar).
-  updated: "2026-09-24",
+  // 2026-09-25: sweep konsistensi kapasitas studi kasus (audit ulang total) —
+  // sawit 10 kWp → 10,4 kWp pada key takeaway, narasi, jumlah panel, dan
+  // label tautan studi kasus (selaras caseStudies.ts).
+  updated: "2026-09-25",
   readingMinutes: 8,
   keyTakeaways: [
     "Areal kebun sawit yang jauh dari jaringan PLN umumnya bergantung pada genset BBM — dengan biaya operasional yang terus berjalan setiap hari.",
     "PLTS off-grid memasok listrik di siang hari sekaligus menyimpan kelebihannya di baterai LiFePO4 untuk malam hari.",
-    "Studi kasus terdokumentasi: kebun sawit di Riau yang semula membayar Rp 12 juta per bulan untuk genset kini mandiri energi dengan sistem 10 kWp off-grid.",
+    "Studi kasus terdokumentasi: kebun sawit di Riau yang semula membayar Rp 12 juta per bulan untuk genset kini mandiri energi dengan sistem 10,4 kWp off-grid.",
     "Beban khas kebun — pompa air, CCTV, dan penerangan pondok — terpetakan jelas sehingga kapasitas sistem mudah dihitung.",
   ],
   blocks: [
@@ -47,7 +50,7 @@ export const article: Article = {
     },
     {
       type: "p",
-      text: "Sebagai gambaran nyata dari proyek yang terdokumentasi di situs kami: sebuah kebun sawit di Riau menghabiskan sekitar Rp 12 juta per bulan untuk operasional genset — sebelum beralih ke sistem PLTS off-grid 10 kWp yang kini memasok pompa air, CCTV, dan pondok kebun secara mandiri tanpa tagihan bulanan.",
+      text: "Sebagai gambaran nyata dari proyek yang terdokumentasi di situs kami: sebuah kebun sawit di Riau menghabiskan sekitar Rp 12 juta per bulan untuk operasional genset — sebelum beralih ke sistem PLTS off-grid 10,4 kWp yang kini memasok pompa air, CCTV, dan pondok kebun secara mandiri tanpa tagihan bulanan.",
     },
     { type: "h2", text: "Genset vs PLTS Off-Grid: Perbandingan Langsung" },
     {
@@ -71,7 +74,7 @@ export const article: Article = {
     {
       type: "ul",
       items: [
-        "Panel surya monokristalin 650Wp — dipasang dalam string untuk mencapai kapasitas target; 10 kWp setara sekitar 16 panel.",
+        "Panel surya monokristalin 650Wp — dipasang dalam string untuk mencapai kapasitas target; 10,4 kWp setara 16 panel.",
         "Inverter hybrid — mengubah arus DC menjadi AC sekaligus mengatur alur daya antara panel, baterai, dan beban.",
         "Baterai LiFePO4 48V 100Ah — modular 4,8 kWh per unit, disusun sesuai kebutuhan cadangan malam hari.",
         "Proteksi lengkap: MCB DC, SPD penahan surja petir, dan grounding — krusial untuk area terbuka di dalam kebun.",
@@ -115,7 +118,7 @@ export const article: Article = {
       intro: "Bacaan terkait:",
       items: [
         {
-          label: "Studi Kasus: Kebun Sawit Riau 10 kWp Off-Grid",
+          label: "Studi Kasus: Kebun Sawit Riau 10,4 kWp Off-Grid",
           href: "/studi-kasus/kebun-sawit-riau-10-kwp-off-grid",
           desc: "Dari tagihan genset Rp 12 juta per bulan menjadi listrik mandiri.",
         },

@@ -7,6 +7,9 @@ export const article: Article = {
     "Solar pump mengairi kebun sawit dan karet tanpa biaya BBM. Pelajari cara kerja pompa air tenaga surya, pilihan kapasitas 1–3 HP, dan tips memilihnya.",
   category: "Kebun & Perkebunan",
   date: "2026-09-23",
+  // 2026-09-25: sweep konsistensi kapasitas studi kasus (audit ulang total) —
+  // label tautan sawit 10 kWp → 10,4 kWp (selaras caseStudies.ts).
+  updated: "2026-09-25",
   readingMinutes: 7,
   keyTakeaways: [
     "Solar pump mengubah sinar matahari langsung menjadi daya pompa — tanpa BBM, tanpa tagihan, dan tanpa kabel PLN.",
@@ -127,7 +130,7 @@ export const article: Article = {
       intro: "Bacaan terkait:",
       items: [
         {
-          label: "Studi Kasus: Kebun Sawit Riau 10 kWp Off-Grid",
+          label: "Studi Kasus: Kebun Sawit Riau 10,4 kWp Off-Grid",
           href: "/studi-kasus/kebun-sawit-riau-10-kwp-off-grid",
           desc: "Sistem off-grid untuk pompa air, CCTV, dan pondok kebun.",
         },

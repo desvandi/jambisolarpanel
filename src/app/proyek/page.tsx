@@ -15,11 +15,15 @@ export const metadata: Metadata = buildMetadata({
   path: "/proyek",
   title: "Proyek & Studi Kasus PLTS Jambi | Jambi Solar Panel",
   description:
-    "Portofolio proyek instalasi PLTS oleh PT. Jaya Mandiri Smart Energy: villa Jambi 5 kWp hybrid, kebun sawit Riau 10 kWp off-grid, gudang Palembang 50 kWp hybrid, dan lainnya.",
+    "Portofolio proyek instalasi PLTS oleh PT. Jaya Mandiri Smart Energy: villa Jambi 5,2 kWp hybrid, kebun sawit Riau 10,4 kWp off-grid, gudang Palembang 50 kWp hybrid, dan lainnya.",
   ogImageAlt: "Portofolio proyek instalasi panel surya — Jambi Solar Panel",
 });
 
 /** Proyek lainnya — dirangkum dari testimoni pelanggan yang ada di situs. */
+// CATATAN KONSISTENSI (audit 2026-09-25): entri "Kantor Desa, Lampung 5 kWp"
+// adalah proyek BERBEDA dari studi kasus villa (testimoni Bapak Agus, bukan
+// Bapak Hendra) — kapasitas 5 kWp dipertahankan apa adanya. Kapasitas studi
+// kasus villa/sawit (5,2 / 10,4 kWp) mengikuti src/content/caseStudies.ts.
 const otherProjects = [
   {
     title: "Toko",

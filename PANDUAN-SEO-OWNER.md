@@ -165,7 +165,7 @@ calon pelanggan menelepon. Target: **3 ulasan bulan pertama → 10 di bulan ke-3
 
 ### Respond template (contoh, jangan copy persis)
 - Ulasan positif: ucapkan terima kasih + sebut layanan ("Terima kasih Pak Budi atas
-  kepercayaan memasang PLTS hybrid 5 kWp di rumah Bapak di Jambi…")
+  kepercayaan memasang PLTS hybrid 5,2 kWp di rumah Bapak di Jambi…")
 - Ulasan negatif: minta maaf + alihkan ke penyelesaian offline + balas setelah selesai.
 
 ---

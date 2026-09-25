@@ -9,6 +9,13 @@ import Link from "next/link";
  * Klaim angka agregat (rating/review count) sengaja tidak digunakan karena
  * tidak memiliki sumber terverifikasi. Testimoni adalah konten yang sudah
  * ada di situs; portofolio ditautkan ke studi kasus terperinci.
+ *
+ * KONSISTENSI KAPASITAS (audit 2026-09-25): kapasitas villa (Bapak Hendra)
+ * dan kebun sawit (Bapak Darmawan) HARUS mengikuti kapasitas terpasang di
+ * src/content/caseStudies.ts — 5,2 kWp (8 × 650 Wp) dan 10,4 kWp
+ * (16 × 650 Wp). Entri lain (Toko 3 kWp, Workshop 20 kWp, Cold Storage
+ * 50 kWp, Kantor Desa 5 kWp) adalah proyek BERBEDA dari testimoni
+ * masing-masing — BUKAN studi kasus, jangan ikut diubah.
  */
 const testimonials = [
   {
@@ -17,7 +24,8 @@ const testimonials = [
     role: "Pemilik Villa",
     text: "Sejak pasang panel surya dari Jambi Solar Panel, tagihan listrik villa saya turun drastis. Pemasangan rapi, tim profesional, dan respon cepat. Sangat recommended!",
     rating: 5,
-    system: "5 kWp Hybrid",
+    // Villa case study: kapasitas terpasang 5,2 kWp (caseStudies.ts)
+    system: "5,2 kWp Hybrid",
     beforeBill: "Rp 4 juta/bulan",
     afterBill: "Rp 500 rb/bulan",
     savings: "Hemat Rp 3.5jt/bulan",
@@ -41,7 +49,8 @@ const testimonials = [
     role: "Pemilik Kebun Sawit",
     text: "Kebun saya jauh dari PLN, selama ini pakai genset yang boros. Dengan sistem off-grid dari Jambi Solar Panel, sekarang CCTV dan pompa air saya jalan 24 jam tanpa masalah.",
     rating: 5,
-    system: "10 kWp Off-Grid",
+    // Kebun sawit case study: kapasitas terpasang 10,4 kWp (caseStudies.ts)
+    system: "10,4 kWp Off-Grid",
     beforeBill: "Rp 12 jt/bulan (genset)",
     afterBill: "Rp 0 (listrik mandiri)",
     savings: "Hemat Rp 8jt/bulan",
@@ -77,6 +86,8 @@ const testimonials = [
     role: "Kepala Desa",
     text: "Kantor desa kami sekarang pakai panel surya dari Jambi Solar Panel. Warga juga tertarik. Tim mereka sangat sabar menjelaskan dan membantu proses instalasi.",
     rating: 5,
+    // Bukan studi kasus villa — proyek berbeda (Kantor Desa), kapasitas
+    // dari testimoni aslinya, dipertahankan.
     system: "5 kWp Hybrid",
     beforeBill: "Rp 4 juta/bulan",
     afterBill: "Rp 1 jt/bulan",
@@ -88,7 +99,7 @@ const testimonials = [
 const portfolioItems = [
   {
     title: "Villa Premium Jambi",
-    desc: "Instalasi 5 kWp Hybrid untuk villa eksklusif dengan pool dan garden lighting.",
+    desc: "Instalasi PLTS Hybrid ±5,2 kWp untuk villa eksklusif dengan pool dan garden lighting.",
     image: "/studi-kasus-villa.jpg",
     tag: "Residential",
     result: "Tagihan Rp 4jt → Rp 500rb",
@@ -104,7 +115,7 @@ const portfolioItems = [
   },
   {
     title: "Kebun Sawit Riau",
-    desc: "Sistem Off-Grid 10 kWp untuk pompa air, CCTV, dan pondok kebun.",
+    desc: "Sistem Off-Grid ±10,4 kWp untuk pompa air, CCTV, dan pondok kebun.",
     image: "/studi-kasus-sawit.jpg",
     tag: "Agriculture",
     result: "Listrik mandiri 24 jam",

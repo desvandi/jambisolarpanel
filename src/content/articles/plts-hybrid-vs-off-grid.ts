@@ -7,6 +7,10 @@ export const article: Article = {
     "Beda PLTS hybrid dan off-grid: cara kerja, kelebihan, perbandingan biaya, dan panduan memilih konfigurasi yang tepat untuk rumah, kebun, atau usaha Anda.",
   category: "Panduan Teknis",
   date: "2026-09-23",
+  // 2026-09-25: sweep konsistensi kapasitas studi kasus (audit ulang total) —
+  // villa 5 kWp → 5,2 kWp, sawit 10 kWp → 10,4 kWp pada narasi portofolio
+  // dan label tautan studi kasus (selaras caseStudies.ts).
+  updated: "2026-09-25",
   readingMinutes: 7,
   keyTakeaways: [
     "PLTS hybrid tetap terhubung ke PLN sebagai jaring pengaman; baterainya opsional dan sistem tetap menyala ketika listrik PLN padam.",
@@ -104,7 +108,7 @@ export const article: Article = {
     },
     {
       type: "p",
-      text: "Dua proyek di portofolio kami menggambarkan perbedaan ini dengan baik: sebuah villa di Jambi yang memilih sistem hybrid 5 kWp karena lokasinya sudah tersambung PLN dan mengutamakan kenyamanan tamu, serta kebun sawit di Riau yang memilih off-grid 10 kWp karena areal kerjanya tidak terjangkau jaringan. Keduanya benar — karena keduanya menjawab konteks lokasi yang berbeda.",
+      text: "Dua proyek di portofolio kami menggambarkan perbedaan ini dengan baik: sebuah villa di Jambi yang memilih sistem hybrid 5,2 kWp karena lokasinya sudah tersambung PLN dan mengutamakan kenyamanan tamu, serta kebun sawit di Riau yang memilih off-grid 10,4 kWp karena areal kerjanya tidak terjangkau jaringan. Keduanya benar — karena keduanya menjawab konteks lokasi yang berbeda.",
     },
     {
       type: "cta",
@@ -133,12 +137,12 @@ export const article: Article = {
       intro: "Bacaan terkait:",
       items: [
         {
-          label: "Studi Kasus: Villa Jambi 5 kWp Hybrid",
+          label: "Studi Kasus: Villa Jambi 5,2 kWp Hybrid",
           href: "/studi-kasus/villa-jambi-5-kwp-hybrid",
           desc: "Contoh penerapan sistem hybrid untuk properti yang terjangkau PLN",
         },
         {
-          label: "Studi Kasus: Kebun Sawit Riau 10 kWp Off-Grid",
+          label: "Studi Kasus: Kebun Sawit Riau 10,4 kWp Off-Grid",
           href: "/studi-kasus/kebun-sawit-riau-10-kwp-off-grid",
           desc: "Sistem mandiri untuk kebutuhan kebun tanpa jaringan PLN",
         },
