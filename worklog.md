@@ -325,3 +325,31 @@ Stage Summary:
 - Sisa pekerjaan = owner-side: (1) klik Verify di GSC, (2) submit sitemap.xml + URL inspection 5 halaman prioritas, (3) GBP setup, (4) bukti proyek nyata, (5) tunggu data impression/click 2–4 minggu
 - Catatan auditor diadopsi: bagian custom domain di PANDUAN-SEO-OWNER.md dibaca sebagai analisis opsi masa depan, BUKAN task wajib — official URL tetap jambisolarpanel.vercel.app
 - Commit: 77bd943 (HEAD, pushed, Vercel success)
+
+---
+Task ID: 32
+Agent: main (Z.ai Code)
+Task: Audit ulang total + Audit 1 (baseline baru 6758219) — tutup semua item yang bisa dikerjakan dev-side
+
+Work Log:
+- Verifikasi P1-1 (production chain, bukti untuk auditor yang koneksinya tidak menemukan project):
+  * Vercel API: project jambisolarpanel (prj_1SsmPvosKkuNupLKePY9ppXfXzCp) ADA & READY
+  * Deployment production terakhir = dpl_6ago2x5e READY pada commit 6758219 (persis baseline auditor) — chain GitHub main → Vercel aktif utk 5 commit terakhir
+  * GET / 200 (373KB), /robots.txt 200, /sitemap.xml 200 (33 URL), canonical benar
+  * Marker konten HEAD live: priceRange string (dari 77bd943) + GSC verification tag (dari b3c6418)
+- P2-1 robots policy: hapus Disallow /kalibrasi-harga dari robots.ts (crawler yang di-Disallow tidak bisa baca X-Robots-Tag noindex — kontradiktif; proteksi utama = Basic Auth di proxy.ts, noindex tetap dikirim; /api/ tetap Disallow). Komentar justifikasi ditambahkan
+- P1 warranty consistency (temuan #2): WARRANTY_CONFIG baru di methodology.ts (panel 25y performa / inverter 5–10y / baterai 5–10y / instalasi 2y / EV charger 2y / pompa 2y / PJUTS 3y). Update 5 konsumen yang tadinya "5 tahun" flat: TrustSection, SolarHomePage, SolarCommercialPage, EVChargingPage, pricing-ev (3 paket). Semua kini konsisten dengan FAQ/About/Glossary
+- P1 kapasitas studi kasus (temuan #3): kapasitasKwp 5→5.2, 10→10.4 (aktual terpasang = panel × 650 Wp); judul/summary/solusi/spec "5 kWp"→"±5,2 kWp", "10 kWp"→"±10,4 kWp"; estimasi produksi dihitung ulang dari kapasitas terpasang (villa 15→15,6 kWh/hari; sawit 30→31,2 kWh/hari — kini juga konsisten dengan artikel berapa-produksi-1-kwp yang menulis "paket 5,2 kWp ±15,6 kWh/hari"); helper formatKwp() (koma id-ID); slug LAMA dipertahankan demi stabilitas URL (didokumentasikan di header file); UI /proyek + /studi-kasus + total stat (65,6 kWp, decimals=1) semuanya via formatKwp
+- P2 "13+ panduan" (temuan #9): diganti dinamis articles.length (13) — tidak akan pernah basi lagi
+- Entity graph (temuan #10): hapus render LocalBusiness JSON-LD duplikat di /tentang-kami (root layout sudah menyediakan satu definisi @id #organization utk semua halaman) — kini 1 definisi + references
+- P2 sitemap lastmod (temuan #8): verifikasi git menunjukkan lastmod 2026-09-24 utk smartIot/maintenance/tenderProcurement SAH — konten E-E-A-T berubah di 1fbd70a (00:37 UTC) SEBELUM refactor e66e049 (04:07 UTC, zero copy changes). Komentar justifikasi ditambahkan di sitemap.ts (governance terdokumentasi)
+- framer-motion: 0 import runtime tersisa di src/ → dependency dihapus dari package.json (bun remove)
+- QA: lint 0, tsc src 0, 10 route 200 (termasuk robots.txt, sitemap.xml, 2 studi kasus), verifikasi render HTML: robots.txt baru, ±5,2/±10,4 kWp, 15,6/31,2 kWh, warranty 5–10 tahun, >13< dinamis, LocalBusiness 1x, 65,6 kWp
+- Commit 92bfded + push → Vercel READY @ 92bfded → verifikasi production: robots.txt live (Disallow kalibrasi hilang), judul villa ±5,2 kWp live, warranty 5–10 tahun live
+
+Stage Summary:
+- AUDIT 1 STATUS: P2-1 CLOSED (dev), P1-1 CLOSED (production chain terverifikasi lengkap: Vercel API + endpoint + marker konten — bukti utk auditor), P1-2 TETAP OWNER-SIDE (GSC verify + sitemap submit + URL inspection)
+- Konsistensi factual P1 (warranty + kWp) CLOSED dev-side; "13+" CLOSED; entity graph dibersihkan; lastmod terdokumentasi; framer-motion dependency dihapus
+- Yang TIDAK dikerjakan dev (sesuai directive auditor "jangan tambah fitur SEO sebelum evidence/indexing/consistency/measurement kuat"): author identity framework, legal/cert evidence layer, testimonial evidence, security headers (CSP/CORS), distributed rate limiting, artikel baru
+- Prioritas berikutnya: owner-side (GSC verify + sitemap + GBP + bukti proyek), lalu Audit 2 (on-page) setelah Audit 1 ditutup auditor
+- Commit: 92bfded (HEAD, pushed, Vercel READY & terverifikasi)
