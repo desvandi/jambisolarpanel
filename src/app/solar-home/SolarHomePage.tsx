@@ -1,5 +1,5 @@
 import { MethodologyNote } from "@/components/landing/MethodologyNote";
-import { DESIGN_PARAMS } from "@/lib/methodology";
+import { DESIGN_PARAMS, WARRANTY_CONFIG } from "@/lib/methodology";
 import {
   calculatePackages,
   defaultComponentPrices,
@@ -27,7 +27,7 @@ const benefits = [
     desc: "Potensi hemat sebagian besar tagihan — rentangnya bergantung profil beban rumah Anda (lihat metodologi di bawah)",
   },
   { icon: Battery, title: "Backup saat PLN Padam", desc: "Dengan opsi baterai LiFePO4, rumah tetap menyala 24 jam" },
-  { icon: Shield, title: "Garansi Resmi", desc: "Panel surya 25 tahun performa, inverter 5 tahun, baterai sesuai paket" },
+  { icon: Shield, title: "Garansi Resmi", desc: `Panel surya 25 tahun performa, inverter ${WARRANTY_CONFIG.inverter}, baterai sesuai paket` },
   {
     icon: Clock,
     title: "ROI ± 9–11 Tahun (simulasi)",

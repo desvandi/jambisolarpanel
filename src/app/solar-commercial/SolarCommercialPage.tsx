@@ -1,5 +1,5 @@
 import { MethodologyNote } from "@/components/landing/MethodologyNote";
-import { DESIGN_PARAMS } from "@/lib/methodology";
+import { DESIGN_PARAMS, WARRANTY_CONFIG } from "@/lib/methodology";
 import {
   calculatePackages,
   defaultComponentPrices,
@@ -30,7 +30,7 @@ const benefits = [
   { icon: Zap, title: "Efisiensi Operasional", desc: "Kurangi biaya energi tetap per bulan, tingkatkan profit margin" },
   { icon: Car, title: "Carport Solar", desc: "Tambahkan kanopi carport solar sebagai nilai tambah properti bisnis Anda" },
   { icon: Monitor, title: "Smart Monitoring", desc: "Pantau performa sistem secara real-time via dashboard & mobile app" },
-  { icon: Shield, title: "Garansi Resmi", desc: "Panel 25 tahun, inverter 5 tahun, instalasi & commissioning termasuk" },
+  { icon: Shield, title: "Garansi Resmi", desc: `Panel 25 tahun, inverter ${WARRANTY_CONFIG.inverter}, instalasi & commissioning termasuk` },
   { icon: BarChart3, title: "Laporan Performa", desc: "Monitoring standard & industrial menyediakan laporan bulanan otomatis" },
 ];
 

@@ -17,6 +17,15 @@
  *   karena tidak didokumentasikan pada sumber asal.
  * - Foto bersifat ILUSTRASI (bukan foto dokumentasi proyek) — diberi
  *   caption jujur di halaman.
+ *
+ * KAPASITAS (audit ulang total 2026-09-24, temuan konsistensi #3):
+ * - kapasitasKwp = kapasitas AKTUAL TERPASANG (jumlah panel × 650 Wp),
+ *   bukan angka desain bulat — villa 8×650=5,2 kWp, sawit 16×650=10,4 kWp.
+ * - Semua teks (judul, ringkasan, spec, estimasi produksi) memakai
+ *   kapasitas terpasang yang sama; estimasi produksi dihitung ulang dari
+ *   kapasitas terpasang (5,2×3,75×0,8 = 15,6 kWh/hari, dst).
+ * - Slug lama (mis. "villa-jambi-5-kwp-hybrid") SENGAJA dipertahankan demi
+ *   stabilitas URL/sitemap; yang harus konsisten adalah konten visible.
  */
 
 export interface CaseStudy {
@@ -61,13 +70,13 @@ export interface CaseStudy {
 export const caseStudies: CaseStudy[] = [
   {
     slug: "villa-jambi-5-kwp-hybrid",
-    title: "Villa Premium Jambi — PLTS Hybrid 5 kWp",
+    title: "Villa Premium Jambi — PLTS Hybrid ±5,2 kWp",
     summary:
-      "Instalasi PLTS hybrid 5 kWp untuk villa eksklusif dengan kolam renang dan garden lighting — tagihan listrik dilaporkan turun dari Rp 4 juta menjadi Rp 500 ribu per bulan.",
+      "Instalasi PLTS hybrid ±5,2 kWp (8 × panel 650 Wp) untuk villa eksklusif dengan kolam renang dan garden lighting — tagihan listrik dilaporkan turun dari Rp 4 juta menjadi Rp 500 ribu per bulan.",
     segment: "Residential",
     lokasi: "Jambi",
     jenisBangunan: "Villa (kolam renang & garden lighting)",
-    kapasitasKwp: 5,
+    kapasitasKwp: 5.2,
     jenisSistem: "Hybrid",
     profilBeban: [
       "Pompa kolam renang",
@@ -77,21 +86,21 @@ export const caseStudies: CaseStudy[] = [
     masalahAwal:
       "Tagihan listrik villa mencapai Rp 4 juta per bulan akibat pemakaian pompa kolam dan pencahayaan taman yang berjalan hampir sepanjang waktu.",
     solusiDesain:
-      "Sistem PLTS hybrid 5 kWp dipasang untuk men-supply beban utama villa di siang hari, sementara grid PLN tetap terhubung sebagai cadangan. Sistem hybrid dipilih agar villa tetap mendapat listrik dari PLN saat produksi surya berkurang.",
+      "Sistem PLTS hybrid ±5,2 kWp (8 × panel 650 Wp) dipasang untuk men-supply beban utama villa di siang hari, sementara grid PLN tetap terhubung sebagai cadangan. Sistem hybrid dipilih agar villa tetap mendapat listrik dari PLN saat produksi surya berkurang.",
     hasil: [
       { label: "Tagihan sebelum", value: "Rp 4 juta/bulan" },
       { label: "Tagihan sesudah", value: "Rp 500 ribu/bulan" },
       { label: "Penghematan", value: "± Rp 3,5 juta/bulan" },
     ],
     spesifikasi: [
-      { label: "Panel surya", value: "8 × monokristalin 650 Wp (± 5,2 kWp terpasang)" },
+      { label: "Panel surya", value: "8 × monokristalin 650 Wp (5,2 kWp DC terpasang)" },
       { label: "Inverter", value: "Hybrid 1 fase, kelas 5 kW" },
       { label: "Baterai", value: "2 × LiFePO4 48V 100Ah (9,6 kWh)" },
       { label: "Mode operasi", value: "Surya → baterai → PLN (prioritas)" },
     ],
     catatanDesain: [
       "Hybrid (bukan off-grid) dipilih karena villa sudah terjangkau PLN — targetnya memangkas tagihan, bukan lepas dari jaringan.",
-      "Kapasitas 5 kWp dihitung dari beban pompa kolam dan pencahayaan yang berjalan siang-malam; pompa dijadwalkan dominan siang agar langsung menyerap produksi surya.",
+      "Kapasitas 5,2 kWp (8 × 650 Wp) dihitung dari beban pompa kolam dan pencahayaan yang berjalan siang-malam; pompa dijadwalkan dominan siang agar langsung menyerap produksi surya.",
       "Baterai 2 unit (9,6 kWh) menutup beban malam — garden lighting dan peralatan istirahat tamu — dengan cadangan saat PLN padam.",
     ],
     batasan: [
@@ -100,10 +109,10 @@ export const caseStudies: CaseStudy[] = [
     ],
     metodeData: [
       "Angka tagihan sebelum/sesudah adalah data yang dilaporkan pemilik villa dari tagihan PLN mereka — bukan hasil pembacaan meter oleh tim kami.",
-      "Estimasi produksi (± 15 kWh/hari) adalah perhitungan desain dengan parameter desain internal kami: 5 kWp × PSH Jambi 3,75 × efisiensi 80%.",
+      "Estimasi produksi (± 15,6 kWh/hari) adalah perhitungan desain dengan parameter desain internal kami: 5,2 kWp × PSH Jambi 3,75 × efisiensi 80%.",
       "Angka penghematan aktual per bulan dapat berbeda mengikuti cuaca, okupansi villa, dan pola penggunaan pompa.",
     ],
-    estimasiProduksiHarian: "± 15 kWh/hari (estimasi desain: 5 kWp × 3,75 PSH × 80% efisiensi)",
+    estimasiProduksiHarian: "± 15,6 kWh/hari (estimasi desain: 5,2 kWp × 3,75 PSH × 80% efisiensi)",
     testimoni: {
       quote:
         "Sejak pasang panel surya dari Jambi Solar Panel, tagihan listrik villa saya turun drastis. Pemasangan rapi, tim profesional, dan respon cepat. Sangat recommended!",
@@ -112,20 +121,20 @@ export const caseStudies: CaseStudy[] = [
     },
     image: "/studi-kasus-villa.jpg",
     imageAlt:
-      "Ilustrasi villa tropis dengan panel surya di atap, kolam renang, dan pencahayaan taman — menggambarkan sistem PLTS hybrid 5 kWp",
+      "Ilustrasi villa tropis dengan panel surya di atap, kolam renang, dan pencahayaan taman — menggambarkan sistem PLTS hybrid ±5,2 kWp",
     imageCaption:
       "Ilustrasi konfigurasi sistem — bukan foto dokumentasi proyek.",
     relatedService: { label: "Panel Surya Rumah", href: "/solar-home" },
   },
   {
     slug: "kebun-sawit-riau-10-kwp-off-grid",
-    title: "Kebun Sawit Riau — PLTS Off-Grid 10 kWp",
+    title: "Kebun Sawit Riau — PLTS Off-Grid ±10,4 kWp",
     summary:
-      "Sistem PLTS off-grid 10 kWp untuk kebun sawit di Riau yang tidak terjangkau jaringan PLN — pompa air, CCTV, dan pondok kebun kini beroperasi 24 jam tanpa genset.",
+      "Sistem PLTS off-grid ±10,4 kWp (16 × panel 650 Wp) untuk kebun sawit di Riau yang tidak terjangkau jaringan PLN — pompa air, CCTV, dan pondok kebun kini beroperasi 24 jam tanpa genset.",
     segment: "Agriculture",
     lokasi: "Riau",
     jenisBangunan: "Kebun sawit (pondok kebun & area produksi)",
-    kapasitasKwp: 10,
+    kapasitasKwp: 10.4,
     jenisSistem: "Off-Grid",
     profilBeban: [
       "Pompa air untuk kebun",
@@ -135,7 +144,7 @@ export const caseStudies: CaseStudy[] = [
     masalahAwal:
       "Lokasi kebun jauh dari jangkauan jaringan PLN. Selama ini operasional bergantung pada genset dengan biaya BBM ± Rp 12 juta per bulan, belum termasuk biaya perawatan genset dan risiko pasokan bahan bakar ke lokasi terpencil.",
     solusiDesain:
-      "Sistem PLTS off-grid 10 kWp dirancang untuk kemandirian penuh: panel surya mengisi baterai penyimpanan di siang hari, dan beban pompa, CCTV, serta pondok kebun dilayani dari baterai pada malam hari. Tidak ada koneksi PLN sama sekali.",
+      "Sistem PLTS off-grid ±10,4 kWp (16 × panel 650 Wp) dirancang untuk kemandirian penuh: panel surya mengisi baterai penyimpanan di siang hari, dan beban pompa, CCTV, serta pondok kebun dilayani dari baterai pada malam hari. Tidak ada koneksi PLN sama sekali.",
     hasil: [
       { label: "Biaya sebelum (genset)", value: "Rp 12 juta/bulan" },
       { label: "Biaya sesudah", value: "Rp 0 — listrik mandiri" },
@@ -143,7 +152,7 @@ export const caseStudies: CaseStudy[] = [
       { label: "Keandalan", value: "Listrik & CCTV aktif 24 jam" },
     ],
     spesifikasi: [
-      { label: "Panel surya", value: "16 × monokristalin 650 Wp (± 10,4 kWp terpasang)" },
+      { label: "Panel surya", value: "16 × monokristalin 650 Wp (10,4 kWp DC terpasang)" },
       { label: "Inverter", value: "Off-grid 1 fase, kelas 8–10 kW" },
       { label: "Baterai", value: "8 × LiFePO4 48V 100Ah (38,4 kWh)" },
       { label: "Mode operasi", value: "Surya → beban + pengisian baterai → baterai malam hari" },
@@ -161,9 +170,9 @@ export const caseStudies: CaseStudy[] = [
     metodeData: [
       "Biaya BBM genset (± Rp 12 juta/bulan) adalah estimasi yang dilaporkan pemilik kebun dari pengeluaran operasional sebelum instalasi.",
       "Angka penghematan ± Rp 8 juta/bulan sudah menghitung sisa biaya operasional PLTS (perawatan berkala), diluar biaya perawatan genset yang hilang.",
-      "Estimasi produksi (± 30 kWh/hari) adalah perhitungan desain: 10 kWp × PSH 3,75 × efisiensi 80%.",
+      "Estimasi produksi (± 31,2 kWh/hari) adalah perhitungan desain: 10,4 kWp × PSH 3,75 × efisiensi 80%.",
     ],
-    estimasiProduksiHarian: "± 30 kWh/hari (estimasi desain: 10 kWp × 3,75 PSH × 80% efisiensi)",
+    estimasiProduksiHarian: "± 31,2 kWh/hari (estimasi desain: 10,4 kWp × 3,75 PSH × 80% efisiensi)",
     testimoni: {
       quote:
         "Kebun saya jauh dari PLN, selama ini pakai genset yang boros. Dengan sistem off-grid dari Jambi Solar Panel, sekarang CCTV dan pompa air saya jalan 24 jam tanpa masalah.",
@@ -232,4 +241,12 @@ export const caseStudies: CaseStudy[] = [
 
 export function getCaseStudyBySlug(slug: string): CaseStudy | undefined {
   return caseStudies.find((c) => c.slug === slug);
+}
+
+/**
+ * Format kapasitas kWp mengikuti konvensi angka Indonesia (koma desimal).
+ * Dipakai semua UI yang menampilkan kapasitas studi kasus.
+ */
+export function formatKwp(kwp: number): string {
+  return `${kwp.toLocaleString("id-ID", { maximumFractionDigits: 1 })} kWp`;
 }

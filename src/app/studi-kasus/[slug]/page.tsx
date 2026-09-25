@@ -21,7 +21,7 @@ import {
 import { SitePageLayout } from "@/components/site/SitePageLayout";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
-import { caseStudies, getCaseStudyBySlug } from "@/content/caseStudies";
+import { caseStudies, getCaseStudyBySlug, formatKwp } from "@/content/caseStudies";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -98,7 +98,7 @@ export default async function CaseStudyPage({ params }: Props) {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12">
             {[
               { icon: MapPin, label: "Lokasi", value: cs.lokasi },
-              { icon: Zap, label: "Kapasitas", value: `${cs.kapasitasKwp} kWp` },
+              { icon: Zap, label: "Kapasitas", value: formatKwp(cs.kapasitasKwp) },
               { icon: Sun, label: "Sistem", value: cs.jenisSistem },
               { icon: Building2, label: "Bangunan", value: cs.jenisBangunan },
             ].map((item) => (
@@ -321,7 +321,7 @@ export default async function CaseStudyPage({ params }: Props) {
                   className="group p-6 rounded-2xl bg-card border border-border hover:border-solar/30 hover:shadow-lg transition-all duration-300"
                 >
                   <span className="px-2.5 py-0.5 rounded-full bg-solar/10 text-solar text-xs font-semibold mb-3 inline-block">
-                    {o.segment} — {o.kapasitasKwp} kWp {o.jenisSistem}
+                    {o.segment} — {formatKwp(o.kapasitasKwp)} {o.jenisSistem}
                   </span>
                   <h3 className="font-bold text-navy dark:text-white leading-snug mb-2 group-hover:text-solar transition-colors">
                     {o.title}

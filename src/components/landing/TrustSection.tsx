@@ -11,6 +11,7 @@ import {
   HardHat,
   BadgeCheck,
 } from "lucide-react";
+import { WARRANTY_CONFIG } from "@/lib/methodology";
 import Link from "next/link";
 
 const trustItems = [
@@ -49,7 +50,7 @@ const trustItems = [
   {
     icon: Shield,
     title: "Garansi Komprehensif",
-    desc: "Garansi panel surya 25 tahun performa, inverter 5 tahun, baterai LiFePO4 5 tahun, dan garansi instalasi profesional oleh tim kami.",
+    desc: `Garansi panel surya ${WARRANTY_CONFIG.panel}, inverter ${WARRANTY_CONFIG.inverter}, baterai LiFePO4 ${WARRANTY_CONFIG.battery}, dan garansi instalasi profesional oleh tim kami.`,
   },
   {
     icon: Wrench,

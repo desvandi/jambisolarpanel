@@ -120,6 +120,26 @@ export const SAVINGS_RANGES = {
 export const SAVINGS_RANGE_NOTE =
   "Rentang ini adalah kisaran skenario berdasarkan profil beban — bukan hasil pengukuran proyek aktual.";
 
+/**
+ * Konfigurasi garansi resmi — SINGLE SOURCE OF TRUTH (audit ulang total
+ * 2026-09-24, temuan konsistensi factual #2: "inverter 5 tahun" di beberapa
+ * halaman vs "inverter 5–10 tahun" di FAQ/Tentang Kami/Glossary).
+ *
+ * Seluruh UI/konten yang menyebut durasi garansi WAJIB membaca dari sini
+ * (atau minimal memakai nilai yang sama) — jangan pernah hardcode angka
+ * garansi di komponen lagi. Rentang "5–10 tahun" berarti tergantung merek
+ * dan model perangkat (sesuai jawaban FAQ).
+ */
+export const WARRANTY_CONFIG = {
+  panel: "25 tahun (performa)",
+  inverter: "5–10 tahun (tergantung merek & model)",
+  battery: "5–10 tahun",
+  installation: "2 tahun",
+  evCharger: "2 tahun",
+  solarPump: "2 tahun (pompa)",
+  pjuts: "3 tahun",
+} as const;
+
 /** Asumsi baku yang dirender di MethodologyNote (urutan tetap). */
 export const CORE_ASSUMPTIONS = [
   {

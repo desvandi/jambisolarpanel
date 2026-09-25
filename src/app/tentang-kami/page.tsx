@@ -24,10 +24,10 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import {
   buildMetadata,
   breadcrumbJsonLd,
-  localBusinessJsonLd,
   BUSINESS_NAP,
   SERVICE_AREAS,
 } from "@/lib/seo";
+import { articles } from "@/content/articles";
 
 export const metadata: Metadata = buildMetadata({
   path: "/tentang-kami",
@@ -178,8 +178,10 @@ export default function TentangKamiPage() {
           { name: "Tentang Kami", path: "/tentang-kami" },
         ])}
       />
-      {/* LocalBusiness schema dengan NAP lengkap — konsisten dengan footer & GBP */}
-      <JsonLd data={localBusinessJsonLd()} />
+      {/* LocalBusiness entity TIDAK dirender ulang di sini — root layout
+          sudah menyediakan satu definisi utama (@id #organization) untuk
+          semua halaman; duplikasi definisi membuat entity graph kotor
+          (audit ulang total 2026-09-24, temuan #10). */}
 
       {/* Profil singkat */}
       <section className="py-14 md:py-20">
@@ -350,7 +352,7 @@ export default function TentangKamiPage() {
             <Link href="/artikel" className="link-underline font-semibold text-solar">
               Baca Knowledge Center kami
             </Link>{" "}
-            — 13+ panduan teknis yang kami tulis sendiri, atau{" "}
+            — {articles.length} panduan teknis yang kami tulis sendiri, atau{" "}
             <Link href="/proyek" className="link-underline font-semibold text-solar">
               lihat proyek yang telah dikerjakan
             </Link>

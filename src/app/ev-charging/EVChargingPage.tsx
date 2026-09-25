@@ -1,5 +1,6 @@
 import { evPackages, evAssumptions, formatTariffLabel } from "@/lib/pricing-ev";
 import { formatRp, formatRpShort } from "@/lib/pricing";
+import { WARRANTY_CONFIG } from "@/lib/methodology";
 import { MessageCircle, Car, Battery, Leaf, Zap, Shield, CheckCircle } from "lucide-react";
 
 /**
@@ -38,7 +39,7 @@ const benefits = [
   {
     icon: Shield,
     title: "Garansi Resmi",
-    desc: "Panel 25 tahun, inverter 5 tahun, charger 2 tahun, instalasi termasuk",
+    desc: `Panel 25 tahun, inverter ${WARRANTY_CONFIG.inverter}, charger ${WARRANTY_CONFIG.evCharger}, instalasi termasuk`,
   },
   {
     icon: CheckCircle,

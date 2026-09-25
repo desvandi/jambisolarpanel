@@ -38,6 +38,12 @@ const LAST_MODIFIED = {
   // klaim "100% energi surya"/"gratis"/"Rp 5-7 jt" dihapus, tarif disatukan
   // ke DESIGN_PARAMS, penghematan charging = min(produksi, kebutuhan) × 70% × tarif.
   evCharging: "2026-09-24",
+  // 2026-09-24 — ketiga route di bawah diubah KONTENYA di commit 1fbd70a
+  // (00:37 UTC: klaim tak terverifikasi dilunakkan + editorial process note)
+  // — BUKAN karena refactor rendering e66e049 (04:07 UTC, "zero copy
+  // changes"). Audit ulang total 2026-09-24 sempat menandai ini; verifikasi
+  // git menunjukkan lastmod 2026-09-24 tetap sah karena perubahan konten
+  // E-E-A-T terjadi di hari yang sama, sebelum refactor.
   smartIot: "2026-09-24",
   maintenance: "2026-09-24",
   tenderProcurement: "2026-09-24",

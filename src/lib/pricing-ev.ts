@@ -1,5 +1,5 @@
 import { formatRpShort } from "./pricing";
-import { DESIGN_PARAMS } from "./methodology";
+import { DESIGN_PARAMS, WARRANTY_CONFIG } from "./methodology";
 
 /* ============================================================
    EV CHARGING PRICING — PT. Jaya Mandiri Smart Energy
@@ -216,7 +216,7 @@ export const evPackages: EVPackage[] = [
       "Charging EV dari produksi surya di siang hari",
       "Sisa produksi untuk beban rumah tangga",
       "Garansi panel 25 tahun",
-      "Garansi inverter 5 tahun",
+      `Garansi inverter ${WARRANTY_CONFIG.inverter}`,
       "Gratis survei & instalasi",
       "PPN 11% termasuk",
     ],
@@ -240,7 +240,7 @@ export const evPackages: EVPackage[] = [
       "Cukup untuk 1-2 EV sekaligus",
       "Sisa produksi lebih besar untuk beban rumah",
       "Garansi panel 25 tahun",
-      "Garansi inverter 5 tahun",
+      `Garansi inverter ${WARRANTY_CONFIG.inverter}`,
       "Gratis survei & instalasi",
       "PPN 11% termasuk",
     ],
@@ -264,7 +264,7 @@ export const evPackages: EVPackage[] = [
       "Cocok untuk bisnis & area parkir komersial",
       "Sisa produksi membantu beban operasional bisnis",
       "Garansi panel 25 tahun",
-      "Garansi inverter 5 tahun",
+      `Garansi inverter ${WARRANTY_CONFIG.inverter}`,
       "Gratis survei & instalasi",
       "PPN 11% termasuk",
     ],
